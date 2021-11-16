@@ -185,7 +185,7 @@ dependencies {
 mainClassName = 'uk.gov.hmcts.reform.demo.Application'
 
 bootJar {
-  archiveFileName = "spring-boot-template.jar"
+  archiveFileName = "rd-commondata-api.jar"
 
   manifest {
     attributes('Implementation-Version': project.version.toString())
