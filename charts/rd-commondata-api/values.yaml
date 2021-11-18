@@ -30,5 +30,3 @@ java:
               alias: azure.application-insights.instrumentation-key
             - name: LD-SDK-KEY
               alias: LD_SDK_KEY
-           # - name: commondata-api-s2s-secret
-            #  alias: COMMONDATA_API_S2S_SECRET
