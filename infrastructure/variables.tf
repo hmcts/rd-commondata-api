@@ -12,7 +12,7 @@ variable "component" {
 }
 
 variable "location" {
-  type    = string
+  type = string
   default = "UK South"
 }
 
@@ -23,8 +23,6 @@ variable "env" {
 variable "subscription" {
   type = string
 }
-
-// variable "deployment_namespace" {}
 
 variable "common_tags" {
   type = map(any)
