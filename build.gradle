@@ -108,9 +108,11 @@ project.tasks['sonarqube'].dependsOn test, integration, jacocoTestReport
 
 sonarqube {
   properties {
-    property "sonar.projectName", "RD :: Common Data API"
-    property "sonar.projectKey", "RDCOMMONDATAAPI"
+    property "sonar.projectName", "rd-common-data-api"
+    property "sonar.projectKey", "rd-common-data-api"
     property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+    property "sonar.exclusions", "build/generated-sources/**/*.java," +
+      "src/main/java/uk/gov/hmcts/reform/demo/**,"
   }
 }
 
