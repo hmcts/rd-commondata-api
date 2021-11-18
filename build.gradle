@@ -111,6 +111,8 @@ sonarqube {
     property "sonar.projectName", "RD :: Common Data API"
     property "sonar.projectKey", "RDCOMMONDATAAPI"
     property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+    property "sonar.exclusions", "src/main/java/uk/gov/hmcts/reform/cdapi/config/**," +
+      "src/main/java/uk/gov/hmcts/reform/cdapi/CommonDataApplication.java"
   }
 }
 
