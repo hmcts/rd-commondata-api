@@ -6,4 +6,12 @@ def type = "java"
 def product = "rd"
 def component = "commondata-api"
 
-withPipeline(type, product, component) {}
+withPipeline(type, product, component) {
+    enableAksStagingDeployment()
+
+    // Sync environment specific branches with master branch
+    // Configure branches to sync with master branch
+    // def branchesToSync = ['demo', 'ithc', 'perftest']
+    // syncBranchesWithMaster(branchesToSync)
+
+}

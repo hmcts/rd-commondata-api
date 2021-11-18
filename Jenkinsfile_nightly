@@ -1,7 +1,5 @@
 #!groovy
 
-
-
 @Library("Infrastructure")
 
 def type = "java"
