@@ -1,10 +1,10 @@
-package uk.gov.hmcts.reform.rsecheck;
+package uk.gov.hmcts.reform.cdapi;
 
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class DemoUnitTest {
+class CommonDataTest {
 
     @Test
     void exampleOfTest() {
