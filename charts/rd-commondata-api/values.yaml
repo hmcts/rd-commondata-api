@@ -1,10 +1,10 @@
 java:
-  applicationPort: 8101
+  applicationPort: 4550
   readinessPath: '/health/readiness'
   ingressHost: rd-commondata-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
   aadIdentityName: rd
   image: 'hmctspublic.azurecr.io/rd/commondata-api:latest'
-  
+
   environment:
     POSTGRES_HOST: rd-commondata-api-postgres-db-{{ .Values.global.environment }}.postgres.database.azure.com
     POSTGRES_USERNAME: dbrdcommondata@rd-commondata-api-postgres-db-{{ .Values.global.environment }}
