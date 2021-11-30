@@ -14,7 +14,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import java.util.List;
 import java.util.Optional;
 
-import static com.google.common.collect.Lists.newArrayList;
 
 @Configuration
 @EnableSwagger2
@@ -36,10 +35,10 @@ public class SwaggerConfiguration {
 
     private  List<SecurityScheme> apiKeyList() {
         return
-            newArrayList(
+            List.of(
                 new ApiKey("Authorization", "Authorization","header"),
-                new ApiKey("ServiceAuthorization", "ServiceAuthorization", "header"),
-                new ApiKey("UserEmail", "UserEmail", "header")
+                new ApiKey("ServiceAuthorization", "ServiceAuthorization", "header")
+
             );
     }
 
