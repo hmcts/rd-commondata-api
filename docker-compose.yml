@@ -9,8 +9,8 @@ services:
     volumes:
       - rd-commondata-api-volume:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD="${POSTGRES_PASSWORD:-dbrdcommondata}"
+      - POSTGRES_PASSWORD="${POSTGRES_PASSWORD:-dbcommondata}"
     ports:
-      - 5460:5432
+      - 5459:5432
 volumes:
   rd-commondata-api-volume:
