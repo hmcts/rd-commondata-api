@@ -10,6 +10,7 @@ java:
     POSTGRES_PORT: "{{ .Values.postgresql.postgresqlPort}}"
     # LOCATIONS_DB: classpath:db/migration,classpath:db/postgres,classpath:db/migrationAks
     LAUNCH_DARKLY_ENV: "preview"
+    ENVIRONMENT_NAME: "preview"
   postgresql:
     enabled: true
     postgresqlUsername: dbcommondata
