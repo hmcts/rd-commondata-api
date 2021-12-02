@@ -16,7 +16,7 @@ java:
     #IDAM_URL: https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net
     #LOCATIONS_DB: classpath:db/migration,classpath:db/postgres
     #LAUNCH_DARKLY_ENV: "{{ .Values.global.environment }}"
-
+    ENVIRONMENT_NAME: "{{ .Values.global.environment }}"
   keyVaults:
     rd:
       secrets:
