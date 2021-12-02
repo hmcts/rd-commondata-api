@@ -24,7 +24,7 @@ java:
           alias: azure.application-insights.instrumentation-key
         - name: LD-SDK-KEY
           alias: LD_SDK_KEY
-        - name: -PASS
+        - name: commondata-api-POSTGRES-PASS
           alias: POSTGRES_PASSWORD
        #- name: commondata-api-s2s-secret
        #  alias: COMMONDATA_API_S2S_SECRET
