@@ -13,10 +13,10 @@ CREATE TABLE case_type (
 );
 
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
-	 ('caseType','BBA3','BBA3-034','COEG','','','Y'),
-	 ('caseType','BBA3','BBA3-056','CARERS CREDIT','','','Y'),
-	 ('caseType','BBA3','BBA3-075','HOUSING BENEFIT','','','Y'),
-	 ('caseType','BBA3','BBA3-001','UNIVERSAL CREDIT','','','Y'),
+	 ('caseType','BBA3','BBA3-034','COEG',NULL,NULL,'Y'),
+	 ('caseType','BBA3','BBA3-056','CARERS CREDIT',NULL,NULL,'Y'),
+	 ('caseType','BBA3','BBA3-075','HOUSING BENEFIT',NULL,NULL,'Y'),
+	 ('caseType','BBA3','BBA3-001','UNIVERSAL CREDIT',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-001AD','ADVANCE PAYMENT','caseType','BBA3-001','Y'),
 	 ('caseSubType','BBA3','BBA3-001BC','BENEFIT CAP CALCULATION','caseType','BBA3-001','Y'),
 	 ('caseSubType','BBA3','BBA3-001BR','BEDROOM REDUCTION','caseType','BBA3-001','Y'),
@@ -60,7 +60,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-001UM','MULTIPLE ELEMENT','caseType','BBA3-001','Y'),
 	 ('caseSubType','BBA3','BBA3-001US','SINGLE ELEMENT','caseType','BBA3-001','Y'),
 	 ('caseSubType','BBA3','BBA3-001WC','WORK CAPABILITY ASSESSMENT','caseType','BBA3-001','Y'),
-	 ('caseType','BBA3','BBA3-002','PERSONAL INDEPENDENT PAYMENT (NEW CLAIM)','','','Y'),
+	 ('caseType','BBA3','BBA3-002','PERSONAL INDEPENDENT PAYMENT (NEW CLAIM)',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-002AA','INVALID','caseType','BBA3-002','Y'),
 	 ('caseSubType','BBA3','BBA3-002AR','ALTERNATIVE DISPUTE RESOLUTION','caseType','BBA3-002','Y'),
 	 ('caseSubType','BBA3','BBA3-002CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-002','Y'),
@@ -87,7 +87,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-002RA','RATE OF ASSESSMENT/PAYABILITY ISSUES','caseType','BBA3-002','Y'),
 	 ('caseSubType','BBA3','BBA3-002RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-002','Y'),
 	 ('caseSubType','BBA3','BBA3-002VW','VERBALLY WITHDRAWN','caseType','BBA3-002','Y'),
-	 ('caseType','BBA3','BBA3-003','PERSONAL INDEPENDENT PAYMENT (REASSESSMENT CASE)','','','Y'),
+	 ('caseType','BBA3','BBA3-003','PERSONAL INDEPENDENT PAYMENT (REASSESSMENT CASE)',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-003AA','INVALID','caseType','BBA3-003','Y');
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
 	 ('caseSubType','BBA3','BBA3-003AR','ALTERNATIVE DISPUTE RESOLUTION','caseType','BBA3-003','Y'),
@@ -115,7 +115,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-003RA','RATE OF ASSESSMENT/PAYABILITY ISSUES','caseType','BBA3-003','Y'),
 	 ('caseSubType','BBA3','BBA3-003RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-003','Y'),
 	 ('caseSubType','BBA3','BBA3-003VW','VERBALLY WITHDRAWN','caseType','BBA3-003','Y'),
-	 ('caseType','BBA3','BBA3-011','CHILD TRUST FUND','','','Y'),
+	 ('caseType','BBA3','BBA3-011','CHILD TRUST FUND',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-011AA','INVALID','caseType','BBA3-011','Y'),
 	 ('caseSubType','BBA3','BBA3-011CP','CIVIL PENALTIES','caseType','BBA3-011','Y'),
 	 ('caseSubType','BBA3','BBA3-011DD','APPEAL DIRECTLY LODGED','caseType','BBA3-011','Y'),
@@ -124,12 +124,12 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-011NP','AMOUNT PAID','caseType','BBA3-011','Y');
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
 	 ('caseSubType','BBA3','BBA3-011NV','NO VOUCHER','caseType','BBA3-011','Y'),
-	 ('caseType','BBA3','BBA3-012','HEALTH IN PREGNANCY GRANT','','','Y'),
+	 ('caseType','BBA3','BBA3-012','HEALTH IN PREGNANCY GRANT',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-012AA','INVALID','caseType','BBA3-012','Y'),
 	 ('caseSubType','BBA3','BBA3-012CE','CONDITIONS OF ENTITLEMENT','caseType','BBA3-012','Y'),
 	 ('caseSubType','BBA3','BBA3-012CP','CIVIL PENALTIES','caseType','BBA3-012','Y'),
 	 ('caseSubType','BBA3','BBA3-012HT','HABITUAL RESIDENCE TEST','caseType','BBA3-012','Y'),
-	 ('caseType','BBA3','BBA3-013','ATTENDANCE ALLOWANCE','','','Y'),
+	 ('caseType','BBA3','BBA3-013','ATTENDANCE ALLOWANCE',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-013AA','INVALID','caseType','BBA3-013','Y'),
 	 ('caseSubType','BBA3','BBA3-013AR','ALTERNATIVE DISPUTE RESOLUTION','caseType','BBA3-013','Y'),
 	 ('caseSubType','BBA3','BBA3-013CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-013','Y');
@@ -153,11 +153,11 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-013OX','OVERPAYMENT - COMPLEX','caseType','BBA3-013','Y'),
 	 ('caseSubType','BBA3','BBA3-013RA','RATE OF ASSESSMENT/PAYABILITY ISSUES','caseType','BBA3-013','Y'),
 	 ('caseSubType','BBA3','BBA3-013RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-013','Y'),
-	 ('caseType','BBA3','BBA3-014','DIFFUSE MESOTHELIOMA','','','Y'),
+	 ('caseType','BBA3','BBA3-014','DIFFUSE MESOTHELIOMA',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-014DD','APPEAL DIRECTLY LODGED','caseType','BBA3-014','Y');
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
 	 ('caseSubType','BBA3','BBA3-014MN','NEW SCHEME (MESO)','caseType','BBA3-014','Y'),
-	 ('caseType','BBA3','BBA3-016','CHILD BENEFIT / CHILD BENEFIT (LONE PARENT)','','','Y'),
+	 ('caseType','BBA3','BBA3-016','CHILD BENEFIT / CHILD BENEFIT (LONE PARENT)',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-016AA','INVALID','caseType','BBA3-016','Y'),
 	 ('caseSubType','BBA3','BBA3-016CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-016','Y'),
 	 ('caseSubType','BBA3','BBA3-016CE','CONDITIONS OF ENTITLEMENT','caseType','BBA3-016','Y'),
@@ -178,7 +178,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-016RG','RECIPROCAL AGREEMENT','caseType','BBA3-016','Y'),
 	 ('caseSubType','BBA3','BBA3-016SU','SUSPENSIONS','caseType','BBA3-016','Y');
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
-	 ('caseType','BBA3','BBA3-022','CHILD SUPPORT ASSESSMENTS','','','Y'),
+	 ('caseType','BBA3','BBA3-022','CHILD SUPPORT ASSESSMENTS',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-022AA','INVALID','caseType','BBA3-022','Y'),
 	 ('caseSubType','BBA3','BBA3-022CA','CHILD SUPPORT REFORM CONVERSION APPEALS','caseType','BBA3-022','Y'),
 	 ('caseSubType','BBA3','BBA3-022CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-022','Y'),
@@ -201,7 +201,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-022SS','SELF EMPLOYED - STRAIGHTFORWARD','caseType','BBA3-022','Y');
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
 	 ('caseSubType','BBA3','BBA3-022SX','SELF EMPLOYED - COMPLEX','caseType','BBA3-022','Y'),
-	 ('caseType','BBA3','BBA3-023','CHILD SUPPORT REFORMS','','','Y'),
+	 ('caseType','BBA3','BBA3-023','CHILD SUPPORT REFORMS',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-023AA','INVALID','caseType','BBA3-023','Y'),
 	 ('caseSubType','BBA3','BBA3-023CA','CHILD SUPPORT REFORM CONVERSION APPEALS','caseType','BBA3-023','Y'),
 	 ('caseSubType','BBA3','BBA3-023CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-023','Y'),
@@ -224,7 +224,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
 	 ('caseSubType','BBA3','BBA3-023SS','SELF EMPLOYED - STRAIGHTFORWARD','caseType','BBA3-023','Y'),
 	 ('caseSubType','BBA3','BBA3-023SX','SELF EMPLOYED - COMPLEX','caseType','BBA3-023','Y'),
-	 ('caseType','BBA3','BBA3-024','CHILD SUPPORT REFORM VARIATION REFERRALS','','','Y'),
+	 ('caseType','BBA3','BBA3-024','CHILD SUPPORT REFORM VARIATION REFERRALS',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-024AA','INVALID','caseType','BBA3-024','Y'),
 	 ('caseSubType','BBA3','BBA3-024CA','CHILD SUPPORT REFORM CONVERSION APPEALS','caseType','BBA3-024','Y'),
 	 ('caseSubType','BBA3','BBA3-024CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-024','Y'),
@@ -247,7 +247,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-024RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-024','Y'),
 	 ('caseSubType','BBA3','BBA3-024SS','SELF EMPLOYED - STRAIGHTFORWARD','caseType','BBA3-024','Y'),
 	 ('caseSubType','BBA3','BBA3-024SX','SELF EMPLOYED - COMPLEX','caseType','BBA3-024','Y'),
-	 ('caseType','BBA3','BBA3-025','CHILD SUPPORT DEPARTURES','','','Y'),
+	 ('caseType','BBA3','BBA3-025','CHILD SUPPORT DEPARTURES',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-025AA','INVALID','caseType','BBA3-025','Y'),
 	 ('caseSubType','BBA3','BBA3-025CA','CHILD SUPPORT REFORM CONVERSION APPEALS','caseType','BBA3-025','Y'),
 	 ('caseSubType','BBA3','BBA3-025CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-025','Y'),
@@ -270,7 +270,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-025RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-025','Y'),
 	 ('caseSubType','BBA3','BBA3-025SS','SELF EMPLOYED - STRAIGHTFORWARD','caseType','BBA3-025','Y'),
 	 ('caseSubType','BBA3','BBA3-025SX','SELF EMPLOYED - COMPLEX','caseType','BBA3-025','Y'),
-	 ('caseType','BBA3','BBA3-026','CHILD SUPPORT VARIATION REFERRAL','','','Y'),
+	 ('caseType','BBA3','BBA3-026','CHILD SUPPORT VARIATION REFERRAL',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-026AA','INVALID','caseType','BBA3-026','Y'),
 	 ('caseSubType','BBA3','BBA3-026CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-026','Y'),
 	 ('caseSubType','BBA3','BBA3-026CE','CONDITIONS OF ENTITLEMENT','caseType','BBA3-026','Y'),
@@ -292,7 +292,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-026RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-026','Y'),
 	 ('caseSubType','BBA3','BBA3-026SS','SELF EMPLOYED - STRAIGHTFORWARD','caseType','BBA3-026','Y'),
 	 ('caseSubType','BBA3','BBA3-026SX','SELF EMPLOYED - COMPLEX','caseType','BBA3-026','Y'),
-	 ('caseType','BBA3','BBA3-028','CHILD SUPPORT DEPARTURES REFERRAL','','','Y'),
+	 ('caseType','BBA3','BBA3-028','CHILD SUPPORT DEPARTURES REFERRAL',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-028AA','INVALID','caseType','BBA3-028','Y'),
 	 ('caseSubType','BBA3','BBA3-028CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-028','Y'),
 	 ('caseSubType','BBA3','BBA3-028CE','CONDITIONS OF ENTITLEMENT','caseType','BBA3-028','Y'),
@@ -314,7 +314,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-028RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-028','Y'),
 	 ('caseSubType','BBA3','BBA3-028SS','SELF EMPLOYED - STRAIGHTFORWARD','caseType','BBA3-028','Y'),
 	 ('caseSubType','BBA3','BBA3-028SX','SELF EMPLOYED - COMPLEX','caseType','BBA3-028','Y'),
-	 ('caseType','BBA3','BBA3-030','CREDITS - APPROVED TRAINING','','','Y'),
+	 ('caseType','BBA3','BBA3-030','CREDITS - APPROVED TRAINING',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-030AA','INVALID','caseType','BBA3-030','Y'),
 	 ('caseSubType','BBA3','BBA3-030CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-030','Y'),
 	 ('caseSubType','BBA3','BBA3-030CE','CONDITIONS OF ENTITLEMENT','caseType','BBA3-030','Y'),
@@ -334,7 +334,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
 	 ('caseSubType','BBA3','BBA3-030RA','RATE OF ASSESSMENT/PAYABILITY ISSUES','caseType','BBA3-030','Y'),
 	 ('caseSubType','BBA3','BBA3-030RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-030','Y'),
-	 ('caseType','BBA3','BBA3-031','COMPENSATION RECOVERY UNIT','','','Y'),
+	 ('caseType','BBA3','BBA3-031','COMPENSATION RECOVERY UNIT',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-031AA','INVALID','caseType','BBA3-031','Y'),
 	 ('caseSubType','BBA3','BBA3-031CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-031','Y'),
 	 ('caseSubType','BBA3','BBA3-031CE','CONDITIONS OF ENTITLEMENT','caseType','BBA3-031','Y'),
@@ -358,7 +358,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-031SS','SELF EMPLOYED - STRAIGHTFORWARD','caseType','BBA3-031','Y'),
 	 ('caseSubType','BBA3','BBA3-031SX','SELF EMPLOYED - COMPLEX','caseType','BBA3-031','Y'),
 	 ('caseSubType','BBA3','BBA3-031XA','SEXUAL ABUSE','caseType','BBA3-031','Y'),
-	 ('caseType','BBA3','BBA3-032','CREDITS - JURY SERVICE','','','Y'),
+	 ('caseType','BBA3','BBA3-032','CREDITS - JURY SERVICE',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-032AA','INVALID','caseType','BBA3-032','Y'),
 	 ('caseSubType','BBA3','BBA3-032CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-032','Y'),
 	 ('caseSubType','BBA3','BBA3-032CE','CONDITIONS OF ENTITLEMENT','caseType','BBA3-032','Y'),
@@ -373,7 +373,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-032OS','OVERPAYMENT - STRAIGHTFORWARD','caseType','BBA3-032','Y'),
 	 ('caseSubType','BBA3','BBA3-032RA','RATE OF ASSESSMENT/PAYABILITY ISSUES','caseType','BBA3-032','Y'),
 	 ('caseSubType','BBA3','BBA3-032RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-032','Y'),
-	 ('caseType','BBA3','BBA3-033','CREDITS - STATUTORY SICK PAY','','','Y'),
+	 ('caseType','BBA3','BBA3-033','CREDITS - STATUTORY SICK PAY',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-033AA','INVALID','caseType','BBA3-033','Y');
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
 	 ('caseSubType','BBA3','BBA3-033CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-033','Y'),
@@ -407,7 +407,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-034RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-034','Y'),
 	 ('caseSubType','BBA3','BBA3-034SS','SELF EMPLOYED - STRAIGHTFORWARD','caseType','BBA3-034','Y'),
 	 ('caseSubType','BBA3','BBA3-034SX','SELF EMPLOYED - COMPLEX','caseType','BBA3-034','Y'),
-	 ('caseType','BBA3','BBA3-035','CREDITS - STATUTORY MATERNITY PAY','','','Y');
+	 ('caseType','BBA3','BBA3-035','CREDITS - STATUTORY MATERNITY PAY',NULL,NULL,'Y');
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
 	 ('caseSubType','BBA3','BBA3-035AA','INVALID','caseType','BBA3-035','Y'),
 	 ('caseSubType','BBA3','BBA3-035CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-035','Y'),
@@ -423,13 +423,13 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-035OS','OVERPAYMENT - STRAIGHTFORWARD','caseType','BBA3-035','Y'),
 	 ('caseSubType','BBA3','BBA3-035RA','RATE OF ASSESSMENT/PAYABILITY ISSUES','caseType','BBA3-035','Y'),
 	 ('caseSubType','BBA3','BBA3-035RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-035','Y'),
-	 ('caseType','BBA3','BBA3-036','ROAD TRAFFIC (NHS CHARGE)','','','Y'),
+	 ('caseType','BBA3','BBA3-036','ROAD TRAFFIC (NHS CHARGE)',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-036AA','INVALID','caseType','BBA3-036','Y'),
 	 ('caseSubType','BBA3','BBA3-036CP','CIVIL PENALTIES','caseType','BBA3-036','Y'),
 	 ('caseSubType','BBA3','BBA3-036DD','APPEAL DIRECTLY LODGED','caseType','BBA3-036','Y'),
 	 ('caseSubType','BBA3','BBA3-036DQ','DISABLEMENT QUESTION','caseType','BBA3-036','Y'),
 	 ('caseSubType','BBA3','BBA3-036ON','ONE PROJECT','caseType','BBA3-036','Y'),
-	 ('caseType','BBA3','BBA3-037','DISABILITY LIVING ALLOWANCE','','','Y');
+	 ('caseType','BBA3','BBA3-037','DISABILITY LIVING ALLOWANCE',NULL,NULL,'Y');
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
 	 ('caseSubType','BBA3','BBA3-037AA','INVALID','caseType','BBA3-037','Y'),
 	 ('caseSubType','BBA3','BBA3-037AR','ALTERNATIVE DISPUTE RESOLUTION','caseType','BBA3-037','Y'),
@@ -453,7 +453,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-037RA','RATE OF ASSESSMENT/PAYABILITY ISSUES','caseType','BBA3-037','Y'),
 	 ('caseSubType','BBA3','BBA3-037RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-037','Y');
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
-	 ('caseType','BBA3','BBA3-040','DISABILITY WORKING ALLOWANCE','','','Y'),
+	 ('caseType','BBA3','BBA3-040','DISABILITY WORKING ALLOWANCE',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-040AA','INVALID','caseType','BBA3-040','Y'),
 	 ('caseSubType','BBA3','BBA3-040CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-040','Y'),
 	 ('caseSubType','BBA3','BBA3-040CE','CONDITIONS OF ENTITLEMENT','caseType','BBA3-040','Y'),
@@ -479,7 +479,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-040RG','RECIPROCAL AGREEMENT','caseType','BBA3-040','Y'),
 	 ('caseSubType','BBA3','BBA3-040SS','SELF EMPLOYED - STRAIGHTFORWARD','caseType','BBA3-040','Y'),
 	 ('caseSubType','BBA3','BBA3-040SX','SELF EMPLOYED - COMPLEX','caseType','BBA3-040','Y'),
-	 ('caseType','BBA3','BBA3-043','DISABLED PERSONS TAX CREDIT','','','Y'),
+	 ('caseType','BBA3','BBA3-043','DISABLED PERSONS TAX CREDIT',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-043AA','INVALID','caseType','BBA3-043','Y'),
 	 ('caseSubType','BBA3','BBA3-043CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-043','Y'),
 	 ('caseSubType','BBA3','BBA3-043CE','CONDITIONS OF ENTITLEMENT','caseType','BBA3-043','Y'),
@@ -499,7 +499,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
 	 ('caseSubType','BBA3','BBA3-043RA','RATE OF ASSESSMENT/PAYABILITY ISSUES','caseType','BBA3-043','Y'),
 	 ('caseSubType','BBA3','BBA3-043RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-043','Y'),
-	 ('caseType','BBA3','BBA3-045','PENSION CREDITS','','','Y'),
+	 ('caseType','BBA3','BBA3-045','PENSION CREDITS',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-045AA','INVALID','caseType','BBA3-045','Y'),
 	 ('caseSubType','BBA3','BBA3-045AP','ASSESSED INCOME PERIODS','caseType','BBA3-045','Y'),
 	 ('caseSubType','BBA3','BBA3-045AS','ASYLUM','caseType','BBA3-045','Y'),
@@ -535,7 +535,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-045SM','MATERNITY','caseType','BBA3-045','Y'),
 	 ('caseSubType','BBA3','BBA3-045SS','SELF EMPLOYED - STRAIGHTFORWARD','caseType','BBA3-045','Y'),
 	 ('caseSubType','BBA3','BBA3-045SX','SELF EMPLOYED - COMPLEX','caseType','BBA3-045','Y'),
-	 ('caseType','BBA3','BBA3-049','FAMILY CREDIT','','','Y'),
+	 ('caseType','BBA3','BBA3-049','FAMILY CREDIT',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-049AA','INVALID','caseType','BBA3-049','Y'),
 	 ('caseSubType','BBA3','BBA3-049CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-049','Y'),
 	 ('caseSubType','BBA3','BBA3-049CE','CONDITIONS OF ENTITLEMENT','caseType','BBA3-049','Y'),
@@ -555,7 +555,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-049OX','OVERPAYMENT - COMPLEX','caseType','BBA3-049','Y'),
 	 ('caseSubType','BBA3','BBA3-049RA','RATE OF ASSESSMENT/PAYABILITY ISSUES','caseType','BBA3-049','Y'),
 	 ('caseSubType','BBA3','BBA3-049RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-049','Y'),
-	 ('caseType','BBA3','BBA3-050','HRP','','','Y'),
+	 ('caseType','BBA3','BBA3-050','HRP',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-050AA','INVALID','caseType','BBA3-050','Y'),
 	 ('caseSubType','BBA3','BBA3-050CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-050','Y'),
 	 ('caseSubType','BBA3','BBA3-050CE','CONDITIONS OF ENTITLEMENT','caseType','BBA3-050','Y'),
@@ -596,7 +596,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-051TP','TRANSITIONAL PROTECTION','caseType','BBA3-051','Y'),
 	 ('caseSubType','BBA3','BBA3-051WC','WORK CAPABILITY ASSESSMENT','caseType','BBA3-051','Y');
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
-	 ('caseType','BBA3','BBA3-052','INCAPACITY BENEFIT','','','Y'),
+	 ('caseType','BBA3','BBA3-052','INCAPACITY BENEFIT',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-052AA','INVALID','caseType','BBA3-052','Y'),
 	 ('caseSubType','BBA3','BBA3-052AT','ALL WORK TEST','caseType','BBA3-052','Y'),
 	 ('caseSubType','BBA3','BBA3-052CB','CONTRIBUTION RECORDS','caseType','BBA3-052','Y'),
@@ -618,7 +618,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-052RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-052','Y'),
 	 ('caseSubType','BBA3','BBA3-052RG','RECIPROCAL AGREEMENT','caseType','BBA3-052','Y');
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
-	 ('caseType','BBA3','BBA3-053','CHILD TAX CREDIT','','','Y'),
+	 ('caseType','BBA3','BBA3-053','CHILD TAX CREDIT',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-053AA','INVALID','caseType','BBA3-053','Y'),
 	 ('caseSubType','BBA3','BBA3-053CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-053','Y'),
 	 ('caseSubType','BBA3','BBA3-053CE','CONDITIONS OF ENTITLEMENT','caseType','BBA3-053','Y'),
@@ -633,7 +633,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-053OI','OVERPAYMENT INTEREST','caseType','BBA3-053','Y'),
 	 ('caseSubType','BBA3','BBA3-053RA','RATE OF ASSESSMENT/PAYABILITY ISSUES','caseType','BBA3-053','Y'),
 	 ('caseSubType','BBA3','BBA3-053RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-053','Y'),
-	 ('caseType','BBA3','BBA3-054','WORKING TAX CREDIT','','','Y'),
+	 ('caseType','BBA3','BBA3-054','WORKING TAX CREDIT',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-054AA','INVALID','caseType','BBA3-054','Y'),
 	 ('caseSubType','BBA3','BBA3-054CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-054','Y'),
 	 ('caseSubType','BBA3','BBA3-054CE','CONDITIONS OF ENTITLEMENT','caseType','BBA3-054','Y'),
@@ -648,7 +648,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-054OI','OVERPAYMENT INTEREST','caseType','BBA3-054','Y'),
 	 ('caseSubType','BBA3','BBA3-054RA','RATE OF ASSESSMENT/PAYABILITY ISSUES','caseType','BBA3-054','Y'),
 	 ('caseSubType','BBA3','BBA3-054RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-054','Y'),
-	 ('caseType','BBA3','BBA3-055','PENALTY PROCEEDINGS','','','Y'),
+	 ('caseType','BBA3','BBA3-055','PENALTY PROCEEDINGS',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-055AA','INVALID','caseType','BBA3-055','Y');
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
 	 ('caseSubType','BBA3','BBA3-055CP','CIVIL PENALTIES','caseType','BBA3-055','Y'),
@@ -662,7 +662,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-056AA','INVALID','caseType','BBA3-056','Y'),
 	 ('caseSubType','BBA3','BBA3-056VW','VERBALLY WITHDRAWN','caseType','BBA3-056','Y');
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
-	 ('caseType','BBA3','BBA3-057','TAX-FREE CHILDCARE SCHEME','','','Y'),
+	 ('caseType','BBA3','BBA3-057','TAX-FREE CHILDCARE SCHEME',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-057CE','CONDITIONS OF ENTITLEMENT','caseType','BBA3-057','Y'),
 	 ('caseSubType','BBA3','BBA3-057CP','CIVIL PENALTIES','caseType','BBA3-057','Y'),
 	 ('caseSubType','BBA3','BBA3-057DD','APPEAL DIRECTLY LODGED','caseType','BBA3-057','Y'),
@@ -670,12 +670,12 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-057DS','DISQUALIFICATION FROM THE SCHEME','caseType','BBA3-057','Y'),
 	 ('caseSubType','BBA3','BBA3-057RO','ACCOUNT USAGE','caseType','BBA3-057','Y'),
 	 ('caseSubType','BBA3','BBA3-057TU','TOP-UP ASSESSMENTS','caseType','BBA3-057','Y'),
-	 ('caseType','BBA3','BBA3-058','30 HOURS'' FREE CHILDCARE SCHEME','','','Y'),
+	 ('caseType','BBA3','BBA3-058','30 HOURS'' FREE CHILDCARE SCHEME',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-058CE','CONDITIONS OF ENTITLEMENT','caseType','BBA3-058','Y');
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
 	 ('caseSubType','BBA3','BBA3-058CP','CIVIL PENALTIES','caseType','BBA3-058','Y'),
 	 ('caseSubType','BBA3','BBA3-058DD','APPEAL DIRECTLY LODGED','caseType','BBA3-058','Y'),
-	 ('caseType','BBA3','BBA3-061','INCOME SUPPORT','','','Y'),
+	 ('caseType','BBA3','BBA3-061','INCOME SUPPORT',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-061AA','INVALID','caseType','BBA3-061','Y'),
 	 ('caseSubType','BBA3','BBA3-061AS','ASYLUM','caseType','BBA3-061','Y'),
 	 ('caseSubType','BBA3','BBA3-061AT','ALL WORK TEST','caseType','BBA3-061','Y'),
@@ -724,7 +724,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-061SX','SELF EMPLOYED - COMPLEX','caseType','BBA3-061','Y'),
 	 ('caseSubType','BBA3','BBA3-061TT','TERM-TIME','caseType','BBA3-061','Y'),
 	 ('caseSubType','BBA3','BBA3-061WF','SOCIAL FUND WINTER FUEL PAYMENTS','caseType','BBA3-061','Y'),
-	 ('caseType','BBA3','BBA3-062','EMPLOYMENT SUPPORT ALLOWANCE REASSESSMENT','','','Y'),
+	 ('caseType','BBA3','BBA3-062','EMPLOYMENT SUPPORT ALLOWANCE REASSESSMENT',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-062AA','INVALID','caseType','BBA3-062','Y'),
 	 ('caseSubType','BBA3','BBA3-062CB','CONTRIBUTION RECORDS','caseType','BBA3-062','Y');
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
@@ -745,7 +745,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-062SG','SUPPORT GROUP PLACEMENT','caseType','BBA3-062','Y'),
 	 ('caseSubType','BBA3','BBA3-062TP','TRANSITIONAL PROTECTION','caseType','BBA3-062','Y'),
 	 ('caseSubType','BBA3','BBA3-062WC','WORK CAPABILITY ASSESSMENT','caseType','BBA3-062','Y'),
-	 ('caseType','BBA3','BBA3-064','INDUSTRIAL DEATH BENEFIT','','','Y'),
+	 ('caseType','BBA3','BBA3-064','INDUSTRIAL DEATH BENEFIT',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-064AA','INVALID','caseType','BBA3-064','Y'),
 	 ('caseSubType','BBA3','BBA3-064CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-064','Y'),
 	 ('caseSubType','BBA3','BBA3-064CE','CONDITIONS OF ENTITLEMENT','caseType','BBA3-064','Y');
@@ -766,7 +766,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-064OX','OVERPAYMENT - COMPLEX','caseType','BBA3-064','Y'),
 	 ('caseSubType','BBA3','BBA3-064RA','RATE OF ASSESSMENT/PAYABILITY ISSUES','caseType','BBA3-064','Y'),
 	 ('caseSubType','BBA3','BBA3-064RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-064','Y'),
-	 ('caseType','BBA3','BBA3-067','INDUSTRIAL INJURIES DISABLEMENT BENEFIT','','','Y'),
+	 ('caseType','BBA3','BBA3-067','INDUSTRIAL INJURIES DISABLEMENT BENEFIT',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-067AA','INVALID','caseType','BBA3-067','Y'),
 	 ('caseSubType','BBA3','BBA3-067CB','CONTRIBUTION RECORDS','caseType','BBA3-067','Y'),
 	 ('caseSubType','BBA3','BBA3-067CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-067','Y'),
@@ -791,7 +791,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-067OX','OVERPAYMENT - COMPLEX','caseType','BBA3-067','Y'),
 	 ('caseSubType','BBA3','BBA3-067RA','RATE OF ASSESSMENT/PAYABILITY ISSUES','caseType','BBA3-067','Y'),
 	 ('caseSubType','BBA3','BBA3-067RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-067','Y'),
-	 ('caseType','BBA3','BBA3-069','(HOUSING / COUNCIL TAX) BENEFIT COMBINED','','','Y'),
+	 ('caseType','BBA3','BBA3-069','(HOUSING / COUNCIL TAX) BENEFIT COMBINED',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-069AA','INVALID','caseType','BBA3-069','Y');
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
 	 ('caseSubType','BBA3','BBA3-069AS','ASYLUM','caseType','BBA3-069','Y'),
@@ -832,7 +832,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-069TB','TERMINATION OF BENEFIT - FAILURE TO PROVIDE FURTHE','caseType','BBA3-069','Y'),
 	 ('caseSubType','BBA3','BBA3-069TE','EXCEPTIONAL CIRCUMSTANCES PAYMENTS','caseType','BBA3-069','Y'),
 	 ('caseSubType','BBA3','BBA3-069TO','EXCEPTIONAL HARDSHIP PAYMENTS','caseType','BBA3-069','Y'),
-	 ('caseType','BBA3','BBA3-070','CARER''S ALLOWANCE','','','Y'),
+	 ('caseType','BBA3','BBA3-070','CARER''S ALLOWANCE',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-070AA','INVALID','caseType','BBA3-070','Y'),
 	 ('caseSubType','BBA3','BBA3-070CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-070','Y'),
 	 ('caseSubType','BBA3','BBA3-070CE','CONDITIONS OF ENTITLEMENT','caseType','BBA3-070','Y'),
@@ -850,7 +850,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-070RA','RATE OF ASSESSMENT/PAYABILITY ISSUES','caseType','BBA3-070','Y');
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
 	 ('caseSubType','BBA3','BBA3-070RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-070','Y'),
-	 ('caseType','BBA3','BBA3-073','JOB SEEKER''S ALLOWANCE','','','Y'),
+	 ('caseType','BBA3','BBA3-073','JOB SEEKER''S ALLOWANCE',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-073AA','INVALID','caseType','BBA3-073','Y'),
 	 ('caseSubType','BBA3','BBA3-073AS','ASYLUM','caseType','BBA3-073','Y'),
 	 ('caseSubType','BBA3','BBA3-073AT','ALL WORK TEST','caseType','BBA3-073','Y'),
@@ -950,7 +950,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
 	 ('caseSubType','BBA3','BBA3-075UA','ASSESSED AS UNABLE TO PAY - STRAIGHTFORWARD','caseType','BBA3-075','Y'),
 	 ('caseSubType','BBA3','BBA3-075UL','ASSESSED AS UNLIKELY TO PAY - STRAIGHTFORWARD','caseType','BBA3-075','Y'),
-	 ('caseType','BBA3','BBA3-076','LOOKALIKES','','','Y'),
+	 ('caseType','BBA3','BBA3-076','LOOKALIKES',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-076AA','INVALID','caseType','BBA3-076','Y'),
 	 ('caseSubType','BBA3','BBA3-076AS','ASYLUM','caseType','BBA3-076','Y'),
 	 ('caseSubType','BBA3','BBA3-076AT','ALL WORK TEST','caseType','BBA3-076','Y'),
@@ -999,7 +999,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-076SS','SELF EMPLOYED - STRAIGHTFORWARD','caseType','BBA3-076','Y'),
 	 ('caseSubType','BBA3','BBA3-076SU','SUSPENSIONS','caseType','BBA3-076','Y'),
 	 ('caseSubType','BBA3','BBA3-076SX','SELF EMPLOYED - COMPLEX','caseType','BBA3-076','Y'),
-	 ('caseType','BBA3','BBA3-077','COUNCIL TAX BENEFIT','','','Y'),
+	 ('caseType','BBA3','BBA3-077','COUNCIL TAX BENEFIT',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-077AA','INVALID','caseType','BBA3-077','Y'),
 	 ('caseSubType','BBA3','BBA3-077AS','ASYLUM','caseType','BBA3-077','Y');
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
@@ -1039,7 +1039,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-077TB','TERMINATION OF BENEFIT - FAILURE TO PROVIDE FURTHE','caseType','BBA3-077','Y'),
 	 ('caseSubType','BBA3','BBA3-077TE','EXCEPTIONAL CIRCUMSTANCES PAYMENTS','caseType','BBA3-077','Y'),
 	 ('caseSubType','BBA3','BBA3-077TO','EXCEPTIONAL HARDSHIP PAYMENTS','caseType','BBA3-077','Y'),
-	 ('caseType','BBA3','BBA3-079','MATERNITY BENEFIT/ALLOWANCES','','','Y'),
+	 ('caseType','BBA3','BBA3-079','MATERNITY BENEFIT/ALLOWANCES',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-079AA','INVALID','caseType','BBA3-079','Y'),
 	 ('caseSubType','BBA3','BBA3-079CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-079','Y'),
 	 ('caseSubType','BBA3','BBA3-079CE','CONDITIONS OF ENTITLEMENT','caseType','BBA3-079','Y'),
@@ -1056,7 +1056,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-079OX','OVERPAYMENT - COMPLEX','caseType','BBA3-079','Y'),
 	 ('caseSubType','BBA3','BBA3-079RA','RATE OF ASSESSMENT/PAYABILITY ISSUES','caseType','BBA3-079','Y'),
 	 ('caseSubType','BBA3','BBA3-079RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-079','Y'),
-	 ('caseType','BBA3','BBA3082','RETIREMENT PENSION','','','Y');
+	 ('caseType','BBA3','BBA3082','RETIREMENT PENSION',NULL,NULL,'Y');
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
 	 ('caseSubType','BBA3','BBA3082AA','INVALID','caseType','BBA3082','Y'),
 	 ('caseSubType','BBA3','BBA3082CB','CONTRIBUTION RECORDS','caseType','BBA3082','Y'),
@@ -1075,7 +1075,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3082OX','OVERPAYMENT - COMPLEX','caseType','BBA3082','Y'),
 	 ('caseSubType','BBA3','BBA3082RA','RATE OF ASSESSMENT/PAYABILITY ISSUES','caseType','BBA3082','Y'),
 	 ('caseSubType','BBA3','BBA3082RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3082','Y'),
-	 ('caseType','BBA3','BBA3-085','SEVERE DISABLEMENT BENEFIT/ALLOWANCE','','','Y'),
+	 ('caseType','BBA3','BBA3-085','SEVERE DISABLEMENT BENEFIT/ALLOWANCE',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-085AA','INVALID','caseType','BBA3-085','Y'),
 	 ('caseSubType','BBA3','BBA3-085AT','ALL WORK TEST','caseType','BBA3-085','Y'),
 	 ('caseSubType','BBA3','BBA3-085CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-085','Y');
@@ -1095,7 +1095,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-085OX','OVERPAYMENT - COMPLEX','caseType','BBA3-085','Y'),
 	 ('caseSubType','BBA3','BBA3-085RA','RATE OF ASSESSMENT/PAYABILITY ISSUES','caseType','BBA3-085','Y'),
 	 ('caseSubType','BBA3','BBA3-085RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-085','Y'),
-	 ('caseType','BBA3','BBA3-088','SOCIAL FUND - MATERNITY','','','Y'),
+	 ('caseType','BBA3','BBA3-088','SOCIAL FUND - MATERNITY',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-088AA','INVALID','caseType','BBA3-088','Y'),
 	 ('caseSubType','BBA3','BBA3-088CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-088','Y'),
 	 ('caseSubType','BBA3','BBA3-088CE','CONDITIONS OF ENTITLEMENT','caseType','BBA3-088','Y'),
@@ -1116,7 +1116,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-088RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-088','Y'),
 	 ('caseSubType','BBA3','BBA3-088SF','FUNERAL','caseType','BBA3-088','Y'),
 	 ('caseSubType','BBA3','BBA3-088SM','MATERNITY','caseType','BBA3-088','Y'),
-	 ('caseType','BBA3','BBA3-089','SOCIAL FUND - FUNERAL','','','Y'),
+	 ('caseType','BBA3','BBA3-089','SOCIAL FUND - FUNERAL',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-089AA','INVALID','caseType','BBA3-089','Y'),
 	 ('caseSubType','BBA3','BBA3-089CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-089','Y'),
 	 ('caseSubType','BBA3','BBA3-089CE','CONDITIONS OF ENTITLEMENT','caseType','BBA3-089','Y'),
@@ -1137,10 +1137,10 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
 	 ('caseSubType','BBA3','BBA3-089SF','FUNERAL','caseType','BBA3-089','Y'),
 	 ('caseSubType','BBA3','BBA3-089SM','MATERNITY','caseType','BBA3-089','Y'),
-	 ('caseType','BBA3','BBA3-090','CHILDREN''S FUNERAL FUND FOR ENGLAND','','','Y'),
+	 ('caseType','BBA3','BBA3-090','CHILDREN''S FUNERAL FUND FOR ENGLAND',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-090DD','APPEAL DIRECTLY LODGED','caseType','BBA3-090','Y'),
 	 ('caseSubType','BBA3','BBA3-090FF','FUNERAL FUND','caseType','BBA3-090','Y'),
-	 ('caseType','BBA3','BBA3-091','VACCINE DAMAGE APPEALS','','','Y'),
+	 ('caseType','BBA3','BBA3-091','VACCINE DAMAGE APPEALS',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-091AA','INVALID','caseType','BBA3-091','Y'),
 	 ('caseSubType','BBA3','BBA3-091CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-091','Y'),
 	 ('caseSubType','BBA3','BBA3-091CE','CONDITIONS OF ENTITLEMENT','caseType','BBA3-091','Y'),
@@ -1154,7 +1154,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-091ON','ONE PROJECT','caseType','BBA3-091','Y'),
 	 ('caseSubType','BBA3','BBA3-091RA','RATE OF ASSESSMENT/PAYABILITY ISSUES','caseType','BBA3-091','Y'),
 	 ('caseSubType','BBA3','BBA3-091RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-091','Y'),
-	 ('caseType','BBA3','BBA3-094','BEREAVEMENT BENEFIT','','','Y'),
+	 ('caseType','BBA3','BBA3-094','BEREAVEMENT BENEFIT',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-094AA','INVALID','caseType','BBA3-094','Y');
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
 	 ('caseSubType','BBA3','BBA3-094CB','CONTRIBUTION RECORDS','caseType','BBA3-094','Y'),
@@ -1174,7 +1174,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-094OX','OVERPAYMENT - COMPLEX','caseType','BBA3-094','Y'),
 	 ('caseSubType','BBA3','BBA3-094RA','RATE OF ASSESSMENT/PAYABILITY ISSUES','caseType','BBA3-094','Y'),
 	 ('caseSubType','BBA3','BBA3-094RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-094','Y'),
-	 ('caseType','BBA3','BBA3-095','BEREAVEMENT SUPPORT PAYMENT SCHEME','','','Y'),
+	 ('caseType','BBA3','BBA3-095','BEREAVEMENT SUPPORT PAYMENT SCHEME',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-095CB','CONTRIBUTION RECORDS','caseType','BBA3-095','Y'),
 	 ('caseSubType','BBA3','BBA3-095CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-095','Y'),
 	 ('caseSubType','BBA3','BBA3-095CE','CONDITIONS OF ENTITLEMENT','caseType','BBA3-095','Y');
@@ -1184,7 +1184,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 	 ('caseSubType','BBA3','BBA3-095LE','LATE (EXTENDING BACK)','caseType','BBA3-095','Y'),
 	 ('caseSubType','BBA3','BBA3-095OS','OVERPAYMENT - STRAIGHTFORWARD','caseType','BBA3-095','Y'),
 	 ('caseSubType','BBA3','BBA3-095RA','RATE OF ASSESSMENT/PAYABILITY ISSUES','caseType','BBA3-095','Y'),
-	 ('caseType','BBA3','BBA3-096','WORKING FAMILIES TAX CREDIT','','','Y'),
+	 ('caseType','BBA3','BBA3-096','WORKING FAMILIES TAX CREDIT',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-096AA','INVALID','caseType','BBA3-096','Y'),
 	 ('caseSubType','BBA3','BBA3-096CC','CONDITIONS OF ENTITLEMENT - COMPLEX','caseType','BBA3-096','Y'),
 	 ('caseSubType','BBA3','BBA3-096CE','CONDITIONS OF ENTITLEMENT','caseType','BBA3-096','Y'),
@@ -1203,7 +1203,7 @@ INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,paren
 INSERT INTO case_type (categorykey,serviceid,"key",value_en,parentcategory,parentkey,active) VALUES
 	 ('caseSubType','BBA3','BBA3-096RA','RATE OF ASSESSMENT/PAYABILITY ISSUES','caseType','BBA3-096','Y'),
 	 ('caseSubType','BBA3','BBA3-096RC','RATE OF ASSESSMENT/PAYABILITY ISSUES - COMPLEX','caseType','BBA3-096','Y'),
-	 ('caseType','BBA3','BBA3-099','OTHERS (EXTINCT/RARE BENEFITS)','','','Y'),
+	 ('caseType','BBA3','BBA3-099','OTHERS (EXTINCT/RARE BENEFITS)',NULL,NULL,'Y'),
 	 ('caseSubType','BBA3','BBA3-099AA','INVALID','caseType','BBA3-099','Y'),
 	 ('caseSubType','BBA3','BBA3-099AS','ASYLUM','caseType','BBA3-099','Y'),
 	 ('caseSubType','BBA3','BBA3-099AT','ALL WORK TEST','caseType','BBA3-099','Y'),
