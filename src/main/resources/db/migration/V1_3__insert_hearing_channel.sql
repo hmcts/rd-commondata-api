@@ -1371,5 +1371,5 @@ Active varchar(1)
 INSERT INTO hearing_priority (CategoryKey,ServiceID,Key,Value_EN,Value_CY,HintText_EN,HintText_CY,Lov_Order,ParentCategory,ParentKey,Active)
 VALUES ('HearingPriority', null, 'normal', 'Normal', null, null , null, null, null, null, 'Y'),
 ('HearingPriority', null, 'high', 'High', null, null, null, null, null, null, 'Y'),
-('HearingPriority', null, 'critical', 'Critical', null, null, null, null, null, null, 'Y');
+('HearingPriority', null, 'critical', 'Critical', null, null, null, null, null, null, 'Y'),
 ('HearingPriority', null, 'pending', 'Pending', null, null, null, null, null, null, 'Y');
