@@ -1,5 +1,5 @@
 locals {
-  key_vault_name          = join("-", [var.product, "aat"])
+  key_vault_name          = join("-", [var.product, var.env])
   s2s_key_vault_name        = join("-", ["s2s", var.env])
   s2s_vault_resource_group  = join("-", ["rpe-service-auth-provider", var.env])
 }
