@@ -21,7 +21,7 @@ allprojects {
 
 def versions = [
   springfoxSwagger   : '2.9.2',
-  log4j              : '2.15.0'
+  log4j              : '2.16.0'
   ]
 
 
