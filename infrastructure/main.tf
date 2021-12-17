@@ -62,3 +62,9 @@ resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   value         = module.db-common-data-v11.postgresql_database
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
+
+resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
+  name          = join("-", [var.component, "POSTGRES-PORT"])
+  value         = "5432"
+  key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
+}
