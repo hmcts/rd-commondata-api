@@ -8,6 +8,7 @@ def component = "commondata-api"
 
 withPipeline(type, product, component) {
     enableAksStagingDeployment()
+    enableDbMigration('rd')
 
     // Configure branches to sync with master branch
     def branchesToSync = ['demo', 'ithc', 'perftest']
