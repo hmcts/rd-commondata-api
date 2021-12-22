@@ -1,6 +1,6 @@
 server:
   port: 4550
-
+flaglist: PF0015,RA0042
 management:
   endpoints:
     jmx:
