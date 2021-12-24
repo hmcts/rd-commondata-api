@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.cdapi.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +26,7 @@ import static uk.gov.hmcts.reform.cdapi.controllers.constant.Constant.FLAG_PF001
 import static uk.gov.hmcts.reform.cdapi.controllers.constant.Constant.FLAG_RA0042;
 
 @Service
+@Slf4j
 public class CaseFlagServiceImpl implements CaseFlagService {
 
     @Autowired
@@ -45,6 +47,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         var flagDetails = addTopLevelFlag(caseFlagDtoList);
         addChildLevelFlag(caseFlagDtoList, flagDetails);
         addOtherFlag(flagDetails);
+        log.info("Added other flag");
         flag.setFlagDetails(filterFlagType(flagDetails, flagType));
         if (flag.getFlagDetails().size() == 0)
             throw new ResourceNotFoundException("Data not found");
@@ -77,6 +80,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                 flagDetails.add(flagDetail);
             }
         }
+        log.info("Added top level flag : " + flagDetails.size());
         return flagDetails;
     }
 
@@ -106,6 +110,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                 addChildFlag(flagDetails, childFlag);
             }
         }
+        log.info("Added all child flag");
     }
 
     /**
@@ -126,6 +131,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         childFlag.setChildFlags(null);
         childFlag.setListOfValuesLength(listOfValues.size());
         childFlag.setListOfValues(listOfValues);
+        log.info("Added Lov: " + listOfValues.size());
     }
 
     /**

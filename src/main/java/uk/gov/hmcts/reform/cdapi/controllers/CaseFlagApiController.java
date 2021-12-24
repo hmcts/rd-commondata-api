@@ -79,6 +79,7 @@ public class CaseFlagApiController {
     ) {
         if (null != flagType)
             validationFlagType(flagType);
+        log.info("Calling Service layer");
         CaseFlag caseFlag = caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType);
         return ResponseEntity.ok().body(caseFlag);
     }

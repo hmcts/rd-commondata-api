@@ -14,7 +14,7 @@ public class ListOfValue {
     @Id
     @Column(name = "ctid")
     @JsonIgnore
-    String id;
+    private String id;
     private String key;
     private String value;
 }
