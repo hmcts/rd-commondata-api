@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.cdapi.exception.handler;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,11 +34,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 public class GlobalExceptionHandler {
 
+    @Value("${loggingComponentName}")
+    private String loggingComponentName;
+
     private static final String HANDLING_EXCEPTION_TEMPLATE = "{}:: handling exception: {}";
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
-    public ResponseEntity<Object> handleEmptyResultDataAccessException(
-        EmptyResultDataAccessException ex) {
+    public ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex) {
         return errorDetailsResponseEntity(ex, NOT_FOUND, ErrorConstants.EMPTY_RESULT_DATA_ACCESS.getErrorMessage());
     }
 
@@ -54,8 +57,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(InvalidRequestException.class)
-    public ResponseEntity<Object> customValidationError(
-        InvalidRequestException ex) {
+    public ResponseEntity<Object> customValidationError(InvalidRequestException ex) {
         return errorDetailsResponseEntity(ex, BAD_REQUEST, ErrorConstants.INVALID_REQUEST_EXCEPTION.getErrorMessage());
     }
 
@@ -72,16 +74,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleException(Exception ex) {
-        return errorDetailsResponseEntity(
-            ex,
-            INTERNAL_SERVER_ERROR,
-            ErrorConstants.UNKNOWN_EXCEPTION.getErrorMessage()
+        return errorDetailsResponseEntity(ex,
+                                          INTERNAL_SERVER_ERROR,
+                                          ErrorConstants.UNKNOWN_EXCEPTION.getErrorMessage()
         );
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<Object> handleResourceNotFoundException(
-        ResourceNotFoundException ex) {
+    public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex) {
         return errorDetailsResponseEntity(ex, NOT_FOUND, ErrorConstants.EMPTY_RESULT_DATA_ACCESS.getErrorMessage());
     }
 
@@ -114,8 +114,10 @@ public class GlobalExceptionHandler {
 
     private ResponseEntity<Object> errorDetailsResponseEntity(Exception ex, HttpStatus httpStatus, String errorMsg) {
 
-        log.info(HANDLING_EXCEPTION_TEMPLATE, "loggingComponentName", ex.getMessage(), ex);
-        ErrorResponse errorDetails = new ErrorResponse(httpStatus.value(), httpStatus.getReasonPhrase(), errorMsg,
+        log.info(HANDLING_EXCEPTION_TEMPLATE, loggingComponentName, ex.getMessage(), ex);
+        ErrorResponse errorDetails = new ErrorResponse(httpStatus.value(),
+                                                       httpStatus.getReasonPhrase(),
+                                                       errorMsg,
                                                        getRootException(ex).getLocalizedMessage(),
                                                        getTimeStamp()
         );
