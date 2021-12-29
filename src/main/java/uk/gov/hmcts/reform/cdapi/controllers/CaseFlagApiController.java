@@ -62,7 +62,7 @@ public class CaseFlagApiController {
         produces = APPLICATION_JSON_VALUE,
         path = "/service-id={service-id}"
     )
-    public ResponseEntity<?> retrieveCaseFlagsByServiceId(
+    public ResponseEntity<CaseFlag> retrieveCaseFlagsByServiceId(
         @PathVariable(value = "service-id")
         @ApiParam(name = "service-id",
             value = "Any Valid String is allowed",

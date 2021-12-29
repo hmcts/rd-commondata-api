@@ -48,7 +48,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         log.info("Added other flag");
         var flag = new Flag();
         flag.setFlagDetails(filterFlagType(flagDetails, flagType));
-        if (flag.getFlagDetails().size() == 0) {
+        if (flag.getFlagDetails().isEmpty()) {
             throw new ResourceNotFoundException("Data not found");
         }
         var flags = new ArrayList<Flag>();
@@ -121,7 +121,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
      * @param childFlag flag detail object
      */
     private void retrieveListOfValues(FlagDetail childFlag) {
-        List<ListOfValue> listOfValues = new ArrayList<>();
+        List<ListOfValue> listOfValues;
         switch (childFlag.getFlagCode()) {
             case FLAG_PF0015:
                 listOfValues = listOfVenueRepository.findListOfValues(CATEGORY_KEY_LANGUAGE_INTERPRETER);
@@ -168,19 +168,18 @@ public class CaseFlagServiceImpl implements CaseFlagService {
             return;
         }
         for (FlagDetail flagDetail : flagDetails) {
-            if (flagDetail.getParent()) {
+            if (Boolean.TRUE.equals(flagDetail.getParent())) {
                 flagDetail.getChildFlags().add(otherFlagBuilder(flagDetail
                                                                     .getChildFlags()
                                                                     .stream()
-                                                                    .findFirst()
-                                                                    .get().getPath()));
+                                                                    .findFirst().orElseThrow().getPath()));
             }
             addOtherFlag(flagDetail.getChildFlags());
         }
     }
 
     private FlagDetail otherFlagBuilder(List<String> path) {
-        var otherFlag = FlagDetail.builder()
+        return FlagDetail.builder()
             .name("Other")
             .flagCode("OT0001")
             .hearingRelevant(true)
@@ -188,7 +187,6 @@ public class CaseFlagServiceImpl implements CaseFlagService {
             .childFlags(new ArrayList<>())
             .path(path)
             .flagComment(true).build();
-        return otherFlag;
     }
 
     private List<FlagDetail> filterFlagType(List<FlagDetail> flagDetail, String flagType) {
