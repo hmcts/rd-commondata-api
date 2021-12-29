@@ -41,7 +41,6 @@ def versions = [
   restAssured        : '4.3.3'
 ]
 
-
 sourceSets {
   functionalTest {
     java {
