@@ -33,6 +33,6 @@ public class TestConfigProperties {
     protected String s2sSecret;
 
     @Value("${targetInstance}")
-    protected String CommonDataApiUrl;
+    protected String commonDataApiUrl;
 
 }
