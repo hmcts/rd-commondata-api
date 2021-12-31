@@ -25,7 +25,7 @@ public class CommonDataApiClient {
 
     private static final String SERVICE_HEADER = "ServiceAuthorization";
     private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final String BASE_URL_CASE_FLAGS = "/refdata/commondata/caseflags";
+    private static final String BASE_URL_CASE_FLAGS = "/refdata/commondata";
 
     private final String commonDataApiUrl;
     private final String s2sToken;
@@ -68,7 +68,7 @@ public class CommonDataApiClient {
 
     public Object retrieveCaseFlagsByServiceId(HttpStatus expectedStatus, String param) {
         Response response = getMultipleAuthHeaders()
-            .get(BASE_URL_CASE_FLAGS + "/service-id=XXXX?flag-type=" + param)
+            .get(BASE_URL_CASE_FLAGS + "/caseflags/service-id=XXXX?flag-type=" + param)
             .andReturn();
 
         response.then()
