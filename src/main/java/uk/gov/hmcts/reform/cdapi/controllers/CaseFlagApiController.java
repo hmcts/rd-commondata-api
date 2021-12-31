@@ -23,7 +23,7 @@ import static uk.gov.hmcts.reform.cdapi.util.ValidationUtil.validationFlagType;
 @RestController
 @Slf4j
 @RequestMapping(
-    path = "/refdata/commondata/caseflags"
+    path = "/refdata/commondata"
 )
 public class CaseFlagApiController {
 
@@ -60,7 +60,7 @@ public class CaseFlagApiController {
     })
     @GetMapping(
         produces = APPLICATION_JSON_VALUE,
-        path = "/service-id={service-id}"
+        path = "/caseflags/service-id={service-id}"
     )
     public ResponseEntity<CaseFlag> retrieveCaseFlagsByServiceId(
         @PathVariable(value = "service-id")

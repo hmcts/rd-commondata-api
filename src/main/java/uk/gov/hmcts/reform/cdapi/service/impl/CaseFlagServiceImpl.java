@@ -190,6 +190,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     }
 
     private List<FlagDetail> filterFlagType(List<FlagDetail> flagDetail, String flagType) {
+        log.info("FlagType: " + flagType);
         flagDetail = (StringUtils.isEmpty(flagType))
             ? flagDetail
             : flagDetail

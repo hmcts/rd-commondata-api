@@ -30,7 +30,7 @@ import static uk.gov.hmcts.reform.cdapi.util.JwtTokenUtil.generateToken;
 @PropertySource(value = "/integrationTest/resources/application-test.yml")
 public class CommonDataApiClient {
 
-    private static final String APP_BASE_PATH = "/refdata/commondata/caseflags";
+    private static final String APP_BASE_PATH = "/refdata/commondata";
 
     private static String JWT_TOKEN = null;
     private final Integer commonDataApiPort;
