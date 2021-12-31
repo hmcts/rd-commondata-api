@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.cdapi;
 
+import io.restassured.response.Response;
 import net.thucydides.core.annotations.WithTag;
 import net.thucydides.core.annotations.WithTags;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import uk.gov.hmcts.reform.cdapi.serenity5.SerenityTest;
 import uk.gov.hmcts.reform.cdapi.util.FeatureToggleConditionExtension;
 import uk.gov.hmcts.reform.cdapi.util.ToggleEnable;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SerenityTest
@@ -22,16 +24,18 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class RetrieveCaseFlagByServiceIdFunctionalTest extends AuthorizationFunctionalTest {
 
     public static final String mapKey = "CaseFlagApiController.retrieveCaseFlagsByServiceId";
-    private static final String path = "/refdata/commondata/caseflags";
+    private static final String path = "/caseflags";
 
     @Test
     @ToggleEnable(mapKey = mapKey, withFeature = true)
-    void shouldReturnEmptyList_WhenNoDataFound() {
+    void shouldThrowError_WhenFlagTypeisInvalid() {
         final var response = (ErrorResponse)
             commonDataApiClient.retrieveCaseFlagsByServiceId(
                 HttpStatus.BAD_REQUEST,
-                "service-id=xxxx?flag-type=hello"
+                "hello"
             );
+        assertNotNull(response);
+        assertEquals("Allowed values are PARTY or CASE", response.getErrorDescription());
     }
 
     @Test
@@ -41,9 +45,29 @@ class RetrieveCaseFlagByServiceIdFunctionalTest extends AuthorizationFunctionalT
         ErrorResponse response = (ErrorResponse)
             commonDataApiClient
                 .retrieveResponseForGivenRequest(HttpStatus.FORBIDDEN,
-                                                 "service-id=xxxx?flag-type=hello",
+                                                 "/service-id=xxxx?flag-type=hello",
                                                  CaseFlag.class, path
                 );
         assertNotNull(response);
+    }
+
+    @Test
+    @ToggleEnable(mapKey = mapKey, withFeature = true)
+    void retrieveCaseFlags_UnauthorizedDueToNoBearerToken_ShouldReturnStatusCode401() {
+        Response response =
+            commonDataApiClient.retrieveResponseForGivenRequest_NoBearerToken("/service-id=AAA1", path);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.UNAUTHORIZED.value(), response.getStatusCode());
+    }
+
+    @Test
+    @ToggleEnable(mapKey = mapKey, withFeature = true)
+    void retrieveBuildingLocations_UnauthorizedDueToNoS2SToken_ShouldReturnStatusCode401() {
+        Response response =
+            commonDataApiClient.retrieveResponseForGivenRequest_NoS2SToken("/service-id=AAA1", path);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.UNAUTHORIZED.value(), response.getStatusCode());
     }
 }
