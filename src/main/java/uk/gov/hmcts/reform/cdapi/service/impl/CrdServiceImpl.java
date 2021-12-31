@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.cdapi.domain.HearingChannel;
 import uk.gov.hmcts.reform.cdapi.domain.HearingChannelDto;
+import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
 import uk.gov.hmcts.reform.cdapi.repository.HearingChannelRepository;
 import uk.gov.hmcts.reform.cdapi.service.CrdService;
 
@@ -30,8 +31,11 @@ public class CrdServiceImpl implements CrdService {
                 .and(hearingChannelServiceId(serviceId))
                 .and(hearingChannelParentCategory(parentCategory))
                 .and(hearingChannelParentKey(parentKey)));
-
+        if (list.isEmpty()) {
+            throw new ResourceNotFoundException("Data not found");
+        }
         return convertHearingChannelList(list);
+
     }
 
     private List<HearingChannel> convertHearingChannelList(List<HearingChannelDto> hearingChannelDtos) {

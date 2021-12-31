@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.cdapi.service.FeatureToggleService;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
-import javax.annotation.PostConstruct;
 
 @Service
 public class FeatureToggleServiceImpl implements FeatureToggleService {
@@ -35,6 +35,10 @@ public class FeatureToggleServiceImpl implements FeatureToggleService {
         launchDarklyMap = new HashMap<>();
         launchDarklyMap.put(
             "CaseFlagApiController.retrieveCaseFlagsByServiceId",
+            "rd_commondata_api"
+        );
+        launchDarklyMap.put(
+            "CrdApiController.retrieveHearingChannelByCategoryId",
             "rd_commondata_api"
         );
     }

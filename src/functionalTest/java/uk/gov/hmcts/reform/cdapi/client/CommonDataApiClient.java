@@ -82,9 +82,9 @@ public class CommonDataApiClient {
         }
     }
 
-    public Object retrieveHearingChannelsByCategoryId(HttpStatus expectedStatus, String param) {
+     public Object retrieveHearingChannelsByCategoryId(HttpStatus expectedStatus, String param) {
         Response response = getMultipleAuthHeaders()
-            .get(BASE_URL_CASE_FLAGS + "/lov/categories/{category-id}" + param)
+            .get(BASE_URL_CASE_FLAGS + "/lov/categories/XXXX?service-id=" + param)
             .andReturn();
 
         response.then()
