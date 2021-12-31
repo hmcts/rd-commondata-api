@@ -6,14 +6,116 @@ def type = "java"
 def product = "rd"
 def component = "commondata-api"
 
+def secrets = [
+  's2s-${env}': [
+    secret('microservicekey-rd-commondata-api', 'COMMONDATA_API_S2S_SECRET')
+  ],
+  'rd-${env}' : [
+    secret('OAUTH2-CLIENT-SECRET', 'OAUTH2_CLIENT_SECRET'),
+    secret('OAUTH2-CLIENT-ID', 'OAUTH2_CLIENT_ID'),
+    secret('LD-SDK-KEY', 'LD_SDK_KEY')
+  ]
+]
+
+static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
+  [$class     : 'AzureKeyVaultSecret',
+   secretType : 'Secret',
+   name       : secretName,
+   version    : '',
+   envVariable: envVar
+  ]
+}
+
+def vaultOverrides = [
+  'preview' : 'aat',
+  'spreview': 'saat'
+]
+// Configure branches to sync with master branch
+def branchesToSync = ['demo', 'ithc', 'perftest']
+
+
 withPipeline(type, product, component) {
-    enableAksStagingDeployment()
-    enableDbMigration('rd')
+  overrideVaultEnvironments(vaultOverrides)
+  loadVaultSecrets(secrets)
+  enableDbMigration('rd')
+  enableAksStagingDeployment()
+  syncBranchesWithMaster(branchesToSync)
 
-    // Configure branches to sync with master branch
-    def branchesToSync = ['demo', 'ithc', 'perftest']
+  env.S2S_URL_FOR_TESTS = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
+  env.IDAM_URL = "https://idam-api.aat.platform.hmcts.net"
 
-    // Sync demo and perftest with master branch
-    syncBranchesWithMaster(branchesToSync)
+  before('functionalTest:preview') {
+    env.execution_environment = "preview"
+  }
+
+  before('functionalTest:aat') {
+    env.execution_environment = "aat"
+  }
+
+  after('sonarscan') {
+    publishHTML target: [
+      allowMissing         : true,
+      alwaysLinkToLastBuild: true,
+      keepAll              : true,
+      reportDir            : "build/reports/tests/test",
+      reportFiles          : "index.html",
+      reportName           : "Unit Tests Report"
+    ]
+
+    publishHTML target: [
+      allowMissing         : true,
+      alwaysLinkToLastBuild: true,
+      keepAll              : true,
+      reportDir            : "build/reports/tests/integration",
+      reportFiles          : "index.html",
+      reportName           : "Integration Test Report"
+    ]
+  }
+
+  after('smoketest:preview') {
+    publishHTML target: [
+      allowMissing         : true,
+      alwaysLinkToLastBuild: true,
+      keepAll              : true,
+      reportDir            : "build/reports/tests/smoke",
+      reportFiles          : "index.html",
+      reportName           : "Smoke Test Report"
+    ]
+  }
+
+  after('smoketest:aat') {
+    publishHTML target: [
+      allowMissing         : true,
+      alwaysLinkToLastBuild: true,
+      keepAll              : true,
+      reportDir            : "build/reports/tests/smoke",
+      reportFiles          : "index.html",
+      reportName           : "Smoke Test Report"
+    ]
+  }
+
+  after('functionalTest:aat') {
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+    publishHTML target: [
+      allowMissing         : true,
+      alwaysLinkToLastBuild: true,
+      keepAll              : true,
+      reportDir            : "target/site/serenity/",
+      reportFiles          : "index.html",
+      reportName           : "Functional Tests Report"
+    ]
+  }
+
+  after('functionalTest:preview') {
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+    publishHTML target: [
+      allowMissing         : true,
+      alwaysLinkToLastBuild: true,
+      keepAll              : true,
+      reportDir            : "target/site/serenity/",
+      reportFiles          : "index.html",
+      reportName           : "Functional Tests Report"
+    ]
+  }
 
 }
