@@ -52,13 +52,15 @@ public class CommonDataApiClient {
         this.expiration = tokenExpirationInterval;
     }
 
-    public Object retrieveCaseFlagsByServiceId(String queryParam, Class<?> clazz, String path) throws JsonProcessingException {
+    public Object retrieveCaseFlagsByServiceId(String queryParam,
+                                               Class<?> clazz,
+                                               String path) throws JsonProcessingException {
         ResponseEntity<Object> responseEntity = getRequest(APP_BASE_PATH + path + queryParam, clazz, "");
         return mapCaseFlagsByServiceIdResponse(responseEntity, clazz);
     }
 
-    private Object mapCaseFlagsByServiceIdResponse(ResponseEntity<Object> responseEntity, Class<?> clazz) throws JsonProcessingException {
-
+    private Object mapCaseFlagsByServiceIdResponse(ResponseEntity<Object> responseEntity,
+                                                   Class<?> clazz) throws JsonProcessingException {
         HttpStatus status = responseEntity.getStatusCode();
 
         if (status.is2xxSuccessful()) {

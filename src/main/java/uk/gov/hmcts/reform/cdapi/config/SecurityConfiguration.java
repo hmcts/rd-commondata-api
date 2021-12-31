@@ -21,8 +21,8 @@ import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthen
 import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
 import uk.gov.hmcts.reform.cdapi.oidc.JwtGrantedAuthoritiesConverter;
 
-import javax.inject.Inject;
 import java.util.List;
+import javax.inject.Inject;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 

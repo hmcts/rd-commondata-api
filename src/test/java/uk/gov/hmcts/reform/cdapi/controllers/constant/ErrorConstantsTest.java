@@ -9,7 +9,7 @@ import static uk.gov.hmcts.reform.cdapi.controllers.constant.ErrorConstants.INVA
 import static uk.gov.hmcts.reform.cdapi.controllers.constant.ErrorConstants.MALFORMED_JSON;
 import static uk.gov.hmcts.reform.cdapi.controllers.constant.ErrorConstants.UNSUPPORTED_MEDIA_TYPES;
 
-public class ErrorConstantsTest {
+class ErrorConstantsTest {
 
     @Test
     void test_shouldReturnMsgWhenMsgPassed() {

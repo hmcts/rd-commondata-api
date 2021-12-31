@@ -5,19 +5,21 @@ buildscript {
 }
 plugins {
   id 'application'
-  id 'checkstyle'
+  id 'uk.gov.hmcts.java' version '0.12.12'
   id 'pmd'
   id 'jacoco'
   id "org.flywaydb.flyway" version "7.0.2"
   id 'io.spring.dependency-management' version '1.0.11.RELEASE'
   id 'org.springframework.boot' version '2.4.12'
-  id 'org.owasp.dependencycheck' version '6.5.0.1'
   id 'com.github.ben-manes.versions' version '0.39.0'
   id 'org.sonarqube' version '3.3'
+  id "info.solidsoft.pitest" version '1.7.0'
 }
 
 apply plugin: 'java'
 apply plugin: 'net.serenity-bdd.aggregator'
+apply plugin: 'project-report'
+apply plugin: 'idea'
 
 group = 'uk.gov.hmcts.reform'
 version = '0.0.1'
@@ -28,15 +30,18 @@ allprojects {
 }
 
 def versions = [
-  lombok             : '1.18.20',
-  springfoxSwagger   : '2.9.2',
-  log4j              : '2.16.0',
-  launchDarklySdk    : "5.2.3",
-  reformS2sClient    : '4.0.0',
-  serenity           : '2.0.76',
-  restAssured        : '4.3.3'
+  lombok          : '1.18.20',
+  gradlePitest    : '1.5.1',
+  pitest          : '1.7.0',
+  sonarPitest     : '0.5',
+  reformLogging   : '5.1.7',
+  springfoxSwagger: '2.9.2',
+  log4j           : '2.17.0',
+  launchDarklySdk : "5.2.3",
+  reformS2sClient : '4.0.0',
+  serenity        : '2.0.76',
+  restAssured     : '4.3.3'
 ]
-
 
 sourceSets {
   functionalTest {
@@ -112,24 +117,57 @@ task smoke(type: Test) {
 }
 
 
-
 pmd {
-  toolVersion = "6.39.0"
+  toolVersion = "6.12.0"
   ignoreFailures = true
   sourceSets = [sourceSets.main, sourceSets.test, sourceSets.functionalTest, sourceSets.integrationTest, sourceSets.smokeTest]
   reportsDir = file("$project.buildDir/reports/pmd")
   // https://github.com/pmd/pmd/issues/876
-  ruleSets = []
-  ruleSetFiles = files("config/pmd/ruleset.xml")
+  ruleSets = [
+    'category/java/errorprone.xml',
+    'category/java/bestpractices.xml'
+  ]
+}
+
+jacoco {
+  toolVersion = "0.8.5"
+}
+jacocoTestCoverageVerification {
+  violationRules {
+    rule {
+      limit {
+        counter = 'LINE'
+        value = 'COVEREDRATIO'
+        minimum = 0.00
+      }
+    }
+  }
 }
 
 jacocoTestReport {
-  executionData(test, integration)
+  executionData(test)
   reports {
     xml.required = true
     csv.required = false
     xml.destination file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
   }
+}
+
+pitest {
+  junit5PluginVersion = '0.15'
+  targetClasses = ['uk.gov.hmcts.reform.cdapi.*']
+  excludedClasses = [
+    'uk.gov.hmcts.reform.cdapi.config.*',
+    'uk.gov.hmcts.reform.cdapi.domain.*'
+  ]
+  threads = 10
+  enableDefaultIncrementalAnalysis = true
+  historyInputLocation = 'build/reports/pitest/fastermutationtesting'
+  historyOutputLocation = 'build/reports/pitest/fastermutationtestingoutput'
+  outputFormats = ['XML', 'HTML']
+  timestampedReports = false
+  mutationThreshold = 90
+  useClasspathFile = true
 }
 
 project.tasks['sonarqube'].dependsOn test, integration, jacocoTestReport
@@ -139,8 +177,11 @@ sonarqube {
     property "sonar.projectName", "RD :: Common Data API"
     property "sonar.projectKey", "RDCOMMONDATAAPI"
     property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+    property "sonar.pitest.mode", "reuseReport"
+    property "sonar.pitest.reportsDirectory", "build/reports/pitest"
     property "sonar.exclusions", "src/main/java/uk/gov/hmcts/reform/cdapi/config/**," +
-      "src/main/java/uk/gov/hmcts/reform/cdapi/CommonDataApplication.java"
+      "src/main/java/uk/gov/hmcts/reform/cdapi/CommonDataApplication.java," +
+      "src/main/java/uk/gov/hmcts/reform/cdapi/domain/**"
   }
 }
 
@@ -160,7 +201,6 @@ dependencyUpdates {
 dependencyCheck {
   // Specifies if the build should be failed if a CVSS score above a specified level is identified.
   // range of 0-10 fails the build, anything greater and it doesn't fail the build
-  failBuildOnCVSS = System.getProperty('dependencyCheck.failBuild') == 'true' ? 0 : 11
   suppressionFile = 'config/owasp/suppressions.xml'
 
   analyzers {
@@ -174,10 +214,6 @@ repositories {
   mavenCentral()
   jcenter()
   maven { url 'https://jitpack.io' }
-}
-
-ext {
-  reformLoggingVersion = "5.1.9"
 }
 
 dependencies {
@@ -195,8 +231,10 @@ dependencies {
   implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.14'
   implementation group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
   implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
-  implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: reformLoggingVersion
-  implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: reformLoggingVersion
+  implementation group: 'io.github.openfeign.form', name: 'feign-form', version: '3.8.0'
+  implementation group: 'io.github.openfeign.form', name: 'feign-form-spring', version: '3.8.0'
+  implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.reformLogging
+  implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.reformLogging
   implementation group: 'org.flywaydb', name: 'flyway-core', version: '6.5.1'
   implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: versions.log4j
   implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: versions.log4j
@@ -208,11 +246,16 @@ dependencies {
   implementation group: 'javax.inject', name: 'javax.inject', version: '1'
   implementation group: 'uk.gov.hmcts.reform', name: 'idam-client', version: '2.0.0'
   implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '2.8.5'
-  implementation group: 'io.jsonwebtoken', name: 'jjwt', version:'0.9.1'
-  implementation (group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0') {
+  implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+  implementation(group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0') {
     exclude group: "com.sun.xml.bind", module: "jaxb-osgi"
     exclude group: "org.apache.sling"
   }
+  implementation 'commons-io:commons-io:2.8.0'
+  implementation "io.github.openfeign:feign-httpclient:11.0"
+  implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.3'
+  implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.9'
+  implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.9'
 
   testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.16.2'
   testImplementation "org.testcontainers:junit-jupiter:1.16.2"
@@ -224,7 +267,7 @@ dependencies {
     exclude group: 'junit', module: 'junit'
     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
   }
-  testImplementation ("com.github.tomakehurst:wiremock-jre8:2.31.0") {
+  testImplementation("com.github.tomakehurst:wiremock-jre8:2.31.0") {
     exclude group: 'com.github.jknack'
   }
   testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0'
@@ -237,6 +280,13 @@ dependencies {
   testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: '3.0.2'
   testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
   testImplementation group: 'com.github.mifmif', name: 'generex', version: '1.0.2'
+  testImplementation 'io.github.openfeign:feign-jackson:11.0'
+  testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
+  testImplementation 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.7.0'
+  testImplementation 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5', {
+    exclude group: 'junit', module: 'junit'
+    exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+  }
 
   integrationTestImplementation sourceSets.main.runtimeClasspath
   integrationTestImplementation sourceSets.test.runtimeClasspath

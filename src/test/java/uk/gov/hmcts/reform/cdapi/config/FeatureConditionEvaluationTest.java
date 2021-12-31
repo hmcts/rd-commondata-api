@@ -15,12 +15,12 @@ import uk.gov.hmcts.reform.cdapi.controllers.RootController;
 import uk.gov.hmcts.reform.cdapi.exception.ForbiddenException;
 import uk.gov.hmcts.reform.cdapi.service.impl.FeatureToggleServiceImpl;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;

@@ -5,6 +5,10 @@ import uk.gov.hmcts.reform.cdapi.exception.InvalidRequestException;
 
 public class ValidationUtil {
 
+    private ValidationUtil() {
+
+    }
+
     public static void validationFlagType(String flagType) {
         boolean validFlag = false;
         for (FlagType flagTypes : FlagType.values()) {

@@ -31,8 +31,8 @@ public class CaseFlagApiController {
     CaseFlagService caseFlagService;
 
     @ApiOperation(
-        value = "CommonData API will be used to retrieve the list of case flags for a " +
-            "given service id.",
+        value = "CommonData API will be used to retrieve the list of case flags for a "
+            + "given service id.",
         notes = "Any valid IDAM role should be able to access this API ",
         authorizations = {
             @Authorization(value = "ServiceAuthorization"),
@@ -62,7 +62,7 @@ public class CaseFlagApiController {
         produces = APPLICATION_JSON_VALUE,
         path = "/service-id={service-id}"
     )
-    public ResponseEntity<?> retrieveCaseFlagsByServiceId(
+    public ResponseEntity<CaseFlag> retrieveCaseFlagsByServiceId(
         @PathVariable(value = "service-id")
         @ApiParam(name = "service-id",
             value = "Any Valid String is allowed",
@@ -77,8 +77,9 @@ public class CaseFlagApiController {
             value = "Allowed Values are Y or N")
             String welshRequired
     ) {
-        if (null != flagType)
+        if (null != flagType) {
             validationFlagType(flagType);
+        }
         log.info("Calling Service layer");
         CaseFlag caseFlag = caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType);
         return ResponseEntity.ok().body(caseFlag);

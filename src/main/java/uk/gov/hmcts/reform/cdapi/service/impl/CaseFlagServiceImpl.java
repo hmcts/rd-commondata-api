@@ -10,6 +10,7 @@ import uk.gov.hmcts.reform.cdapi.domain.CaseFlagDto;
 import uk.gov.hmcts.reform.cdapi.domain.Flag;
 import uk.gov.hmcts.reform.cdapi.domain.FlagDetail;
 import uk.gov.hmcts.reform.cdapi.domain.ListOfValue;
+import uk.gov.hmcts.reform.cdapi.exception.InvalidRequestException;
 import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
 import uk.gov.hmcts.reform.cdapi.repository.CaseFlagRepository;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfVenueRepository;
@@ -40,18 +41,19 @@ public class CaseFlagServiceImpl implements CaseFlagService {
 
     @Override
     public CaseFlag retrieveCaseFlagByServiceId(String serviceId, String flagType) {
-        var caseFlag = new CaseFlag();
-        var flag = new Flag();
-        var flags = new ArrayList<Flag>();
         var caseFlagDtoList = caseFlagRepository.findAll(serviceId.trim().toUpperCase());
         var flagDetails = addTopLevelFlag(caseFlagDtoList);
         addChildLevelFlag(caseFlagDtoList, flagDetails);
         addOtherFlag(flagDetails);
         log.info("Added other flag");
+        var flag = new Flag();
         flag.setFlagDetails(filterFlagType(flagDetails, flagType));
-        if (flag.getFlagDetails().size() == 0)
+        if (flag.getFlagDetails().isEmpty()) {
             throw new ResourceNotFoundException("Data not found");
+        }
+        var flags = new ArrayList<Flag>();
         flags.add(flag);
+        var caseFlag = new CaseFlag();
         caseFlag.setFlags(flags);
         return caseFlag;
     }
@@ -85,7 +87,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     }
 
     /**
-     * Adding child level flag
+     * Adding child level flag.
      *
      * @param caseFlagDtoList caseFlagDtoList
      * @param flagDetails     list of flagdetail with toplevel flags
@@ -114,12 +116,12 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     }
 
     /**
-     * Retrieve list of values based on switch condition
+     * Retrieve list of values based on switch condition.
      *
      * @param childFlag flag detail object
      */
     private void retrieveListOfValues(FlagDetail childFlag) {
-        List<ListOfValue> listOfValues = new ArrayList<>();
+        List<ListOfValue> listOfValues;
         switch (childFlag.getFlagCode()) {
             case FLAG_PF0015:
                 listOfValues = listOfVenueRepository.findListOfValues(CATEGORY_KEY_LANGUAGE_INTERPRETER);
@@ -127,6 +129,8 @@ public class CaseFlagServiceImpl implements CaseFlagService {
             case FLAG_RA0042:
                 listOfValues = listOfVenueRepository.findListOfValues(CATEGORY_KEY_SIGN_LANGUAGE);
                 break;
+            default:
+                throw new InvalidRequestException("invalid lov flag");
         }
         childFlag.setChildFlags(null);
         childFlag.setListOfValuesLength(listOfValues.size());
@@ -141,8 +145,10 @@ public class CaseFlagServiceImpl implements CaseFlagService {
      * @param newChildFlag new child flag which need to be added.
      */
     private void addChildFlag(List<FlagDetail> flagDetails, FlagDetail newChildFlag) {
-        if (null == flagDetails)
+        if (null == flagDetails) {
             return;
+        }
+
         for (FlagDetail flagDetail : flagDetails) {
             if (flagDetail.getId().equals(newChildFlag.getCateGoryId())) {
                 flagDetail.getChildFlags().add(newChildFlag);
@@ -153,23 +159,27 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     }
 
     /**
-     * Adding other flag based on condition
+     * Adding other flag based on condition.
      *
      * @param flagDetails list of all flags
      */
     private void addOtherFlag(List<FlagDetail> flagDetails) {
-        if (null == flagDetails)
+        if (null == flagDetails) {
             return;
+        }
         for (FlagDetail flagDetail : flagDetails) {
-            if (flagDetail.getParent()) {
-                flagDetail.getChildFlags().add(otherFlagBuilder(flagDetail.getChildFlags().stream().findFirst().get().getPath()));
+            if (Boolean.TRUE.equals(flagDetail.getParent())) {
+                flagDetail.getChildFlags().add(otherFlagBuilder(flagDetail
+                                                                    .getChildFlags()
+                                                                    .stream()
+                                                                    .findFirst().orElseThrow().getPath()));
             }
             addOtherFlag(flagDetail.getChildFlags());
         }
     }
 
     private FlagDetail otherFlagBuilder(List<String> path) {
-        var otherFlag = FlagDetail.builder()
+        return FlagDetail.builder()
             .name("Other")
             .flagCode("OT0001")
             .hearingRelevant(true)
@@ -177,12 +187,14 @@ public class CaseFlagServiceImpl implements CaseFlagService {
             .childFlags(new ArrayList<>())
             .path(path)
             .flagComment(true).build();
-        return otherFlag;
     }
 
     private List<FlagDetail> filterFlagType(List<FlagDetail> flagDetail, String flagType) {
-        flagDetail = (StringUtils.isEmpty(flagType)) ? flagDetail : flagDetail.stream().filter(f1 -> f1.getName().equalsIgnoreCase(
-            flagType)).collect(Collectors.toList());
+        flagDetail = (StringUtils.isEmpty(flagType))
+            ? flagDetail
+            : flagDetail
+            .stream().filter(f1 -> f1.getName().equalsIgnoreCase(
+                flagType)).collect(Collectors.toList());
         return flagDetail;
     }
 }

@@ -53,12 +53,13 @@ public class CommonDataApiClient {
         Response response = getMultipleAuthHeaders()
             .get(BASE_URL_CASE_FLAGS + path + queryParam)
             .andReturn();
-
         response.then()
             .assertThat()
             .statusCode(expectedStatus.value());
         if (expectedStatus.is2xxSuccessful()) {
-            return response.getBody().as(clazz);
+            return response
+                .getBody()
+                .as(clazz);
         } else {
             return response.getBody().as(ErrorResponse.class);
         }
