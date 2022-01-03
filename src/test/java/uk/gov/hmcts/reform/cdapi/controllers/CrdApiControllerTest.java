@@ -38,7 +38,7 @@ public class CrdApiControllerTest {
     }
 
     @Test
-    void testWithMissingCategoryId_NoInvoke() {
+    void testWithEmptyCategoryId() {
         ResponseEntity<?> result = crdApiController.retrieveHearingChannelByCategoryId(
             "", null, null, null);
         assertNotNull(result);
@@ -57,8 +57,6 @@ public class CrdApiControllerTest {
         verify(crdService, times(1)).retrieveHearingChannelsByCategoryId(
             "HearingChannel","BBA3","1","5");
     }
-
-
 }
 
 
