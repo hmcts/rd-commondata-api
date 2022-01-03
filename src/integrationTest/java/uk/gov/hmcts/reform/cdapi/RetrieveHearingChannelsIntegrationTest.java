@@ -39,8 +39,8 @@ public class RetrieveHearingChannelsIntegrationTest extends CdAuthorizationEnabl
     void shouldRetrieveHearingChannel_WithAllParams_WithStatusCode_200()
         throws JsonProcessingException {
         final var response = (HearingChannels)
-            commonDataApiClient.retrieveCaseFlagsByServiceId("HearingSubChannel?service-id=BBA3" +
-                                                                 "&parent-category=HearingChannel&parent-key=telephone",
+            commonDataApiClient.retrieveCaseFlagsByServiceId("HearingSubChannel?service-id=BBA3"
+                                                             + "&parent-category=HearingChannel&parent-key=telephone",
                                                              HearingChannels.class, path
             );
         assertNotNull(response);

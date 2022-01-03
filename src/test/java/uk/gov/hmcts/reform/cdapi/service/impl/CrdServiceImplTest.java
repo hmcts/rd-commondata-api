@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.jpa.domain.Specification;
 import uk.gov.hmcts.reform.cdapi.domain.HearingChannel;
 import uk.gov.hmcts.reform.cdapi.domain.HearingChannelDto;
+import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
 import uk.gov.hmcts.reform.cdapi.helper.CrdTestSupport;
 import uk.gov.hmcts.reform.cdapi.repository.HearingChannelRepository;
 
@@ -17,7 +18,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -65,15 +66,13 @@ public class CrdServiceImplTest {
     }
 
     @Test
-    void retrieveHearingChannelsByUnEqualParams() {
+    void shouldThrowNotFoundExceptionWithUnMappedParams() {
         List<HearingChannelDto> hearingChannelDtos = new ArrayList<>();
+
         when(hearingChannelRepository.findAll(ArgumentMatchers.<Specification<HearingChannelDto>>any()))
             .thenReturn(hearingChannelDtos);
 
-        List<HearingChannel> result = crdServiceImpl.retrieveHearingChannelsByCategoryId(
-            "HearingChannel", null, null, null);
-
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
+        assertThrows(ResourceNotFoundException.class, () -> crdServiceImpl.retrieveHearingChannelsByCategoryId(
+            "HearingChannel", null, null, null));
     }
 }

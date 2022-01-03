@@ -66,7 +66,6 @@ public class CommonDataApiClient {
         }
     }
 
-
     public Object retrieveCaseFlagsByServiceId(HttpStatus expectedStatus, String param) {
         Response response = getMultipleAuthHeaders()
             .get(BASE_URL_CASE_FLAGS + "/caseflags/service-id=XXXX?flag-type=" + param)
@@ -82,7 +81,7 @@ public class CommonDataApiClient {
         }
     }
 
-     public Object retrieveHearingChannelsByCategoryId(HttpStatus expectedStatus, String param) {
+    public Object retrieveHearingChannelsByCategoryId(HttpStatus expectedStatus, String param) {
         Response response = getMultipleAuthHeaders()
             .get(BASE_URL_CASE_FLAGS + "/lov/categories/XXXX?service-id=" + param)
             .andReturn();
