@@ -123,6 +123,21 @@ public class IdamOpenIdClient {
 
     }
 
+
+    public void deleteSidamUser(String email) {
+        try {
+            log.info("delete sidam user with email");
+            RestAssured
+                .given()
+                .relaxedHTTPSValidation()
+                .baseUri(testConfig.getIdamApiUrl())
+                .header(CONTENT_TYPE, APPLICATION_FORM_URLENCODED_VALUE)
+                .delete("/testing-support/accounts/" + email);
+        } catch (Exception ex) {
+            log.error("unable to delete sidam user with email");
+        }
+    }
+
     @AllArgsConstructor
     class User {
         private String email;

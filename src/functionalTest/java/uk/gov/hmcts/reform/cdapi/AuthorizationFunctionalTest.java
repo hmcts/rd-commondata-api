@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.cdapi;
 import io.restassured.parsing.Parser;
 import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.rest.SerenityRest;
+import org.junit.jupiter.api.AfterAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
@@ -14,6 +15,8 @@ import uk.gov.hmcts.reform.cdapi.config.TestConfigProperties;
 import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
 import uk.gov.hmcts.reform.cdapi.idam.IdamOpenIdClient;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
@@ -35,6 +38,8 @@ public abstract class AuthorizationFunctionalTest {
     protected TestConfigProperties testConfigProperties;
 
     protected static String s2sToken;
+
+    public static List<String> emailsTobeDeleted = new ArrayList<>();
 
     public static final String EMAIL = "EMAIL";
 
@@ -72,7 +77,14 @@ public abstract class AuthorizationFunctionalTest {
     }
 
     public static String generateRandomEmail() {
-        return String.format(EMAIL_TEMPLATE, randomAlphanumeric(10));
+        String generatedEmail = String.format(EMAIL_TEMPLATE, randomAlphanumeric(10));
+        emailsTobeDeleted.add(generatedEmail);
+        return generatedEmail;
+    }
+
+    @AfterAll
+    public static void destroy() {
+        emailsTobeDeleted.forEach(email -> idamOpenIdClient.deleteSidamUser(email));
     }
 
     public void validateErrorResponse(ErrorResponse errorResponse, String expectedErrorMessage,
