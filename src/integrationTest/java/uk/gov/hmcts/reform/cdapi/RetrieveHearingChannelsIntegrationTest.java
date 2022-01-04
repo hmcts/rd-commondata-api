@@ -62,16 +62,6 @@ public class RetrieveHearingChannelsIntegrationTest extends CdAuthorizationEnabl
 
     @Test
     @SuppressWarnings("unchecked")
-    void shouldThrowStatusCode_404_For_EmptyCategoryId()
-        throws JsonProcessingException {
-        var errorResponseMap = commonDataApiClient.retrieveCaseFlagsByServiceId(
-            "",Map.class, path);
-        assertNotNull(errorResponseMap);
-        assertThat((Map<String, Object>) errorResponseMap).containsEntry("http_status", HttpStatus.NOT_FOUND);
-    }
-
-    @Test
-    @SuppressWarnings("unchecked")
     void shouldThrowStatusCode_404_For_NullCategoryId()
         throws JsonProcessingException {
         var errorResponseMap = commonDataApiClient.retrieveCaseFlagsByServiceId(
