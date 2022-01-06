@@ -12,6 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 public class HearingChannels {
 
-    @JsonProperty("ListOfValues")
+    @JsonProperty("list_of_values")
     private List<HearingChannel> hearingChannels;
 }

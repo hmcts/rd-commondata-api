@@ -31,7 +31,7 @@ public class CrdApiController {
     CrdService crdService;
 
     @ApiOperation(
-        value = "CommonData API will be used to retrieve the list of case flags for a given service id.",
+        value = "CommonData API will be used to retrieve the list of category values for a given category id.",
         notes = "Any valid IDAM role should be able to access this API ",
         authorizations = {
             @Authorization(value = "ServiceAuthorization"),
@@ -61,7 +61,7 @@ public class CrdApiController {
         produces = APPLICATION_JSON_VALUE,
         path = "/lov/categories/{category-id}"
     )
-    public ResponseEntity<?> retrieveHearingChannelByCategoryId(
+    public ResponseEntity<HearingChannels> retrieveHearingChannelByCategoryId(
         @PathVariable(value = "category-id")
         @ApiParam(name = "category-id", value = "Any Valid String is allowed", required = true) String categoryKey,
         @RequestParam(value = "service-id", required = false)
