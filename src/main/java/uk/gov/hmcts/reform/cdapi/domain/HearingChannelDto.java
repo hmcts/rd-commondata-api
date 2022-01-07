@@ -12,7 +12,7 @@ import javax.persistence.Entity;
 @Data
 @Getter
 @Setter
-@Entity(name = "hearing_channel")
+@Entity(name = "mv_list_of_values")
 public class HearingChannelDto {
     @EmbeddedId
     private CategoryKey categoryKey;
