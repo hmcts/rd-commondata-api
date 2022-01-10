@@ -47,7 +47,7 @@ public class CrdServiceImpl implements CrdService {
                 .active(dto.getActive())
                 .hintTextCy(dto.getHintTextCy())
                 .hintTextEn(dto.getHintTextEn())
-                .key(dto.getKey())
+                .key(dto.getCategoryKey().getKey())
                 .lovOrder(dto.getLovOrder())
                 .valueCy(dto.getValueCy())
                 .valueEn(dto.getValueEn())

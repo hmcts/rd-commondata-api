@@ -13,9 +13,9 @@ public class CrdTestSupport {
                                                                 String parentCategory, String parentKey) {
         CategoryKey categoryKey = new CategoryKey();
         categoryKey.setCategoryKey(categoryId);
+        categoryKey.setKey("telephone-CVP");
         HearingChannelDto hearingChannelDtoMock = new HearingChannelDto();
         hearingChannelDtoMock.setServiceId(serviceId);
-        hearingChannelDtoMock.setKey("telephone-CVP");
         hearingChannelDtoMock.setActive(true);
         hearingChannelDtoMock.setCategoryKey(categoryKey);
         hearingChannelDtoMock.setParentCategory(parentCategory);

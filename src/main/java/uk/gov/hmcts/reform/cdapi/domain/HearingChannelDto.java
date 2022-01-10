@@ -20,8 +20,6 @@ public class HearingChannelDto {
     @Column(name = "serviceid")
     private String serviceId;
 
-    private String key;
-
     @Column(name = "value_en")
     private String valueEn;
 

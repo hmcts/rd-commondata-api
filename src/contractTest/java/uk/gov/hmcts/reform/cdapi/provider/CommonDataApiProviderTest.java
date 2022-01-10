@@ -129,7 +129,7 @@ public class CommonDataApiProviderTest {
         hearingChannelDto1.setValueCy(null);
         hearingChannelDto1.setValueEn("Telephone - BTMeetme");
         CategoryKey categoryKey = new CategoryKey();
-        hearingChannelDto1.setKey("telephone-btMeetMe");
+        categoryKey.setKey("telephone-btMeetMe");
         hearingChannelDto1.setCategoryKey(categoryKey);
 
         HearingChannelDto hearingChannelDto2 = new HearingChannelDto();
@@ -142,7 +142,7 @@ public class CommonDataApiProviderTest {
         hearingChannelDto2.setValueCy(null);
         hearingChannelDto2.setValueEn("Video - CVP");
         CategoryKey categoryKey1 = new CategoryKey();
-        hearingChannelDto2.setKey("telephone-CVP");
+        categoryKey1.setKey("telephone-CVP");
         hearingChannelDto2.setCategoryKey(categoryKey1);
 
         List<HearingChannelDto> hearingChannelDtos = new ArrayList<>();
