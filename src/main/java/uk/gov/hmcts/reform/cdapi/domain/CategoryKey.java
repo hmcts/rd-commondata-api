@@ -12,10 +12,5 @@ public class CategoryKey implements Serializable {
     @Column(name = "categorykey")
     private String categoryKey;
 
-    @Column(name = "serviceid")
-    private String serviceId;
-
-    private String key;
-
 }
 

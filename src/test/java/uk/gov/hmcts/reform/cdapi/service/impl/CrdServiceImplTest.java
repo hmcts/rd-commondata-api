@@ -42,7 +42,7 @@ public class CrdServiceImplTest {
             "HearingChannel", null, null, null);
 
         assertNotNull(result);
-        assertEquals(hearingChannelDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
+        assertEquals(hearingChannelDtos.get(0).getKey(), result.get(0).getKey());
         assertEquals(hearingChannelDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
         assertEquals(hearingChannelDtos.get(0).getActive(), result.get(0).getActive());
     }
@@ -60,7 +60,7 @@ public class CrdServiceImplTest {
             "HearingChannel", "BBA3", "HearingChannel", "telephone");
 
         assertNotNull(result);
-        assertEquals(hearingChannelDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
+        assertEquals(hearingChannelDtos.get(0).getKey(), result.get(0).getKey());
         assertEquals(hearingChannelDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
         assertEquals(hearingChannelDtos.get(0).getActive(), result.get(0).getActive());
     }

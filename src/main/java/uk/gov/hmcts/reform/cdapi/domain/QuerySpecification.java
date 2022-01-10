@@ -11,7 +11,7 @@ public class QuerySpecification {
     public static Specification<HearingChannelDto> hearingChannelCategoryKey(String categoryKey) {
         return (root, query, builder) ->
             categoryKey == null ? builder.conjunction() :
-                builder.equal(root.get("categoryKey").get("categoryKey"), categoryKey);
+                builder.equal(root.get("categoryKey").get("categoryKey"), categoryKey.trim());
     }
 
     /**
@@ -20,7 +20,7 @@ public class QuerySpecification {
     public static Specification<HearingChannelDto> hearingChannelServiceId(String serviceId) {
         return (root, query, builder) ->
             serviceId == null ? builder.conjunction() :
-                builder.equal(root.get("categoryKey").get("serviceId"), serviceId);
+                builder.equal(root.get("serviceId"), serviceId.trim());
     }
 
     /**
@@ -29,7 +29,7 @@ public class QuerySpecification {
     public static Specification<HearingChannelDto> hearingChannelParentCategory(String parentCategory) {
         return (root, query, builder) ->
             parentCategory == null ? builder.conjunction() :
-                builder.equal(root.get("parentCategory"), parentCategory);
+                builder.equal(root.get("parentCategory"), parentCategory.trim());
     }
 
     /**
@@ -38,7 +38,7 @@ public class QuerySpecification {
     public static Specification<HearingChannelDto> hearingChannelParentKey(String parentKey) {
         return (root, query, builder) ->
             parentKey == null ? builder.conjunction() :
-                builder.equal(root.get("parentKey"), parentKey);
+                builder.equal(root.get("parentKey"), parentKey.trim());
 
     }
 
