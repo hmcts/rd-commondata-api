@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.cdapi.exception.InvalidRequestException;
 import uk.gov.hmcts.reform.cdapi.service.CrdService;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -40,10 +42,11 @@ class CrdApiControllerTest {
     }
 
     @Test
-    void testWithNullCategoryId() {
-        assertThrows(InvalidRequestException.class, () ->
-            crdApiController.retrieveHearingChannelByCategoryId(null, null, null, null));
+    public void whenIdIsNull_thenExceptionIsThrown() {
+        assertThrows(InvalidRequestException.class, () -> crdApiController.retrieveHearingChannelByCategoryId(
+            Optional.empty(), null, null, null));
     }
+
 
     @Test
     void testWithAllValidParamValues_ShouldReturnStatusCode200() {
