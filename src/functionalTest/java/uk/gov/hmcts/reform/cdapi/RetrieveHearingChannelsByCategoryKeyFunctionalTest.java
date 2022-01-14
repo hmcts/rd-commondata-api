@@ -59,7 +59,16 @@ public class RetrieveHearingChannelsByCategoryKeyFunctionalTest extends Authoriz
         assertEquals(HttpStatus.UNAUTHORIZED.value(), response.getStatusCode());
     }
 
-
-
-
+    @Test
+    @ExtendWith(FeatureToggleConditionExtension.class)
+    @ToggleEnable(mapKey = mapKey, withFeature = true)
+    void shouldThrowError_WhenCategoryIdisEmpty() {
+        final var response = (ErrorResponse)
+            commonDataApiClient.retrieveBadRequestByEmptyCategoryId(
+                HttpStatus.BAD_REQUEST,
+                " "
+            );
+        assertNotNull(response);
+        assertEquals("Syntax error or Bad request", response.getErrorDescription());
+    }
 }

@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.cdapi.domain.HearingChannel;
 import uk.gov.hmcts.reform.cdapi.domain.HearingChannels;
+import uk.gov.hmcts.reform.cdapi.exception.InvalidRequestException;
 import uk.gov.hmcts.reform.cdapi.service.CrdService;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -59,19 +61,23 @@ public class CrdApiController {
     })
     @GetMapping(
         produces = APPLICATION_JSON_VALUE,
-        path = "/lov/categories/{category-id}"
+        path = {"/lov/categories", "/lov/categories/{category-id}"}
     )
     public ResponseEntity<HearingChannels> retrieveHearingChannelByCategoryId(
         @PathVariable(value = "category-id")
-        @ApiParam(name = "category-id", value = "Any Valid String is allowed", required = true) String categoryKey,
+        @ApiParam(name = "category-id", value = "Any Valid String is allowed", required = true)
+            Optional<String> categoryKey,
         @RequestParam(value = "service-id", required = false)
         @ApiParam(name = "service-id", value = "Any Valid String is allowed") String serviceId,
         @RequestParam(value = "parent-category", required = false)
         @ApiParam(name = "parent-category", value = "Any Valid String is allowed") String parentCategory,
         @RequestParam(value = "parent-key", required = false)
         @ApiParam(name = "parent-key", value = "Any Valid String is allowed") String parentKey) {
-        List<HearingChannel> hearingChannels = crdService.retrieveHearingChannelsByCategoryId(categoryKey, serviceId,
-                                                                                          parentCategory, parentKey);
+        if (categoryKey == null || !categoryKey.isPresent()) {
+            throw new InvalidRequestException("Syntax error or Bad request");
+        }
+        List<HearingChannel> hearingChannels = crdService.retrieveHearingChannelsByCategoryId(categoryKey.get(),
+                                                                                  serviceId, parentCategory, parentKey);
         return ResponseEntity.ok().body(new HearingChannels(hearingChannels));
     }
 

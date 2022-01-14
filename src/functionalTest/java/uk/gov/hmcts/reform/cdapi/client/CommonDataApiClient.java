@@ -81,6 +81,21 @@ public class CommonDataApiClient {
         }
     }
 
+    public Object retrieveBadRequestByEmptyCategoryId(HttpStatus expectedStatus, String param) {
+        Response response = getMultipleAuthHeaders()
+            .get(BASE_URL_CASE_FLAGS + "/lov/categories/" + param)
+            .andReturn();
+
+        response.then()
+            .assertThat()
+            .statusCode(expectedStatus.value());
+        if (expectedStatus.is2xxSuccessful()) {
+            return Arrays.asList(response.getBody().as(HearingChannels[].class));
+        } else {
+            return response.getBody().as(ErrorResponse.class);
+        }
+    }
+
     public Object retrieveHearingChannelsByCategoryId(HttpStatus expectedStatus, String param) {
         Response response = getMultipleAuthHeaders()
             .get(BASE_URL_CASE_FLAGS + "/lov/categories/XXXX?service-id=" + param)
