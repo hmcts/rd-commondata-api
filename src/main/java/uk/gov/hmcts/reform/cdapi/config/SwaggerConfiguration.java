@@ -29,6 +29,7 @@ public class SwaggerConfiguration {
             .select()
             .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
             .paths(PathSelectors.any())
+            .paths(PathSelectors.ant("/refdata/commondata/caseflags").negate())
             .build()
             .securitySchemes(apiKeyList());
     }
