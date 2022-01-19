@@ -10,7 +10,7 @@ plugins {
   id 'jacoco'
   id "org.flywaydb.flyway" version "8.3.0"
   id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-  id 'org.springframework.boot' version '2.5.6'
+  id 'org.springframework.boot' version '2.4.12'
   id 'org.owasp.dependencycheck' version '6.5.2.1'
   id 'com.github.ben-manes.versions' version '0.40.0'
   id 'org.sonarqube' version '3.3'
@@ -292,8 +292,8 @@ dependencies {
   implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
   implementation group: 'io.github.openfeign.form', name: 'feign-form', version: '3.8.0'
   implementation group: 'io.github.openfeign.form', name: 'feign-form-spring', version: '3.8.0'
-  implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: reformLoggingVersion
-  implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: reformLoggingVersion
+  implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.reformLogging
+  implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.reformLogging
   implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.3.0'
   implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: versions.log4j
   implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: versions.log4j
@@ -319,7 +319,7 @@ dependencies {
   testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.16.2'
   testImplementation "org.testcontainers:junit-jupiter:1.16.2"
   testImplementation "org.testcontainers:testcontainers:1.16.2"
-  implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.14
+  implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.14'
   testImplementation(platform('org.junit:junit-bom:5.8.2'))
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
     exclude group: 'junit', module: 'junit'
