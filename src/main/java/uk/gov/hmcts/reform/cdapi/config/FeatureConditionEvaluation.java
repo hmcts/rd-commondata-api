@@ -39,24 +39,26 @@ public class FeatureConditionEvaluation implements HandlerInterceptor {
                              @NotNull HttpServletResponse response, @NotNull Object handler) throws Exception {
 
         Map<String, String> launchDarklyUrlMap = featureToggleService.getLaunchDarklyMap();
+        if (handler instanceof HandlerMethod) {
+            String restMethod = ((HandlerMethod) handler).getMethod().getName();
+            String clazz = ((HandlerMethod) handler).getMethod().getDeclaringClass().getSimpleName();
+            boolean flagStatus;
 
-        String restMethod = ((HandlerMethod) handler).getMethod().getName();
-        String clazz = ((HandlerMethod) handler).getMethod().getDeclaringClass().getSimpleName();
-        boolean flagStatus;
+            String flagName = launchDarklyUrlMap.get(clazz + "." + restMethod);
 
-        String flagName = launchDarklyUrlMap.get(clazz + "." + restMethod);
+            if (isNotTrue(launchDarklyUrlMap.isEmpty()) && nonNull(flagName)) {
 
-        if (isNotTrue(launchDarklyUrlMap.isEmpty()) && nonNull(flagName)) {
+                flagStatus = featureToggleService
+                    .isFlagEnabled(getServiceName(flagName), launchDarklyUrlMap.get(clazz + "." + restMethod));
 
-            flagStatus = featureToggleService
-                .isFlagEnabled(getServiceName(flagName), launchDarklyUrlMap.get(clazz + "." + restMethod));
-
-            if (!flagStatus) {
-                throw new ForbiddenException(flagName.concat(SPACE).concat(FORBIDDEN_EXCEPTION_LD));
+                if (!flagStatus) {
+                    throw new ForbiddenException(flagName.concat(SPACE).concat(FORBIDDEN_EXCEPTION_LD));
+                }
             }
         }
         return true;
     }
+
 
     public String getServiceName(String flagName) {
         String serviceName = null;

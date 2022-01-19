@@ -4,5 +4,5 @@ import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
 
 public interface CaseFlagService {
 
-    CaseFlag retrieveCaseFlagByServiceId(String serviceId,String flagType);
+    CaseFlag retrieveCaseFlagByServiceId(String serviceId,String flagType,String welshRequired);
 }

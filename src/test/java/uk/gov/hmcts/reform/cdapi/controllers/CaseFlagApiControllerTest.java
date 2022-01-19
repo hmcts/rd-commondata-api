@@ -30,12 +30,12 @@ class CaseFlagApiControllerTest {
     void testGetCaseFlag_ByServiceId_Returns200() {
         ResponseEntity<CaseFlag> responseEntity =
             caseFlagApiController.retrieveCaseFlagsByServiceId("XXXX",
-                                                               "PARTY", ""
+                                                               "PARTY", "N"
             );
         assertNotNull(responseEntity);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         verify(caseFlagService, times(1))
-            .retrieveCaseFlagByServiceId("XXXX", "PARTY");
+            .retrieveCaseFlagByServiceId("XXXX", "PARTY", "N");
     }
 
     @Test
@@ -46,14 +46,38 @@ class CaseFlagApiControllerTest {
     }
 
     @Test
+    void testGetCaseFlag_WhenServiceIdIsEmpty_Returns400() {
+        assertThrows(InvalidRequestException.class, () ->
+            caseFlagApiController.retrieveCaseFlagsByServiceId(
+                "", "Hello", ""));
+    }
+
+    @Test
     void testGetCaseFlag_ByLowerCaseFlagType_Returns200() {
         ResponseEntity<CaseFlag> responseEntity =
             caseFlagApiController.retrieveCaseFlagsByServiceId("XXXX",
-                                                               "case", ""
+                                                               "case", "N"
             );
         assertNotNull(responseEntity);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         verify(caseFlagService, times(1))
-            .retrieveCaseFlagByServiceId("XXXX", "case");
+            .retrieveCaseFlagByServiceId("XXXX", "case", "N");
+    }
+
+    @Test
+    void testGetCaseFlag_ByWelshRequiredIsNotYorN_Returns400() {
+        assertThrows(InvalidRequestException.class, () ->
+            caseFlagApiController.retrieveCaseFlagsByServiceId(
+                "XXXX", "Hello", ""));
+    }
+
+    @Test
+    void testGetCaseFlag_When_FlagType_WelshRequired_isnull() {
+        ResponseEntity<CaseFlag> responseEntity = caseFlagApiController.retrieveCaseFlagsByServiceId(
+            "XXXX", null, null);
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        verify(caseFlagService, times(1))
+            .retrieveCaseFlagByServiceId("XXXX", null, null);
     }
 }

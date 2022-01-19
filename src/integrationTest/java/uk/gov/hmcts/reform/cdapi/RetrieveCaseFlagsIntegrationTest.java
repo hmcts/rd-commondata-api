@@ -38,7 +38,7 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
     void shouldRetrieveCaseFlag_For_DefaultServiceId()
         throws JsonProcessingException {
 
-        final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId("", CaseFlag.class, path);
+        final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId("XXXX", CaseFlag.class, path);
         assertNotNull(response);
         assertNotNull(response.getFlags().get(0).getFlagDetails());
         assertEquals(1, response.getFlags().get(0).getFlagDetails().size());
@@ -94,6 +94,20 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
 
         var errorResponseMap = commonDataApiClient.retrieveCaseFlagsByServiceId(
             "XXXX?flag-type=case",
+            ErrorResponse.class,
+            path
+        );
+        assertNotNull(errorResponseMap);
+        assertThat((Map<String, Object>) errorResponseMap).containsEntry("http_status", HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void shouldRetrieveCaseFlag_For_WelshRequiredasY_WithStatusCode_404()
+        throws JsonProcessingException {
+
+        var errorResponseMap = commonDataApiClient.retrieveCaseFlagsByServiceId(
+            "XXXX?flag-type=case&welsh-required=y",
             ErrorResponse.class,
             path
         );

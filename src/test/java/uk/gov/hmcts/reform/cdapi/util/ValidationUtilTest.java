@@ -13,7 +13,7 @@ class ValidationUtilTest {
 
 
     @Test
-    void test_invalid_flagtype_() {
+    void test_invalid_flagtype() {
         InvalidRequestException invalidRequestException = assertThrows(
             InvalidRequestException.class,
             () -> ValidationUtil.validationFlagType(
@@ -27,6 +27,24 @@ class ValidationUtilTest {
     void test_validation_flagtype() {
         Assertions.assertDoesNotThrow(() -> ValidationUtil.validationFlagType(
             "Party"));
+
+    }
+
+    @Test
+    void test_welshrequiredWhenNotYorN() {
+        InvalidRequestException invalidRequestException = assertThrows(
+            InvalidRequestException.class,
+            () -> ValidationUtil.validationWelshRequired(
+                "test"
+            )
+        );
+        Assertions.assertEquals("Allowed values are Y or N", invalidRequestException.getMessage());
+    }
+
+    @Test
+    void test_validation_welshRequired() {
+        Assertions.assertDoesNotThrow(() -> ValidationUtil.validationWelshRequired(
+            "Y"));
 
     }
 }

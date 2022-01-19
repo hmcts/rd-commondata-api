@@ -40,10 +40,10 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     List<String> flaglistLov;
 
     @Override
-    public CaseFlag retrieveCaseFlagByServiceId(String serviceId, String flagType) {
+    public CaseFlag retrieveCaseFlagByServiceId(String serviceId, String flagType, String welshRequired) {
         var caseFlagDtoList = caseFlagRepository.findAll(serviceId.trim().toUpperCase());
-        var flagDetails = addTopLevelFlag(caseFlagDtoList);
-        addChildLevelFlag(caseFlagDtoList, flagDetails);
+        var flagDetails = addTopLevelFlag(caseFlagDtoList, welshRequired);
+        addChildLevelFlag(caseFlagDtoList, flagDetails, welshRequired);
         addOtherFlag(flagDetails);
         log.info("Added other flag");
         var flag = new Flag();
@@ -64,13 +64,15 @@ public class CaseFlagServiceImpl implements CaseFlagService {
      * @param caseFlagDtoList caseFlagDtoList
      * @return list of flagdetail with toplevel flags
      */
-    public List<FlagDetail> addTopLevelFlag(List<CaseFlagDto> caseFlagDtoList) {
+    public List<FlagDetail> addTopLevelFlag(List<CaseFlagDto> caseFlagDtoList, String welshRequired) {
         var flagDetails = new ArrayList<FlagDetail>();
         for (CaseFlagDto caseFlagDto : caseFlagDtoList) {
             //creating top level flags
             if (caseFlagDto.getCategoryId() == 0) {
+                String name = (StringUtils.isNotEmpty(welshRequired) && (welshRequired.trim().equalsIgnoreCase("y")))
+                    ? caseFlagDto.getValueCy() : caseFlagDto.getValueEn();
                 var flagDetail = FlagDetail.builder()
-                    .name(caseFlagDto.getValueEn())
+                    .name(name)
                     .flagCode(caseFlagDto.getFlagCode())
                     .flagComment(caseFlagDto.getRequestReason())
                     .parent(caseFlagDto.getIsParent())
@@ -92,13 +94,15 @@ public class CaseFlagServiceImpl implements CaseFlagService {
      * @param caseFlagDtoList caseFlagDtoList
      * @param flagDetails     list of flagdetail with toplevel flags
      */
-    public void addChildLevelFlag(List<CaseFlagDto> caseFlagDtoList, List<FlagDetail> flagDetails) {
+    public void addChildLevelFlag(List<CaseFlagDto> caseFlagDtoList, List<FlagDetail> flagDetails,
+                                  String welshRequired) {
         for (CaseFlagDto caseFlagDto : caseFlagDtoList) {
             //creating child level flags
             if (caseFlagDto.getCategoryId() != 0) {
-
+                String name = (StringUtils.isNotEmpty(welshRequired) && (welshRequired.trim().equalsIgnoreCase("y")))
+                    ? caseFlagDto.getValueCy() : caseFlagDto.getValueEn();
                 var childFlag = FlagDetail.builder()
-                    .name(caseFlagDto.getValueEn())
+                    .name(name)
                     .flagCode(caseFlagDto.getFlagCode())
                     .flagComment(caseFlagDto.getRequestReason())
                     .parent(caseFlagDto.getIsParent())
@@ -195,7 +199,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
             ? flagDetail
             : flagDetail
             .stream().filter(f1 -> f1.getName().equalsIgnoreCase(
-                flagType)).collect(Collectors.toList());
+                flagType.trim())).collect(Collectors.toList());
         return flagDetail;
     }
 }

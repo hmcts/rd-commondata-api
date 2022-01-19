@@ -6,6 +6,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +45,11 @@ public class GlobalExceptionHandler {
         return errorDetailsResponseEntity(ex, NOT_FOUND, ErrorConstants.EMPTY_RESULT_DATA_ACCESS.getErrorMessage());
     }
 
+    @ExceptionHandler(MissingPathVariableException.class)
+    public ResponseEntity<Object> handleMissingPathVariableException(MissingPathVariableException ex) {
+        return errorDetailsResponseEntity(ex, BAD_REQUEST, ErrorConstants.INVALID_REQUEST_EXCEPTION.getErrorMessage());
+    }
+
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex) {
@@ -74,9 +80,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleException(Exception ex) {
-        return errorDetailsResponseEntity(ex,
-                                          INTERNAL_SERVER_ERROR,
-                                          ErrorConstants.UNKNOWN_EXCEPTION.getErrorMessage()
+        return errorDetailsResponseEntity(
+            ex,
+            INTERNAL_SERVER_ERROR,
+            ErrorConstants.UNKNOWN_EXCEPTION.getErrorMessage()
         );
     }
 
@@ -115,11 +122,12 @@ public class GlobalExceptionHandler {
     private ResponseEntity<Object> errorDetailsResponseEntity(Exception ex, HttpStatus httpStatus, String errorMsg) {
 
         log.info(HANDLING_EXCEPTION_TEMPLATE, loggingComponentName, ex.getMessage(), ex);
-        ErrorResponse errorDetails = new ErrorResponse(httpStatus.value(),
-                                                       httpStatus.getReasonPhrase(),
-                                                       errorMsg,
-                                                       getRootException(ex).getLocalizedMessage(),
-                                                       getTimeStamp()
+        ErrorResponse errorDetails = new ErrorResponse(
+            httpStatus.value(),
+            httpStatus.getReasonPhrase(),
+            errorMsg,
+            getRootException(ex).getLocalizedMessage(),
+            getTimeStamp()
         );
 
         return new ResponseEntity<>(errorDetails, httpStatus);

@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Authorization;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
+import uk.gov.hmcts.reform.cdapi.exception.InvalidRequestException;
 import uk.gov.hmcts.reform.cdapi.service.CaseFlagService;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.cdapi.util.ValidationUtil.validationFlagType;
+import static uk.gov.hmcts.reform.cdapi.util.ValidationUtil.validationWelshRequired;
 
 @RestController
 @Slf4j
@@ -60,7 +63,7 @@ public class CaseFlagApiController {
     })
     @GetMapping(
         produces = APPLICATION_JSON_VALUE,
-        path = "/caseflags/service-id={service-id}"
+        path = {"/caseflags", "/caseflags/service-id={service-id}"}
     )
     public ResponseEntity<CaseFlag> retrieveCaseFlagsByServiceId(
         @PathVariable(value = "service-id")
@@ -77,11 +80,17 @@ public class CaseFlagApiController {
             value = "Allowed Values are Y or N")
             String welshRequired
     ) {
+        if (StringUtils.isEmpty(serviceId)) {
+            throw new InvalidRequestException("service Id can not be null or empty");
+        }
         if (null != flagType) {
-            validationFlagType(flagType);
+            validationFlagType(flagType.trim());
+        }
+        if (null != welshRequired) {
+            validationWelshRequired(welshRequired.trim());
         }
         log.info("Calling Service layer");
-        CaseFlag caseFlag = caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType);
+        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired);
         return ResponseEntity.ok().body(caseFlag);
     }
 

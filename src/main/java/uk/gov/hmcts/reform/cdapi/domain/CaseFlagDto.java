@@ -14,6 +14,8 @@ public class CaseFlagDto {
     Integer id;
     @Column(name = "flag_code")
     String flagCode;
+    @Column(name = "value_cy")
+    String valueCy;
     @Column(name = "value_en")
     String valueEn;
     @Column(name = "category_id")
