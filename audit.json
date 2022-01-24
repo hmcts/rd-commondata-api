@@ -10,12 +10,12 @@
   "10021_X-Content-Type-Options Header Missing_http://rd-commondata-api-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
   "90033_Loosely Scoped Cookie_http://rd-commondata-api-aat.service.core-compute-aat.internal/_GET": "ignore",
   "90033_Loosely Scoped Cookie_http://rd-commondata-api-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
-  "90022_Application Error Disclosure_http://rd-commondata-api-pr-44.service.core-compute-preview.internal/v2/api-docs_GET" : "ignore",
-  "10023_Information Disclosure - Debug Error Messages_http://rd-commondata-api-pr-44.service.core-compute-preview.internal/v2/api-docs_GET" : "ignore",
-  "100001_Unexpected Content-Type was returned_http://rd-commondata-api-pr-44.service.core-compute-preview.internal/_GET" : "ignore",
-  "10021_X-Content-Type-Options Header Missing_http://rd-commondata-api-pr-44.service.core-compute-preview.internal/_GET" : "ignore",
-  "10021_X-Content-Type-Options Header Missing_http://rd-commondata-api-pr-44.service.core-compute-preview.internal/v2/api-docs_GET" : "ignore",
-  "100000_A Client Error response code was returned by the server_http://rd-commondata-api-pr-44.service.core-compute-preview.internal/refdata/commondata/caseflags/service-id=service-id?flag-type=flag-type&welsh-required=welsh-required_GET" : "ignore",
-  "100000_A Client Error response code was returned by the server_http://rd-commondata-api-pr-44.service.core-compute-preview.internal/refdata/commondata/lov/categories/category-id?parent-category=parent-category&parent-key=parent-key&service-id=service-id_GET" : "ignore",
-  "100000_A Client Error response code was returned by the server_http://rd-commondata-api-pr-44.service.core-compute-preview.internal/refdata/commondata/lov/categories?parent-category=parent-category&parent-key=parent-key&service-id=service-id_GET" : "ignore"
+  "90022_Application Error Disclosure_http://rd-commondata-api-aat.service.core-compute-aat.internal/v2/api-docs_GET" : "ignore",
+  "10023_Information Disclosure - Debug Error Messages_http://rd-commondata-api-aat.service.core-compute-aat.internal/v2/api-docs_GET" : "ignore",
+  "100001_Unexpected Content-Type was returned_http://rd-commondata-api-aat.service.core-compute-aat.internal/_GET" : "ignore",
+  "10021_X-Content-Type-Options Header Missing_http://rd-commondata-api-aat.service.core-compute-aat.internal/_GET" : "ignore",
+  "10021_X-Content-Type-Options Header Missing_http://rd-commondata-api-aat.service.core-compute-aat.internal/v2/api-docs_GET" : "ignore",
+  "100000_A Client Error response code was returned by the server_http://rd-commondata-api-aat.service.core-compute-aat.internal/refdata/commondata/caseflags/service-id=service-id?flag-type=flag-type&welsh-required=welsh-required_GET" : "ignore",
+  "100000_A Client Error response code was returned by the server_http://rd-commondata-api-aat.service.core-compute-aat.internal/refdata/commondata/lov/categories/category-id?parent-category=parent-category&parent-key=parent-key&service-id=service-id_GET" : "ignore",
+  "100000_A Client Error response code was returned by the server_http://rd-commondata-api-aat.service.core-compute-aat.internal/refdata/commondata/lov/categories?parent-category=parent-category&parent-key=parent-key&service-id=service-id_GET" : "ignore"
 }
