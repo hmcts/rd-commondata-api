@@ -1,6 +1,6 @@
 server:
   port: 4550
-
+flaglist: PF0015,RA0042
 management:
   endpoints:
     jmx:
@@ -14,13 +14,39 @@ management:
 
 #If you use a database then uncomment below lines and update db properties accordingly
 spring:
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+    properties:
+      hibernate:
+#        default_schema: dbcommondata
+        jdbc:
+          lob:
+            non_contextual_creation: true
+          time_zone: UTC
+    cache:
+      cache-names: token
+      caffeine:
+        spec: maximumSize=50,expireAfterWrite=1m
   flyway:
     enabled: true
     locations: ${COMMONDATA_DB:classpath:db/migration}
   config:
     import: "optional:configtree:/mnt/secrets/rd/"
+  main:
+    allow-bean-definition-overriding: true
   application:
-    name: Common Data Api
+    name: RD Commond Data API
+  security:
+      oauth2:
+        client:
+          provider:
+            oidc:
+              issuer-uri: ${OPEN_ID_API_BASE_URI:https://idam-web-public.aat.platform.hmcts.net/o}
+          registration:
+            oidc:
+              client-id: microservicekey-rd-commondata-api
+              client-secret: ${COMMONDATA_API_S2S_SECRET:}
   datasource:
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5459}/${POSTGRES_NAME:dbcommondata}${POSTGRES_CONNECTION_OPTIONS:}
@@ -64,3 +90,21 @@ security:
     - "/csrf"
     - "/error"
     - "/favicon.ico"
+
+idam:
+  s2s-auth:
+    totp_secret: ${COMMONDATA_API_S2S_SECRET:}
+    microservice: rd_commondata_api
+    url: ${S2S_URL:http://rpe-service-auth-provider-aat.service.core-compute-aat.internal}
+  s2s-authorised:
+    services: ${CRD_S2S_AUTHORISED_SERVICES:rd_commondata_api}
+  api.url: ${idam_url:https://idam-api.aat.platform.hmcts.net}
+
+oidc.issuer: ${OIDC_ISSUER_URL:https://forgerock-am.service.core-compute-idam-aat.internal:8443/openam/oauth2/hmcts}
+
+loggingComponentName: RD-Common-Data-Api
+launchdarkly:
+  sdk:
+    key: ${LD_SDK_KEY:}
+    environment: ${LAUNCH_DARKLY_ENV:local}
+    user: rd

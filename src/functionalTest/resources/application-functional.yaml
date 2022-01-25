@@ -1,0 +1,12 @@
+targetInstance: ${TEST_URL:http://localhost:4550}
+
+s2s-url: ${S2S_URL_FOR_TESTS:http://rpe-service-auth-provider-aat.service.core-compute-aat.internal}
+
+s2s-name: rd_commondata_api
+
+idam.api.url: ${IDAM_URL:https://idam-api.aat.platform.hmcts.net}
+oauth2.client.secret: ${OAUTH2_CLIENT_SECRET:}
+idam.auth.clientId: ${OAUTH2_CLIENT_ID:rd-professional-api}
+idam.auth.redirectUrl: ${OAUTH2_REDIRECT_URI:https://rd-professional-api-aat.service.core-compute-aat.internal/oauth2redirect}
+s2s-secret: ${COMMONDATA_API_S2S_SECRET:}
+

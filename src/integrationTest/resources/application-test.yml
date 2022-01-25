@@ -1,0 +1,66 @@
+flaglist: PF0015,RA0042
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:tc:postgresql:11.1:///dbcommondata}
+    username: ${DB_USERNAME:dbcommondata}
+    password: ${DB_PASSWORD:dbcommondata}
+  flyway:
+    enabled: true
+    locations: classpath:db/testmigration
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+        hbm2ddl.auto: none
+  main:
+    allow-bean-definition-overriding: true
+  security:
+    oauth2:
+      client:
+        provider:
+          oidc:
+            issuer-uri: ${OPEN_ID_API_BASE_URI:http://0.0.0.0:6000/o}
+        registration:
+          oidc:
+            client-id: microservicekey-rd-commondata-api
+            client-secret: ${COMMONDATA_API_S2S_SECRET:}
+security:
+  anonymousPaths:
+    - "/"
+    - "/csrf"
+    - "/health"
+    - "/health/liveness"
+    - "/loggers/**"
+    - "/swagger-ui.html"
+    - "/swagger-resources/**"
+    - "/v2/api-docs"
+    - "/webjars/springfox-swagger-ui/**"
+    - "/favicon.ico"
+    - "/error"
+idam:
+  s2s-auth:
+    totp_secret: ${COMMONDATA_API_S2S_SECRET:}
+    microservice: rd_commondata_api
+    url: ${S2S_URL:http://127.0.0.1:8990}
+  client:
+    redirect_uri: https://rd-commondata-api-aat.service.core-compute-aat.internal/oauth2redirect
+    id: rd-commondata-api
+
+  s2s-authorised:
+    services: ${CRD_S2S_AUTHORISED_SERVICES:rd_commondata_api}
+  api:
+    url: ${IDAM_URL:http://127.0.0.1:5000}
+
+auth.idam.client.baseUrl: ${http://127.0.0.1:5000/o}
+oidc:
+  issuer: ${OIDC_ISSUER:http://127.0.0.1:5000/openam/oauth2/hmcts}
+  expiration: 14400000 # milliseconds 4 hours
+
+loggingComponentName: RD-Common-Data-Api
+launchdarkly:
+  sdk:
+    key: ${LD_SDK_KEY:test}
+    environment: ${LAUNCH_DARKLY_ENV:local}
+    user: rd
