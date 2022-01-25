@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
-import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -69,7 +68,7 @@ public class CommonDataApiClient {
             Map<String, Object> errorResponseMap = new HashMap<>();
             errorResponseMap.put(
                 "response_body",
-                objectMapper.readValue(responseEntity.getBody().toString(), ErrorResponse.class)
+                objectMapper.readValue(responseEntity.getBody().toString(), clazz)
             );
             errorResponseMap.put("http_status", status);
             return errorResponseMap;

@@ -27,6 +27,7 @@ class RetrieveCaseFlagByServiceIdFunctionalTest extends AuthorizationFunctionalT
     private static final String path = "/caseflags";
 
     @Test
+    @ExtendWith(FeatureToggleConditionExtension.class)
     @ToggleEnable(mapKey = mapKey, withFeature = true)
     void shouldThrowError_WhenFlagTypeisInvalid() {
         final var response = (ErrorResponse)

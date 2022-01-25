@@ -37,6 +37,10 @@ public class FeatureToggleServiceImpl implements FeatureToggleService {
             "CaseFlagApiController.retrieveCaseFlagsByServiceId",
             "rd_commondata_api"
         );
+        launchDarklyMap.put(
+            "CrdApiController.retrieveHearingChannelByCategoryId",
+            "rd_lov_api"
+        );
     }
 
     @Override
