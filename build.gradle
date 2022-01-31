@@ -328,7 +328,7 @@ dependencies {
     exclude group: 'com.github.jknack'
   }
   testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0'
-  testImplementation group: 'io.rest-assured', name: 'rest-assured-common', version: '4.2.0'
+  testImplementation group: 'io.rest-assured', name: 'rest-assured-common', version: '4.5.0'
 
   testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.4.6'
   testImplementation group: 'org.mockito', name: 'mockito-inline', version: '3.4.6'
