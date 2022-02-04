@@ -321,7 +321,7 @@ dependencies {
   implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.9'
   implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.9'
 
-  testCompile 'com.github.hmcts:fortify-client:1.2.0:all'
+  testImplementation 'com.github.hmcts:fortify-client:1.2.0:all'
   testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.16.2'
   testImplementation "org.testcontainers:junit-jupiter:1.16.2"
   testImplementation "org.testcontainers:testcontainers:1.16.2"
