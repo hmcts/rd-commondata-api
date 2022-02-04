@@ -1,3 +1,5 @@
+Delete from flag_service;
+
 Delete from flag_details;
 
 INSERT INTO flag_details (id,flag_code,value_en,value_cy,category_id) VALUES
@@ -77,3 +79,5 @@ INSERT INTO flag_details (id,flag_code,value_en,value_cy,category_id) VALUES
 	 (74,'PF0018','Lacking capacity','',2),
 	 (75,'CF0010','Class appeal','',1),
 	 (76,'CF0011','Presidential panel','',1);
+
+
