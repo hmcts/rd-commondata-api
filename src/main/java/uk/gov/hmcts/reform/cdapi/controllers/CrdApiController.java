@@ -72,12 +72,16 @@ public class CrdApiController {
         @RequestParam(value = "parent-category", required = false)
         @ApiParam(name = "parent-category", value = "Any Valid String is allowed") String parentCategory,
         @RequestParam(value = "parent-key", required = false)
-        @ApiParam(name = "parent-key", value = "Any Valid String is allowed") String parentKey) {
+        @ApiParam(name = "parent-key", value = "Any Valid String is allowed") String parentKey,
+        @RequestParam(value = "key", required = false)
+        @ApiParam(name = "key", value = "Any Valid String is allowed") String key,
+        @RequestParam(value = "is-child-required", required = false)
+        @ApiParam(name = "is-child-required", value = "Any Valid String is allowed") String isChildRequired) {
         if (!categoryKey.isPresent()) {
             throw new InvalidRequestException("Syntax error or Bad request");
         }
         List<HearingChannel> hearingChannels = crdService.retrieveHearingChannelsByCategoryId(categoryKey.get(),
-                                                                                  serviceId, parentCategory, parentKey);
+                                      serviceId, parentCategory, parentKey, key, "Y".equalsIgnoreCase(isChildRequired));
         return ResponseEntity.ok().body(new HearingChannels(hearingChannels));
     }
 

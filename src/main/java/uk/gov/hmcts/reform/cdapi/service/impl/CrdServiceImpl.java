@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.cdapi.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.cdapi.domain.HearingChannel;
 import uk.gov.hmcts.reform.cdapi.domain.HearingChannelDto;
@@ -8,11 +9,17 @@ import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
 import uk.gov.hmcts.reform.cdapi.repository.HearingChannelRepository;
 import uk.gov.hmcts.reform.cdapi.service.CrdService;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.springframework.data.jpa.domain.Specification.where;
 import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.hearingChannelCategoryKey;
+import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.hearingChannelKey;
 import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.hearingChannelParentCategory;
 import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.hearingChannelParentKey;
 import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.hearingChannelServiceId;
@@ -20,22 +27,40 @@ import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.hearingChannel
 @Service
 public class CrdServiceImpl implements CrdService {
 
+    private static final String PARENT = "PARENT";
+
     @Autowired
     HearingChannelRepository hearingChannelRepository;
 
     @Override
     public List<HearingChannel> retrieveHearingChannelsByCategoryId(String categoryId, String serviceId,
-                                                                    String parentCategory, String parentKey) {
-        List<HearingChannelDto> list = hearingChannelRepository.findAll(
-            where(hearingChannelCategoryKey(categoryId))
-                .and(hearingChannelServiceId(serviceId))
-                .and(hearingChannelParentCategory(parentCategory))
-                .and(hearingChannelParentKey(parentKey)));
+                                                                    String parentCategory, String parentKey, String key, Boolean isChildRequired) {
+        Specification<HearingChannelDto> query = where(hearingChannelCategoryKey(categoryId))
+            .and(hearingChannelServiceId(serviceId))
+            .and(hearingChannelParentCategory(parentCategory))
+            .and(hearingChannelParentKey(parentKey))
+            .and(hearingChannelKey(key));
+
+        isChildRequired = isChildRequired ? parentCategory != null && parentKey !=null : false;
+        if (isChildRequired) {
+            query = query.or(hearingChannelParentCategory(categoryId).and(hearingChannelParentKey(key)));
+        }
+
+        List<HearingChannelDto> list = hearingChannelRepository.findAll(query);
         if (list.isEmpty()) {
             throw new ResourceNotFoundException("Data not found");
         }
-        return convertHearingChannelList(list);
 
+        List<HearingChannel> channelList = convertHearingChannelList(list);
+
+        if (isChildRequired) {
+            Map<String, List<HearingChannel>> result = channelList.stream().collect(
+                Collectors.groupingBy(h -> h.getParentKey() == null ? PARENT : h.getParentKey(), HashMap::new,
+                                      Collectors.toCollection(ArrayList::new)));
+            channelList = Optional.ofNullable(result.get(PARENT)).orElseGet(Collections::emptyList).stream()
+                .peek(h -> h.setChildNodes(result.get(h.getKey()))).collect(Collectors.toList());
+        }
+        return channelList;
     }
 
     private List<HearingChannel> convertHearingChannelList(List<HearingChannelDto> hearingChannelDtos) {

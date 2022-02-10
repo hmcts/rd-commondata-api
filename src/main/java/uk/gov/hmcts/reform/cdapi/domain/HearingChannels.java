@@ -14,4 +14,6 @@ public class HearingChannels {
 
     @JsonProperty("list_of_values")
     private List<HearingChannel> hearingChannels;
+
+
 }

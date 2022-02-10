@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -39,4 +41,5 @@ public class HearingChannel {
     @JsonProperty("active_flag")
     private Boolean active;
 
+    private List<HearingChannel> childNodes;
 }

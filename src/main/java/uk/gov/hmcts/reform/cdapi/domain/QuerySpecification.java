@@ -43,4 +43,14 @@ public class QuerySpecification {
 
     }
 
+    /**
+     * if key == null then specification is ignored.
+     */
+    public static Specification<HearingChannelDto> hearingChannelKey(String key) {
+        return (root, query, builder) ->
+            key == null ? builder.conjunction() :
+                builder.equal(builder.lower(root.get("categoryKey").get("key")), key.toLowerCase().trim());
+
+    }
+
 }
