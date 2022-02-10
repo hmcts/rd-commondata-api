@@ -14,6 +14,7 @@ import uk.gov.hmcts.reform.cdapi.serenity5.SerenityTest;
 import uk.gov.hmcts.reform.cdapi.util.FeatureToggleConditionExtension;
 import uk.gov.hmcts.reform.cdapi.util.ToggleEnable;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -59,6 +60,7 @@ class RetrieveCaseFlagByServiceIdFunctionalTest extends AuthorizationFunctionalT
             commonDataApiClient.retrieveResponseForGivenRequest_NoBearerToken("/service-id=AAA1", path);
 
         assertNotNull(response);
+        assertThat(response.getHeader("UnAuthorized-Token-Error").contains("Authentication Exception"));
         assertEquals(HttpStatus.UNAUTHORIZED.value(), response.getStatusCode());
     }
 
