@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class FlagTest {
 
@@ -21,7 +21,7 @@ class FlagTest {
         assertEquals(1, flag.getFlagDetails().get(0).getCateGoryId());
         assertEquals(true, flag.getFlagDetails().get(0).getFlagComment());
         assertEquals(Arrays.asList("party", "ra"), flag.getFlagDetails().get(0).getPath());
-        assertTrue(flag.getFlagDetails().get(0).getListOfValues() != null);
+        assertNotNull(flag.getFlagDetails().get(0).getListOfValues());
         assertEquals(0, flag.getFlagDetails().get(0).getListOfValuesLength());
         assertEquals(true, flag.getFlagDetails().get(0).getParent());
         assertEquals(false, flag.getFlagDetails().get(0).getHearingRelevant());

@@ -42,9 +42,10 @@ class CrdApiControllerTest {
     }
 
     @Test
-    public void whenIdIsNull_thenExceptionIsThrown() {
+    void whenIdIsNull_thenExceptionIsThrown() {
+        final Optional<String> categoryId = Optional.empty();
         assertThrows(InvalidRequestException.class, () -> crdApiController.retrieveHearingChannelByCategoryId(
-            Optional.empty(), null, null, null));
+            categoryId, null, null, null));
     }
 
 
