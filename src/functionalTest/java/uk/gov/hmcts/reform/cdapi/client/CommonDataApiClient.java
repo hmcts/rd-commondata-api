@@ -111,6 +111,15 @@ public class CommonDataApiClient {
         }
     }
 
+    public Object retrieveHearingChannelsByCategoryIdSuccess(String path, String param) {
+        Response response = getMultipleAuthHeaders()
+            .get(BASE_URL_CASE_FLAGS + path + param)
+            .andReturn();
+        return Arrays.asList(response.getBody().as(HearingChannels[].class));
+
+    }
+
+
     public Response retrieveResponseForGivenRequest_NoBearerToken(String param, String path) {
         Response response = withUnauthenticatedRequest_NoBearerToken()
             .get(BASE_URL_CASE_FLAGS + path + param)

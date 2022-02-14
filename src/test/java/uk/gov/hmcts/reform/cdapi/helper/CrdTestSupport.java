@@ -10,10 +10,10 @@ public class CrdTestSupport {
     }
 
     public static HearingChannelDto createHearingChannelDtoMock(String categoryId, String serviceId,
-                                                                String parentCategory, String parentKey) {
+                                                                String parentCategory, String parentKey, String key) {
         CategoryKey categoryKey = new CategoryKey();
         categoryKey.setCategoryKey(categoryId);
-        categoryKey.setKey("telephone-CVP");
+        categoryKey.setKey(key);
         HearingChannelDto hearingChannelDtoMock = new HearingChannelDto();
         hearingChannelDtoMock.setServiceId(serviceId);
         hearingChannelDtoMock.setActive(true);

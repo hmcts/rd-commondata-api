@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.reform.cdapi.domain.HearingChannels;
 import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
 import uk.gov.hmcts.reform.cdapi.serenity5.SerenityTest;
 import uk.gov.hmcts.reform.cdapi.util.FeatureToggleConditionExtension;
@@ -37,6 +38,16 @@ public class RetrieveHearingChannelsByCategoryKeyFunctionalTest extends Authoriz
             );
         assertNotNull(response);
         assertEquals("Data not found", response.getErrorDescription());
+    }
+
+    @Test
+   /* @ToggleEnable(mapKey = mapKey, withFeature = true)
+    @ExtendWith(FeatureToggleConditionExtension.class)*/
+    void shouldReturnSuccess() {
+        final var response = (HearingChannels)
+            commonDataApiClient.retrieveHearingChannelsByCategoryIdSuccess("HearingChannel","BBA3");
+        assertNotNull(response);
+        //assertEquals("Data not found", response.getErrorDescription());
     }
 
     @Test

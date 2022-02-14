@@ -10,11 +10,9 @@ import uk.gov.hmcts.reform.cdapi.repository.HearingChannelRepository;
 import uk.gov.hmcts.reform.cdapi.service.CrdService;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.springframework.data.jpa.domain.Specification.where;
@@ -41,7 +39,7 @@ public class CrdServiceImpl implements CrdService {
             .and(hearingChannelParentKey(parentKey))
             .and(hearingChannelKey(key));
 
-        isChildRequired = isChildRequired ? parentCategory != null && parentKey !=null : false;
+        isChildRequired = isChildRequired ? parentCategory == null && parentKey == null : isChildRequired;
         if (isChildRequired) {
             query = query.or(hearingChannelParentCategory(categoryId).and(hearingChannelParentKey(key)));
         }
@@ -57,14 +55,15 @@ public class CrdServiceImpl implements CrdService {
             Map<String, List<HearingChannel>> result = channelList.stream().collect(
                 Collectors.groupingBy(h -> h.getParentKey() == null ? PARENT : h.getParentKey(), HashMap::new,
                                       Collectors.toCollection(ArrayList::new)));
-            channelList = Optional.ofNullable(result.get(PARENT)).orElseGet(Collections::emptyList).stream()
-                .peek(h -> h.setChildNodes(result.get(h.getKey()))).collect(Collectors.toList());
+            if(result.get(PARENT)!=null) {
+                result.get(PARENT).forEach(channel -> channel.setChildNodes(result.get(channel.getKey())));
+                channelList = result.get(PARENT);
+            }
         }
         return channelList;
     }
 
     private List<HearingChannel> convertHearingChannelList(List<HearingChannelDto> hearingChannelDtos) {
-
         return hearingChannelDtos.stream()
             .map(dto -> HearingChannel.builder()
                 .categoryKey(dto.getCategoryKey().getCategoryKey())
