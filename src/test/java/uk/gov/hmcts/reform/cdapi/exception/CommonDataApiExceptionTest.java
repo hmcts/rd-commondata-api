@@ -7,10 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
-public class CommonDataApiExceptionTest {
+class CommonDataApiExceptionTest {
 
     @Test
-    public void testCommonDataApiException() {
+    void testCommonDataApiException() {
         CommonDataApiException externalApiException = new CommonDataApiException(BAD_REQUEST, "BAD REQUEST");
         assertNotNull(externalApiException);
         assertThat(externalApiException.getHttpStatus()).hasToString("400 BAD_REQUEST");

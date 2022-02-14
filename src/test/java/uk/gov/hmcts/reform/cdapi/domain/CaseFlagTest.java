@@ -7,9 +7,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class CaseFlagTest {
+class CaseFlagTest {
 
     @Test
     void testCaseFlag() {
@@ -25,7 +25,7 @@ public class CaseFlagTest {
         assertEquals(1, caseFlag.getFlags().get(0).getFlagDetails().get(0).getCateGoryId());
         assertEquals(true, caseFlag.getFlags().get(0).getFlagDetails().get(0).getFlagComment());
         assertEquals(Arrays.asList("party", "ra"), caseFlag.getFlags().get(0).getFlagDetails().get(0).getPath());
-        assertTrue(caseFlag.getFlags().get(0).getFlagDetails().get(0).getListOfValues() != null);
+        assertNotNull(caseFlag.getFlags().get(0).getFlagDetails().get(0).getListOfValues());
         assertEquals(0, caseFlag.getFlags().get(0).getFlagDetails().get(0).getListOfValuesLength());
         assertEquals(true, caseFlag.getFlags().get(0).getFlagDetails().get(0).getParent());
         assertEquals(false, caseFlag.getFlags().get(0).getFlagDetails().get(0).getHearingRelevant());
