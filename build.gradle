@@ -255,6 +255,18 @@ dependencyUpdates {
   }
 }
 
+dependencyManagement {
+
+  dependencies {
+    // CVE-2021-42340
+    dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.58') {
+      entry 'tomcat-embed-core'
+      entry 'tomcat-embed-el'
+      entry 'tomcat-embed-websocket'
+    }
+  }
+}
+
 // https://jeremylong.github.io/DependencyCheck/dependency-check-gradle/configuration.html
 dependencyCheck {
   // Specifies if the build should be failed if a CVSS score above a specified level is identified.
