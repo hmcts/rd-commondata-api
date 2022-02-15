@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class FlagDetailTest {
 
@@ -32,8 +32,8 @@ class FlagDetailTest {
         assertEquals(1, flagDetail1.getCateGoryId());
         assertEquals(true, flagDetail1.getFlagComment());
         assertEquals(Arrays.asList("party", "ra"), flagDetail1.getPath());
-        assertTrue(flagDetail1.getListOfValues() != null);
-        assertTrue(flagDetail1.getChildFlags() != null);
+        assertNotNull(flagDetail1.getListOfValues());
+        assertNotNull(flagDetail1.getChildFlags());
         assertEquals(0, flagDetail1.getListOfValuesLength());
         assertEquals(true, flagDetail1.getParent());
         assertEquals(false, flagDetail1.getHearingRelevant());
