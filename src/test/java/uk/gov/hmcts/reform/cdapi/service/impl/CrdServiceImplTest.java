@@ -94,7 +94,8 @@ class CrdServiceImplTest {
         assertEquals(hearingChannelDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
         assertEquals(hearingChannelDtos.get(0).getActive(), result.get(0).getActive());
         assertEquals(hearingChannelDtos.get(0).getActive(), result.get(0).getActive());
-        assertEquals(hearingChannelDtos.get(1).getCategoryKey().getKey(), result.get(0).getChildNodes().get(0).getKey());
+        assertEquals(hearingChannelDtos.get(1).getCategoryKey().getKey(),
+                     result.get(0).getChildNodes().get(0).getKey());
         assertEquals(hearingChannelDtos.get(1).getCategoryKey().getCategoryKey(), result.get(0).getChildNodes().get(0)
             .getCategoryKey());
     }

@@ -111,11 +111,11 @@ public class CommonDataApiClient {
         }
     }
 
-    public Object retrieveHearingChannelsByCategoryIdSuccess(String path, String param) {
+    public HearingChannels retrieveHearingChannelsByCategoryIdSuccess(String path, String param) {
         Response response = getMultipleAuthHeaders()
             .get(BASE_URL_CASE_FLAGS + path + param)
             .andReturn();
-        return response;
+        return response.getBody().as(HearingChannels.class);
 
     }
 

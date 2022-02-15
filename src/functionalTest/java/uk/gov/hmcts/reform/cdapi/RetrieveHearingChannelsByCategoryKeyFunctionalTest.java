@@ -14,8 +14,11 @@ import uk.gov.hmcts.reform.cdapi.serenity5.SerenityTest;
 import uk.gov.hmcts.reform.cdapi.util.FeatureToggleConditionExtension;
 import uk.gov.hmcts.reform.cdapi.util.ToggleEnable;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 
 @SerenityTest
@@ -41,13 +44,26 @@ public class RetrieveHearingChannelsByCategoryKeyFunctionalTest extends Authoriz
     }
 
     @Test
-   /* @ToggleEnable(mapKey = mapKey, withFeature = true)
-    @ExtendWith(FeatureToggleConditionExtension.class)*/
+    @ToggleEnable(mapKey = mapKey, withFeature = true)
+    @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnSuccess() {
-        final var response =
+        final HearingChannels response =
             commonDataApiClient.retrieveHearingChannelsByCategoryIdSuccess(path,"/HearingChannel");
         assertNotNull(response);
-        //assertEquals(4,response.);
+        assertThat(response.getHearingChannels()).hasSizeGreaterThan(1);
+        response.getHearingChannels().forEach(h -> assertNull(h.getChildNodes()));
+    }
+
+    @Test
+    @ToggleEnable(mapKey = mapKey, withFeature = true)
+    @ExtendWith(FeatureToggleConditionExtension.class)
+    void shouldReturnSuccessWithChilds() {
+        final HearingChannels response =
+            commonDataApiClient.retrieveHearingChannelsByCategoryIdSuccess(path,"/HearingChannel?"
+                + "is-child-required=y&key=telephone");
+        assertNotNull(response);
+        assertThat(response.getHearingChannels()).hasSizeGreaterThan(0);
+        response.getHearingChannels().forEach(h -> assertFalse(h.getChildNodes().isEmpty()));
     }
 
     @Test

@@ -32,7 +32,7 @@ public class CrdServiceImpl implements CrdService {
 
     @Override
     public List<HearingChannel> retrieveHearingChannelsByCategoryId(String categoryId, String serviceId,
-                                                                    String parentCategory, String parentKey, String key, Boolean isChildRequired) {
+                                String parentCategory, String parentKey, String key, Boolean isChildRequired) {
         Specification<HearingChannelDto> query = where(hearingChannelCategoryKey(categoryId))
             .and(hearingChannelServiceId(serviceId))
             .and(hearingChannelParentCategory(parentCategory))
@@ -55,7 +55,7 @@ public class CrdServiceImpl implements CrdService {
             Map<String, List<HearingChannel>> result = channelList.stream().collect(
                 Collectors.groupingBy(h -> h.getParentKey() == null ? PARENT : h.getParentKey(), HashMap::new,
                                       Collectors.toCollection(ArrayList::new)));
-            if(result.get(PARENT)!=null) {
+            if (result.get(PARENT) != null) {
                 result.get(PARENT).forEach(channel -> channel.setChildNodes(result.get(channel.getKey())));
                 channelList = result.get(PARENT);
             }
