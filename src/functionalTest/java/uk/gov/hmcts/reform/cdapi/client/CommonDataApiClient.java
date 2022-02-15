@@ -115,7 +115,7 @@ public class CommonDataApiClient {
         Response response = getMultipleAuthHeaders()
             .get(BASE_URL_CASE_FLAGS + path + param)
             .andReturn();
-        return Arrays.asList(response.getBody().as(HearingChannels[].class));
+        return response;
 
     }
 

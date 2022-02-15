@@ -44,10 +44,10 @@ public class RetrieveHearingChannelsByCategoryKeyFunctionalTest extends Authoriz
    /* @ToggleEnable(mapKey = mapKey, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)*/
     void shouldReturnSuccess() {
-        final var response = (HearingChannels)
-            commonDataApiClient.retrieveHearingChannelsByCategoryIdSuccess("HearingChannel","BBA3");
+        final var response =
+            commonDataApiClient.retrieveHearingChannelsByCategoryIdSuccess(path,"/HearingChannel");
         assertNotNull(response);
-        //assertEquals("Data not found", response.getErrorDescription());
+        //assertEquals(4,response.);
     }
 
     @Test
