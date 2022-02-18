@@ -60,6 +60,3 @@ class CrdApiControllerTest {
             "HearingChannel","BBA3","1","5","1",true);
     }
 }
-
-
-

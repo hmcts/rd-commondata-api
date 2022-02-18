@@ -81,8 +81,8 @@ public class CrdApiController {
             throw new InvalidRequestException("Syntax error or Bad request");
         }
         List<Category> listOfValues = crdService.retrieveListOfValuesByCategoryId(categoryKey.get(), serviceId,
-                                                                              parentCategory, parentKey, key,
-                                                                              "Y".equalsIgnoreCase(isChildRequired));
+                                                                                parentCategory, parentKey, key,
+                                                                                "Y".equalsIgnoreCase(isChildRequired));
         return ResponseEntity.ok().body(new Categories(listOfValues));
     }
 

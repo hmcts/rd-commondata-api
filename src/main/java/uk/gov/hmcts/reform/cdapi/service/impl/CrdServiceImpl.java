@@ -39,7 +39,7 @@ public class CrdServiceImpl implements CrdService {
             .and(parentKey(parentKey))
             .and(key(key));
 
-        isChildRequired = isChildRequired ? parentCategory == null && parentKey == null : isChildRequired;
+        isChildRequired = isChildRequired && parentCategory == null && parentKey == null;
         if (isChildRequired) {
             query = query.or(parentCategory(categoryId).and(parentKey(key)));
         }
