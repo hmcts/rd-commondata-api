@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import uk.gov.hmcts.reform.cdapi.controllers.request.CategoryRequest;
 import uk.gov.hmcts.reform.cdapi.exception.InvalidRequestException;
 import uk.gov.hmcts.reform.cdapi.service.CrdService;
 
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static uk.gov.hmcts.reform.cdapi.helper.CrdTestSupport.buildCategoryRequest;
 
 class CrdApiControllerTest {
 
@@ -33,31 +35,36 @@ class CrdApiControllerTest {
 
     @Test
     void testWithValidCategoryId_ShouldReturnStatusCode200() {
+        CategoryRequest request = buildCategoryRequest("HearingChannel", null, null,
+                                                       null, null, "N");
+
         ResponseEntity<?> result = crdApiController.retrieveListOfValuesByCategoryId(
-            java.util.Optional.of("HearingChannel"), null, null, null,null,
-            "N");
+            java.util.Optional.of("HearingChannel"), request);
         assertNotNull(result);
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        verify(crdService, times(1)).retrieveListOfValuesByCategoryId(
-            "HearingChannel",null,null,null,null,false);
+        verify(crdService, times(1)).retrieveListOfValuesByCategory(request);
     }
 
     @Test
      void whenIdIsNull_thenExceptionIsThrown() {
+        CategoryRequest request = buildCategoryRequest("HearingChannel", null, null,
+                                                       null, null, "N");
+
         Optional<String> empty = Optional.empty();
         assertThrows(InvalidRequestException.class, () -> crdApiController.retrieveListOfValuesByCategoryId(
-            empty, null, null, null,null,"N"));
+            empty, request));
     }
-
 
     @Test
     void testWithAllValidParamValues_ShouldReturnStatusCode200() {
+        CategoryRequest request = buildCategoryRequest("HearingChannel", "BBA3", "1",
+                                                       "1", "5", "y");
+
         ResponseEntity<?> result = crdApiController.retrieveListOfValuesByCategoryId(
-            java.util.Optional.of("HearingChannel"), "BBA3", "1", "5","1",
-            "y");
+            java.util.Optional.of("HearingChannel"), request);
         assertNotNull(result);
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        verify(crdService, times(1)).retrieveListOfValuesByCategoryId(
-            "HearingChannel","BBA3","1","5","1",true);
+
+        verify(crdService, times(1)).retrieveListOfValuesByCategory(request);
     }
 }

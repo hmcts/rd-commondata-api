@@ -12,10 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.hmcts.reform.cdapi.domain.Categories;
-import uk.gov.hmcts.reform.cdapi.domain.Category;
+import uk.gov.hmcts.reform.cdapi.controllers.request.CategoryRequest;
+import uk.gov.hmcts.reform.cdapi.controllers.response.Categories;
+import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
 import uk.gov.hmcts.reform.cdapi.exception.InvalidRequestException;
 import uk.gov.hmcts.reform.cdapi.service.CrdService;
 
@@ -64,25 +64,14 @@ public class CrdApiController {
         path = {"/lov/categories", "/lov/categories/{category-id}"}
     )
     public ResponseEntity<Categories> retrieveListOfValuesByCategoryId(
-        @PathVariable(value = "category-id")
         @ApiParam(name = "category-id", value = "Any Valid String is allowed", required = true)
-            Optional<String> categoryKey,
-        @RequestParam(value = "service-id", required = false)
-        @ApiParam(name = "service-id", value = "Any Valid String is allowed") String serviceId,
-        @RequestParam(value = "parent-category", required = false)
-        @ApiParam(name = "parent-category", value = "Any Valid String is allowed") String parentCategory,
-        @RequestParam(value = "parent-key", required = false)
-        @ApiParam(name = "parent-key", value = "Any Valid String is allowed") String parentKey,
-        @RequestParam(value = "key", required = false)
-        @ApiParam(name = "key", value = "Any Valid String is allowed") String key,
-        @RequestParam(value = "is-child-required", required = false)
-        @ApiParam(name = "is-child-required", value = "Any Valid String is allowed") String isChildRequired) {
-        if (!categoryKey.isPresent()) {
+        @PathVariable(value = "category-id") Optional<String> categoryId,
+        CategoryRequest categoryRequest) {
+        if (!categoryId.isPresent()) {
             throw new InvalidRequestException("Syntax error or Bad request");
         }
-        List<Category> listOfValues = crdService.retrieveListOfValuesByCategoryId(categoryKey.get(), serviceId,
-                                                                                parentCategory, parentKey, key,
-                                                                                "Y".equalsIgnoreCase(isChildRequired));
+        categoryRequest.setCategoryId(categoryId.get());
+        List<Category> listOfValues = crdService.retrieveListOfValuesByCategory(categoryRequest);
         return ResponseEntity.ok().body(new Categories(listOfValues));
     }
 

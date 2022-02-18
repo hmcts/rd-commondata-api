@@ -3,7 +3,8 @@ package uk.gov.hmcts.reform.cdapi.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.cdapi.domain.Category;
+import uk.gov.hmcts.reform.cdapi.controllers.request.CategoryRequest;
+import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
 import uk.gov.hmcts.reform.cdapi.domain.ListOfValueDto;
 import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfValuesRepository;
@@ -31,17 +32,12 @@ public class CrdServiceImpl implements CrdService {
     ListOfValuesRepository listOfValuesRepository;
 
     @Override
-    public List<Category> retrieveListOfValuesByCategoryId(String categoryId, String serviceId,
-                                       String parentCategory, String parentKey, String key, boolean isChildRequired) {
-        Specification<ListOfValueDto> query = where(categoryKey(categoryId))
-            .and(serviceId(serviceId))
-            .and(parentCategory(parentCategory))
-            .and(parentKey(parentKey))
-            .and(key(key));
+    public List<Category> retrieveListOfValuesByCategory(CategoryRequest request) {
+        boolean isChildRequired = isChildRequired(request);
 
-        isChildRequired = isChildRequired && parentCategory == null && parentKey == null;
+        Specification<ListOfValueDto> query = prepareBaseQuerySpecification(request);
         if (isChildRequired) {
-            query = query.or(parentCategory(categoryId).and(parentKey(key)));
+            query = query.or(parentCategory(request.getCategoryId()).and(parentKey(request.getKey())));
         }
 
         List<ListOfValueDto> list = listOfValuesRepository.findAll(query);
@@ -52,13 +48,31 @@ public class CrdServiceImpl implements CrdService {
         List<Category> channelList = convertCategoryList(list);
 
         if (isChildRequired) {
-            Map<String, List<Category>> result = channelList.stream().collect(
-                Collectors.groupingBy(h -> h.getParentKey() == null ? PARENT : h.getParentKey(), HashMap::new,
-                                      Collectors.toCollection(ArrayList::new)));
-            if (result.get(PARENT) != null) {
-                result.get(PARENT).forEach(channel -> channel.setChildNodes(result.get(channel.getKey())));
-                channelList = result.get(PARENT);
-            }
+            channelList = mapToParentCategory(channelList);
+        }
+        return channelList;
+    }
+
+    private boolean isChildRequired(CategoryRequest request) {
+        return "Y".equalsIgnoreCase(request.getIsChildRequired())
+            && request.getParentCategory() == null && request.getParentKey() == null;
+    }
+
+    private Specification<ListOfValueDto> prepareBaseQuerySpecification(CategoryRequest request) {
+        return where(categoryKey(request.getCategoryId()))
+            .and(serviceId(request.getServiceId()))
+            .and(parentCategory(request.getParentCategory()))
+            .and(parentKey(request.getParentKey()))
+            .and(key(request.getKey()));
+    }
+
+    private List<Category> mapToParentCategory(List<Category> channelList) {
+        Map<String, List<Category>> result = channelList.stream().collect(
+            Collectors.groupingBy(h -> h.getParentKey() == null ? PARENT : h.getParentKey(), HashMap::new,
+                                  Collectors.toCollection(ArrayList::new)));
+        if (result.get(PARENT) != null) {
+            result.get(PARENT).forEach(channel -> channel.setChildNodes(result.get(channel.getKey())));
+            channelList = result.get(PARENT);
         }
         return channelList;
     }

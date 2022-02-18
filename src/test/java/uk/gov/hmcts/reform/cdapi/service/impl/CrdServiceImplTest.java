@@ -8,7 +8,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.jpa.domain.Specification;
-import uk.gov.hmcts.reform.cdapi.domain.Category;
+import uk.gov.hmcts.reform.cdapi.controllers.request.CategoryRequest;
+import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
 import uk.gov.hmcts.reform.cdapi.domain.ListOfValueDto;
 import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
 import uk.gov.hmcts.reform.cdapi.helper.CrdTestSupport;
@@ -24,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.cdapi.helper.CrdTestSupport.buildCategoryRequest;
 
 @ExtendWith(MockitoExtension.class)
 class CrdServiceImplTest {
@@ -38,12 +40,12 @@ class CrdServiceImplTest {
     void retrieveCategoriesByCategoryId() {
         List<ListOfValueDto> listOfValueDtos = new ArrayList<>();
         listOfValueDtos.add(CrdTestSupport.createListOfCategoriesDtoMock("HearingChannel", null,
-                                                                            null, null, null));
+                                                                         null, null, null));
         when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
             .thenReturn(listOfValueDtos);
-
-        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategoryId(
-            "HearingChannel", null, null, null,null,false);
+        CategoryRequest request = buildCategoryRequest("HearingChannel",  null, null,
+                                                       null,null, null);
+        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
 
         assertNotNull(result);
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
@@ -57,15 +59,17 @@ class CrdServiceImplTest {
         when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
             .thenReturn(listOfValueDtos);
 
-        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategoryId(
-            "HearingChannel", "BBA3", "HearingChannel", "telephone",
-            "telephone",true);
+        CategoryRequest request = buildCategoryRequest("HearingChannel", "BBA3", "telephone",
+                                           "HearingChannel", "telephone","y");
+        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
 
         assertNotNull(result);
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
         assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActive());
     }
+
+
 
     @NotNull
     private List<ListOfValueDto> mockListOfValuesDtos() {
@@ -85,8 +89,9 @@ class CrdServiceImplTest {
         when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
             .thenReturn(listOfValueDtos);
 
-        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategoryId(
-            "HearingChannel", null, null, null,null,true);
+        CategoryRequest request = buildCategoryRequest("HearingChannel",  null, null,
+                                                       null,null, "y");
+        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
 
         assertNotNull(result);
         assertThat(result, hasSize(1));
@@ -106,9 +111,9 @@ class CrdServiceImplTest {
         when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
             .thenReturn(listOfValueDtos);
 
-        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategoryId(
-            "HearingSubChannel", null, "HearingChannel", "telephone",
-            null,true);
+        CategoryRequest request = buildCategoryRequest("HearingSubChannel",  null, null,
+                                           "HearingChannel","telephone", "y");
+        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
 
         assertNotNull(result);
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
@@ -123,9 +128,9 @@ class CrdServiceImplTest {
         when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
             .thenReturn(listOfValueDtos);
 
-        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategoryId(
-            "HearingSubChannel", null, "HearingChannel", null,null,
-            true);
+        CategoryRequest request = buildCategoryRequest("HearingSubChannel",  null, null,
+                                                       "HearingChannel",null, "y");
+        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
 
         assertNotNull(result);
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
@@ -139,9 +144,9 @@ class CrdServiceImplTest {
         when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
             .thenReturn(listOfValueDtos);
 
-        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategoryId(
-            "HearingSubChannel", null, "HearingChannel", null,null,
-            false);
+        CategoryRequest request = buildCategoryRequest("HearingSubChannel",  null, null,
+                                                       "HearingChannel",null, "n");
+        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
 
         assertNotNull(result);
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
@@ -155,9 +160,9 @@ class CrdServiceImplTest {
         when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
             .thenReturn(listOfValueDtos);
 
-        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategoryId(
-            "HearingSubChannel", null, null, "telephone",null,
-            true);
+        CategoryRequest request = buildCategoryRequest("HearingSubChannel",  null, null,
+                                                       null,"telephone", "y");
+        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
 
         assertNotNull(result);
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
@@ -173,7 +178,8 @@ class CrdServiceImplTest {
         when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
             .thenReturn(listOfValueDtos);
 
-        assertThrows(ResourceNotFoundException.class, () -> crdServiceImpl.retrieveListOfValuesByCategoryId(
-            "HearingChannel", null, null, null,null,false));
+        CategoryRequest request = buildCategoryRequest("HearingChannel",  null, null,
+                                                       null,null, "n");
+        assertThrows(ResourceNotFoundException.class, () -> crdServiceImpl.retrieveListOfValuesByCategory(request));
     }
 }

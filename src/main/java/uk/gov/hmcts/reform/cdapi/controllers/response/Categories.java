@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.cdapi.domain;
+package uk.gov.hmcts.reform.cdapi.controllers.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import uk.gov.hmcts.reform.cdapi.domain.Categories;
-import uk.gov.hmcts.reform.cdapi.domain.Category;
+import uk.gov.hmcts.reform.cdapi.controllers.response.Categories;
+import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
 import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
 
 import java.util.Map;
