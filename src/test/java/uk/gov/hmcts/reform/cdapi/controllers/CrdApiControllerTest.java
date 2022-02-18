@@ -33,30 +33,30 @@ class CrdApiControllerTest {
 
     @Test
     void testWithValidCategoryId_ShouldReturnStatusCode200() {
-        ResponseEntity<?> result = crdApiController.retrieveHearingChannelByCategoryId(
+        ResponseEntity<?> result = crdApiController.retrieveListOfValuesByCategoryId(
             java.util.Optional.of("HearingChannel"), null, null, null,null,
             "N");
         assertNotNull(result);
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        verify(crdService, times(1)).retrieveHearingChannelsByCategoryId(
+        verify(crdService, times(1)).retrieveListOfValuesByCategoryId(
             "HearingChannel",null,null,null,null,false);
     }
 
     @Test
     public void whenIdIsNull_thenExceptionIsThrown() {
-        assertThrows(InvalidRequestException.class, () -> crdApiController.retrieveHearingChannelByCategoryId(
+        assertThrows(InvalidRequestException.class, () -> crdApiController.retrieveListOfValuesByCategoryId(
             Optional.empty(), null, null, null,null,"N"));
     }
 
 
     @Test
     void testWithAllValidParamValues_ShouldReturnStatusCode200() {
-        ResponseEntity<?> result = crdApiController.retrieveHearingChannelByCategoryId(
+        ResponseEntity<?> result = crdApiController.retrieveListOfValuesByCategoryId(
             java.util.Optional.of("HearingChannel"), "BBA3", "1", "5","1",
             "y");
         assertNotNull(result);
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        verify(crdService, times(1)).retrieveHearingChannelsByCategoryId(
+        verify(crdService, times(1)).retrieveListOfValuesByCategoryId(
             "HearingChannel","BBA3","1","5","1",true);
     }
 }

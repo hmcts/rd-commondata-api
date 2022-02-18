@@ -3,10 +3,10 @@ package uk.gov.hmcts.reform.cdapi.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.cdapi.domain.HearingChannel;
-import uk.gov.hmcts.reform.cdapi.domain.HearingChannelDto;
+import uk.gov.hmcts.reform.cdapi.domain.Category;
+import uk.gov.hmcts.reform.cdapi.domain.ListOfValueDto;
 import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
-import uk.gov.hmcts.reform.cdapi.repository.HearingChannelRepository;
+import uk.gov.hmcts.reform.cdapi.repository.ListOfValuesRepository;
 import uk.gov.hmcts.reform.cdapi.service.CrdService;
 
 import java.util.ArrayList;
@@ -16,11 +16,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.springframework.data.jpa.domain.Specification.where;
-import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.hearingChannelCategoryKey;
-import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.hearingChannelKey;
-import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.hearingChannelParentCategory;
-import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.hearingChannelParentKey;
-import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.hearingChannelServiceId;
+import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.categoryKey;
+import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.key;
+import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.parentCategory;
+import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.parentKey;
+import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.serviceId;
 
 @Service
 public class CrdServiceImpl implements CrdService {
@@ -28,31 +28,31 @@ public class CrdServiceImpl implements CrdService {
     private static final String PARENT = "PARENT";
 
     @Autowired
-    HearingChannelRepository hearingChannelRepository;
+    ListOfValuesRepository listOfValuesRepository;
 
     @Override
-    public List<HearingChannel> retrieveHearingChannelsByCategoryId(String categoryId, String serviceId,
-                                String parentCategory, String parentKey, String key, Boolean isChildRequired) {
-        Specification<HearingChannelDto> query = where(hearingChannelCategoryKey(categoryId))
-            .and(hearingChannelServiceId(serviceId))
-            .and(hearingChannelParentCategory(parentCategory))
-            .and(hearingChannelParentKey(parentKey))
-            .and(hearingChannelKey(key));
+    public List<Category> retrieveListOfValuesByCategoryId(String categoryId, String serviceId,
+                                       String parentCategory, String parentKey, String key, Boolean isChildRequired) {
+        Specification<ListOfValueDto> query = where(categoryKey(categoryId))
+            .and(serviceId(serviceId))
+            .and(parentCategory(parentCategory))
+            .and(parentKey(parentKey))
+            .and(key(key));
 
         isChildRequired = isChildRequired ? parentCategory == null && parentKey == null : isChildRequired;
         if (isChildRequired) {
-            query = query.or(hearingChannelParentCategory(categoryId).and(hearingChannelParentKey(key)));
+            query = query.or(parentCategory(categoryId).and(parentKey(key)));
         }
 
-        List<HearingChannelDto> list = hearingChannelRepository.findAll(query);
+        List<ListOfValueDto> list = listOfValuesRepository.findAll(query);
         if (list.isEmpty()) {
             throw new ResourceNotFoundException("Data not found");
         }
 
-        List<HearingChannel> channelList = convertHearingChannelList(list);
+        List<Category> channelList = convertCategoryList(list);
 
         if (isChildRequired) {
-            Map<String, List<HearingChannel>> result = channelList.stream().collect(
+            Map<String, List<Category>> result = channelList.stream().collect(
                 Collectors.groupingBy(h -> h.getParentKey() == null ? PARENT : h.getParentKey(), HashMap::new,
                                       Collectors.toCollection(ArrayList::new)));
             if (result.get(PARENT) != null) {
@@ -63,9 +63,9 @@ public class CrdServiceImpl implements CrdService {
         return channelList;
     }
 
-    private List<HearingChannel> convertHearingChannelList(List<HearingChannelDto> hearingChannelDtos) {
-        return hearingChannelDtos.stream()
-            .map(dto -> HearingChannel.builder()
+    private List<Category> convertCategoryList(List<ListOfValueDto> listOfValueDtos) {
+        return listOfValueDtos.stream()
+            .map(dto -> Category.builder()
                 .categoryKey(dto.getCategoryKey().getCategoryKey())
                 .serviceId(dto.getServiceId())
                 .active(dto.getActive())

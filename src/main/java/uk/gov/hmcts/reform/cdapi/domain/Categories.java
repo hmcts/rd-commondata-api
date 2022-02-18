@@ -10,10 +10,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class HearingChannels {
-
+public class Categories {
     @JsonProperty("list_of_values")
-    private List<HearingChannel> hearingChannels;
-
-
+    private List<Category> categories;
 }

@@ -23,11 +23,11 @@ import static org.mockito.Mockito.when;
 class QuerySpecificationTest {
 
     @Mock
-    Specification<HearingChannelDto> specMock;
+    Specification<ListOfValueDto> specMock;
     @Mock
-    Root<HearingChannelDto> root;
+    Root<ListOfValueDto> root;
     @Mock
-    CriteriaQuery<HearingChannelDto> query;
+    CriteriaQuery<ListOfValueDto> query;
     @Mock
     CriteriaBuilder builder;
     @Mock
@@ -36,11 +36,11 @@ class QuerySpecificationTest {
     Path<Object> pathObj;
 
     @Test
-    void retrieveHearingChannelCategoryKey() {
+    void retrieveCategoryKey() {
         when(root.get(anyString())).thenReturn(pathObj);
         when(specMock.toPredicate(root, query, builder)).thenReturn(predicate);
 
-        Specification<HearingChannelDto> result = QuerySpecification.hearingChannelCategoryKey("HearingChannel");
+        Specification<ListOfValueDto> result = QuerySpecification.categoryKey("HearingChannel");
         result = result.and(specMock);
         Assertions.assertThat(result).isNotNull();
         MatcherAssert.assertThat(result.toPredicate(root, query, builder), is(predicate));
@@ -48,9 +48,9 @@ class QuerySpecificationTest {
     }
 
     @Test
-    void retrieveHearingChannelCategoryKey_withNull() {
+    void retrieveCategoryKey_withNull() {
 
-        Specification<HearingChannelDto> result = QuerySpecification.hearingChannelCategoryKey(null);
+        Specification<ListOfValueDto> result = QuerySpecification.categoryKey(null);
         result = result.and(specMock);
 
         Assertions.assertThat(result).isNotNull();
@@ -58,10 +58,10 @@ class QuerySpecificationTest {
     }
 
     @Test
-    void retrieveHearingChannelParentCategory() {
+    void retrieveParentCategory() {
         when(specMock.toPredicate(root, query, builder)).thenReturn(predicate);
 
-        Specification<HearingChannelDto> result = QuerySpecification.hearingChannelParentCategory("HearingChannel");
+        Specification<ListOfValueDto> result = QuerySpecification.parentCategory("HearingChannel");
 
         result = result.and(specMock);
         Assertions.assertThat(result).isNotNull();
@@ -69,9 +69,9 @@ class QuerySpecificationTest {
     }
 
     @Test
-    void retrieveHearingChannelParentCategory_withNull() {
+    void retrieveParentCategory_withNull() {
 
-        Specification<HearingChannelDto> result = QuerySpecification.hearingChannelParentCategory(null);
+        Specification<ListOfValueDto> result = QuerySpecification.parentCategory(null);
         result = result.and(specMock);
 
         Assertions.assertThat(result).isNotNull();
@@ -79,11 +79,11 @@ class QuerySpecificationTest {
     }
 
     @Test
-    void retrieveHearingChannelServiceId() {
+    void retrieveServiceId() {
         when(root.get(anyString())).thenReturn(pathObj);
         when(specMock.toPredicate(root, query, builder)).thenReturn(predicate);
 
-        Specification<HearingChannelDto> result = QuerySpecification.hearingChannelServiceId("BBA3");
+        Specification<ListOfValueDto> result = QuerySpecification.serviceId("BBA3");
 
         result = result.and(specMock);
         Assertions.assertThat(result).isNotNull();
@@ -91,9 +91,9 @@ class QuerySpecificationTest {
     }
 
     @Test
-    void retrieveHearingChannelServiceId_withNull() {
+    void retrieveServiceId_withNull() {
 
-        Specification<HearingChannelDto> result = QuerySpecification.hearingChannelServiceId(null);
+        Specification<ListOfValueDto> result = QuerySpecification.serviceId(null);
         result = result.and(specMock);
 
         Assertions.assertThat(result).isNotNull();
@@ -101,10 +101,10 @@ class QuerySpecificationTest {
     }
 
     @Test
-    void retrieveHearingChannelParentKey() {
+    void retrieveParentKey() {
         when(specMock.toPredicate(root, query, builder)).thenReturn(predicate);
 
-        Specification<HearingChannelDto> result = QuerySpecification.hearingChannelParentKey("telephone");
+        Specification<ListOfValueDto> result = QuerySpecification.parentKey("telephone");
 
         result = result.and(specMock);
         Assertions.assertThat(result).isNotNull();
@@ -112,9 +112,9 @@ class QuerySpecificationTest {
     }
 
     @Test
-    void retrieveHearingChannelParentKey_withNull() {
+    void retrieveParentKey_withNull() {
 
-        Specification<HearingChannelDto> result = QuerySpecification.hearingChannelParentKey(null);
+        Specification<ListOfValueDto> result = QuerySpecification.parentKey(null);
         result = result.and(specMock);
 
         Assertions.assertThat(result).isNotNull();

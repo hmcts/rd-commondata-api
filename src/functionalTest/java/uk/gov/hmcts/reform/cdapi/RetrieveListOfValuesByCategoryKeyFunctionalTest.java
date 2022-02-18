@@ -8,7 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
-import uk.gov.hmcts.reform.cdapi.domain.HearingChannels;
+import uk.gov.hmcts.reform.cdapi.domain.Categories;
 import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
 import uk.gov.hmcts.reform.cdapi.serenity5.SerenityTest;
 import uk.gov.hmcts.reform.cdapi.util.FeatureToggleConditionExtension;
@@ -25,9 +25,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @SpringBootTest
 @WithTags({@WithTag("testType:Functional")})
 @ActiveProfiles("functional")
-public class RetrieveHearingChannelsByCategoryKeyFunctionalTest extends AuthorizationFunctionalTest {
+public class RetrieveListOfValuesByCategoryKeyFunctionalTest extends AuthorizationFunctionalTest {
 
-    public static final String mapKey = "CrdApiController.retrieveHearingChannelByCategoryId";
+    public static final String mapKey = "CrdApiController.retrieveListOfValuesByCategoryId";
     private static final String path = "/lov/categories";
 
     @Test
@@ -35,7 +35,7 @@ public class RetrieveHearingChannelsByCategoryKeyFunctionalTest extends Authoriz
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnEmptyList_WhenNoDataFound() {
         final var response = (ErrorResponse)
-            commonDataApiClient.retrieveHearingChannelsByCategoryId(
+            commonDataApiClient.retrieveListOfValuesByCategoryId(
                 HttpStatus.NOT_FOUND,
                 "hello"
             );
@@ -47,28 +47,28 @@ public class RetrieveHearingChannelsByCategoryKeyFunctionalTest extends Authoriz
     @ToggleEnable(mapKey = mapKey, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnSuccess() {
-        final HearingChannels response =
-            commonDataApiClient.retrieveHearingChannelsByCategoryIdSuccess(path,"/HearingChannel");
+        final Categories response =
+            commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(path, "/HearingChannel");
         assertNotNull(response);
-        assertThat(response.getHearingChannels()).hasSizeGreaterThan(1);
-        response.getHearingChannels().forEach(h -> assertNull(h.getChildNodes()));
+        assertThat(response.getCategories()).hasSizeGreaterThan(1);
+        response.getCategories().forEach(h -> assertNull(h.getChildNodes()));
     }
 
     @Test
     @ToggleEnable(mapKey = mapKey, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnSuccessWithChilds() {
-        final HearingChannels response =
-            commonDataApiClient.retrieveHearingChannelsByCategoryIdSuccess(path,"/HearingChannel?"
+        final Categories response =
+            commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(path, "/HearingChannel?"
                 + "is-child-required=y&key=telephone");
         assertNotNull(response);
-        assertThat(response.getHearingChannels()).hasSizeGreaterThan(0);
-        response.getHearingChannels().forEach(h -> assertFalse(h.getChildNodes().isEmpty()));
+        assertThat(response.getCategories()).hasSizeGreaterThan(0);
+        response.getCategories().forEach(h -> assertFalse(h.getChildNodes().isEmpty()));
     }
 
     @Test
     @ToggleEnable(mapKey = mapKey, withFeature = true)
-    void retrieveHearingChannels_UnauthorizedDueToNoBearerToken_ShouldReturnStatusCode401() {
+    void retrieveCategories_UnauthorizedDueToNoBearerToken_ShouldReturnStatusCode401() {
         Response response =
             commonDataApiClient.retrieveResponseForGivenRequest_NoBearerToken("/HearingChannel", path);
 
@@ -78,7 +78,7 @@ public class RetrieveHearingChannelsByCategoryKeyFunctionalTest extends Authoriz
 
     @Test
     @ToggleEnable(mapKey = mapKey, withFeature = true)
-    void retrieveHearingChannels_UnauthorizedDueToNoS2SToken_ShouldReturnStatusCode401() {
+    void retrieveCategories_UnauthorizedDueToNoS2SToken_ShouldReturnStatusCode401() {
         Response response =
             commonDataApiClient.retrieveResponseForGivenRequest_NoS2SToken("/HearingChannel", path);
 

@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.rest.SerenityRest;
 import org.springframework.http.HttpStatus;
 import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
-import uk.gov.hmcts.reform.cdapi.domain.HearingChannels;
+import uk.gov.hmcts.reform.cdapi.domain.Categories;
 import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
 import uk.gov.hmcts.reform.cdapi.idam.IdamOpenIdClient;
 
@@ -90,13 +90,13 @@ public class CommonDataApiClient {
             .assertThat()
             .statusCode(expectedStatus.value());
         if (expectedStatus.is2xxSuccessful()) {
-            return Arrays.asList(response.getBody().as(HearingChannels[].class));
+            return Arrays.asList(response.getBody().as(Categories[].class));
         } else {
             return response.getBody().as(ErrorResponse.class);
         }
     }
 
-    public Object retrieveHearingChannelsByCategoryId(HttpStatus expectedStatus, String param) {
+    public Object retrieveListOfValuesByCategoryId(HttpStatus expectedStatus, String param) {
         Response response = getMultipleAuthHeaders()
             .get(BASE_URL_CASE_FLAGS + "/lov/categories/XXXX?service-id=" + param)
             .andReturn();
@@ -105,17 +105,17 @@ public class CommonDataApiClient {
             .assertThat()
             .statusCode(expectedStatus.value());
         if (expectedStatus.is2xxSuccessful()) {
-            return Arrays.asList(response.getBody().as(HearingChannels[].class));
+            return Arrays.asList(response.getBody().as(Categories[].class));
         } else {
             return response.getBody().as(ErrorResponse.class);
         }
     }
 
-    public HearingChannels retrieveHearingChannelsByCategoryIdSuccess(String path, String param) {
+    public Categories retrieveCategoriesByCategoryIdSuccess(String path, String param) {
         Response response = getMultipleAuthHeaders()
             .get(BASE_URL_CASE_FLAGS + path + param)
             .andReturn();
-        return response.getBody().as(HearingChannels.class);
+        return response.getBody().as(Categories.class);
 
     }
 

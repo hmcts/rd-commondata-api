@@ -22,10 +22,10 @@ import uk.gov.hmcts.reform.cdapi.controllers.CaseFlagApiController;
 import uk.gov.hmcts.reform.cdapi.controllers.CrdApiController;
 import uk.gov.hmcts.reform.cdapi.domain.CaseFlagDto;
 import uk.gov.hmcts.reform.cdapi.domain.CategoryKey;
-import uk.gov.hmcts.reform.cdapi.domain.HearingChannelDto;
 import uk.gov.hmcts.reform.cdapi.domain.ListOfValue;
+import uk.gov.hmcts.reform.cdapi.domain.ListOfValueDto;
 import uk.gov.hmcts.reform.cdapi.repository.CaseFlagRepository;
-import uk.gov.hmcts.reform.cdapi.repository.HearingChannelRepository;
+import uk.gov.hmcts.reform.cdapi.repository.ListOfValuesRepository;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfVenueRepository;
 import uk.gov.hmcts.reform.cdapi.service.impl.CaseFlagServiceImpl;
 import uk.gov.hmcts.reform.cdapi.service.impl.CrdServiceImpl;
@@ -62,7 +62,7 @@ public class CommonDataApiProviderTest {
     CrdApiController crdApiController;
 
     @MockBean
-    HearingChannelRepository hearingChannelRepository;
+    ListOfValuesRepository listOfValuesRepository;
 
     @TestTemplate
     @ExtendWith(PactVerificationInvocationContextProvider.class)
@@ -117,38 +117,38 @@ public class CommonDataApiProviderTest {
         when(caseFlagRepository.findAll(anyString())).thenReturn(caseFlagDtos);
     }
 
-    @State({"HearingChannels Details Exist"})
-    public void toReturnHearingChannelsByCategoryId() {
-        HearingChannelDto hearingChannelDto1 = new HearingChannelDto();
-        hearingChannelDto1.setParentKey("telephone");
-        hearingChannelDto1.setParentCategory("HearingChannel");
-        hearingChannelDto1.setLovOrder(1L);
-        hearingChannelDto1.setActive(true);
-        hearingChannelDto1.setHintTextCy(null);
-        hearingChannelDto1.setHintTextEn(null);
-        hearingChannelDto1.setValueCy(null);
-        hearingChannelDto1.setValueEn("Telephone - BTMeetme");
+    @State({"ListOfCategories Details Exist"})
+    public void toReturnListOfCategoriesByCategoryId() {
+        ListOfValueDto listOfValueDto1 = new ListOfValueDto();
+        listOfValueDto1.setParentKey("telephone");
+        listOfValueDto1.setParentCategory("HearingChannel");
+        listOfValueDto1.setLovOrder(1L);
+        listOfValueDto1.setActive(true);
+        listOfValueDto1.setHintTextCy(null);
+        listOfValueDto1.setHintTextEn(null);
+        listOfValueDto1.setValueCy(null);
+        listOfValueDto1.setValueEn("Telephone - BTMeetme");
         CategoryKey categoryKey = new CategoryKey();
         categoryKey.setKey("telephone-btMeetMe");
-        hearingChannelDto1.setCategoryKey(categoryKey);
+        listOfValueDto1.setCategoryKey(categoryKey);
 
-        HearingChannelDto hearingChannelDto2 = new HearingChannelDto();
-        hearingChannelDto2.setParentKey("video");
-        hearingChannelDto2.setParentCategory("HearingChannel");
-        hearingChannelDto2.setLovOrder(2L);
-        hearingChannelDto2.setActive(true);
-        hearingChannelDto2.setHintTextCy(null);
-        hearingChannelDto2.setHintTextEn(null);
-        hearingChannelDto2.setValueCy(null);
-        hearingChannelDto2.setValueEn("Video - CVP");
+        ListOfValueDto listOfValueDto2 = new ListOfValueDto();
+        listOfValueDto2.setParentKey("video");
+        listOfValueDto2.setParentCategory("HearingChannel");
+        listOfValueDto2.setLovOrder(2L);
+        listOfValueDto2.setActive(true);
+        listOfValueDto2.setHintTextCy(null);
+        listOfValueDto2.setHintTextEn(null);
+        listOfValueDto2.setValueCy(null);
+        listOfValueDto2.setValueEn("Video - CVP");
         CategoryKey categoryKey1 = new CategoryKey();
         categoryKey1.setKey("telephone-CVP");
-        hearingChannelDto2.setCategoryKey(categoryKey1);
+        listOfValueDto2.setCategoryKey(categoryKey1);
 
-        List<HearingChannelDto> hearingChannelDtos = new ArrayList<>();
-        hearingChannelDtos.add(hearingChannelDto1);
-        hearingChannelDtos.add(hearingChannelDto2);
-        when(hearingChannelRepository.findAll(ArgumentMatchers.<Specification<HearingChannelDto>>any()))
-            .thenReturn(hearingChannelDtos);
+        List<ListOfValueDto> listOfValueDtos = new ArrayList<>();
+        listOfValueDtos.add(listOfValueDto1);
+        listOfValueDtos.add(listOfValueDto2);
+        when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
+            .thenReturn(listOfValueDtos);
     }
 }

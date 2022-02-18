@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class HearingChannel {
+public class Category {
     @JsonIgnore
     private String categoryKey;
     @JsonIgnore
@@ -41,5 +41,5 @@ public class HearingChannel {
     @JsonProperty("active_flag")
     private Boolean active;
 
-    private List<HearingChannel> childNodes;
+    private List<Category> childNodes;
 }

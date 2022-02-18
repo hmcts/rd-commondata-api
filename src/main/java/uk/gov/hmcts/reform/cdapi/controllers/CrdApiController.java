@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.hmcts.reform.cdapi.domain.HearingChannel;
-import uk.gov.hmcts.reform.cdapi.domain.HearingChannels;
+import uk.gov.hmcts.reform.cdapi.domain.Categories;
+import uk.gov.hmcts.reform.cdapi.domain.Category;
 import uk.gov.hmcts.reform.cdapi.exception.InvalidRequestException;
 import uk.gov.hmcts.reform.cdapi.service.CrdService;
 
@@ -44,7 +44,7 @@ public class CrdApiController {
         @ApiResponse(
             code = 200,
             message = "Successfully retrieved list of Category Values for the request provided",
-            response = HearingChannels.class
+            response = Categories.class
         ),
         @ApiResponse(
             code = 400,
@@ -63,7 +63,7 @@ public class CrdApiController {
         produces = APPLICATION_JSON_VALUE,
         path = {"/lov/categories", "/lov/categories/{category-id}"}
     )
-    public ResponseEntity<HearingChannels> retrieveHearingChannelByCategoryId(
+    public ResponseEntity<Categories> retrieveListOfValuesByCategoryId(
         @PathVariable(value = "category-id")
         @ApiParam(name = "category-id", value = "Any Valid String is allowed", required = true)
             Optional<String> categoryKey,
@@ -80,9 +80,10 @@ public class CrdApiController {
         if (!categoryKey.isPresent()) {
             throw new InvalidRequestException("Syntax error or Bad request");
         }
-        List<HearingChannel> hearingChannels = crdService.retrieveHearingChannelsByCategoryId(categoryKey.get(),
-                                      serviceId, parentCategory, parentKey, key, "Y".equalsIgnoreCase(isChildRequired));
-        return ResponseEntity.ok().body(new HearingChannels(hearingChannels));
+        List<Category> listOfValues = crdService.retrieveListOfValuesByCategoryId(categoryKey.get(), serviceId,
+                                                                              parentCategory, parentKey, key,
+                                                                              "Y".equalsIgnoreCase(isChildRequired));
+        return ResponseEntity.ok().body(new Categories(listOfValues));
     }
 
 }

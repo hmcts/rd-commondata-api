@@ -38,7 +38,7 @@ public class FeatureToggleServiceImpl implements FeatureToggleService {
             "rd_commondata_api"
         );
         launchDarklyMap.put(
-            "CrdApiController.retrieveHearingChannelByCategoryId",
+            "CrdApiController.retrieveListOfValuesByCategoryId",
             "rd_lov_api"
         );
     }
