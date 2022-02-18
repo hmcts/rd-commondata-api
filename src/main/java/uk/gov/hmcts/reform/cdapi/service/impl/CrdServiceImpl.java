@@ -32,7 +32,7 @@ public class CrdServiceImpl implements CrdService {
 
     @Override
     public List<Category> retrieveListOfValuesByCategoryId(String categoryId, String serviceId,
-                                       String parentCategory, String parentKey, String key, Boolean isChildRequired) {
+                                       String parentCategory, String parentKey, String key, boolean isChildRequired) {
         Specification<ListOfValueDto> query = where(categoryKey(categoryId))
             .and(serviceId(serviceId))
             .and(parentCategory(parentCategory))

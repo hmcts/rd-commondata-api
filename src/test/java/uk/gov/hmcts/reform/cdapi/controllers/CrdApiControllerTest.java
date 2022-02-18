@@ -43,9 +43,10 @@ class CrdApiControllerTest {
     }
 
     @Test
-    public void whenIdIsNull_thenExceptionIsThrown() {
+     void whenIdIsNull_thenExceptionIsThrown() {
+        Optional empty = Optional.empty();
         assertThrows(InvalidRequestException.class, () -> crdApiController.retrieveListOfValuesByCategoryId(
-            Optional.empty(), null, null, null,null,"N"));
+            empty, null, null, null,null,"N"));
     }
 
 
