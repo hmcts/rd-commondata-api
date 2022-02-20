@@ -61,15 +61,17 @@ public class CrdApiController {
     })
     @GetMapping(
         produces = APPLICATION_JSON_VALUE,
-        path = {"/lov/categories", "/lov/categories/{category-id}"}
+        path = {"/lov/categories", "/lov/categories/{categoryId}"}
     )
     public ResponseEntity<Categories> retrieveListOfValuesByCategoryId(
-        @ApiParam(name = "category-id", value = "Any Valid String is allowed", required = true)
-        @PathVariable(value = "category-id") Optional<String> categoryId,
+        @ApiParam(name = "categoryId", value = "Any Valid String is allowed", required = true)
+        @PathVariable(value = "categoryId") Optional<String> categoryId,
         CategoryRequest categoryRequest) {
+
         if (!categoryId.isPresent()) {
             throw new InvalidRequestException("Syntax error or Bad request");
         }
+
         categoryRequest.setCategoryId(categoryId.get());
         List<Category> listOfValues = crdService.retrieveListOfValuesByCategory(categoryRequest);
         return ResponseEntity.ok().body(new Categories(listOfValues));

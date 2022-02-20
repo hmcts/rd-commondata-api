@@ -37,7 +37,6 @@ class CrdApiControllerTest {
     void testWithValidCategoryId_ShouldReturnStatusCode200() {
         CategoryRequest request = buildCategoryRequest("HearingChannel", null, null,
                                                        null, null, "N");
-
         ResponseEntity<?> result = crdApiController.retrieveListOfValuesByCategoryId(
             java.util.Optional.of("HearingChannel"), request);
         assertNotNull(result);
@@ -59,7 +58,6 @@ class CrdApiControllerTest {
     void testWithAllValidParamValues_ShouldReturnStatusCode200() {
         CategoryRequest request = buildCategoryRequest("HearingChannel", "BBA3", "1",
                                                        "1", "5", "y");
-
         ResponseEntity<?> result = crdApiController.retrieveListOfValuesByCategoryId(
             java.util.Optional.of("HearingChannel"), request);
         assertNotNull(result);
