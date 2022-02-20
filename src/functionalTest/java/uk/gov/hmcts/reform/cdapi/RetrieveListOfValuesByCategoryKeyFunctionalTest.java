@@ -60,7 +60,7 @@ public class RetrieveListOfValuesByCategoryKeyFunctionalTest extends Authorizati
     void shouldReturnSuccessWithChilds() {
         final Categories response =
             commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(path, "/HearingChannel?"
-                + "is-child-required=y&key=telephone");
+                + "isChildRequired=y&key=telephone");
         assertNotNull(response);
         assertThat(response.getCategories()).hasSizeGreaterThan(0);
         response.getCategories().forEach(h -> assertFalse(h.getChildNodes().isEmpty()));

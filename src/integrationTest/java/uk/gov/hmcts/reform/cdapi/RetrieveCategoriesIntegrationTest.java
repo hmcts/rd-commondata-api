@@ -39,8 +39,8 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
     void shouldRetrieveCategories_WithAllParams_WithStatusCode_200()
         throws JsonProcessingException {
         final var response = (Categories)
-            commonDataApiClient.retrieveCaseFlagsByServiceId("HearingSubChannel?service-id=BBA3"
-                                                             + "&parent-category=HearingChannel&parent-key=telephone",
+            commonDataApiClient.retrieveCaseFlagsByServiceId("HearingSubChannel?serviceId=BBA3"
+                                                             + "&parentCategory=HearingChannel&parentKey=telephone",
                                                              Categories.class, path
             );
         assertNotNull(response);
