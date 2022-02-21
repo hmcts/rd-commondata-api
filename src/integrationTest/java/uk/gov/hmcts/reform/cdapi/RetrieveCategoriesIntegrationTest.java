@@ -31,8 +31,8 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
                                                              Categories.class, path
             );
         assertNotNull(response);
-        assertEquals(9, response.getCategories().size());
-        responseVerification(response.getCategories().get(0));
+        assertEquals(9, response.getListOfCategory().size());
+        responseVerification(response.getListOfCategory().get(0));
     }
 
     @Test
@@ -44,7 +44,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
                                                              Categories.class, path
             );
         assertNotNull(response);
-        assertEquals(4, response.getCategories().size());
+        assertEquals(4, response.getListOfCategory().size());
         responseVerification(response);
     }
 
@@ -71,7 +71,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
     }
 
     private void responseVerification(Categories response) {
-        for (Category hearingChannels : response.getCategories()) {
+        for (Category hearingChannels : response.getListOfCategory()) {
             assertThat(hearingChannels.getParentCategory()).isEqualTo("HearingChannel");
             assertThat(hearingChannels.getParentKey()).isEqualTo("telephone");
             assertThat(hearingChannels.getActive()).isEqualTo(true);

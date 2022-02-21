@@ -50,8 +50,8 @@ public class RetrieveListOfValuesByCategoryKeyFunctionalTest extends Authorizati
         final Categories response =
             commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(path, "/HearingChannel");
         assertNotNull(response);
-        assertThat(response.getCategories()).hasSizeGreaterThan(1);
-        response.getCategories().forEach(h -> assertNull(h.getChildNodes()));
+        assertThat(response.getListOfCategory()).hasSizeGreaterThan(1);
+        response.getListOfCategory().forEach(h -> assertNull(h.getChildNodes()));
     }
 
     @Test
@@ -62,8 +62,8 @@ public class RetrieveListOfValuesByCategoryKeyFunctionalTest extends Authorizati
             commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(path, "/HearingChannel?"
                 + "isChildRequired=y&key=telephone");
         assertNotNull(response);
-        assertThat(response.getCategories()).hasSizeGreaterThan(0);
-        response.getCategories().forEach(h -> assertFalse(h.getChildNodes().isEmpty()));
+        assertThat(response.getListOfCategory()).hasSizeGreaterThan(0);
+        response.getListOfCategory().forEach(h -> assertFalse(h.getChildNodes().isEmpty()));
     }
 
     @Test

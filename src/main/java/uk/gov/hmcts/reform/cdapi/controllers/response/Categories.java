@@ -12,5 +12,5 @@ import java.util.List;
 @NoArgsConstructor
 public class Categories {
     @JsonProperty("list_of_values")
-    private List<Category> categories;
+    private List<Category> listOfCategory;
 }
