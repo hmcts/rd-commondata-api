@@ -21,9 +21,11 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.cdapi.helper.CrdTestSupport.buildCategoryRequest;
 
@@ -48,14 +50,30 @@ class CrdServiceImplTest {
         List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
 
         assertNotNull(result);
-        assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
-        assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
-        assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActive());
+        Category actualCategory = result.get(0);
+        assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), actualCategory.getKey());
+        assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), actualCategory.getCategoryKey());
+        assertEquals(listOfValueDtos.get(0).getActive(), actualCategory.getActive());
+        assertEquals(listOfValueDtos.get(0).getParentCategory(), actualCategory.getParentCategory());
+        assertEquals(listOfValueDtos.get(0).getParentKey(), actualCategory.getParentKey());
+        assertEquals(listOfValueDtos.get(0).getValueCy(), actualCategory.getValueCy());
+        assertEquals(listOfValueDtos.get(0).getValueEn(), actualCategory.getValueEn());
+        assertEquals(listOfValueDtos.get(0).getHintTextCy(), actualCategory.getHintTextCy());
+        assertEquals(listOfValueDtos.get(0).getHintTextEn(), actualCategory.getHintTextEn());
+        assertEquals(listOfValueDtos.get(0).getLovOrder(), actualCategory.getLovOrder());
+        assertEquals(listOfValueDtos.get(0).getServiceId(), actualCategory.getServiceId());
+        assertEquals(listOfValueDtos.get(0).getActive(), actualCategory.getActive());
+        assertNull(actualCategory.getChildNodes());
     }
 
     @Test
     void retrieveCategoriesByAllParams() {
-        List<ListOfValueDto> listOfValueDtos = mockListOfValuesDtos();
+        List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
+        ListOfValueDto inactiveCategory = CrdTestSupport.createListOfCategoriesDtoMock("HearingChannel",
+                                            "BBA3", null, null, "telephone");
+        inactiveCategory.setActive(false);
+        listOfValueDtos.add(inactiveCategory);
+
         when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
             .thenReturn(listOfValueDtos);
 
@@ -66,13 +84,15 @@ class CrdServiceImplTest {
         assertNotNull(result);
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
-        assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActive());
+        assertTrue(result.get(0).getActive());
+        assertTrue(result.get(1).getActive());
+        assertFalse(result.get(2).getActive());
     }
 
 
 
     @NotNull
-    private List<ListOfValueDto> mockListOfValuesDtos() {
+    private List<ListOfValueDto> buildListOfValuesDtos() {
         List<ListOfValueDto> listOfValueDtos = new ArrayList<>();
         listOfValueDtos.add(CrdTestSupport.createListOfCategoriesDtoMock("HearingChannel", "BBA3",
                                                                             null,
@@ -85,7 +105,7 @@ class CrdServiceImplTest {
 
     @Test
     void retrieveCategoriessByCategoryIdWithChildNodes() {
-        List<ListOfValueDto> listOfValueDtos = mockListOfValuesDtos();
+        List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
         when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
             .thenReturn(listOfValueDtos);
 
@@ -107,7 +127,7 @@ class CrdServiceImplTest {
 
     @Test
     void retrieveCategoriesByCategoryIdWithNoChildNodes() {
-        List<ListOfValueDto> listOfValueDtos = mockListOfValuesDtos();
+        List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
         when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
             .thenReturn(listOfValueDtos);
 
@@ -124,7 +144,7 @@ class CrdServiceImplTest {
 
     @Test
     void retrieveCategoriesByCategoryIdWithParentCategory() {
-        List<ListOfValueDto> listOfValueDtos = mockListOfValuesDtos();
+        List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
         when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
             .thenReturn(listOfValueDtos);
 
@@ -136,11 +156,12 @@ class CrdServiceImplTest {
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
         assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActive());
+
     }
 
     @Test
     void retrieveCategoriesByCategoryIdWithIsChildFalse() {
-        List<ListOfValueDto> listOfValueDtos = mockListOfValuesDtos();
+        List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
         when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
             .thenReturn(listOfValueDtos);
 
@@ -156,7 +177,7 @@ class CrdServiceImplTest {
 
     @Test
     void retrieveCategoriesByCategoryIdWithParentKey() {
-        List<ListOfValueDto> listOfValueDtos = mockListOfValuesDtos();
+        List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
         when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
             .thenReturn(listOfValueDtos);
 
@@ -170,6 +191,24 @@ class CrdServiceImplTest {
         assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActive());
     }
 
+    @Test
+    void retrieveCategoriesByCategoryIdWithEmptyParams() {
+        List<ListOfValueDto> listOfValueDtos = List.of(CrdTestSupport.createListOfCategoriesDtoMock(
+            "HearingChannel", "", "", "", ""));
+
+        when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
+            .thenReturn(listOfValueDtos);
+
+        CategoryRequest request = buildCategoryRequest("HearingChannel",  "", "",
+                                                       null,"", "");
+        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
+
+        assertNotNull(result);
+        assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
+        assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
+        assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActive());
+
+    }
 
     @Test
     void shouldThrowNotFoundExceptionWithUnMappedParams() {
@@ -182,4 +221,6 @@ class CrdServiceImplTest {
                                                        null,null, "n");
         assertThrows(ResourceNotFoundException.class, () -> crdServiceImpl.retrieveListOfValuesByCategory(request));
     }
+
+
 }
