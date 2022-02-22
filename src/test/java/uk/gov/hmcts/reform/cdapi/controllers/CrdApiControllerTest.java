@@ -57,7 +57,7 @@ class CrdApiControllerTest {
         assertFalse(result.getBody().getListOfCategory().isEmpty());
         assertTrue(result.getBody().getListOfCategory().get(0).getChildNodes().isEmpty());
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals(request.getCategoryId(), "HearingChannel");
+        assertEquals("HearingChannel", request.getCategoryId());
         verify(crdService, times(1)).retrieveListOfValuesByCategory(request);
     }
 

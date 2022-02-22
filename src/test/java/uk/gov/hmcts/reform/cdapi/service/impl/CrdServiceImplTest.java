@@ -142,45 +142,18 @@ class CrdServiceImplTest {
 
     @Test
     void retrieveCategoriesByCategoryIdWithParentCategory() {
-        List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
-        when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
-            .thenReturn(listOfValueDtos);
-
-        CategoryRequest request = buildCategoryRequest("HearingSubChannel",  null, null,
-                                                       "HearingChannel",null, "y");
-        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
-
-        assertNotNull(result);
-        assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
-        assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
-        assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActiveFlag());
-
+        verifyWithParams("y", "HearingChannel", null);
+        verifyWithParams("y", null, "telephone");
+        verifyWithParams("n", "HearingChannel", null);
     }
 
-    @Test
-    void retrieveCategoriesByCategoryIdWithIsChildFalse() {
+    private void verifyWithParams(String isChildRequired, String parentCategory, String parentKey) {
         List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
         when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
             .thenReturn(listOfValueDtos);
 
-        CategoryRequest request = buildCategoryRequest("HearingSubChannel",  null, null,
-                                                       "HearingChannel",null, "n");
-        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
-
-        assertNotNull(result);
-        assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
-        assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
-        assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActiveFlag());
-    }
-
-    @Test
-    void retrieveCategoriesByCategoryIdWithParentKey() {
-        List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
-        when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
-            .thenReturn(listOfValueDtos);
-
-        CategoryRequest request = buildCategoryRequest("HearingSubChannel",  null, null,
-                                                       null,"telephone", "y");
+        CategoryRequest request = buildCategoryRequest("HearingSubChannel", null, null,
+                                                       parentCategory, parentKey, isChildRequired);
         List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
 
         assertNotNull(result);
