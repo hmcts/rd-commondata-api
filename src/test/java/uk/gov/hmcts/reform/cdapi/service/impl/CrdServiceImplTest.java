@@ -21,11 +21,9 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.cdapi.helper.CrdTestSupport.buildCategoryRequest;
 
@@ -53,7 +51,7 @@ class CrdServiceImplTest {
         Category actualCategory = result.get(0);
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), actualCategory.getKey());
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), actualCategory.getCategoryKey());
-        assertEquals(listOfValueDtos.get(0).getActive(), actualCategory.getActive());
+        assertEquals(listOfValueDtos.get(0).getActive(), actualCategory.getActiveFlag());
         assertEquals(listOfValueDtos.get(0).getParentCategory(), actualCategory.getParentCategory());
         assertEquals(listOfValueDtos.get(0).getParentKey(), actualCategory.getParentKey());
         assertEquals(listOfValueDtos.get(0).getValueCy(), actualCategory.getValueCy());
@@ -62,7 +60,7 @@ class CrdServiceImplTest {
         assertEquals(listOfValueDtos.get(0).getHintTextEn(), actualCategory.getHintTextEn());
         assertEquals(listOfValueDtos.get(0).getLovOrder(), actualCategory.getLovOrder());
         assertEquals(listOfValueDtos.get(0).getServiceId(), actualCategory.getServiceId());
-        assertEquals(listOfValueDtos.get(0).getActive(), actualCategory.getActive());
+        assertEquals(listOfValueDtos.get(0).getActive(), actualCategory.getActiveFlag());
         assertNull(actualCategory.getChildNodes());
     }
 
@@ -71,7 +69,7 @@ class CrdServiceImplTest {
         List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
         ListOfValueDto inactiveCategory = CrdTestSupport.createListOfCategoriesDtoMock("HearingChannel",
                                             "BBA3", null, null, "telephone");
-        inactiveCategory.setActive(false);
+        inactiveCategory.setActive("n");
         listOfValueDtos.add(inactiveCategory);
 
         when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
@@ -84,9 +82,9 @@ class CrdServiceImplTest {
         assertNotNull(result);
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
-        assertTrue(result.get(0).getActive());
-        assertTrue(result.get(1).getActive());
-        assertFalse(result.get(2).getActive());
+        assertEquals("y", result.get(0).getActiveFlag());
+        assertEquals("y", result.get(1).getActiveFlag());
+        assertEquals("n", result.get(2).getActiveFlag());
     }
 
 
@@ -117,8 +115,8 @@ class CrdServiceImplTest {
         assertThat(result, hasSize(1));
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
-        assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActive());
-        assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActive());
+        assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActiveFlag());
+        assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActiveFlag());
         assertEquals(listOfValueDtos.get(1).getCategoryKey().getKey(),
                      result.get(0).getChildNodes().get(0).getKey());
         assertEquals(listOfValueDtos.get(1).getCategoryKey().getCategoryKey(), result.get(0).getChildNodes().get(0)
@@ -138,7 +136,7 @@ class CrdServiceImplTest {
         assertNotNull(result);
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
-        assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActive());
+        assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActiveFlag());
         assertNull(result.get(0).getChildNodes());
     }
 
@@ -155,7 +153,7 @@ class CrdServiceImplTest {
         assertNotNull(result);
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
-        assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActive());
+        assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActiveFlag());
 
     }
 
@@ -172,7 +170,7 @@ class CrdServiceImplTest {
         assertNotNull(result);
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
-        assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActive());
+        assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActiveFlag());
     }
 
     @Test
@@ -188,7 +186,7 @@ class CrdServiceImplTest {
         assertNotNull(result);
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
-        assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActive());
+        assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActiveFlag());
     }
 
     @Test
@@ -206,7 +204,7 @@ class CrdServiceImplTest {
         assertNotNull(result);
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
-        assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActive());
+        assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActiveFlag());
 
     }
 

@@ -17,7 +17,7 @@ public class CrdTestSupport {
         categoryKey.setKey(key);
         ListOfValueDto listOfValueDtoMock = new ListOfValueDto();
         listOfValueDtoMock.setServiceId(serviceId);
-        listOfValueDtoMock.setActive(true);
+        listOfValueDtoMock.setActive("y");
         listOfValueDtoMock.setCategoryKey(categoryKey);
         listOfValueDtoMock.setParentCategory(parentCategory);
         listOfValueDtoMock.setParentKey(parentKey);

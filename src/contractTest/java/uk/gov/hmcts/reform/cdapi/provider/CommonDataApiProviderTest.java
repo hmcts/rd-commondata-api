@@ -8,6 +8,7 @@ import au.com.dius.pact.provider.junitsupport.State;
 import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
 import au.com.dius.pact.provider.junitsupport.loader.VersionSelector;
 import au.com.dius.pact.provider.spring.junit5.MockMvcTestTarget;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,6 +33,7 @@ import uk.gov.hmcts.reform.cdapi.service.impl.CrdServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static java.util.Objects.nonNull;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -118,37 +120,39 @@ public class CommonDataApiProviderTest {
     }
 
     @State({"ListOfCategories Details Exist"})
-    public void toReturnListOfCategoriesByCategoryId() {
-        ListOfValueDto listOfValueDto1 = new ListOfValueDto();
-        listOfValueDto1.setParentKey("telephone");
-        listOfValueDto1.setParentCategory("HearingChannel");
-        listOfValueDto1.setLovOrder(1L);
-        listOfValueDto1.setActive(true);
-        listOfValueDto1.setHintTextCy(null);
-        listOfValueDto1.setHintTextEn(null);
-        listOfValueDto1.setValueCy(null);
-        listOfValueDto1.setValueEn("Telephone - BTMeetme");
-        CategoryKey categoryKey = new CategoryKey();
-        categoryKey.setKey("telephone-btMeetMe");
-        listOfValueDto1.setCategoryKey(categoryKey);
+    public void toReturnListOfCategoriesWithChildNodesByCategoryId() {
+        List<ListOfValueDto> listOfValueDtos = List.of(
+            buildListOfValueDto("HearingChannel", "BBA3", "video", "Video",
+                                null, null),
+            buildListOfValueDto("HearingSubChannel", "BBA3", "video-cvp", "Video - CVP",
+                                "HearingChannel", "video"),
+            buildListOfValueDto("HearingSubChannel", "BBA3", "video-other",
+                                "Video - Other", "HearingChannel", "video")
+            );
 
-        ListOfValueDto listOfValueDto2 = new ListOfValueDto();
-        listOfValueDto2.setParentKey("video");
-        listOfValueDto2.setParentCategory("HearingChannel");
-        listOfValueDto2.setLovOrder(2L);
-        listOfValueDto2.setActive(true);
-        listOfValueDto2.setHintTextCy(null);
-        listOfValueDto2.setHintTextEn(null);
-        listOfValueDto2.setValueCy(null);
-        listOfValueDto2.setValueEn("Video - CVP");
-        CategoryKey categoryKey1 = new CategoryKey();
-        categoryKey1.setKey("telephone-CVP");
-        listOfValueDto2.setCategoryKey(categoryKey1);
-
-        List<ListOfValueDto> listOfValueDtos = new ArrayList<>();
-        listOfValueDtos.add(listOfValueDto1);
-        listOfValueDtos.add(listOfValueDto2);
         when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
             .thenReturn(listOfValueDtos);
     }
+
+    @NotNull
+    private ListOfValueDto buildListOfValueDto(String categoryId, String serviceId, String key, String value,
+                                               String parentCategory, String parentKey) {
+        ListOfValueDto listOfValueDto1 = new ListOfValueDto();
+        listOfValueDto1.setParentKey(parentKey);
+        listOfValueDto1.setParentCategory(parentCategory);
+        listOfValueDto1.setLovOrder(new Random().nextLong());
+        listOfValueDto1.setActive("y");
+        listOfValueDto1.setHintTextCy(null);
+        listOfValueDto1.setHintTextEn(null);
+        listOfValueDto1.setValueCy(null);
+        listOfValueDto1.setValueEn(value);
+        listOfValueDto1.setServiceId(serviceId);
+        CategoryKey categoryKey = new CategoryKey();
+        categoryKey.setKey(key);
+        categoryKey.setCategoryKey(categoryId);
+        listOfValueDto1.setCategoryKey(categoryKey);
+        return listOfValueDto1;
+    }
+
+
 }

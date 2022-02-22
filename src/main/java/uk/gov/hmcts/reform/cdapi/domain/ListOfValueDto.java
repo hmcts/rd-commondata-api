@@ -39,7 +39,8 @@ public class ListOfValueDto {
     @Column(name = "parentkey")
     private String parentKey;
 
-    private Boolean active;
+    private String active;
+
 
 }
 

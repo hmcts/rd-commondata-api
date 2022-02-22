@@ -74,7 +74,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         for (Category hearingChannels : response.getListOfCategory()) {
             assertThat(hearingChannels.getParentCategory()).isEqualTo("HearingChannel");
             assertThat(hearingChannels.getParentKey()).isEqualTo("telephone");
-            assertThat(hearingChannels.getActive()).isEqualTo(true);
+            assertThat(hearingChannels.getActiveFlag()).isEqualTo("Y");
         }
     }
 
@@ -87,6 +87,6 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         assertThat(response.getLovOrder()).isNull();
         assertThat(response.getParentCategory()).isEqualTo("HearingChannel");
         assertThat(response.getParentKey()).isEqualTo("telephone");
-        assertThat(response.getActive()).isEqualTo(true);
+        assertThat(response.getActiveFlag()).isEqualTo("Y");
     }
 }

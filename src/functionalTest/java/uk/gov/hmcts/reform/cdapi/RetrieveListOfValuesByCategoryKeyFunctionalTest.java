@@ -68,6 +68,84 @@ public class RetrieveListOfValuesByCategoryKeyFunctionalTest extends Authorizati
 
     @Test
     @ToggleEnable(mapKey = mapKey, withFeature = true)
+    @ExtendWith(FeatureToggleConditionExtension.class)
+    void shouldReturnSuccessForChildCategories() {
+        final Categories response =
+            commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(path, "/HearingSubChannel?"
+                + "isChildRequired=y&parentKey=telephone");
+        assertNotNull(response);
+        assertThat(response.getListOfCategory()).hasSizeGreaterThan(0);
+    }
+
+    @Test
+    @ToggleEnable(mapKey = mapKey, withFeature = true)
+    @ExtendWith(FeatureToggleConditionExtension.class)
+    void shouldReturnSuccessWithNoChilds() {
+        final Categories response =
+            commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(path, "/HearingChannel?"
+                + "isChildRequired=n&key=telephone");
+        assertNotNull(response);
+        assertThat(response.getListOfCategory()).hasSizeGreaterThan(0);
+    }
+
+    @Test
+    @ToggleEnable(mapKey = mapKey, withFeature = true)
+    @ExtendWith(FeatureToggleConditionExtension.class)
+    void shouldReturnResourceNotFoundWithChildsAndInvalidParentKey() {
+        final var response = (ErrorResponse)
+            commonDataApiClient.retrieveListOfValuesByCategoryId(
+                HttpStatus.NOT_FOUND,
+                "/HearingChannel?"
+                    + "isChildRequired=y&parentKey=telephone"
+            );
+        assertNotNull(response);
+        assertEquals("Data not found", response.getErrorDescription());
+    }
+
+    @Test
+    @ToggleEnable(mapKey = mapKey, withFeature = true)
+    @ExtendWith(FeatureToggleConditionExtension.class)
+    void shouldReturnResourceNotFoundWithChildsAndInvalidParentCategory() {
+        final var response = (ErrorResponse)
+            commonDataApiClient.retrieveListOfValuesByCategoryId(
+                HttpStatus.NOT_FOUND,
+                "/HearingChannel?"
+                    + "isChildRequired=y&parentCategory=HearingChannel"
+            );
+        assertNotNull(response);
+        assertEquals("Data not found", response.getErrorDescription());
+    }
+
+    @Test
+    @ToggleEnable(mapKey = mapKey, withFeature = true)
+    @ExtendWith(FeatureToggleConditionExtension.class)
+    void shouldReturnResourceNotFoundInvalidServiceId() {
+        final var response = (ErrorResponse)
+            commonDataApiClient.retrieveListOfValuesByCategoryId(
+                HttpStatus.NOT_FOUND,
+                "/HearingChannel?"
+                    + "serviceId=BBA5"
+            );
+        assertNotNull(response);
+        assertEquals("Data not found", response.getErrorDescription());
+    }
+
+    @Test
+    @ToggleEnable(mapKey = mapKey, withFeature = true)
+    @ExtendWith(FeatureToggleConditionExtension.class)
+    void shouldReturnResourceNotFoundWithChildsAndInvalidKey() {
+        final var response = (ErrorResponse)
+            commonDataApiClient.retrieveListOfValuesByCategoryId(
+                HttpStatus.NOT_FOUND,
+                "/HearingChannel?"
+                    + "isChildRequired=y&key=telephone-CVP"
+            );
+        assertNotNull(response);
+        assertEquals("Data not found", response.getErrorDescription());
+    }
+
+    @Test
+    @ToggleEnable(mapKey = mapKey, withFeature = true)
     void retrieveCategories_UnauthorizedDueToNoBearerToken_ShouldReturnStatusCode401() {
         Response response =
             commonDataApiClient.retrieveResponseForGivenRequest_NoBearerToken("/HearingChannel", path);

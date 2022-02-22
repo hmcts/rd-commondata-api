@@ -82,7 +82,7 @@ public class CrdServiceImpl implements CrdService {
             .map(dto -> Category.builder()
                 .categoryKey(dto.getCategoryKey().getCategoryKey())
                 .serviceId(dto.getServiceId())
-                .active(dto.getActive())
+                .activeFlag(dto.getActive())
                 .hintTextCy(dto.getHintTextCy())
                 .hintTextEn(dto.getHintTextEn())
                 .key(dto.getCategoryKey().getKey())

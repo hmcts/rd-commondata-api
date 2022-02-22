@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.cdapi.controllers.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
@@ -18,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class Category {
-    @JsonIgnore
+
     private String categoryKey;
     @JsonIgnore
     private String serviceId;
@@ -39,8 +38,7 @@ public class Category {
 
     private String parentKey;
 
-    @JsonProperty("active_flag")
-    private Boolean active;
+    private String activeFlag;
 
     @Setter
     private List<Category> childNodes;
