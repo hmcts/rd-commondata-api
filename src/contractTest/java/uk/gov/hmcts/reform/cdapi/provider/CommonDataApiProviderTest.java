@@ -33,7 +33,6 @@ import uk.gov.hmcts.reform.cdapi.service.impl.CrdServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static java.util.Objects.nonNull;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -122,12 +121,10 @@ public class CommonDataApiProviderTest {
     @State({"ListOfCategories Details Exist"})
     public void toReturnListOfCategoriesWithChildNodesByCategoryId() {
         List<ListOfValueDto> listOfValueDtos = List.of(
-            buildListOfValueDto("HearingChannel", "BBA3", "video", "Video",
+            buildListOfValueDto("HearingChannel", "video", "Video",
                                 null, null),
-            buildListOfValueDto("HearingSubChannel", "BBA3", "video-cvp", "Video - CVP",
-                                "HearingChannel", "video"),
-            buildListOfValueDto("HearingSubChannel", "BBA3", "video-other",
-                                "Video - Other", "HearingChannel", "video")
+            buildListOfValueDto("HearingSubChannel", "video-cvp", "Video - CVP",
+                                "HearingChannel", "video")
             );
 
         when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
@@ -135,24 +132,22 @@ public class CommonDataApiProviderTest {
     }
 
     @NotNull
-    private ListOfValueDto buildListOfValueDto(String categoryId, String serviceId, String key, String value,
+    private ListOfValueDto buildListOfValueDto(String categoryId, String key, String value,
                                                String parentCategory, String parentKey) {
         ListOfValueDto listOfValueDto1 = new ListOfValueDto();
         listOfValueDto1.setParentKey(parentKey);
         listOfValueDto1.setParentCategory(parentCategory);
-        listOfValueDto1.setLovOrder(new Random().nextLong());
-        listOfValueDto1.setActive("y");
+        listOfValueDto1.setLovOrder(1L);
+        listOfValueDto1.setActive("Y");
         listOfValueDto1.setHintTextCy(null);
         listOfValueDto1.setHintTextEn(null);
         listOfValueDto1.setValueCy(null);
         listOfValueDto1.setValueEn(value);
-        listOfValueDto1.setServiceId(serviceId);
+        listOfValueDto1.setServiceId("BBA3");
         CategoryKey categoryKey = new CategoryKey();
         categoryKey.setKey(key);
         categoryKey.setCategoryKey(categoryId);
         listOfValueDto1.setCategoryKey(categoryKey);
         return listOfValueDto1;
     }
-
-
 }
