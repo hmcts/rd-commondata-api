@@ -13,7 +13,7 @@ import javax.persistence.Entity;
 @Getter
 @Setter
 @Entity(name = "mv_list_of_values")
-public class HearingChannelDto {
+public class ListOfValueDto {
     @EmbeddedId
     private CategoryKey categoryKey;
 
@@ -39,7 +39,8 @@ public class HearingChannelDto {
     @Column(name = "parentkey")
     private String parentKey;
 
-    private Boolean active;
+    private String active;
+
 
 }
 

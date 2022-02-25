@@ -8,7 +8,7 @@ public class QuerySpecification {
 
     }
 
-    public static Specification<HearingChannelDto> hearingChannelCategoryKey(String categoryKey) {
+    public static Specification<ListOfValueDto> categoryKey(String categoryKey) {
         return (root, query, builder) ->
             categoryKey == null ? builder.conjunction() :
                 builder.equal(builder.lower(root.get("categoryKey").get("categoryKey")),
@@ -18,7 +18,7 @@ public class QuerySpecification {
     /**
      * if serviceId == null then specification is ignored.
      */
-    public static Specification<HearingChannelDto> hearingChannelServiceId(String serviceId) {
+    public static Specification<ListOfValueDto> serviceId(String serviceId) {
         return (root, query, builder) ->
             serviceId == null ? builder.conjunction() :
                 builder.equal(builder.lower(root.get("serviceId")), serviceId.toLowerCase().trim());
@@ -27,7 +27,7 @@ public class QuerySpecification {
     /**
      * if parentcategory == null then specification is ignored.
      */
-    public static Specification<HearingChannelDto> hearingChannelParentCategory(String parentCategory) {
+    public static Specification<ListOfValueDto> parentCategory(String parentCategory) {
         return (root, query, builder) ->
             parentCategory == null ? builder.conjunction() :
                 builder.equal(builder.lower(root.get("parentCategory")), parentCategory.toLowerCase().trim());
@@ -36,10 +36,20 @@ public class QuerySpecification {
     /**
      * if parentkey == null then specification is ignored.
      */
-    public static Specification<HearingChannelDto> hearingChannelParentKey(String parentKey) {
+    public static Specification<ListOfValueDto> parentKey(String parentKey) {
         return (root, query, builder) ->
             parentKey == null ? builder.conjunction() :
                 builder.equal(builder.lower(root.get("parentKey")), parentKey.toLowerCase().trim());
+
+    }
+
+    /**
+     * if key == null then specification is ignored.
+     */
+    public static Specification<ListOfValueDto> key(String key) {
+        return (root, query, builder) ->
+            key == null ? builder.conjunction() :
+                builder.equal(builder.lower(root.get("categoryKey").get("key")), key.toLowerCase().trim());
 
     }
 

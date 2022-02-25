@@ -12,10 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.hmcts.reform.cdapi.domain.HearingChannel;
-import uk.gov.hmcts.reform.cdapi.domain.HearingChannels;
+import uk.gov.hmcts.reform.cdapi.controllers.request.CategoryRequest;
+import uk.gov.hmcts.reform.cdapi.controllers.response.Categories;
+import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
 import uk.gov.hmcts.reform.cdapi.exception.InvalidRequestException;
 import uk.gov.hmcts.reform.cdapi.service.CrdService;
 
@@ -44,7 +44,7 @@ public class CrdApiController {
         @ApiResponse(
             code = 200,
             message = "Successfully retrieved list of Category Values for the request provided",
-            response = HearingChannels.class
+            response = Categories.class
         ),
         @ApiResponse(
             code = 400,
@@ -61,24 +61,20 @@ public class CrdApiController {
     })
     @GetMapping(
         produces = APPLICATION_JSON_VALUE,
-        path = {"/lov/categories", "/lov/categories/{category-id}"}
+        path = {"/lov/categories", "/lov/categories/{categoryId}"}
     )
-    public ResponseEntity<HearingChannels> retrieveHearingChannelByCategoryId(
-        @PathVariable(value = "category-id")
-        @ApiParam(name = "category-id", value = "Any Valid String is allowed", required = true)
-            Optional<String> categoryKey,
-        @RequestParam(value = "service-id", required = false)
-        @ApiParam(name = "service-id", value = "Any Valid String is allowed") String serviceId,
-        @RequestParam(value = "parent-category", required = false)
-        @ApiParam(name = "parent-category", value = "Any Valid String is allowed") String parentCategory,
-        @RequestParam(value = "parent-key", required = false)
-        @ApiParam(name = "parent-key", value = "Any Valid String is allowed") String parentKey) {
-        if (!categoryKey.isPresent()) {
+    public ResponseEntity<Categories> retrieveListOfValuesByCategoryId(
+        @ApiParam(name = "categoryId", value = "Any Valid String is allowed", required = true)
+        @PathVariable(value = "categoryId") Optional<String> categoryId,
+        CategoryRequest categoryRequest) {
+
+        if (!categoryId.isPresent()) {
             throw new InvalidRequestException("Syntax error or Bad request");
         }
-        List<HearingChannel> hearingChannels = crdService.retrieveHearingChannelsByCategoryId(categoryKey.get(),
-                                                                                  serviceId, parentCategory, parentKey);
-        return ResponseEntity.ok().body(new HearingChannels(hearingChannels));
+
+        categoryRequest.setCategoryId(categoryId.get());
+        List<Category> listOfValues = crdService.retrieveListOfValuesByCategory(categoryRequest);
+        return ResponseEntity.ok().body(new Categories(listOfValues));
     }
 
 }

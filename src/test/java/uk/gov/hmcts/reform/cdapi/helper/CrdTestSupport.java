@@ -1,7 +1,8 @@
 package uk.gov.hmcts.reform.cdapi.helper;
 
+import uk.gov.hmcts.reform.cdapi.controllers.request.CategoryRequest;
 import uk.gov.hmcts.reform.cdapi.domain.CategoryKey;
-import uk.gov.hmcts.reform.cdapi.domain.HearingChannelDto;
+import uk.gov.hmcts.reform.cdapi.domain.ListOfValueDto;
 
 public class CrdTestSupport {
 
@@ -9,19 +10,29 @@ public class CrdTestSupport {
         // empty constructor
     }
 
-    public static HearingChannelDto createHearingChannelDtoMock(String categoryId, String serviceId,
-                                                                String parentCategory, String parentKey) {
+    public static ListOfValueDto createListOfCategoriesDtoMock(String categoryId, String serviceId,
+                                                               String parentCategory, String parentKey, String key) {
         CategoryKey categoryKey = new CategoryKey();
         categoryKey.setCategoryKey(categoryId);
-        categoryKey.setKey("telephone-CVP");
-        HearingChannelDto hearingChannelDtoMock = new HearingChannelDto();
-        hearingChannelDtoMock.setServiceId(serviceId);
-        hearingChannelDtoMock.setActive(true);
-        hearingChannelDtoMock.setCategoryKey(categoryKey);
-        hearingChannelDtoMock.setParentCategory(parentCategory);
-        hearingChannelDtoMock.setParentKey(parentKey);
-        return hearingChannelDtoMock;
+        categoryKey.setKey(key);
+        ListOfValueDto listOfValueDtoMock = new ListOfValueDto();
+        listOfValueDtoMock.setServiceId(serviceId);
+        listOfValueDtoMock.setActive("y");
+        listOfValueDtoMock.setCategoryKey(categoryKey);
+        listOfValueDtoMock.setParentCategory(parentCategory);
+        listOfValueDtoMock.setParentKey(parentKey);
+        return listOfValueDtoMock;
     }
 
-
+    public static CategoryRequest buildCategoryRequest(String categoryId, String serviceId, String key,
+                                                 String parentCategory, String parentKey, String isChileRequired) {
+        return CategoryRequest.builder()
+            .categoryId(categoryId)
+            .serviceId(serviceId)
+            .key(key)
+            .parentCategory(parentCategory)
+            .parentKey(parentKey)
+            .isChildRequired(isChileRequired)
+            .build();
+    }
 }

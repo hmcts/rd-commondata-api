@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import uk.gov.hmcts.reform.cdapi.domain.HearingChannel;
-import uk.gov.hmcts.reform.cdapi.domain.HearingChannels;
+import uk.gov.hmcts.reform.cdapi.controllers.response.Categories;
+import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
 import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
 
 import java.util.Map;
@@ -19,32 +19,32 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
 @WithTags({@WithTag("testType:Integration")})
-public class RetrieveHearingChannelsIntegrationTest extends CdAuthorizationEnabledIntegrationTest {
+public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledIntegrationTest {
 
     private static final String path = "/lov/categories/{category-id}";
 
     @Test
-    void shouldRetrieveHearingChannel_For_CategoryId_WithStatusCode_200()
+    void shouldRetrieveCategories_For_CategoryId_WithStatusCode_200()
         throws JsonProcessingException {
-        final var response = (HearingChannels)
+        final var response = (Categories)
             commonDataApiClient.retrieveCaseFlagsByServiceId("HearingSubChannel",
-                                                             HearingChannels.class, path
+                                                             Categories.class, path
             );
         assertNotNull(response);
-        assertEquals(9, response.getHearingChannels().size());
-        responseVerification(response.getHearingChannels().get(0));
+        assertEquals(9, response.getListOfCategory().size());
+        responseVerification(response.getListOfCategory().get(0));
     }
 
     @Test
-    void shouldRetrieveHearingChannel_WithAllParams_WithStatusCode_200()
+    void shouldRetrieveCategories_WithAllParams_WithStatusCode_200()
         throws JsonProcessingException {
-        final var response = (HearingChannels)
-            commonDataApiClient.retrieveCaseFlagsByServiceId("HearingSubChannel?service-id=BBA3"
-                                                             + "&parent-category=HearingChannel&parent-key=telephone",
-                                                             HearingChannels.class, path
+        final var response = (Categories)
+            commonDataApiClient.retrieveCaseFlagsByServiceId("HearingSubChannel?serviceId=BBA3"
+                                                             + "&parentCategory=HearingChannel&parentKey=telephone",
+                                                             Categories.class, path
             );
         assertNotNull(response);
-        assertEquals(4, response.getHearingChannels().size());
+        assertEquals(4, response.getListOfCategory().size());
         responseVerification(response);
     }
 
@@ -70,15 +70,15 @@ public class RetrieveHearingChannelsIntegrationTest extends CdAuthorizationEnabl
         assertThat((Map<String, Object>) errorResponseMap).containsEntry("http_status", HttpStatus.NOT_FOUND);
     }
 
-    private void responseVerification(HearingChannels response) {
-        for (HearingChannel hearingChannels : response.getHearingChannels()) {
+    private void responseVerification(Categories response) {
+        for (Category hearingChannels : response.getListOfCategory()) {
             assertThat(hearingChannels.getParentCategory()).isEqualTo("HearingChannel");
             assertThat(hearingChannels.getParentKey()).isEqualTo("telephone");
-            assertThat(hearingChannels.getActive()).isEqualTo(true);
+            assertThat(hearingChannels.getActiveFlag()).isEqualTo("Y");
         }
     }
 
-    private void responseVerification(HearingChannel response) {
+    private void responseVerification(Category response) {
         assertThat(response.getKey()).isEqualTo("telephone-btMeetMe");
         assertThat(response.getValueEn()).isEqualTo("Telephone - BTMeetme");
         assertThat(response.getValueCy()).isNull();
@@ -87,7 +87,6 @@ public class RetrieveHearingChannelsIntegrationTest extends CdAuthorizationEnabl
         assertThat(response.getLovOrder()).isNull();
         assertThat(response.getParentCategory()).isEqualTo("HearingChannel");
         assertThat(response.getParentKey()).isEqualTo("telephone");
-        assertThat(response.getActive()).isEqualTo(true);
+        assertThat(response.getActiveFlag()).isEqualTo("Y");
     }
-
 }

@@ -1,17 +1,17 @@
-package uk.gov.hmcts.reform.cdapi.domain;
+package uk.gov.hmcts.reform.cdapi.controllers.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class HearingChannels {
+@Getter
+public class Categories {
 
     @JsonProperty("list_of_values")
-    private List<HearingChannel> hearingChannels;
+    private List<Category> listOfCategory;
 }
