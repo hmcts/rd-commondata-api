@@ -63,6 +63,7 @@ public class IdamOpenIdClient {
 
         String serializedUser = gson.toJson(user);
 
+        log.info("Creating new Sidam user");
         Response createdUserResponse = RestAssured
             .given()
             .relaxedHTTPSValidation()
@@ -94,18 +95,17 @@ public class IdamOpenIdClient {
 
     public String getOpenIdToken(String userEmail, String password) {
 
+
         Map<String, String> tokenParams = new HashMap<>();
         tokenParams.put("grant_type", "password");
         tokenParams.put("username", userEmail);
         tokenParams.put("password", password);
-        log.info("client_id", testConfig.getClientId());
         tokenParams.put("client_id", testConfig.getClientId());
-        log.info("client_secret", testConfig.getClientSecret());
         tokenParams.put("client_secret", testConfig.getClientSecret());
         tokenParams.put("redirect_uri", testConfig.getOauthRedirectUrl());
         tokenParams.put("scope", "openid profile roles search-user");
 
-        log.info("getOpenIdToken Request: " + tokenParams);
+        log.info("Creating Sidam token");
         Response openIdTokenResponse = RestAssured
             .given()
             .relaxedHTTPSValidation()

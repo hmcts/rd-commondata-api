@@ -37,6 +37,7 @@ public class S2sClient {
                                                      "oneTimePassword",
                                                      authenticator.getTotpPassword(this.microserviceKey));
 
+        log.info("Configuring S2S newly");
         Response response = RestAssured
                 .given()
                 .relaxedHTTPSValidation()
