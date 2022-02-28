@@ -3,7 +3,6 @@ package uk.gov.hmcts.reform.cdapi;
 import io.restassured.parsing.Parser;
 import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.rest.SerenityRest;
-import org.junit.jupiter.api.AfterAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
@@ -82,7 +81,6 @@ public abstract class AuthorizationFunctionalTest {
         return generatedEmail;
     }
 
-    @AfterAll
     public static void destroy() {
         emailsTobeDeleted.forEach(email -> idamOpenIdClient.deleteSidamUser(email));
     }
