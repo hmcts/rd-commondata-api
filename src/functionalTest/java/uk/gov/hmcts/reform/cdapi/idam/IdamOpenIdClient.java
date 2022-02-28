@@ -98,7 +98,9 @@ public class IdamOpenIdClient {
         tokenParams.put("grant_type", "password");
         tokenParams.put("username", userEmail);
         tokenParams.put("password", password);
+        log.info("client_id", testConfig.getClientId());
         tokenParams.put("client_id", testConfig.getClientId());
+        log.info("client_secret", testConfig.getClientSecret());
         tokenParams.put("client_secret", testConfig.getClientSecret());
         tokenParams.put("redirect_uri", testConfig.getOauthRedirectUrl());
         tokenParams.put("scope", "openid profile roles search-user");
