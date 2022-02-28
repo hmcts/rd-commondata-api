@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ComponentScan("uk.gov.hmcts.reform.cdapi")
 @TestPropertySource("classpath:application-functional.yaml")
 @Slf4j
-public abstract class AuthorizationFunctionalTest {
+public class AuthorizationFunctionalTest {
 
     protected CommonDataApiClient commonDataApiClient;
 
