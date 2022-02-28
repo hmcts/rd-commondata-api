@@ -43,6 +43,12 @@ def vaultOverrides = [
   'spreview': 'saat'
 ]
 
+import uk.gov.hmcts.contino.AppPipelineConfig
+
+def subscription = "nonprod"
+def config = new AppPipelineConfig()
+config.vaultSecrets = secrets
+
 withNightlyPipeline(type, product, component) {
   env.S2S_URL_FOR_TESTS = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
   env.IDAM_URL = "https://idam-api.aat.platform.hmcts.net"
