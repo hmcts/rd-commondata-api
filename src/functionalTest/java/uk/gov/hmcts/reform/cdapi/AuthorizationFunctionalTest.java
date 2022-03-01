@@ -85,7 +85,7 @@ public abstract class AuthorizationFunctionalTest {
     @AfterAll
     public static void destroy() {
         log.info("Deleting user from sidam");
-        //emailsTobeDeleted.forEach(email -> idamOpenIdClient.deleteSidamUser(email));
+        emailsTobeDeleted.forEach(email -> idamOpenIdClient.deleteSidamUser(email));
     }
 
     public void validateErrorResponse(ErrorResponse errorResponse, String expectedErrorMessage,
