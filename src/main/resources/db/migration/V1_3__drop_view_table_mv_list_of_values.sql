@@ -1,3 +1,4 @@
+DROP MATERIALIZED VIEW mv_list_of_values;
 DROP TABLE hearing_channel;
 DROP TABLE hearing_type;
 DROP TABLE hearing_priority;
@@ -8,5 +9,4 @@ DROP TABLE interpreter_and_sign_language;
 DROP TABLE additional_facilities;
 DROP TABLE panel_member_type;
 DROP TABLE additional_facilities;
-DROP VIEW mv_list_of_values;
 COMMIT;
