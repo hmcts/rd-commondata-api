@@ -9,4 +9,4 @@ DROP TABLE additional_facilities;
 DROP TABLE panel_member_type;
 DROP TABLE additional_facilities;
 DROP VIEW mv_list_of_values;
-commit;
+COMMIT;
