@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.cdapi.exception.handler;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -29,6 +30,7 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static uk.gov.hmcts.reform.cdapi.controllers.constant.ErrorConstants.INVALID_REQUEST_EXCEPTION;
 
 @Slf4j
 @ControllerAdvice(basePackages = "uk.gov.hmcts.reform.cdapi.controllers")
@@ -68,9 +70,20 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<Object> httpMessageNotReadableExceptionError(HttpMessageNotReadableException ex) {
-        return errorDetailsResponseEntity(ex, BAD_REQUEST, ErrorConstants.MALFORMED_JSON.getErrorMessage());
+    public ResponseEntity<Object> customSerializationError(
+        HttpMessageNotReadableException ex) {
 
+        String field = "";
+        if (ex.getCause() != null) {
+            JsonMappingException jme = (JsonMappingException) ex.getCause();
+            field = jme.getPath().get(0).getFieldName();
+        }
+        var errorDetails = new ErrorResponse(BAD_REQUEST.value(), BAD_REQUEST.getReasonPhrase(),
+                                             field + " in invalid format",
+                                             INVALID_REQUEST_EXCEPTION.getErrorMessage(), getTimeStamp()
+        );
+
+        return new ResponseEntity<>(errorDetails, BAD_REQUEST);
     }
 
     @ExceptionHandler(CommonDataApiException.class)
