@@ -30,7 +30,7 @@ spring:
         spec: maximumSize=50,expireAfterWrite=1m
   flyway:
     enabled: true
-    locations: ${COMMONDATA_DB:classpath:db/migration,classpath:db/migrationAks}
+    locations: ${COMMONDATA_DB:classpath:db/migration}
   config:
     import: "optional:configtree:/mnt/secrets/rd/"
   main:
