@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SerenityTest
 @SpringBootTest
@@ -105,6 +106,7 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
             commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, PARAM_HEARING);
         assertNotNull(response);
         assertThat(response.getListOfCategory()).hasSizeGreaterThan(1);
+        response.getListOfCategory().forEach(h -> assertEquals("HearingChannel", h.getCategoryKey()));
         response.getListOfCategory().forEach(h -> assertNull(h.getChildNodes()));
     }
 
@@ -117,6 +119,7 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
                 + "isChildRequired=y&key=telephone");
         assertNotNull(response);
         assertThat(response.getListOfCategory()).hasSizeGreaterThan(0);
+        response.getListOfCategory().forEach(h -> assertEquals("HearingChannel", h.getCategoryKey()));
         response.getListOfCategory().forEach(h -> assertFalse(h.getChildNodes().isEmpty()));
     }
 
@@ -128,6 +131,7 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
             commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, "/HearingSubChannel?"
                 + "isChildRequired=y&parentKey=telephone");
         assertNotNull(response);
+        response.getListOfCategory().forEach(h -> assertEquals("HearingSubChannel", h.getCategoryKey()));
         assertThat(response.getListOfCategory()).hasSizeGreaterThan(0);
     }
 
@@ -139,6 +143,7 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
             commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, PARAM_HEARING_WITH_PARAM_SIGN
                 + "isChildRequired=n&key=telephone");
         assertNotNull(response);
+        response.getListOfCategory().forEach(h -> assertEquals("HearingChannel", h.getCategoryKey()));
         assertThat(response.getListOfCategory()).hasSizeGreaterThan(0);
     }
 
