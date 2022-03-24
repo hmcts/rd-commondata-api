@@ -443,3 +443,12 @@ rootProject.tasks.named("processIntegrationTestResources") {
 wrapper {
   distributionType = Wrapper.DistributionType.ALL
 }
+dependencyManagement {
+  dependencies {
+    dependencySet(group: 'com.fasterxml.jackson.core', version: '2.13.1') {
+      entry 'jackson-databind'
+      entry 'jackson-core'
+      entry 'jackson-annotations'
+    }
+  }
+}
