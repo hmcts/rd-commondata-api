@@ -12,7 +12,7 @@ import javax.persistence.Entity;
 @Data
 @Getter
 @Setter
-@Entity(name = "mv_list_of_values")
+@Entity(name = "list_of_values")
 public class ListOfValueDto {
     @EmbeddedId
     private CategoryKey categoryKey;
