@@ -111,11 +111,11 @@ public class CommonDataApiClient {
         }
     }
 
-    public Categories retrieveCategoriesByCategoryIdSuccess(String path, String param) {
+    public Response retrieveCategoriesByCategoryIdSuccess(String path, String param) {
         Response response = getMultipleAuthHeaders()
             .get(BASE_URL_CASE_FLAGS + path + param)
             .andReturn();
-        return response.getBody().as(Categories.class);
+        return response;
 
     }
 
