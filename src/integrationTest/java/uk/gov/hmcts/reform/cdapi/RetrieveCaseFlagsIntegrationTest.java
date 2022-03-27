@@ -25,7 +25,7 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
     private static final String path = "/caseflags/service-id={service-id}";
 
     @Test
-    void shouldRetrieveCaseFlag_For_ServiceId_WithStatusCode_200()
+    void shouldRetrieveCaseFlagForServiceIdWithStatusCode_200()
         throws JsonProcessingException {
 
         final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId("AAA1", CaseFlag.class, path);
@@ -35,7 +35,7 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
     }
 
     @Test
-    void shouldRetrieveCaseFlag_For_DefaultServiceId()
+    void shouldRetrieveCaseFlagForDefaultServiceId()
         throws JsonProcessingException {
 
         final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId("XXXX", CaseFlag.class, path);
@@ -45,7 +45,7 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
     }
 
     @Test
-    void shouldRetrieveCaseFlag_For_ServiceId_FlagTypeAsParty()
+    void shouldRetrieveCaseFlagForServiceIdFlagTypeAsParty()
         throws JsonProcessingException {
 
         final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
@@ -60,7 +60,7 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
     }
 
     @Test
-    void shouldRetrieveCaseFlag_For_ServiceId_FlagTypeAsCase()
+    void shouldRetrieveCaseFlagForServiceIdFlagTypeAsCase()
         throws JsonProcessingException {
 
         final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
@@ -75,7 +75,7 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
 
     @Test
     @SuppressWarnings("unchecked")
-    void shouldRetrieveCaseFlag_For_ServiceId_WithStatusCode_400()
+    void shouldRetrieveCaseFlagForServiceIdWithStatusCode_400()
         throws JsonProcessingException {
 
         var errorResponseMap = commonDataApiClient.retrieveCaseFlagsByServiceId(
@@ -103,7 +103,7 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
 
     @Test
     @SuppressWarnings("unchecked")
-    void shouldRetrieveCaseFlag_For_WelshRequiredasY_WithStatusCode_404()
+    void shouldRetrieveCaseFlagForWelshRequiredasWithStatusCode_404()
         throws JsonProcessingException {
 
         var errorResponseMap = commonDataApiClient.retrieveCaseFlagsByServiceId(

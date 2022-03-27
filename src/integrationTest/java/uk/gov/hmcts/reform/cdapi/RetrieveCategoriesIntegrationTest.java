@@ -24,7 +24,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
     private static final String path = "/lov/categories/{category-id}";
 
     @Test
-    void shouldRetrieveCategories_For_CategoryId_WithStatusCode_200()
+    void shouldRetrieveCategoriesForCategoryIdWithStatusCode200()
         throws JsonProcessingException {
         final var response = (Categories)
             commonDataApiClient.retrieveCaseFlagsByServiceId("HearingSubChannel",
@@ -36,7 +36,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
     }
 
     @Test
-    void shouldRetrieveCategories_WithAllParams_WithStatusCode_200()
+    void shouldRetrieveCategoriesWithAllParamsWithStatusCode200()
         throws JsonProcessingException {
         final var response = (Categories)
             commonDataApiClient.retrieveCaseFlagsByServiceId("HearingSubChannel?serviceId=BBA3"
@@ -51,7 +51,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
 
     @Test
     @SuppressWarnings("unchecked")
-    void shouldThrowStatusCode_404_For_InvalidCategoryId()
+    void shouldThrowStatusCode404ForInvalidCategoryId()
         throws JsonProcessingException {
 
         var errorResponseMap = commonDataApiClient.retrieveCaseFlagsByServiceId(
@@ -62,7 +62,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
 
     @Test
     @SuppressWarnings("unchecked")
-    void shouldThrowStatusCode_404_For_NullCategoryId()
+    void shouldThrowStatusCode404ForNullCategoryId()
         throws JsonProcessingException {
         var errorResponseMap = commonDataApiClient.retrieveCaseFlagsByServiceId(
             null,Map.class, path);
