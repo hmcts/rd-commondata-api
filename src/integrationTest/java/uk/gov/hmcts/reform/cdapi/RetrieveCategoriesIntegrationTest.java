@@ -31,7 +31,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
                                                              Categories.class, path
             );
         assertNotNull(response);
-        assertEquals(9, response.getListOfCategory().size());
+        assertEquals(1, response.getListOfCategory().size());
         responseVerification(response.getListOfCategory().get(0));
     }
 
@@ -44,7 +44,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
                                                              Categories.class, path
             );
         assertNotNull(response);
-        assertEquals(4, response.getListOfCategory().size());
+        assertEquals(1, response.getListOfCategory().size());
         responseVerification(response);
     }
 
