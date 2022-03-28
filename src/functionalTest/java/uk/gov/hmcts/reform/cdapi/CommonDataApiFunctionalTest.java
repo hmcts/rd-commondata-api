@@ -20,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.OK;
 
 @SerenityTest
 @SpringBootTest
@@ -90,7 +92,7 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
     void shouldReturnEmptyListWhenNoDataFound() {
         final var response = (ErrorResponse)
             commonDataApiClient.retrieveListOfValuesByCategoryId(
-                HttpStatus.NOT_FOUND,
+                NOT_FOUND,
                 "hello"
             );
         assertNotNull(response);
@@ -101,49 +103,74 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnSuccess() {
-        final Categories response =
+        Response response =
             commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, PARAM_HEARING);
-        assertNotNull(response);
-        assertThat(response.getListOfCategory()).hasSizeGreaterThan(1);
-        response.getListOfCategory().forEach(h -> assertEquals("HearingChannel", h.getCategoryKey()));
-        response.getListOfCategory().forEach(h -> assertNull(h.getChildNodes()));
+
+        if (OK.value() == response.getStatusCode()) {
+            var categories = response.getBody().as(Categories.class);
+            assertNotNull(categories);
+            assertThat(categories.getListOfCategory()).hasSizeGreaterThan(1);
+            categories.getListOfCategory().forEach(h -> assertEquals("HearingChannel", h.getCategoryKey()));
+            categories.getListOfCategory().forEach(h -> assertNull(h.getChildNodes()));
+        } else {
+            assertEquals(NOT_FOUND.value(), response.getStatusCode());
+        }
+
     }
 
     @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnSuccessWithChildren() {
-        final Categories response =
+        Response response =
             commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, PARAM_HEARING_WITH_PARAM_SIGN
                 + "isChildRequired=y&key=telephone");
-        assertNotNull(response);
-        assertThat(response.getListOfCategory()).hasSizeGreaterThan(0);
-        response.getListOfCategory().forEach(h -> assertEquals("HearingChannel", h.getCategoryKey()));
-        response.getListOfCategory().forEach(h -> assertFalse(h.getChildNodes().isEmpty()));
+
+        if (OK.value() == response.getStatusCode()) {
+            var categories = response.getBody().as(Categories.class);
+            assertNotNull(categories);
+            assertThat(categories.getListOfCategory()).hasSizeGreaterThan(0);
+            categories.getListOfCategory().forEach(h -> assertEquals("HearingChannel", h.getCategoryKey()));
+            categories.getListOfCategory().forEach(h -> assertFalse(h.getChildNodes().isEmpty()));
+        } else {
+            assertEquals(NOT_FOUND.value(), response.getStatusCode());
+        }
     }
 
     @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnSuccessForChildCategories() {
-        final Categories response =
+        Response response =
             commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, "/HearingSubChannel?"
                 + "isChildRequired=y&parentKey=telephone");
-        assertNotNull(response);
-        response.getListOfCategory().forEach(h -> assertEquals("HearingSubChannel", h.getCategoryKey()));
-        assertThat(response.getListOfCategory()).hasSizeGreaterThan(0);
+
+        if (OK.value() == response.getStatusCode()) {
+            var categories = response.getBody().as(Categories.class);
+            assertNotNull(categories);
+            categories.getListOfCategory().forEach(h -> assertEquals("HearingSubChannel", h.getCategoryKey()));
+            assertThat(categories.getListOfCategory()).hasSizeGreaterThan(0);
+        } else {
+            assertEquals(NOT_FOUND.value(), response.getStatusCode());
+        }
     }
 
     @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnSuccessWithNoChilds() {
-        final Categories response =
+        Response response =
             commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, PARAM_HEARING_WITH_PARAM_SIGN
                 + "isChildRequired=n&key=telephone");
-        assertNotNull(response);
-        response.getListOfCategory().forEach(h -> assertEquals("HearingChannel", h.getCategoryKey()));
-        assertThat(response.getListOfCategory()).hasSizeGreaterThan(0);
+
+        if (OK.value() == response.getStatusCode()) {
+            var categories = response.getBody().as(Categories.class);
+            assertNotNull(categories);
+            categories.getListOfCategory().forEach(h -> assertEquals("HearingChannel", h.getCategoryKey()));
+            assertThat(categories.getListOfCategory()).hasSizeGreaterThan(0);
+        } else {
+            assertEquals(NOT_FOUND.value(), response.getStatusCode());
+        }
     }
 
     @Test
@@ -152,7 +179,7 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
     void shouldReturnResourceNotFoundWithChildsAndInvalidParentKey() {
         final var response = (ErrorResponse)
             commonDataApiClient.retrieveListOfValuesByCategoryId(
-                HttpStatus.NOT_FOUND,
+                NOT_FOUND,
                 PARAM_HEARING_WITH_PARAM_SIGN
                     + "isChildRequired=y&parentKey=telephone"
             );
@@ -166,7 +193,7 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
     void shouldReturnResourceNotFoundWithChildsAndInvalidParentCategory() {
         final var response = (ErrorResponse)
             commonDataApiClient.retrieveListOfValuesByCategoryId(
-                HttpStatus.NOT_FOUND,
+                NOT_FOUND,
                 PARAM_HEARING_WITH_PARAM_SIGN
                     + "isChildRequired=y&parentCategory=HearingChannel"
             );
@@ -180,7 +207,7 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
     void shouldReturnResourceNotFoundInvalidServiceId() {
         final var response = (ErrorResponse)
             commonDataApiClient.retrieveListOfValuesByCategoryId(
-                HttpStatus.NOT_FOUND,
+                NOT_FOUND,
                 PARAM_HEARING_WITH_PARAM_SIGN
                     + "serviceId=BBA5"
             );
@@ -194,7 +221,7 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
     void shouldReturnResourceNotFoundWithChildrenAndInvalidKey() {
         final var response = (ErrorResponse)
             commonDataApiClient.retrieveListOfValuesByCategoryId(
-                HttpStatus.NOT_FOUND,
+                NOT_FOUND,
                 PARAM_HEARING_WITH_PARAM_SIGN
                     + "isChildRequired=y&key=telephone-CVP"
             );
