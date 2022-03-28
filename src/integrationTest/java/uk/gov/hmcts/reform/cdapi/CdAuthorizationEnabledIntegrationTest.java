@@ -92,7 +92,8 @@ public abstract class CdAuthorizationEnabledIntegrationTest extends SpringBootIn
         mockHttpServerForOidc.stubFor(get(urlPathMatching("/jwks"))
                                           .willReturn(aResponse()
                                                           .withStatus(200)
-                                                          .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                                                          .withHeader(HttpHeaders.CONTENT_TYPE,
+                                                                      MediaType.APPLICATION_JSON_VALUE)
                                                           .withBody(getDynamicJwksResponse())));
     }
 
