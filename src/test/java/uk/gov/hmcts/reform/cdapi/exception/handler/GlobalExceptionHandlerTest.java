@@ -1,8 +1,10 @@
 package uk.gov.hmcts.reform.cdapi.exception.handler;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,8 @@ import uk.gov.hmcts.reform.cdapi.exception.InvalidRequestException;
 import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
 
 import java.nio.file.AccessDeniedException;
+import java.util.Collections;
+import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -24,11 +28,20 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+
+
+
 @ExtendWith(MockitoExtension.class)
 class GlobalExceptionHandlerTest {
 
     @InjectMocks
     private GlobalExceptionHandler globalExceptionHandler;
+
+    @Mock
+    HttpMessageNotReadableException httpMessageNotReadableException;
+
+    @Mock
+    LinkedList<JsonMappingException.Reference> path = new LinkedList<>();
 
     @Test
     void test_handle_empty_result_exception() {
@@ -67,14 +80,20 @@ class GlobalExceptionHandlerTest {
 
     }
 
-    @Test
-    void test_handle_http_message_not_readable_exception() {
-        HttpMessageNotReadableException exception = mock(HttpMessageNotReadableException.class);
 
-        ResponseEntity<Object> responseEntity = globalExceptionHandler.httpMessageNotReadableExceptionError(exception);
+    @Test
+    void test_handle_invalid_serialization_exception() {
+
+        JsonMappingException jm = mock(JsonMappingException.class);
+        JsonMappingException.Reference rf = mock(JsonMappingException.Reference.class);
+        when(httpMessageNotReadableException.getCause()).thenReturn(jm);
+        when(jm.getPath()).thenReturn(Collections.unmodifiableList(path));
+        when(jm.getPath().get(0)).thenReturn(rf);
+        when(jm.getPath().get(0).getFieldName()).thenReturn("field");
+        ResponseEntity<Object> responseEntity = globalExceptionHandler
+            .customSerializationError(httpMessageNotReadableException);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-        assertEquals(exception.getMessage(), ((ErrorResponse) responseEntity.getBody()).getErrorDescription());
 
     }
 
