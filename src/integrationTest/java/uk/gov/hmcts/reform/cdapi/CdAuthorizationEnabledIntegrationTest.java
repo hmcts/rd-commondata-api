@@ -10,6 +10,8 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import uk.gov.hmcts.reform.cdapi.service.impl.FeatureToggleServiceImpl;
@@ -35,13 +37,13 @@ import static org.mockito.Mockito.when;
 public abstract class CdAuthorizationEnabledIntegrationTest extends SpringBootIntegrationTest {
 
     @RegisterExtension
-    public static WireMockExtension s2sService = new WireMockExtension(8990);
+    public static final WireMockExtension s2sService = new WireMockExtension(8990);
 
     @RegisterExtension
-    public static WireMockExtension idamService = new WireMockExtension(5000);
+    public static final WireMockExtension idamService = new WireMockExtension(5000);
 
     @RegisterExtension
-    public static WireMockExtension mockHttpServerForOidc = new WireMockExtension(7000);
+    public static final WireMockExtension mockHttpServerForOidc = new WireMockExtension(7000);
 
 
     protected CommonDataApiClient commonDataApiClient;
@@ -67,13 +69,13 @@ public abstract class CdAuthorizationEnabledIntegrationTest extends SpringBootIn
         s2sService.stubFor(get(urlEqualTo("/details"))
                                .willReturn(aResponse()
                                                .withStatus(200)
-                                               .withHeader("Content-Type", "application/json")
+                                               .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                                                .withBody("rd_commondata_api")));
 
         idamService.stubFor(get(urlPathMatching("/o/userinfo"))
                                 .willReturn(aResponse()
                                                 .withStatus(200)
-                                                .withHeader("Content-Type", "application/json")
+                                                .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                                                 .withBody("{"
                                                               + "  \"id\": \"%s\","
                                                               + "  \"uid\": \"%s\","
@@ -90,7 +92,8 @@ public abstract class CdAuthorizationEnabledIntegrationTest extends SpringBootIn
         mockHttpServerForOidc.stubFor(get(urlPathMatching("/jwks"))
                                           .willReturn(aResponse()
                                                           .withStatus(200)
-                                                          .withHeader("Content-Type", "application/json")
+                                                          .withHeader(HttpHeaders.CONTENT_TYPE,
+                                                                      MediaType.APPLICATION_JSON_VALUE)
                                                           .withBody(getDynamicJwksResponse())));
     }
 
