@@ -69,7 +69,8 @@ public class CrdServiceImpl implements CrdService {
 
     private List<Category> mapToParentCategory(List<Category> channelList) {
         Map<String, List<Category>> result = channelList.stream().collect(
-            Collectors.groupingBy(h -> StringUtils.isBlank(h.getParentKey())  ? PARENT : h.getParentKey(), HashMap::new,
+            Collectors.groupingBy(h -> StringUtils.isEmpty(h.getParentKey())
+                                      ? PARENT : h.getParentKey(), HashMap::new,
                                   Collectors.toCollection(ArrayList::new)));
         if (result.get(PARENT) != null) {
             result.get(PARENT).forEach(channel -> channel.setChildNodes(result.get(channel.getKey())));
