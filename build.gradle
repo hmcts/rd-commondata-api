@@ -331,6 +331,8 @@ dependencies {
   implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.10'
   implementation group: 'org.springframework', name: 'spring-core', version: '5.3.15'
   implementation group: 'org.springframework.security', name: 'spring-security-core', version: '5.6.1'
+  implementation group: 'org.springframework', name: 'spring-beans', version: '5.3.18'
+  
   implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2.1'
   implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: '2.13.2.20220324', ext: 'pom'
 
