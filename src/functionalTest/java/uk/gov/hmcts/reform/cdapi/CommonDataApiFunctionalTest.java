@@ -11,9 +11,9 @@ import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Categories;
 import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
 import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
-import uk.gov.hmcts.reform.cdapi.serenity5.SerenityTest;
 import uk.gov.hmcts.reform.cdapi.util.FeatureToggleConditionExtension;
 import uk.gov.hmcts.reform.cdapi.util.ToggleEnable;
+import uk.gov.hmcts.reform.lib.serenity5.SerenityTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -119,8 +119,8 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
     }
 
     @Test
-    @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
-    @ExtendWith(FeatureToggleConditionExtension.class)
+    /*@ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
+    @ExtendWith(FeatureToggleConditionExtension.class)*/
     void shouldReturnSuccessWithChildren() {
         Response response =
             commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, PARAM_HEARING_WITH_PARAM_SIGN

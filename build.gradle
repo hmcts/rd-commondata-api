@@ -287,6 +287,10 @@ repositories {
 }
 
 dependencies {
+  implementation ('com.github.hmcts:rd-commons-lib:v0.0.4'){
+    exclude group: 'org.springframework.boot', module: 'spring-boot-starter-web'
+  }
+
   implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
@@ -303,15 +307,7 @@ dependencies {
   implementation group: 'org.postgresql', name: 'postgresql', version: '42.3.3'
   implementation group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
   implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
-  implementation group: 'io.github.openfeign.form', name: 'feign-form', version: '3.8.0'
-  implementation group: 'io.github.openfeign.form', name: 'feign-form-spring', version: '3.8.0'
-  implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.reformLogging
-  implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.reformLogging
   implementation group: 'org.flywaydb', name: 'flyway-core', version: '6.5.1'
-  implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: versions.log4j
-  implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: versions.log4j
-  implementation group: 'org.apache.logging.log4j', name: 'log4j', version: versions.log4j
-  implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: versions.log4j
   implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
   implementation group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: versions.launchDarklySdk
   implementation group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: versions.reformS2sClient
@@ -352,9 +348,6 @@ dependencies {
   testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.4.6'
   testImplementation group: 'org.mockito', name: 'mockito-inline', version: '3.4.6'
   testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.7'
-  testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: '3.0.2'
-  testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: '3.0.2'
-  testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
   testImplementation group: 'com.github.mifmif', name: 'generex', version: '1.0.2'
   testImplementation 'io.github.openfeign:feign-jackson:11.0'
   testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
@@ -363,12 +356,6 @@ dependencies {
     exclude group: 'junit', module: 'junit'
     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
   }
-
-  functionalTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
-  functionalTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
-  functionalTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit
-  functionalTestImplementation group: 'org.junit.platform', name: 'junit-platform-commons', version: versions.junitPlatform
-  functionalTestRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-engine', version: versions.junitPlatform
 
   smokeTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
   smokeTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
