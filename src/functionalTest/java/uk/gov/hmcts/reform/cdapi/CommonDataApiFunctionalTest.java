@@ -13,7 +13,7 @@ import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
 import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
 import uk.gov.hmcts.reform.cdapi.util.FeatureToggleConditionExtension;
 import uk.gov.hmcts.reform.cdapi.util.ToggleEnable;
-import uk.gov.hmcts.reform.lib.serenity5.SerenityTest;
+import uk.gov.hmcts.reform.lib.util.serenity5.SerenityTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -287,9 +287,10 @@ repositories {
 }
 
 dependencies {
-  implementation ('com.github.hmcts:rd-commons-lib:v0.0.4'){
+  testImplementation ('com.github.hmcts:rd-commons-lib:v0.0.8'){
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-web'
   }
+
 
   implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
@@ -321,7 +322,6 @@ dependencies {
     exclude group: "org.apache.sling"
   }
   implementation 'commons-io:commons-io:2.8.0'
-  implementation "io.github.openfeign:feign-httpclient:11.0"
   implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.3'
   implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.10'
   implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.10'
@@ -330,7 +330,6 @@ dependencies {
   implementation group: 'org.springframework', name: 'spring-beans', version: '5.3.18'
   implementation group: 'org.springframework', name: 'spring-aop', version: '5.3.18'
   implementation group: 'org.springframework', name: 'spring-aspects', version: '5.3.18'
-  implementation group: 'org.springframework', name: 'spring-context', version: '5.3.18'
   implementation group: 'org.springframework', name: 'spring-context-support', version: '5.3.18'
   implementation group: 'org.springframework', name: 'spring-expression', version: '5.3.18'
   implementation group: 'org.springframework', name: 'spring-jcl', version: '5.3.18'
@@ -369,6 +368,12 @@ dependencies {
     exclude group: 'junit', module: 'junit'
     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
   }
+
+  functionalTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
+  functionalTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
+  functionalTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit
+  functionalTestImplementation group: 'org.junit.platform', name: 'junit-platform-commons', version: versions.junitPlatform
+  functionalTestRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-engine', version: versions.junitPlatform
 
   smokeTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
   smokeTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
