@@ -287,7 +287,7 @@ repositories {
 }
 
 dependencies {
-  testImplementation ('com.github.hmcts:rd-commons-lib:v0.0.8'){
+  testImplementation ('com.github.hmcts:rd-commons-lib:v0.0.9'){
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-web'
   }
 
