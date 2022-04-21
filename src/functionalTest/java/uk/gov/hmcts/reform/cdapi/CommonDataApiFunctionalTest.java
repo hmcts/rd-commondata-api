@@ -119,8 +119,8 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
     }
 
     @Test
-    /*@ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
-    @ExtendWith(FeatureToggleConditionExtension.class)*/
+    @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
+    @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnSuccessWithChildren() {
         Response response =
             commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, PARAM_HEARING_WITH_PARAM_SIGN
