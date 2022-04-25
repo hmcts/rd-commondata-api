@@ -287,6 +287,11 @@ repositories {
 }
 
 dependencies {
+  testImplementation ('com.github.hmcts:rd-commons-lib:v0.0.9'){
+    exclude group: 'org.springframework.boot', module: 'spring-boot-starter-web'
+  }
+
+
   implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
@@ -303,15 +308,7 @@ dependencies {
   implementation group: 'org.postgresql', name: 'postgresql', version: '42.3.3'
   implementation group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
   implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
-  implementation group: 'io.github.openfeign.form', name: 'feign-form', version: '3.8.0'
-  implementation group: 'io.github.openfeign.form', name: 'feign-form-spring', version: '3.8.0'
-  implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.reformLogging
-  implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.reformLogging
   implementation group: 'org.flywaydb', name: 'flyway-core', version: '6.5.1'
-  implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: versions.log4j
-  implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: versions.log4j
-  implementation group: 'org.apache.logging.log4j', name: 'log4j', version: versions.log4j
-  implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: versions.log4j
   implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
   implementation group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: versions.launchDarklySdk
   implementation group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: versions.reformS2sClient
@@ -325,7 +322,6 @@ dependencies {
     exclude group: "org.apache.sling"
   }
   implementation 'commons-io:commons-io:2.8.0'
-  implementation "io.github.openfeign:feign-httpclient:11.0"
   implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.3'
   implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.10'
   implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.10'
@@ -334,8 +330,9 @@ dependencies {
   implementation group: 'org.springframework', name: 'spring-beans', version: '5.3.18'
   implementation group: 'org.springframework', name: 'spring-aop', version: '5.3.18'
   implementation group: 'org.springframework', name: 'spring-aspects', version: '5.3.18'
-  implementation group: 'org.springframework', name: 'spring-context', version: '5.3.18'
   implementation group: 'org.springframework', name: 'spring-context-support', version: '5.3.18'
+  implementation group: 'org.springframework', name: 'spring-context', version: '5.3.18'
+
   implementation group: 'org.springframework', name: 'spring-expression', version: '5.3.18'
   implementation group: 'org.springframework', name: 'spring-jcl', version: '5.3.18'
   implementation group: 'org.springframework', name: 'spring-jdbc', version: '5.3.18'
@@ -346,6 +343,8 @@ dependencies {
 
   implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2.1'
   implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: '2.13.2.20220324', ext: 'pom'
+  implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: versions.log4j
+  implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: versions.log4j
 
   testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.16.2'
   testImplementation "org.testcontainers:junit-jupiter:1.16.2"
@@ -365,9 +364,6 @@ dependencies {
   testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.4.6'
   testImplementation group: 'org.mockito', name: 'mockito-inline', version: '3.4.6'
   testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.7'
-  testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: '3.0.2'
-  testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: '3.0.2'
-  testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
   testImplementation group: 'com.github.mifmif', name: 'generex', version: '1.0.2'
   testImplementation 'io.github.openfeign:feign-jackson:11.0'
   testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
