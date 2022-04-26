@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
 import uk.gov.hmcts.reform.cdapi.exception.InvalidRequestException;
-import uk.gov.hmcts.reform.cdapi.service.CaseFlagService;
+import uk.gov.hmcts.reform.cdapi.service.impl.CaseFlagServiceImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -24,7 +24,7 @@ class CaseFlagApiControllerTest {
     CaseFlagApiController caseFlagApiController;
 
     @Mock
-    CaseFlagService caseFlagService;
+    CaseFlagServiceImpl caseFlagService;
 
     @Test
     void testGetCaseFlag_ByServiceId_Returns200() {

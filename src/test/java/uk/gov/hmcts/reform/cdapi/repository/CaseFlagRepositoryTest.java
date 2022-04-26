@@ -6,15 +6,15 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 
 class CaseFlagRepositoryTest {
-    CaseFlagRepository caseFlagRepository = mock(CaseFlagRepository.class);
+    CaseFlagRepository caseFlagRepository = spy(CaseFlagRepository.class);
 
     @Test
     void testFindAll() {
-        when(caseFlagRepository.findAll(anyString())).thenReturn(new ArrayList<>());
+        doReturn(new ArrayList<>()).when(caseFlagRepository).findAll(anyString());
         assertNotNull(caseFlagRepository.findAll(anyString()));
     }
 }

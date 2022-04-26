@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.caffeine.CaffeineCache;
@@ -13,12 +14,12 @@ import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class IdamRepositoryTest {
@@ -26,7 +27,7 @@ class IdamRepositoryTest {
     @Mock
     private IdamClient idamClient;
 
-    @Mock
+    @Spy
     private CacheManager cacheManager;
 
     @InjectMocks
@@ -37,12 +38,13 @@ class IdamRepositoryTest {
     void test_getUserInfo() {
         UserInfo userInfo = mock(UserInfo.class);
         CaffeineCache caffeineCacheMock = mock(CaffeineCache.class);
-        Cache cache = mock(Cache.class);
+        Cache cache = spy(Cache.class);
 
-        when(idamClient.getUserInfo(anyString())).thenReturn(userInfo);
-        when(cacheManager.getCache(anyString())).thenReturn(caffeineCacheMock);
-        when(caffeineCacheMock.getNativeCache()).thenReturn(cache);
-        when(cache.estimatedSize()).thenReturn(anyLong());
+        doReturn(userInfo).when(idamClient).getUserInfo(anyString());
+        doReturn(caffeineCacheMock).when(cacheManager).getCache(anyString());
+
+        doReturn(cache).when(caffeineCacheMock).getNativeCache();
+        //doReturn(anyLong()).when(cache).estimatedSize();
 
         UserInfo returnedUserInfo = idamRepository.getUserInfo("Test");
 
