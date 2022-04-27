@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.jpa.domain.Specification;
 import uk.gov.hmcts.reform.cdapi.controllers.request.CategoryRequest;
@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doReturn;
 import static uk.gov.hmcts.reform.cdapi.helper.CrdTestSupport.buildCategoryRequest;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,7 +33,7 @@ class CrdServiceImplTest {
     @InjectMocks
     CrdServiceImpl crdServiceImpl;
 
-    @Mock
+    @Spy
     ListOfValuesRepository listOfValuesRepository;
 
     @Test
@@ -41,8 +41,9 @@ class CrdServiceImplTest {
         List<ListOfValueDto> listOfValueDtos = new ArrayList<>();
         listOfValueDtos.add(CrdTestSupport.createListOfCategoriesDtoMock("HearingChannel", null,
                                                                          null, null, null));
-        when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
-            .thenReturn(listOfValueDtos);
+        doReturn(listOfValueDtos).when(listOfValuesRepository)
+            .findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any());
+
         CategoryRequest request = buildCategoryRequest("HearingChannel",  null, null,
                                                        null,null, null);
         List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
@@ -72,8 +73,8 @@ class CrdServiceImplTest {
         inactiveCategory.setActive("n");
         listOfValueDtos.add(inactiveCategory);
 
-        when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
-            .thenReturn(listOfValueDtos);
+        doReturn(listOfValueDtos).when(listOfValuesRepository)
+            .findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any());
 
         CategoryRequest request = buildCategoryRequest("HearingChannel", "BBA3", "telephone",
                                            "HearingChannel", "telephone","y");
@@ -104,8 +105,8 @@ class CrdServiceImplTest {
     @Test
     void retrieveCategoriessByCategoryIdWithChildNodes() {
         List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
-        when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
-            .thenReturn(listOfValueDtos);
+        doReturn(listOfValueDtos).when(listOfValuesRepository)
+            .findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any());
 
         CategoryRequest request = buildCategoryRequest("HearingChannel",  null, null,
                                                        null,null, "y");
@@ -126,8 +127,8 @@ class CrdServiceImplTest {
     @Test
     void retrieveCategoriesByCategoryIdWithNoChildNodes() {
         List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
-        when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
-            .thenReturn(listOfValueDtos);
+        doReturn(listOfValueDtos).when(listOfValuesRepository)
+            .findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any());
 
         CategoryRequest request = buildCategoryRequest("HearingSubChannel",  null, null,
                                            "HearingChannel","telephone", "y");
@@ -149,8 +150,8 @@ class CrdServiceImplTest {
 
     private void verifyWithParams(String isChildRequired, String parentCategory, String parentKey) {
         List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
-        when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
-            .thenReturn(listOfValueDtos);
+        doReturn(listOfValueDtos).when(listOfValuesRepository)
+            .findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any());
 
         CategoryRequest request = buildCategoryRequest("HearingSubChannel", null, null,
                                                        parentCategory, parentKey, isChildRequired);
@@ -167,8 +168,8 @@ class CrdServiceImplTest {
         List<ListOfValueDto> listOfValueDtos = List.of(CrdTestSupport.createListOfCategoriesDtoMock(
             "HearingChannel", "", "", "", ""));
 
-        when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
-            .thenReturn(listOfValueDtos);
+        doReturn(listOfValueDtos).when(listOfValuesRepository)
+            .findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any());
 
         CategoryRequest request = buildCategoryRequest("HearingChannel",  "", "",
                                                        null,"", "");
@@ -185,8 +186,8 @@ class CrdServiceImplTest {
     void shouldThrowNotFoundExceptionWithUnMappedParams() {
         List<ListOfValueDto> listOfValueDtos = new ArrayList<>();
 
-        when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
-            .thenReturn(listOfValueDtos);
+        doReturn(listOfValueDtos).when(listOfValuesRepository)
+            .findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any());
 
         CategoryRequest request = buildCategoryRequest("HearingChannel",  null, null,
                                                        null,null, "n");

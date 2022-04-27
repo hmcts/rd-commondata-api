@@ -11,7 +11,7 @@ import uk.gov.hmcts.reform.cdapi.controllers.request.CategoryRequest;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Categories;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
 import uk.gov.hmcts.reform.cdapi.exception.InvalidRequestException;
-import uk.gov.hmcts.reform.cdapi.service.CrdService;
+import uk.gov.hmcts.reform.cdapi.service.impl.CrdServiceImpl;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +32,7 @@ import static uk.gov.hmcts.reform.cdapi.helper.CrdTestSupport.buildCategoryReque
 class CrdApiControllerTest {
 
     @Mock
-    CrdService crdService;
+    CrdServiceImpl crdService;
 
     @InjectMocks
     CrdApiController crdApiController;
