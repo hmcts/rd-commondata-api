@@ -292,7 +292,7 @@ repositories {
 }
 
 dependencies {
-  testImplementation ('com.github.hmcts:rd-commons-lib:v0.0.9'){
+  testImplementation ('com.github.hmcts:rd-commons-lib:v0.0.13'){
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-web'
   }
 
@@ -318,6 +318,8 @@ dependencies {
   implementation group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: versions.launchDarklySdk
   implementation group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: versions.reformS2sClient
   implementation group: 'javax.inject', name: 'javax.inject', version: '1'
+  implementation "com.github.hmcts.java-logging:logging:${versions.reformLogging}"
+  implementation "com.github.hmcts.java-logging:logging-appinsights:${versions.reformLogging}"
   implementation group: 'uk.gov.hmcts.reform', name: 'idam-client', version: '2.0.0'
   // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
   implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '2.8.5'
@@ -350,6 +352,10 @@ dependencies {
   implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: '2.13.2.20220324', ext: 'pom'
   implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: versions.log4j
   implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: versions.log4j
+  implementation group: 'io.github.openfeign.form', name: 'feign-form', version: '3.8.0'
+  implementation group: 'io.github.openfeign.form', name: 'feign-form-spring', version: '3.8.0'
+  implementation "io.github.openfeign:feign-httpclient:11.0"
+  implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: versions.log4j
 
   testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.16.2'
   testImplementation "org.testcontainers:junit-jupiter:1.16.2"
