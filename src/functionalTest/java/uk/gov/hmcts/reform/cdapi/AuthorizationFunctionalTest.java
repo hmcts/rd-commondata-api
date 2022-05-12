@@ -9,11 +9,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import uk.gov.hmcts.reform.cdapi.client.CommonDataApiClient;
-import uk.gov.hmcts.reform.lib.client.response.S2sClient;
 import uk.gov.hmcts.reform.cdapi.config.Oauth2;
 import uk.gov.hmcts.reform.cdapi.config.TestConfigProperties;
 import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
 import uk.gov.hmcts.reform.cdapi.idam.IdamOpenIdClient;
+import uk.gov.hmcts.reform.lib.client.response.S2sClient;
 
 import java.util.ArrayList;
 import java.util.List;

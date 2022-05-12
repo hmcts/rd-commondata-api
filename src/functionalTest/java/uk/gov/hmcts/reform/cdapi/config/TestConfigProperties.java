@@ -9,7 +9,7 @@ import uk.gov.hmcts.reform.lib.config.TestConfig;
 @Getter
 @Setter
 @Configuration
-public class TestConfigProperties implements TestConfig{
+public class TestConfigProperties implements TestConfig {
 
 
     @Value("${oauth2.client.secret}")

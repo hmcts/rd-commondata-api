@@ -7,8 +7,8 @@ import io.restassured.RestAssured;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import uk.gov.hmcts.reform.lib.idam.IdamOpenId;
 import uk.gov.hmcts.reform.cdapi.config.TestConfigProperties;
+import uk.gov.hmcts.reform.lib.idam.IdamOpenId;
 
 import java.util.List;
 
