@@ -40,7 +40,7 @@ def versions = [
   springfoxSwagger: '2.9.2',
   pact_version    : '4.1.7',
   log4j           : '2.17.1',
-  launchDarklySdk : "5.2.3",
+  launchDarklySdk : "5.8.1",
   reformS2sClient : '4.0.0',
   serenity        : '2.0.76',
   restAssured     : '4.3.3'
@@ -342,7 +342,7 @@ dependencies {
   implementation group: 'org.springframework', name: 'spring-jcl', version: '5.3.18'
   implementation group: 'org.springframework', name: 'spring-jdbc', version: '5.3.18'
   implementation group: 'org.springframework', name: 'spring-orm', version: '5.3.18'
-  implementation group: 'org.springframework', name: 'spring-tx', version: '5.3.18'
+  implementation group: 'org.springframework', name: 'spring-tx', version: '5.3.20'
   implementation group: 'org.springframework', name: 'spring-web', version: '5.3.18'
   implementation group: 'org.springframework', name: 'spring-webmvc', version: '5.3.18'
 
