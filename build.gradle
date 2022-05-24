@@ -333,7 +333,7 @@ dependencies {
   implementation 'commons-io:commons-io:2.8.0'
   implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.3'
   implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.10'
-  implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.10'
+  implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.11'
   implementation group: 'org.springframework', name: 'spring-core', version: versions.springVersion
   implementation group: 'org.springframework.security', name: 'spring-security-core', version: '5.6.1'
   implementation group: 'org.springframework', name: 'spring-beans', version: versions.springVersion
