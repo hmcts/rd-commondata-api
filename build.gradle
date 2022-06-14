@@ -165,6 +165,12 @@ task runProviderPactVerification(type: Test) {
   systemProperty 'pact.provider.version', project.pactVersion
 }
 
+task fortifyScan(type: JavaExec)  {
+  main = "uk.gov.hmcts.fortifyclient.FortifyClientMainApp"
+  classpath += sourceSets.test.runtimeClasspath
+  jvmArgs = ['--add-opens=java.base/java.lang.reflect=ALL-UNNAMED']
+}
+
 runProviderPactVerification.dependsOn contract
 
 runProviderPactVerification.finalizedBy pactVerify
@@ -359,6 +365,7 @@ dependencies {
   implementation "io.github.openfeign:feign-httpclient:11.0"
   implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: versions.log4j
 
+  testImplementation 'com.github.hmcts:fortify-client:1.2.0:all'
   testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.16.2'
   testImplementation "org.testcontainers:junit-jupiter:1.16.2"
   testImplementation "org.testcontainers:testcontainers:1.16.2"
