@@ -125,7 +125,8 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
             }
             switch (flagDetail.getFlagCode()) {
                 case "RA0004":
-                    assertEquals("Pre- Hearing visit", flagDetail.getName());
+                    assertEquals("I need adjustments to get to, into and around our buildings",
+                                 flagDetail.getName());
                     break;
                 case "RA0042":
                     assertEquals("Sign Language Interpreter", flagDetail.getName());
