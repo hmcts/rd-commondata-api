@@ -52,6 +52,7 @@ class CrdServiceImplTest {
         Category actualCategory = result.get(0);
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), actualCategory.getKey());
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), actualCategory.getCategoryKey());
+        assertEquals(listOfValueDtos.get(0).getCategoryKey().getServiceId(), actualCategory.getServiceId());
         assertEquals(listOfValueDtos.get(0).getActive(), actualCategory.getActiveFlag());
         assertEquals(listOfValueDtos.get(0).getParentCategory(), actualCategory.getParentCategory());
         assertEquals(listOfValueDtos.get(0).getParentKey(), actualCategory.getParentKey());
@@ -60,8 +61,6 @@ class CrdServiceImplTest {
         assertEquals(listOfValueDtos.get(0).getHintTextCy(), actualCategory.getHintTextCy());
         assertEquals(listOfValueDtos.get(0).getHintTextEn(), actualCategory.getHintTextEn());
         assertEquals(listOfValueDtos.get(0).getLovOrder(), actualCategory.getLovOrder());
-        assertEquals(listOfValueDtos.get(0).getServiceId(), actualCategory.getServiceId());
-        assertEquals(listOfValueDtos.get(0).getActive(), actualCategory.getActiveFlag());
         assertNull(actualCategory.getChildNodes());
     }
 
