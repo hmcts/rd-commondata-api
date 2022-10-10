@@ -16,6 +16,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(SpringExtension.class)
 @WithTags({@WithTag("testType:Integration")})
@@ -48,6 +49,19 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         responseVerification(response);
     }
 
+    @Test
+    void shouldRetrieveCategoriesWithServiceIdWithChildNodes()
+        throws JsonProcessingException {
+        final var response = (Categories)
+            commonDataApiClient.retrieveCaseFlagsByServiceId("HearingChannel?serviceId=BBA3"
+                                                                 + "&isChildRequired=Y",
+                                                             Categories.class, path
+            );
+        assertNotNull(response);
+        assertEquals(4, response.getListOfCategory().size());
+        assertEquals(1,response.getListOfCategory().get(0).getChildNodes().size());
+        responseVerification(response.getListOfCategory().get(0).getChildNodes().get(0));
+    }
 
     @Test
     @SuppressWarnings("unchecked")
@@ -70,11 +84,26 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         assertThat((Map<String, Object>) errorResponseMap).containsEntry("http_status", HttpStatus.NOT_FOUND);
     }
 
+    @Test
+    void shouldRetrieveCategoriesWithServiceIdWithOutChildNodes()
+        throws JsonProcessingException {
+        final var response = (Categories)
+            commonDataApiClient.retrieveCaseFlagsByServiceId("HearingChannel?serviceId=BBA3"
+                                                                 + "&isChildRequired=N",
+                                                             Categories.class, path
+            );
+        assertNotNull(response);
+        assertEquals(4, response.getListOfCategory().size());
+        responseVerificationWithOutChildNodes(response);
+    }
+
     private void responseVerification(Categories response) {
         for (Category hearingChannels : response.getListOfCategory()) {
             assertThat(hearingChannels.getParentCategory()).isEqualTo("HearingChannel");
             assertThat(hearingChannels.getParentKey()).isEqualTo("telephone");
             assertThat(hearingChannels.getActiveFlag()).isEqualTo("Y");
+            assertNull(hearingChannels.getChildNodes());
+
         }
     }
 
@@ -89,4 +118,15 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         assertThat(response.getParentKey()).isEqualTo("telephone");
         assertThat(response.getActiveFlag()).isEqualTo("Y");
     }
+
+    private void responseVerificationWithOutChildNodes(Categories response) {
+        for (Category hearingChannels : response.getListOfCategory()) {
+            assertThat(hearingChannels.getParentCategory()).isEqualTo(null);
+            assertThat(hearingChannels.getParentKey()).isEqualTo(null);
+            assertThat(hearingChannels.getActiveFlag()).isEqualTo("Y");
+            assertNull(hearingChannels.getChildNodes());
+
+        }
+    }
+
 }

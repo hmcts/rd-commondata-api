@@ -52,6 +52,7 @@ class CrdServiceImplTest {
         Category actualCategory = result.get(0);
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), actualCategory.getKey());
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), actualCategory.getCategoryKey());
+        assertEquals(listOfValueDtos.get(0).getCategoryKey().getServiceId(), actualCategory.getServiceId());
         assertEquals(listOfValueDtos.get(0).getActive(), actualCategory.getActiveFlag());
         assertEquals(listOfValueDtos.get(0).getParentCategory(), actualCategory.getParentCategory());
         assertEquals(listOfValueDtos.get(0).getParentKey(), actualCategory.getParentKey());
@@ -60,8 +61,6 @@ class CrdServiceImplTest {
         assertEquals(listOfValueDtos.get(0).getHintTextCy(), actualCategory.getHintTextCy());
         assertEquals(listOfValueDtos.get(0).getHintTextEn(), actualCategory.getHintTextEn());
         assertEquals(listOfValueDtos.get(0).getLovOrder(), actualCategory.getLovOrder());
-        assertEquals(listOfValueDtos.get(0).getServiceId(), actualCategory.getServiceId());
-        assertEquals(listOfValueDtos.get(0).getActive(), actualCategory.getActiveFlag());
         assertNull(actualCategory.getChildNodes());
     }
 
@@ -192,6 +191,45 @@ class CrdServiceImplTest {
         CategoryRequest request = buildCategoryRequest("HearingChannel",  null, null,
                                                        null,null, "n");
         assertThrows(ResourceNotFoundException.class, () -> crdServiceImpl.retrieveListOfValuesByCategory(request));
+    }
+
+    @Test
+    void retrieveCategoriesByServiceIdWithNoChildNodes() {
+        List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
+        doReturn(listOfValueDtos).when(listOfValuesRepository)
+            .findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any());
+
+        CategoryRequest request = buildCategoryRequest("HearingChannel",  "BBA3", null,
+                                                       null,null, "n");
+        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
+
+        assertNotNull(result);
+        assertEquals(listOfValueDtos.get(0).getCategoryKey().getServiceId(), result.get(0).getServiceId());
+        assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
+        assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActiveFlag());
+        assertNull(result.get(0).getChildNodes());
+    }
+
+    @Test
+    void retrieveCategoriesByServiceIdWithChildNodes() {
+        List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
+        doReturn(listOfValueDtos).when(listOfValuesRepository)
+            .findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any());
+
+        CategoryRequest request = buildCategoryRequest("HearingChannel",  "BBA3", null,
+                                                       null,null, "y");
+        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
+
+        assertNotNull(result);
+        assertThat(result, hasSize(1));
+        assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
+        assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
+        assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActiveFlag());
+        assertEquals(listOfValueDtos.get(0).getCategoryKey().getServiceId(), result.get(0).getServiceId());
+        assertEquals(listOfValueDtos.get(1).getCategoryKey().getKey(),
+                     result.get(0).getChildNodes().get(0).getKey());
+        assertEquals(listOfValueDtos.get(1).getCategoryKey().getCategoryKey(), result.get(0).getChildNodes().get(0)
+            .getCategoryKey());
     }
 
 

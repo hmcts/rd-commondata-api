@@ -143,10 +143,10 @@ public class CommonDataApiProviderTest {
         listOfValueDto1.setHintTextEn(null);
         listOfValueDto1.setValueCy(null);
         listOfValueDto1.setValueEn(value);
-        listOfValueDto1.setServiceId("BBA3");
         CategoryKey categoryKey = new CategoryKey();
         categoryKey.setKey(key);
         categoryKey.setCategoryKey(categoryId);
+        categoryKey.setServiceId("BBA3");
         listOfValueDto1.setCategoryKey(categoryKey);
         return listOfValueDto1;
     }

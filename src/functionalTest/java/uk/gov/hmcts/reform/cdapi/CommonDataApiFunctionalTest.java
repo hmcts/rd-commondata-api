@@ -261,4 +261,48 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
         assertNotNull(response);
         assertEquals("Syntax error or Bad request", response.getErrorDescription());
     }
+
+    @Test
+    @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
+    @ExtendWith(FeatureToggleConditionExtension.class)
+    void shouldReturnChildCategoriesInParticularToServiceId() {
+        Response response =
+            commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, "/HearingChannel?"
+                + "isChildRequired=y&serviceId=BBA3");
+
+        if (OK.value() == response.getStatusCode()) {
+            var categories = response.getBody().as(Categories.class);
+            assertNotNull(categories);
+            categories.getListOfCategory().forEach(h -> assertEquals("HearingChannel", h.getCategoryKey()));
+            assertThat(categories.getListOfCategory()).hasSizeGreaterThan(0);
+            assertThat(categories.getListOfCategory().get(0).getChildNodes()).hasSizeGreaterThan(0);
+            assertThat(categories.getListOfCategory().get(0).getChildNodes()).hasSizeGreaterThan(0);
+            assertEquals("HearingChannel",categories.getListOfCategory().get(0).getChildNodes().get(0)
+                .getParentCategory());
+
+        } else {
+            assertEquals(NOT_FOUND.value(), response.getStatusCode());
+        }
+    }
+
+    @Test
+    @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
+    @ExtendWith(FeatureToggleConditionExtension.class)
+    void shouldReturnSuccessWithServiceIdNoChilds() {
+        Response response =
+            commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, PARAM_HEARING_WITH_PARAM_SIGN
+                + "isChildRequired=n&serviceId=BBA3");
+
+        if (OK.value() == response.getStatusCode()) {
+            var categories = response.getBody().as(Categories.class);
+            assertNotNull(categories);
+            categories.getListOfCategory().forEach(h -> assertEquals("HearingChannel", h.getCategoryKey()));
+            assertThat(categories.getListOfCategory()).hasSizeGreaterThan(0);
+            categories.getListOfCategory().forEach(h -> assertNull(h.getChildNodes()));
+        } else {
+            assertEquals(NOT_FOUND.value(), response.getStatusCode());
+        }
+    }
+
+
 }

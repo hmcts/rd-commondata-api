@@ -17,9 +17,6 @@ public class ListOfValueDto {
     @EmbeddedId
     private CategoryKey categoryKey;
 
-    @Column(name = "serviceid")
-    private String serviceId;
-
     @Column(name = "value_en")
     private String valueEn;
 
