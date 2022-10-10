@@ -106,14 +106,6 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         }
     }
 
-    private void responseVerificationWithOutChildNodes(Categories response) {
-        for (Category hearingChannels : response.getListOfCategory()) {
-            assertThat(hearingChannels.getParentCategory()).isEqualTo(null);
-            assertThat(hearingChannels.getParentKey()).isEqualTo(null);
-            assertThat(hearingChannels.getActiveFlag()).isEqualTo("Y");
-        }
-    }
-
     private void responseVerification(Category response) {
         assertThat(response.getKey()).isEqualTo("telephone-btMeetMe");
         assertThat(response.getValueEn()).isEqualTo("Telephone - BTMeetme");
@@ -125,4 +117,13 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         assertThat(response.getParentKey()).isEqualTo("telephone");
         assertThat(response.getActiveFlag()).isEqualTo("Y");
     }
+
+    private void responseVerificationWithOutChildNodes(Categories response) {
+        for (Category hearingChannels : response.getListOfCategory()) {
+            assertThat(hearingChannels.getParentCategory()).isEqualTo(null);
+            assertThat(hearingChannels.getParentKey()).isEqualTo(null);
+            assertThat(hearingChannels.getActiveFlag()).isEqualTo("Y");
+        }
+    }
+
 }
