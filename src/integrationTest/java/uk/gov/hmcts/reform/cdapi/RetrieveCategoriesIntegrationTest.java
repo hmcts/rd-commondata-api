@@ -59,6 +59,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
             );
         assertNotNull(response);
         assertEquals(4, response.getListOfCategory().size());
+        assertEquals(1,response.getListOfCategory().get(0).getChildNodes().size());
         responseVerification(response.getListOfCategory().get(0).getChildNodes().get(0));
     }
 
@@ -123,6 +124,8 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
             assertThat(hearingChannels.getParentCategory()).isEqualTo(null);
             assertThat(hearingChannels.getParentKey()).isEqualTo(null);
             assertThat(hearingChannels.getActiveFlag()).isEqualTo("Y");
+            assertNull(hearingChannels.getChildNodes());
+
         }
     }
 
