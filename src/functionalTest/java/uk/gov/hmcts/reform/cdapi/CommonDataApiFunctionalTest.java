@@ -37,6 +37,12 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
     private static final String PARAM_SIGN = "?";
     private static final String PARAM_HEARING = SLASH.concat("HearingChannel");
     private static final String PARAM_HEARING_WITH_PARAM_SIGN = PARAM_HEARING.concat(PARAM_SIGN);
+    private static final String SERVICE_ID = "ServiceId=";
+    private static final String SERVICE_ID_BBA3 = "BBA3";
+    private static final String PARAM_LISTING_STATUS_WITH_SERVICE_ID = SLASH.concat("ListingStatus")
+        .concat(PARAM_SIGN).concat(SERVICE_ID+SERVICE_ID_BBA3);
+    private static final String PARAM_LISTING_STATUS_WITH_EMPTY_SERVICE_ID = SLASH.concat("ListingStatus")
+        .concat(PARAM_SIGN).concat(SERVICE_ID);
     private static final String DATA_NOT_FOUND = "Data not found";
 
     @Test
@@ -304,5 +310,39 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
         }
     }
 
+    @Test
+    @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
+    @ExtendWith(FeatureToggleConditionExtension.class)
+    void shouldReturnSuccess_Valid_ServiceID() {
+        Response response =
+            commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, PARAM_LISTING_STATUS_WITH_SERVICE_ID);
+        if (OK.value() == response.getStatusCode()) {
+            var categories = response.getBody().as(Categories.class);
+            assertNotNull(categories);
+            assertThat(categories.getListOfCategory()).hasSizeGreaterThan(1);
+            categories.getListOfCategory().forEach(h -> assertEquals("ListingStatus", h.getCategoryKey()));
+        } else {
+            assertEquals(NOT_FOUND.value(), response.getStatusCode());
+        }
+    }
+
+    @Test
+    @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
+    @ExtendWith(FeatureToggleConditionExtension.class)
+    void shouldReturnSuccess_Empty_ServiceID() {
+        Response response =
+            commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(
+                PATH_LOV,
+                PARAM_LISTING_STATUS_WITH_EMPTY_SERVICE_ID
+            );
+        if (OK.value() == response.getStatusCode()) {
+            var categories = response.getBody().as(Categories.class);
+            assertNotNull(categories);
+            assertThat(categories.getListOfCategory()).hasSizeGreaterThan(1);
+            categories.getListOfCategory().forEach(h -> assertEquals("ListingStatus", h.getCategoryKey()));
+        } else {
+            assertEquals(NOT_FOUND.value(), response.getStatusCode());
+        }
+    }
 
 }
