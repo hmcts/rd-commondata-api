@@ -12,6 +12,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 public class RootController {
 
+
     /**
      * Root GET endpoint.
      *
