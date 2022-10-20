@@ -40,7 +40,7 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
     private static final String SERVICE_ID = "ServiceId=";
     private static final String SERVICE_ID_BBA3 = "BBA3";
     private static final String PARAM_LISTING_STATUS_WITH_SERVICE_ID = SLASH.concat("ListingStatus")
-        .concat(PARAM_SIGN).concat(SERVICE_ID+SERVICE_ID_BBA3);
+        .concat(PARAM_SIGN).concat(SERVICE_ID + SERVICE_ID_BBA3);
     private static final String PARAM_LISTING_STATUS_WITH_EMPTY_SERVICE_ID = SLASH.concat("ListingStatus")
         .concat(PARAM_SIGN).concat(SERVICE_ID);
     private static final String DATA_NOT_FOUND = "Data not found";
