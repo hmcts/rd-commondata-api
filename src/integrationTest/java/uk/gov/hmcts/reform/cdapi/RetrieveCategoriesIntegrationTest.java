@@ -129,4 +129,52 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         }
     }
 
+    @Test
+    void shouldRetrieveCategoriesWithEmptyServiceIdWithChildNodes()
+        throws JsonProcessingException {
+        final var response = (Categories)
+            commonDataApiClient.retrieveCaseFlagsByServiceId("ListingStatus?"
+                                                                 + "&isChildRequired=Y&serviceId=",
+                                                             Categories.class, path
+            );
+        Category category = response.getListOfCategory().get(0);
+        assertNotNull(category);
+        assertEquals(1, response.getListOfCategory().size());
+        assertThat(category.getKey()).isEqualTo("test");
+        assertThat(category.getValueEn()).isEqualTo("test");
+        assertThat(category.getValueCy()).isNull();
+        assertThat(category.getHintTextCy()).isNull();
+        assertThat(category.getHintTextEn()).isNull();
+        assertThat(category.getLovOrder()).isNull();
+        assertThat(category.getParentCategory()).isNull();
+        assertThat(category.getParentKey()).isNull();
+        assertThat(category.getActiveFlag()).isEqualTo("Y");
+        assertEquals(1,category.getChildNodes().size());
+        assertThat(category.getChildNodes().get(0).getCategoryKey()).isEqualTo("ListingStatusSubChannel");
+        assertThat(category.getChildNodes().get(0).getParentKey()).isEqualTo("test");
+        assertThat(category.getChildNodes().get(0).getParentCategory()).isEqualTo("ListingStatus");
+    }
+
+    @Test
+    void shouldRetrieveCategoriesWithEmptyServiceIdWithoutChildNodes()
+        throws JsonProcessingException {
+        final var response = (Categories)
+            commonDataApiClient.retrieveCaseFlagsByServiceId("EmptySubCategory?"
+                                                                 + "&isChildRequired=Y&serviceId=",
+                                                             Categories.class, path
+            );
+        Category category = response.getListOfCategory().get(0);
+        assertNotNull(category);
+        assertEquals(1, response.getListOfCategory().size());
+        assertThat(category.getKey()).isEqualTo("test");
+        assertThat(category.getValueEn()).isEqualTo("test");
+        assertThat(category.getValueCy()).isNull();
+        assertThat(category.getHintTextCy()).isNull();
+        assertThat(category.getHintTextEn()).isNull();
+        assertThat(category.getLovOrder()).isNull();
+        assertThat(category.getParentCategory()).isNull();
+        assertThat(category.getParentKey()).isNull();
+        assertThat(category.getActiveFlag()).isEqualTo("Y");
+        assertNull(category.getChildNodes());
+    }
 }
