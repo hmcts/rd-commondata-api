@@ -1,83 +1,180 @@
 package uk.gov.hmcts.reform.cdapi.controllers;
 
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
-import uk.gov.hmcts.reform.cdapi.exception.InvalidRequestException;
-import uk.gov.hmcts.reform.cdapi.service.impl.CaseFlagServiceImpl;
+import uk.gov.hmcts.reform.cdapi.domain.Flag;
+import uk.gov.hmcts.reform.cdapi.domain.FlagDetail;
+import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
+import uk.gov.hmcts.reform.cdapi.exception.handler.GlobalExceptionHandler;
+import uk.gov.hmcts.reform.cdapi.service.CaseFlagService;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.times;
+import java.util.List;
+import java.util.stream.Stream;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest
+@WithMockUser
+@ContextConfiguration(classes = CaseFlagApiController.class)
 class CaseFlagApiControllerTest {
 
-    @InjectMocks
-    CaseFlagApiController caseFlagApiController;
+    @Autowired
+    private MockMvc mockMvc;
 
-    @Mock
-    CaseFlagServiceImpl caseFlagService;
+    @SpyBean
+    private GlobalExceptionHandler globalExceptionHandler;
+
+    @MockBean
+    private CaseFlagService caseFlagService;
+
 
     @Test
-    void testGetCaseFlag_ByServiceId_Returns200() {
-        ResponseEntity<CaseFlag> responseEntity =
-            caseFlagApiController.retrieveCaseFlagsByServiceId("XXXX",
-                                                               "PARTY", "N"
-            );
-        assertNotNull(responseEntity);
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        verify(caseFlagService, times(1))
-            .retrieveCaseFlagByServiceId("XXXX", "PARTY", "N");
+    void should_return_200_with_all_positive_scenario_flags() throws Exception {
+
+        //given
+        String name = RandomStringUtils.randomAlphabetic(5);
+        String flagCode = RandomStringUtils.randomAlphabetic(5);
+        CaseFlag caseFlag = getCaseFlag(name, flagCode);
+
+        //when
+        given(caseFlagService.retrieveCaseFlagByServiceId(anyString(), anyString(), anyString())).willReturn(caseFlag);
+
+        //then
+        mockMvc.perform(
+                get("/refdata/commondata/caseflags/service-id={service-id}", "XXXX")
+                    .queryParam("flag-type", "PARTY")
+                    .queryParam("welsh-required", "Y")
+                    .accept(MediaType.APPLICATION_JSON_VALUE))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.flags", hasSize(1)))
+
+            .andExpect(jsonPath("$.flags[0].FlagDetails", hasSize(1)))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].name", is(name)))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].flagCode", is(flagCode)))
+
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags", hasSize(1)))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].name", is(name)))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].flagCode", is(flagCode)));
+
+        verify(caseFlagService).retrieveCaseFlagByServiceId(anyString(), anyString(), anyString());
     }
 
     @Test
-    void testGetCaseFlag_ByInvalidFlag_Returns400() {
-        assertThrows(InvalidRequestException.class, () ->
-            caseFlagApiController.retrieveCaseFlagsByServiceId(
-                "XXXX", "Hello", ""));
+    @DisplayName("Negative scenario - Should return 404 case flags for given service-id, flag-type and welsh-required")
+    void shouldReturn404WhenFindByServiceIdAndFlagTypeAndWelshRequired() throws Exception {
+
+        //when
+        willThrow(ResourceNotFoundException.class).given(caseFlagService)
+            .retrieveCaseFlagByServiceId(anyString(), anyString(), anyString());
+
+        //then
+        mockMvc.perform(
+                get("/refdata/commondata/caseflags/service-id={service-id}", "XXXX")
+                    .queryParam("flag-type", "PARTY")
+                    .queryParam("welsh-required", "N")
+                    .accept(MediaType.APPLICATION_JSON_VALUE))
+            .andDo(print())
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.errorCode", is(404)))
+            .andExpect(jsonPath("$.status", is("Not Found")))
+            .andExpect(jsonPath("$.errorMessage", is("4 : Resource not found")));
+
+        verify(caseFlagService).retrieveCaseFlagByServiceId(anyString(), anyString(), anyString());
     }
 
-    @Test
-    void testGetCaseFlag_WhenServiceIdIsEmpty_Returns400() {
-        assertThrows(InvalidRequestException.class, () ->
-            caseFlagApiController.retrieveCaseFlagsByServiceId(
-                "", "Hello", ""));
+    @ParameterizedTest
+    @MethodSource("invalidScenarios")
+    @DisplayName("Negative scenario - Should return 400 case flags for given service-id, flag-type and welsh-required")
+    void shouldReturn400WhenFindByServiceIdAndFlagTypeAndWelshRequired2(final String serviceId,
+                                                                        final String flagType,
+                                                                        final String welshRequired,
+                                                                        final String expectedErrorDescription)
+        throws Exception {
+
+        //then
+        mockMvc.perform(
+                get("/refdata/commondata/caseflags/service-id={service-id}", serviceId)
+                    .queryParam("flag-type", flagType)
+                    .queryParam("welsh-required", welshRequired)
+                    .accept(MediaType.APPLICATION_JSON_VALUE))
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.errorCode", is(400)))
+            .andExpect(jsonPath("$.status", is("Bad Request")))
+            .andExpect(jsonPath(
+                "$.errorMessage",
+                is("3 : There is a problem with your request. Please check and try again")
+            ))
+            .andExpect(jsonPath("$.errorDescription", is(expectedErrorDescription)
+            ));
     }
 
-    @Test
-    void testGetCaseFlag_ByLowerCaseFlagType_Returns200() {
-        ResponseEntity<CaseFlag> responseEntity =
-            caseFlagApiController.retrieveCaseFlagsByServiceId("XXXX",
-                                                               "case", "N"
-            );
-        assertNotNull(responseEntity);
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        verify(caseFlagService, times(1))
-            .retrieveCaseFlagByServiceId("XXXX", "case", "N");
+
+    static Stream<Arguments> invalidScenarios() {
+        final String serviceIdErrorDesc = "service Id can not be null or empty";
+        final String flagTypeErrorDesc = "Allowed values are PARTY or CASE";
+        final String welshRequiredErrorDesc = "Allowed values are Y or N";
+        return Stream.of(
+            arguments("", "PARTY", "Y", serviceIdErrorDesc),
+            arguments(null, "PARTY", "Y", serviceIdErrorDesc),
+            arguments("XXXX", "", "Y", flagTypeErrorDesc),
+            arguments("XXXX", "CASE", "", welshRequiredErrorDesc)
+        );
     }
 
-    @Test
-    void testGetCaseFlag_ByWelshRequiredIsNotYorN_Returns400() {
-        assertThrows(InvalidRequestException.class, () ->
-            caseFlagApiController.retrieveCaseFlagsByServiceId(
-                "XXXX", "Hello", ""));
+
+    @NotNull
+    private CaseFlag getCaseFlag(String name, String flagCode) {
+        final CaseFlag caseFlag = new CaseFlag();
+        final Flag flag = new Flag();
+        final FlagDetail flagDetail = new FlagDetail();
+
+        flagDetail.setFlagCode(flagCode);
+        flagDetail.setName(name);
+        flagDetail.setCateGoryId(RandomUtils.nextInt());
+        flagDetail.setId(RandomUtils.nextInt());
+        flagDetail.setFlagComment(RandomUtils.nextBoolean());
+        flagDetail.setHearingRelevant(RandomUtils.nextBoolean());
+        flagDetail.setParent(RandomUtils.nextBoolean());
+        flagDetail.setListOfValuesLength(RandomUtils.nextInt());
+        flag.setFlagDetails(List.of(flagDetail));
+
+        final FlagDetail childFlagDetail = new FlagDetail();
+        childFlagDetail.setFlagCode(flagCode);
+        childFlagDetail.setName(name);
+        flagDetail.setChildFlags(List.of(childFlagDetail));
+
+        caseFlag.setFlags(List.of(flag));
+        return caseFlag;
+
+
     }
 
-    @Test
-    void testGetCaseFlag_When_FlagType_WelshRequired_isnull() {
-        ResponseEntity<CaseFlag> responseEntity = caseFlagApiController.retrieveCaseFlagsByServiceId(
-            "XXXX", null, null);
-        assertNotNull(responseEntity);
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        verify(caseFlagService, times(1))
-            .retrieveCaseFlagByServiceId("XXXX", null, null);
-    }
+
 }
