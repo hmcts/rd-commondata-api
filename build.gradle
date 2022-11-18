@@ -168,6 +168,13 @@ task runProviderPactVerification(type: Test) {
   systemProperty 'pact.provider.version', project.pactVersion
 }
 
+task fortifyScan(type: JavaExec)  {
+  main = "uk.gov.hmcts.fortifyclient.FortifyClientMainApp"
+  classpath += sourceSets.test.runtimeClasspath
+  jvmArgs = ['--add-opens=java.base/java.lang.reflect=ALL-UNNAMED']
+  ignoreExitValue = true
+}
+
 runProviderPactVerification.dependsOn contract
 
 runProviderPactVerification.finalizedBy pactVerify
