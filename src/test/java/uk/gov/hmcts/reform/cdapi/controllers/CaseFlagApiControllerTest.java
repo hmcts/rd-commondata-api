@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.cdapi.controllers;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
@@ -21,18 +20,19 @@ import uk.gov.hmcts.reform.cdapi.domain.Flag;
 import uk.gov.hmcts.reform.cdapi.domain.FlagDetail;
 import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
 import uk.gov.hmcts.reform.cdapi.exception.handler.GlobalExceptionHandler;
-import uk.gov.hmcts.reform.cdapi.service.CaseFlagService;
+import uk.gov.hmcts.reform.cdapi.service.impl.CaseFlagServiceImpl;
 
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willThrow;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -50,15 +50,15 @@ class CaseFlagApiControllerTest {
     private GlobalExceptionHandler globalExceptionHandler;
 
     @MockBean
-    private CaseFlagService caseFlagService;
+    private CaseFlagServiceImpl caseFlagService;
 
 
     @Test
     void should_return_200_with_all_positive_scenario_flags() throws Exception {
 
         //given
-        String name = RandomStringUtils.randomAlphabetic(5);
-        String flagCode = RandomStringUtils.randomAlphabetic(5);
+        String name = randomAlphabetic(5);
+        String flagCode = randomAlphabetic(5);
         CaseFlag caseFlag = getCaseFlag(name, flagCode);
 
         //when
@@ -82,7 +82,7 @@ class CaseFlagApiControllerTest {
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].name", is(name)))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].flagCode", is(flagCode)));
 
-        verify(caseFlagService).retrieveCaseFlagByServiceId(anyString(), anyString(), anyString());
+        then(caseFlagService).should().retrieveCaseFlagByServiceId(anyString(), anyString(), anyString());
     }
 
     @Test
@@ -90,7 +90,7 @@ class CaseFlagApiControllerTest {
     void shouldReturn404WhenFindByServiceIdAndFlagTypeAndWelshRequired() throws Exception {
 
         //when
-        willThrow(ResourceNotFoundException.class).given(caseFlagService)
+        doThrow(ResourceNotFoundException.class).when(caseFlagService)
             .retrieveCaseFlagByServiceId(anyString(), anyString(), anyString());
 
         //then
@@ -105,16 +105,16 @@ class CaseFlagApiControllerTest {
             .andExpect(jsonPath("$.status", is("Not Found")))
             .andExpect(jsonPath("$.errorMessage", is("4 : Resource not found")));
 
-        verify(caseFlagService).retrieveCaseFlagByServiceId(anyString(), anyString(), anyString());
+        then(caseFlagService).should().retrieveCaseFlagByServiceId(anyString(), anyString(), anyString());
     }
 
     @ParameterizedTest
     @MethodSource("invalidScenarios")
     @DisplayName("Negative scenario - Should return 400 case flags for given service-id, flag-type and welsh-required")
-    void shouldReturn400WhenFindByServiceIdAndFlagTypeAndWelshRequired2(final String serviceId,
-                                                                        final String flagType,
-                                                                        final String welshRequired,
-                                                                        final String expectedErrorDescription)
+    public void shouldReturn400WhenFindByServiceIdAndFlagTypeAndWelshRequired2(final String serviceId,
+                                                                               final String flagType,
+                                                                               final String welshRequired,
+                                                                               final String expectedErrorDescription)
         throws Exception {
 
         //then
@@ -136,7 +136,7 @@ class CaseFlagApiControllerTest {
     }
 
 
-    static Stream<Arguments> invalidScenarios() {
+    private static Stream<Arguments> invalidScenarios() {
         final String serviceIdErrorDesc = "service Id can not be null or empty";
         final String flagTypeErrorDesc = "Allowed values are PARTY or CASE";
         final String welshRequiredErrorDesc = "Allowed values are Y or N";
@@ -147,7 +147,6 @@ class CaseFlagApiControllerTest {
             arguments("XXXX", "CASE", "", welshRequiredErrorDesc)
         );
     }
-
 
     @NotNull
     private CaseFlag getCaseFlag(String name, String flagCode) {
@@ -172,9 +171,5 @@ class CaseFlagApiControllerTest {
 
         caseFlag.setFlags(List.of(flag));
         return caseFlag;
-
-
     }
-
-
 }

@@ -26,8 +26,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willThrow;
-import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -67,7 +67,7 @@ class CrdApiControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.list_of_values", hasSize(1)));
 
-        verify(crdService).retrieveListOfValuesByCategory(any(CategoryRequest.class));
+        then(crdService).should().retrieveListOfValuesByCategory(any(CategoryRequest.class));
 
     }
 
@@ -87,7 +87,7 @@ class CrdApiControllerTest {
             .andExpect(jsonPath("$.status", is("Not Found")))
             .andExpect(jsonPath("$.errorMessage", is("4 : Resource not found")));
 
-        verify(crdService).retrieveListOfValuesByCategory(any(CategoryRequest.class));
+        then(crdService).should().retrieveListOfValuesByCategory(any(CategoryRequest.class));
     }
 
     @Test
