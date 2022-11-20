@@ -61,16 +61,16 @@ class CaseFlagApiControllerTest {
         String flagCode = randomAlphabetic(5);
         CaseFlag caseFlag = getCaseFlag(name, flagCode);
 
-        //when
         given(caseFlagService.retrieveCaseFlagByServiceId(anyString(), anyString(), anyString())).willReturn(caseFlag);
 
-        //then
+        //when
         mockMvc.perform(
                 get("/refdata/commondata/caseflags/service-id={service-id}", "XXXX")
                     .queryParam("flag-type", "PARTY")
                     .queryParam("welsh-required", "Y")
                     .accept(MediaType.APPLICATION_JSON_VALUE))
             .andDo(print())
+            //then
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.flags", hasSize(1)))
 
@@ -89,17 +89,18 @@ class CaseFlagApiControllerTest {
     @DisplayName("Negative scenario - Should return 404 case flags for given service-id, flag-type and welsh-required")
     void shouldReturn404WhenFindByServiceIdAndFlagTypeAndWelshRequired() throws Exception {
 
-        //when
+        //given
         doThrow(ResourceNotFoundException.class).when(caseFlagService)
             .retrieveCaseFlagByServiceId(anyString(), anyString(), anyString());
 
-        //then
+        //when
         mockMvc.perform(
                 get("/refdata/commondata/caseflags/service-id={service-id}", "XXXX")
                     .queryParam("flag-type", "PARTY")
                     .queryParam("welsh-required", "N")
                     .accept(MediaType.APPLICATION_JSON_VALUE))
             .andDo(print())
+            //then
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.errorCode", is(404)))
             .andExpect(jsonPath("$.status", is("Not Found")))
@@ -117,13 +118,14 @@ class CaseFlagApiControllerTest {
                                                                                final String expectedErrorDescription)
         throws Exception {
 
-        //then
+        //when
         mockMvc.perform(
                 get("/refdata/commondata/caseflags/service-id={service-id}", serviceId)
                     .queryParam("flag-type", flagType)
                     .queryParam("welsh-required", welshRequired)
                     .accept(MediaType.APPLICATION_JSON_VALUE))
             .andDo(print())
+            //then
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.errorCode", is(400)))
             .andExpect(jsonPath("$.status", is("Bad Request")))
