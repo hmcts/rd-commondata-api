@@ -1,7 +1,9 @@
 package uk.gov.hmcts.reform.cdapi.controllers;
 
+import org.apache.commons.lang3.RandomUtils;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -9,7 +11,6 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.hmcts.reform.cdapi.controllers.request.CategoryRequest;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
@@ -18,10 +19,9 @@ import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
 import uk.gov.hmcts.reform.cdapi.exception.handler.GlobalExceptionHandler;
 import uk.gov.hmcts.reform.cdapi.service.impl.CrdServiceImpl;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
@@ -32,19 +32,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static uk.gov.hmcts.reform.cdapi.helper.CrdTestSupport.buildCategoryRequest;
 
 @WebMvcTest
 @WithMockUser
 @ContextConfiguration(classes = CrdApiController.class)
-@ExtendWith(SpringExtension.class)
 class CrdApiControllerTest {
 
     @MockBean
     CrdServiceImpl crdService;
-
-    @SpyBean
-    CrdApiController crdApiController;
 
     @SpyBean
     private GlobalExceptionHandler globalExceptionHandler;
@@ -53,35 +48,121 @@ class CrdApiControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void testShouldReturn200WhenPassingRightCategoryId() throws Exception {
+    @DisplayName("Positive scenario - Should return 200 when passing correct categoryId and request")
+    void should_return_200_with_all_positive_scenario_flags() throws Exception {
 
-        List<Category> categoryList = List.of(Category.builder().categoryKey("HearingChannel")
-                                                  .childNodes(Collections.emptyList()).build());
+        // given
+        String hearingChannel = "HearingChannel";
+        String key = randomAlphabetic(5);
+        String valueEn = randomAlphabetic(5);
+        String valueCy = randomAlphabetic(5);
+        String hintTextEn = randomAlphabetic(5);
+        String hintTextCy = randomAlphabetic(5);
+        long lovOrder = RandomUtils.nextLong();
+        String parentCategory = randomAlphabetic(5);
+        String parentKey = randomAlphabetic(5);
+        String activeFlag = randomAlphabetic(5);
+
+
+        List<Category> categoryList = getCategoryList(
+            hearingChannel,
+            key,
+            valueEn,
+            valueCy,
+            hintTextEn,
+            hintTextCy,
+            lovOrder,
+            parentCategory,
+            parentKey,
+            activeFlag
+        );
+
         //when
         given(crdService.retrieveListOfValuesByCategory(any(CategoryRequest.class))).willReturn(categoryList);
 
-        //then
+
         mockMvc.perform(get("/refdata/commondata//lov/categories/{categoryId}", "HearingChannel")
                             .accept(MediaType.APPLICATION_JSON_VALUE))
             .andDo(print())
+
+            //then
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.list_of_values", hasSize(1)));
+            .andExpect(jsonPath("$.list_of_values", hasSize(1)))
+
+            .andExpect(jsonPath("$.list_of_values[0].category_key", is(hearingChannel)))
+            .andExpect(jsonPath("$.list_of_values[0].key", is(key)))
+            .andExpect(jsonPath("$.list_of_values[0].value_en", is(valueEn)))
+            .andExpect(jsonPath("$.list_of_values[0].value_cy", is(valueCy)))
+            .andExpect(jsonPath("$.list_of_values[0].hint_text_en", is(hintTextEn)))
+            .andExpect(jsonPath("$.list_of_values[0].hint_text_cy", is(hintTextCy)))
+            .andExpect(jsonPath("$.list_of_values[0].lov_order", is(lovOrder)))
+            .andExpect(jsonPath("$.list_of_values[0].parent_category", is(parentCategory)))
+            .andExpect(jsonPath("$.list_of_values[0].parent_key", is(parentKey)))
+            .andExpect(jsonPath("$.list_of_values[0].active_flag", is(activeFlag)))
+
+
+            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].category_key", is(hearingChannel)))
+            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].key", is(key)))
+            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].value_en", is(valueEn)))
+            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].value_cy", is(valueCy)))
+            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].hint_text_en", is(hintTextEn)))
+            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].hint_text_cy", is(hintTextCy)))
+            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].lov_order", is(lovOrder)))
+            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].parent_category", is(parentCategory)))
+            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].parent_key", is(parentKey)))
+            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].active_flag", is(activeFlag)));
+
 
         then(crdService).should().retrieveListOfValuesByCategory(any(CategoryRequest.class));
 
     }
 
+    @NotNull
+    private static List<Category> getCategoryList(String hearingChannel, String key, String valueEn, String valueCy,
+                                                  String hintTextEn, String hintTextCy,
+                                                  long lovOrder, String parentCategory,
+                                                  String parentKey, String activeFlag) {
+
+
+        Category childNodeCategory = new Category();
+        childNodeCategory.setChildNodes(List.of(Category.builder().categoryKey(hearingChannel)
+                                                    .key(key)
+                                                    .valueEn(valueEn)
+                                                    .valueCy(valueCy)
+                                                    .hintTextEn(hintTextEn)
+                                                    .lovOrder(lovOrder)
+                                                    .parentCategory(parentCategory)
+                                                    .parentKey(parentKey)
+                                                    .activeFlag(activeFlag).hintTextCy(hintTextCy).build()));
+
+        List<Category> categoryList = List.of(Category.builder().categoryKey(hearingChannel)
+                                                  .key(key)
+                                                  .valueEn(valueEn)
+                                                  .valueCy(valueCy)
+                                                  .hintTextEn(hintTextEn)
+                                                  .hintTextCy(hintTextCy)
+                                                  .lovOrder(lovOrder)
+                                                  .parentCategory(parentCategory)
+                                                  .parentKey(parentKey)
+                                                  .activeFlag(activeFlag)
+                                                  .childNodes(childNodeCategory.getChildNodes()).build());
+        return categoryList;
+    }
+
     @Test
-    void testShouldReturn404WhenPassingCategoryIdAsNull() throws Exception {
+    @DisplayName("Negative scenario - Should return 404 when categoryId is NULL")
+    void should_return_404_for_serviceId_is_null() throws Exception {
 
         //when
         willThrow(ResourceNotFoundException.class).given(crdService)
             .retrieveListOfValuesByCategory(any(CategoryRequest.class));
 
-        //then
+
         mockMvc.perform(get("/refdata/commondata/lov/categories/{categoryId}", " ")
                             .accept(MediaType.APPLICATION_JSON_VALUE))
             .andDo(print())
+
+            //then
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.errorCode", is(404)))
             .andExpect(jsonPath("$.status", is("Not Found")))
@@ -91,18 +172,18 @@ class CrdApiControllerTest {
     }
 
     @Test
-    void testShouldReturn400WhenPassingCategoryIdOtherThanHearingChannel() throws Exception {
+    @DisplayName("Negative scenario - Should return 400 when passing categoryId other than HearingChannel ")
+    void should_return_400_for_categoryid_other_than_hearingchannel() throws Exception {
 
-        CategoryRequest request = buildCategoryRequest("HearingChannel", null, null,
-                                                       null, null, "N");
+        willThrow(InvalidRequestException.class).given(crdService)
+            .retrieveListOfValuesByCategory(any(CategoryRequest.class));
+
         //when
-        willThrow(InvalidRequestException.class).given(crdApiController)
-            .retrieveListOfValuesByCategoryId(Optional.empty(), request);
-
-        //then
-        mockMvc.perform(get("/refdata/commondata/lov/categories/{categoryId}", "")
+        mockMvc.perform(get("/refdata/commondata/lov/categories/{categoryId}", "HearingChannel")
                             .accept(MediaType.APPLICATION_JSON_VALUE))
             .andDo(print())
+
+            //then
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.errorCode", is(400)))
             .andExpect(jsonPath("$.status", is("Bad Request")))
