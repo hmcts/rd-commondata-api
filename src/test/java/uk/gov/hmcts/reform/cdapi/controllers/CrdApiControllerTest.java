@@ -4,6 +4,9 @@ import org.apache.commons.lang3.RandomUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,10 +23,12 @@ import uk.gov.hmcts.reform.cdapi.exception.handler.GlobalExceptionHandler;
 import uk.gov.hmcts.reform.cdapi.service.impl.CrdServiceImpl;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -171,15 +176,17 @@ class CrdApiControllerTest {
         then(crdService).should().retrieveListOfValuesByCategory(any(CategoryRequest.class));
     }
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("invalidScenarios")
     @DisplayName("Negative scenario - Should return 400 when passing categoryId other than HearingChannel ")
-    void should_return_400_for_categoryid_other_than_hearingchannel() throws Exception {
+    void should_return_400_for_categoryid_other_than_hearingchannel(final String categoryId,
+                                                                    final String errorDescription) throws Exception {
 
         willThrow(InvalidRequestException.class).given(crdService)
             .retrieveListOfValuesByCategory(any(CategoryRequest.class));
 
         //when
-        mockMvc.perform(get("/refdata/commondata/lov/categories/{categoryId}", "HearingChannel")
+        mockMvc.perform(get("/refdata/commondata/lov/categories/{categoryId}", categoryId)
                             .accept(MediaType.APPLICATION_JSON_VALUE))
             .andDo(print())
 
@@ -190,8 +197,19 @@ class CrdApiControllerTest {
             .andExpect(jsonPath(
                 "$.errorMessage",
                 is("3 : There is a problem with your request. Please check and try again")
-            ));
+            ))
+            .andExpect(jsonPath("$.errorDescription",is(errorDescription)));
 
+    }
+
+    private static Stream<Arguments> invalidScenarios() {
+        final String categoryIdErrorDesc = "Syntax error or Bad request";
+        final String categoryIdotherThanHearingChannel = null;
+        return Stream.of(
+            arguments("", categoryIdErrorDesc),
+            arguments(null, categoryIdErrorDesc),
+            arguments("XXXX", categoryIdotherThanHearingChannel)
+        );
     }
 
 }
