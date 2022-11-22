@@ -39,6 +39,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static uk.gov.hmcts.reform.cdapi.helper.CrdTestSupport.buildCategoryRequest;
 
 @WebMvcTest
 @WithMockUser
@@ -55,112 +56,61 @@ class CrdApiControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    @DisplayName("Positive scenario - Should return 200 with categories for valid categoryId")
-    void should_return_200_with_categories_for_valid_categoryId() throws Exception {
+    @DisplayName("Positive scenario - Should return 200 for valid categoryId and request with isChildRequired :y")
+    void should_return_200_with_categories_for_valid_categoryId_and_request() throws Exception {
 
-        // given
         String hearingChannel = "HearingChannel";
-        String key = randomAlphabetic(5);
-        String valueEn = randomAlphabetic(5);
-        String valueCy = randomAlphabetic(5);
-        String hintTextEn = randomAlphabetic(5);
-        String hintTextCy = randomAlphabetic(5);
-        long lovOrder = RandomUtils.nextLong();
-        String parentCategory = randomAlphabetic(5);
-        String parentKey = randomAlphabetic(5);
-        String activeFlag = randomAlphabetic(5);
-
-
-        List<Category> categoryList = getCategoryList(
-            hearingChannel,
-            key,
-            valueEn,
-            valueCy,
-            hintTextEn,
-            hintTextCy,
-            lovOrder,
-            parentCategory,
-            parentKey,
-            activeFlag
+        CategoryRequest request = buildCategoryRequest(null, "BBA3", "1",
+                                                       "1", "5", "y"
         );
 
-        //when
+        List<Category> categoryList = getCategoryList(hearingChannel,request);
+
+        // given
         given(crdService.retrieveListOfValuesByCategory(any(CategoryRequest.class))).willReturn(categoryList);
 
-
+        //when
         ResultActions resultActions = mockMvc.perform(get(
                 "/refdata/commondata//lov/categories/{categoryId}",
-                "HearingChannel"
-            )
-                                                            .accept(MediaType.APPLICATION_JSON_VALUE))
+                "HearingChannel")
+                                                          .accept(MediaType.APPLICATION_JSON_VALUE))
             .andDo(print())
-
-            //then
             .andExpect(status().isOk());
 
-        resultActions
-            .andExpect(jsonPath("$.list_of_values", hasSize(1)))
-
-            .andExpect(jsonPath("$.list_of_values[0].category_key", is(hearingChannel)))
-            .andExpect(jsonPath("$.list_of_values[0].key", is(key)))
-            .andExpect(jsonPath("$.list_of_values[0].value_en", is(valueEn)))
-            .andExpect(jsonPath("$.list_of_values[0].value_cy", is(valueCy)))
-            .andExpect(jsonPath("$.list_of_values[0].hint_text_en", is(hintTextEn)))
-            .andExpect(jsonPath("$.list_of_values[0].hint_text_cy", is(hintTextCy)))
-            .andExpect(jsonPath("$.list_of_values[0].lov_order", is(lovOrder)))
-            .andExpect(jsonPath("$.list_of_values[0].parent_category", is(parentCategory)))
-            .andExpect(jsonPath("$.list_of_values[0].parent_key", is(parentKey)))
-            .andExpect(jsonPath("$.list_of_values[0].active_flag", is(activeFlag)))
-
-
-            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].category_key", is(hearingChannel)))
-            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].key", is(key)))
-            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].value_en", is(valueEn)))
-            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].value_cy", is(valueCy)))
-            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].hint_text_en", is(hintTextEn)))
-            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].hint_text_cy", is(hintTextCy)))
-            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].lov_order", is(lovOrder)))
-            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].parent_category", is(parentCategory)))
-            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].parent_key", is(parentKey)))
-            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].active_flag", is(activeFlag)))
-            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].child_nodes", is(nullValue())));
-
-
+        //then
+        assertResponseContent(resultActions,categoryList);
         then(crdService).should().retrieveListOfValuesByCategory(any(CategoryRequest.class));
 
     }
 
-    @NotNull
-    private static List<Category> getCategoryList(String hearingChannel, String key, String valueEn, String valueCy,
-                                                  String hintTextEn, String hintTextCy,
-                                                  long lovOrder, String parentCategory,
-                                                  String parentKey, String activeFlag) {
+    @Test
+    @DisplayName("Positive scenario - Should return 200 for valid categoryId and request with isChildRequired :n")
+    void should_return_200_with_categories_for_valid_categoryId_categoryRequest() throws Exception {
 
+        String hearingChannel = "HearingChannel";
+        CategoryRequest request = buildCategoryRequest(null, "BBA3", "1",
+                                                       "1", "5", "n"
+        );
+        List<Category> categoryList = getCategoryList(hearingChannel,request);
+        // given
+        given(crdService.retrieveListOfValuesByCategory(any(CategoryRequest.class))).willReturn(categoryList);
 
-        Category childNodeCategory = new Category();
-        childNodeCategory.setChildNodes(List.of(Category.builder().categoryKey(hearingChannel)
-                                                    .key(key)
-                                                    .valueEn(valueEn)
-                                                    .valueCy(valueCy)
-                                                    .hintTextEn(hintTextEn)
-                                                    .lovOrder(lovOrder)
-                                                    .parentCategory(parentCategory)
-                                                    .parentKey(parentKey)
-                                                    .activeFlag(activeFlag).hintTextCy(hintTextCy).build()));
+        //when
+        ResultActions resultActions = mockMvc.perform(get(
+                "/refdata/commondata//lov/categories/{categoryId}",
+                "HearingChannel"
+            ).queryParam("request", request.getIsChildRequired())
+                                                          .accept(MediaType.APPLICATION_JSON_VALUE))
+            .andDo(print())
+            .andExpect(status().isOk());
 
-        List<Category> categoryList = List.of(Category.builder().categoryKey(hearingChannel)
-                                                  .key(key)
-                                                  .valueEn(valueEn)
-                                                  .valueCy(valueCy)
-                                                  .hintTextEn(hintTextEn)
-                                                  .hintTextCy(hintTextCy)
-                                                  .lovOrder(lovOrder)
-                                                  .parentCategory(parentCategory)
-                                                  .parentKey(parentKey)
-                                                  .activeFlag(activeFlag)
-                                                  .childNodes(childNodeCategory.getChildNodes()).build());
-        return categoryList;
+        //then
+        assertResponseContent(resultActions, categoryList);
+        then(crdService).should().retrieveListOfValuesByCategory(any(CategoryRequest.class));
+
     }
+
+
 
     @Test
     @DisplayName("Negative scenario - Should return 404 when categoryId is NULL")
@@ -219,5 +169,117 @@ class CrdApiControllerTest {
             arguments("XXXX", categoryIdotherThanHearingChannel)
         );
     }
+
+    private static void assertResponseContent(ResultActions resultActions, List<Category> categoryList)
+        throws Exception {
+        final Category parentCategoryListDetails = categoryList.get(0);
+        final Category childCategoryListDetails = categoryList.get(0).getChildNodes().get(0);
+
+        resultActions
+            .andExpect(jsonPath("$.list_of_values", hasSize(1)))
+
+            .andExpect(jsonPath("$.list_of_values[0].category_key", is(parentCategoryListDetails.getCategoryKey())))
+            .andExpect(jsonPath("$.list_of_values[0].key", is(parentCategoryListDetails.getKey())))
+            .andExpect(jsonPath("$.list_of_values[0].value_en", is(parentCategoryListDetails.getValueEn())))
+            .andExpect(jsonPath("$.list_of_values[0].value_cy", is(parentCategoryListDetails.getValueCy())))
+            .andExpect(jsonPath("$.list_of_values[0].hint_text_en", is(parentCategoryListDetails.getHintTextEn())))
+            .andExpect(jsonPath("$.list_of_values[0].hint_text_cy", is(parentCategoryListDetails.getHintTextCy())))
+            .andExpect(jsonPath("$.list_of_values[0].lov_order", is(parentCategoryListDetails.getLovOrder())))
+            .andExpect(jsonPath(
+                "$.list_of_values[0].parent_category",
+                is(parentCategoryListDetails.getParentCategory())
+            ))
+            .andExpect(jsonPath("$.list_of_values[0].parent_key", is(parentCategoryListDetails.getParentKey())))
+            .andExpect(jsonPath("$.list_of_values[0].active_flag", is(parentCategoryListDetails.getActiveFlag())))
+
+
+            .andExpect(jsonPath(
+                "$.list_of_values[0].child_nodes[0].category_key",
+                is(childCategoryListDetails.getCategoryKey())
+            ))
+            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].key", is(childCategoryListDetails.getKey())))
+            .andExpect(jsonPath(
+                "$.list_of_values[0].child_nodes[0].value_en",
+                is(childCategoryListDetails.getValueEn())
+            ))
+            .andExpect(jsonPath(
+                "$.list_of_values[0].child_nodes[0].value_cy",
+                is(childCategoryListDetails.getValueCy())
+            ))
+            .andExpect(jsonPath(
+                "$.list_of_values[0].child_nodes[0].hint_text_en",
+                is(childCategoryListDetails.getHintTextEn())
+            ))
+            .andExpect(jsonPath(
+                "$.list_of_values[0].child_nodes[0].hint_text_cy",
+                is(childCategoryListDetails.getHintTextCy())
+            ))
+            .andExpect(jsonPath(
+                "$.list_of_values[0].child_nodes[0].lov_order",
+                is(childCategoryListDetails.getLovOrder())
+            ))
+            .andExpect(jsonPath(
+                "$.list_of_values[0].child_nodes[0].parent_category",
+                is(childCategoryListDetails.getParentCategory())
+            ))
+            .andExpect(jsonPath(
+                "$.list_of_values[0].child_nodes[0].parent_key",
+                is(childCategoryListDetails.getParentKey())
+            ))
+            .andExpect(jsonPath(
+                "$.list_of_values[0].child_nodes[0].active_flag",
+                is(childCategoryListDetails.getActiveFlag())
+            ))
+            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].child_nodes", is(nullValue())));
+    }
+
+    @NotNull
+    private static List<Category> getCategoryList(String hearingChannel, CategoryRequest request) {
+
+        String valueEn = randomAlphabetic(5);
+        String key = randomAlphabetic(5);
+        String valueCy = randomAlphabetic(5);
+        String hintTextEn = randomAlphabetic(5);
+        String hintTextCy = randomAlphabetic(5);
+        long lovOrder = RandomUtils.nextLong();
+        String parentKey = randomAlphabetic(5);
+        String activeFlag = randomAlphabetic(5);
+        String parentCategory = randomAlphabetic(5);
+
+
+        if ("Y".equalsIgnoreCase(request.getIsChildRequired())) {
+            System.out.println("Value of Key: " + request.getKey());
+            key = request.getKey();
+
+            parentCategory = request.getParentCategory();
+        }
+
+
+        Category childNodeCategory = new Category();
+        childNodeCategory.setChildNodes(List.of(Category.builder().categoryKey(hearingChannel)
+                                                    .key(key)
+                                                    .valueEn(valueEn)
+                                                    .valueCy(valueCy)
+                                                    .hintTextEn(hintTextEn)
+                                                    .lovOrder(lovOrder)
+                                                    .parentKey(parentKey)
+                                                    .parentCategory(parentCategory)
+                                                    .activeFlag(activeFlag)
+                                                    .hintTextCy(hintTextCy).build()));
+
+        List<Category> categoryList = List.of(Category.builder().categoryKey(hearingChannel)
+                                                  .key(key)
+                                                  .valueEn(valueEn)
+                                                  .valueCy(valueCy)
+                                                  .hintTextEn(hintTextEn)
+                                                  .hintTextCy(hintTextCy)
+                                                  .lovOrder(lovOrder)
+                                                  .parentKey(parentKey)
+                                                  .activeFlag(activeFlag)
+                                                  .parentCategory(parentCategory)
+                                                  .childNodes(childNodeCategory.getChildNodes()).build());
+        return categoryList;
+    }
+
 
 }
