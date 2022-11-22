@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import uk.gov.hmcts.reform.cdapi.controllers.request.CategoryRequest;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
 import uk.gov.hmcts.reform.cdapi.exception.InvalidRequestException;
@@ -27,6 +28,7 @@ import java.util.stream.Stream;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.ArgumentMatchers.any;
@@ -53,8 +55,8 @@ class CrdApiControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    @DisplayName("Positive scenario - Should return 200 when passing correct categoryId and request")
-    void should_return_200_with_all_positive_scenario_flags() throws Exception {
+    @DisplayName("Positive scenario - Should return 200 with categories for valid categoryId")
+    void should_return_200_with_categories_for_valid_categoryId() throws Exception {
 
         // given
         String hearingChannel = "HearingChannel";
@@ -86,12 +88,17 @@ class CrdApiControllerTest {
         given(crdService.retrieveListOfValuesByCategory(any(CategoryRequest.class))).willReturn(categoryList);
 
 
-        mockMvc.perform(get("/refdata/commondata//lov/categories/{categoryId}", "HearingChannel")
-                            .accept(MediaType.APPLICATION_JSON_VALUE))
+        ResultActions resultActions = mockMvc.perform(get(
+                "/refdata/commondata//lov/categories/{categoryId}",
+                "HearingChannel"
+            )
+                                                            .accept(MediaType.APPLICATION_JSON_VALUE))
             .andDo(print())
 
             //then
-            .andExpect(status().isOk())
+            .andExpect(status().isOk());
+
+        resultActions
             .andExpect(jsonPath("$.list_of_values", hasSize(1)))
 
             .andExpect(jsonPath("$.list_of_values[0].category_key", is(hearingChannel)))
@@ -115,7 +122,8 @@ class CrdApiControllerTest {
             .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].lov_order", is(lovOrder)))
             .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].parent_category", is(parentCategory)))
             .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].parent_key", is(parentKey)))
-            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].active_flag", is(activeFlag)));
+            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].active_flag", is(activeFlag)))
+            .andExpect(jsonPath("$.list_of_values[0].child_nodes[0].child_nodes", is(nullValue())));
 
 
         then(crdService).should().retrieveListOfValuesByCategory(any(CategoryRequest.class));

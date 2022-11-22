@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.cdapi.controllers;
 
-import org.apache.commons.lang3.RandomUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,9 +14,11 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
 import uk.gov.hmcts.reform.cdapi.domain.Flag;
 import uk.gov.hmcts.reform.cdapi.domain.FlagDetail;
+import uk.gov.hmcts.reform.cdapi.domain.ListOfValue;
 import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
 import uk.gov.hmcts.reform.cdapi.exception.handler.GlobalExceptionHandler;
 import uk.gov.hmcts.reform.cdapi.service.impl.CaseFlagServiceImpl;
@@ -26,7 +27,11 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
+import static org.apache.commons.lang3.RandomUtils.nextBoolean;
+import static org.apache.commons.lang3.RandomUtils.nextInt;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -54,55 +59,107 @@ class CaseFlagApiControllerTest {
 
 
     @Test
-    @DisplayName("Positive scenario -Should return 200 for positive flags of service-id, flag-type and welsh-required")
-    void should_return_200_with_all_positive_scenario_flags() throws Exception {
+    @DisplayName("Positive scenario -Should return 200 with case flags only for service-id")
+    void should_return_200_with_caseFlags_for_serviceId() throws Exception {
 
         //given
-        String name = randomAlphabetic(5);
-        String flagCode = randomAlphabetic(5);
-        int categoryId = RandomUtils.nextInt();
-        int id = RandomUtils.nextInt();
-        boolean flagComment = RandomUtils.nextBoolean();
-        boolean hearingRelevant = RandomUtils.nextBoolean();
-        boolean parent = RandomUtils.nextBoolean();
-        int listOfValueLength = RandomUtils.nextInt();
+        final String serviceId = "XXXX";
+        final String flagType = null;
+        final String welshRequired = null;
 
-
-        CaseFlag caseFlag = getCaseFlag(name, flagCode, categoryId, id, flagComment,
-                                        hearingRelevant, parent, listOfValueLength
-        );
-
-        given(caseFlagService.retrieveCaseFlagByServiceId(anyString(), anyString(), anyString())).willReturn(caseFlag);
+        final CaseFlag caseFlag = getCaseFlag();
+        given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired)).willReturn(caseFlag);
 
         //when
-        mockMvc.perform(
-                get("/refdata/commondata/caseflags/service-id={service-id}", "XXXX")
-                    .queryParam("flag-type", "PARTY")
-                    .queryParam("welsh-required", "Y")
-                    .accept(MediaType.APPLICATION_JSON_VALUE))
-            .andDo(print())
-            //then
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.flags", hasSize(1)))
+        final ResultActions resultActions =
+            mockMvc.perform(
+                    get("/refdata/commondata/caseflags/service-id={service-id}", serviceId)
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andExpect(status().isOk());
 
-            .andExpect(jsonPath("$.flags[0].FlagDetails", hasSize(1)))
-            .andExpect(jsonPath("$.flags[0].FlagDetails[0].name", is(name)))
-            .andExpect(jsonPath("$.flags[0].FlagDetails[0].flagCode", is(flagCode)))
-            .andExpect(jsonPath("$.flags[0].FlagDetails[0].flagComment", is(flagComment)))
-            .andExpect(jsonPath("$.flags[0].FlagDetails[0].hearingRelevant", is(hearingRelevant)))
-            .andExpect(jsonPath("$.flags[0].FlagDetails[0].listOfValuesLength", is(listOfValueLength)))
-            .andExpect(jsonPath("$.flags[0].FlagDetails[0].isParent", is(parent)))
+        //then
+        assertResponseContent(resultActions, caseFlag);
+        then(caseFlagService).should().retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired);
+    }
 
+    @Test
+    @DisplayName("Positive scenario -Should return 200 with case flags for service-id and flag-type")
+    void should_return_200_with_caseFlags_for_serviceId_and_flagType() throws Exception {
 
+        //given
+        final String serviceId = "XXXX";
+        final String flagType = "CASE";
+        final String welshRequired = null;
 
-            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags", hasSize(1)))
-            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].name", is(name)))
-            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].flagCode", is(flagCode)))
-            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].isParent", is(parent)))
-            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].hearingRelevant", is(hearingRelevant)))
-            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].flagComment", is(flagComment)));
+        final CaseFlag caseFlag = getCaseFlag();
+        given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired)).willReturn(caseFlag);
 
-        then(caseFlagService).should().retrieveCaseFlagByServiceId(anyString(), anyString(), anyString());
+        //when
+        final ResultActions resultActions =
+            mockMvc.perform(
+                    get("/refdata/commondata/caseflags/service-id={service-id}", serviceId)
+                        .queryParam("flag-type", flagType)
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        //then
+        assertResponseContent(resultActions, caseFlag);
+        then(caseFlagService).should().retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired);
+    }
+
+    @Test
+    @DisplayName("Positive scenario -Should return 200 with case flags for service-id and welsh-required")
+    void should_return_200_with_caseFlags_for_serviceId_and_welshRequired() throws Exception {
+
+        //given
+        final String serviceId = "XXXX";
+        final String flagType = null;
+        final String welshRequired = "Y";
+
+        final CaseFlag caseFlag = getCaseFlag();
+        given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired)).willReturn(caseFlag);
+
+        //when
+        final ResultActions resultActions =
+            mockMvc.perform(
+                    get("/refdata/commondata/caseflags/service-id={service-id}", serviceId)
+                        .queryParam("welsh-required", welshRequired)
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        //then
+        assertResponseContent(resultActions, caseFlag);
+        then(caseFlagService).should().retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired);
+    }
+
+    @Test
+    @DisplayName("Positive scenario -Should return 200 with case flags for service-id, flag-type and welsh-required")
+    void should_return_200_with_caseFlags_For_serviceId_flagType_welshRequired() throws Exception {
+
+        //given
+        final String serviceId = "XXXX";
+        final CaseFlag caseFlag = getCaseFlag();
+        final String flagType = "PARTY";
+        final String welshRequired = "Y";
+
+        given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired)).willReturn(caseFlag);
+
+        //when
+        final ResultActions resultActions =
+            mockMvc.perform(
+                    get("/refdata/commondata/caseflags/service-id={service-id}", serviceId)
+                        .queryParam("flag-type", flagType)
+                        .queryParam("welsh-required", welshRequired)
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        //then
+        assertResponseContent(resultActions, caseFlag);
+        then(caseFlagService).should().retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired);
     }
 
     @Test
@@ -133,9 +190,9 @@ class CaseFlagApiControllerTest {
     @MethodSource("invalidScenarios")
     @DisplayName("Negative scenario - Should return 400 case flags for given service-id, flag-type and welsh-required")
     void should_return_400_for_all_negative_serviceId_flagType_Welsh_required(final String serviceId,
-                                                                               final String flagType,
-                                                                               final String welshRequired,
-                                                                               final String expectedErrorDescription)
+                                                                              final String flagType,
+                                                                              final String welshRequired,
+                                                                              final String expectedErrorDescription)
         throws Exception {
 
         //when
@@ -157,11 +214,63 @@ class CaseFlagApiControllerTest {
             ));
     }
 
+    private void assertResponseContent(final ResultActions resultActions,
+                                       final CaseFlag caseFlag) throws Exception {
+        final FlagDetail parentFlagDetail = caseFlag.getFlags().get(0).getFlagDetails().get(0);
+        final FlagDetail childFlagDetail = parentFlagDetail.getChildFlags().get(0);
+        final ListOfValue parentListOfValue = parentFlagDetail.getListOfValues().get(0);
+        final ListOfValue childListOfValue = childFlagDetail.getListOfValues().get(0);
+
+        resultActions
+            .andExpect(jsonPath("$.flags", hasSize(1)))
+            .andExpect(jsonPath("$.flags[0].FlagDetails", hasSize(1)))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].name", is(parentFlagDetail.getName())))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].hearingRelevant", is(parentFlagDetail.getHearingRelevant())))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].flagComment", is(parentFlagDetail.getFlagComment())))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].flagCode", is(parentFlagDetail.getFlagCode())))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].isParent", is(parentFlagDetail.getParent())))
+            .andExpect(jsonPath(
+                "$.flags[0].FlagDetails[0].listOfValuesLength",
+                is(parentFlagDetail.getListOfValuesLength())
+            ))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].listOfValuesLength", is(notNullValue())))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].listOfValues", hasSize(1)))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].listOfValues[0].key", is(parentListOfValue.getKey())))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].listOfValues[0].value", is(parentListOfValue.getValue())))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].Path", is(nullValue())))
+
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags", hasSize(1)))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].name", is(childFlagDetail.getName())))
+            .andExpect(jsonPath(
+                "$.flags[0].FlagDetails[0].childFlags[0].hearingRelevant",
+                is(childFlagDetail.getHearingRelevant())
+            ))
+            .andExpect(jsonPath(
+                "$.flags[0].FlagDetails[0].childFlags[0].flagComment",
+                is(childFlagDetail.getFlagComment())
+            ))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].flagCode", is(childFlagDetail.getFlagCode())))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].isParent", is(childFlagDetail.getParent())))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].childFlags", hasSize(0)))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].listOfValuesLength", is(notNullValue())))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].listOfValues", hasSize(1)))
+            .andExpect(jsonPath(
+                "$.flags[0].FlagDetails[0].childFlags[0].listOfValues[0].key",
+                is(childListOfValue.getKey())
+            ))
+            .andExpect(jsonPath(
+                "$.flags[0].FlagDetails[0].childFlags[0].listOfValues[0].value",
+                is(childListOfValue.getValue())
+            ))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].isParent", is(childFlagDetail.getParent())))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].Path", is(nullValue())));
+    }
 
     private static Stream<Arguments> invalidScenarios() {
         final String serviceIdErrorDesc = "service Id can not be null or empty";
         final String flagTypeErrorDesc = "Allowed values are PARTY or CASE";
         final String welshRequiredErrorDesc = "Allowed values are Y or N";
+
         return Stream.of(
             arguments("", "PARTY", "Y", serviceIdErrorDesc),
             arguments(null, "PARTY", "Y", serviceIdErrorDesc),
@@ -171,33 +280,40 @@ class CaseFlagApiControllerTest {
     }
 
     @NotNull
-    private CaseFlag getCaseFlag(String name, String flagCode, int categoryId, int id, boolean flagComment,
-                                 boolean hearingRelevant, boolean parent, int listOfValueLength) {
-        final CaseFlag caseFlag = new CaseFlag();
-        final Flag flag = new Flag();
-        final FlagDetail flagDetail = new FlagDetail();
+    private CaseFlag getCaseFlag() {
 
-        flagDetail.setFlagCode(flagCode);
-        flagDetail.setName(name);
-        flagDetail.setCateGoryId(categoryId);
-        flagDetail.setId(id);
-        flagDetail.setFlagComment(flagComment);
-        flagDetail.setHearingRelevant(hearingRelevant);
-        flagDetail.setParent(parent);
-        flagDetail.setListOfValuesLength(listOfValueLength);
-        flag.setFlagDetails(List.of(flagDetail));
+        final ListOfValue listOfValue = new ListOfValue();
+        listOfValue.setValue(randomAlphabetic(5));
+        listOfValue.setId(randomAlphabetic(5));
+        listOfValue.setKey(randomAlphabetic(5));
 
-        final FlagDetail childFlagDetail = new FlagDetail();
-        childFlagDetail.setFlagCode(flagCode);
-        childFlagDetail.setName(name);
-        childFlagDetail.setParent(parent);
-        childFlagDetail.setFlagComment(flagComment);
-        childFlagDetail.setHearingRelevant(hearingRelevant);
+        final FlagDetail childFlagDetail = FlagDetail.builder()
+            .id(nextInt())
+            .flagCode(randomAlphabetic(5))
+            .name(randomAlphabetic(5))
+            .cateGoryId(nextInt())
+            .flagComment(nextBoolean())
+            .hearingRelevant(nextBoolean())
+            .parent(nextBoolean())
+            .listOfValues(List.of(listOfValue))
+            .listOfValuesLength(nextInt())
+            .build();
 
+        final FlagDetail parentFlagDetail = FlagDetail.builder()
+            .id(nextInt())
+            .flagCode(randomAlphabetic(5))
+            .name(randomAlphabetic(5))
+            .cateGoryId(nextInt())
+            .flagComment(nextBoolean())
+            .hearingRelevant(nextBoolean())
+            .parent(nextBoolean())
+            .listOfValues(List.of(listOfValue))
+            .listOfValuesLength(nextInt())
+            .childFlags(List.of(childFlagDetail))
+            .build();
 
-        flagDetail.setChildFlags(List.of(childFlagDetail));
+        final Flag flag = Flag.builder().flagDetails(List.of(parentFlagDetail)).build();
 
-        caseFlag.setFlags(List.of(flag));
-        return caseFlag;
+        return CaseFlag.builder().flags(List.of(flag)).build();
     }
 }
