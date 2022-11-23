@@ -72,12 +72,13 @@ class CrdApiControllerTest {
         //when
         ResultActions resultActions = mockMvc.perform(get(
                 "/refdata/commondata/lov/categories/{categoryId}",
-                request.getCategoryId())
-                                                          .queryParam("serviceId",request.getServiceId())
-                                                          .queryParam("key",request.getKey())
-                                                          .queryParam("parentKey",request.getParentKey())
-                                                          .queryParam("parentCategory",request.getParentCategory())
-                                                          .queryParam("isChildRequired",request.getIsChildRequired())
+                request.getCategoryId()
+            )
+                                                          .queryParam("serviceId", request.getServiceId())
+                                                          .queryParam("key", request.getKey())
+                                                          .queryParam("parentKey", request.getParentKey())
+                                                          .queryParam("parentCategory", request.getParentCategory())
+                                                          .queryParam("isChildRequired", request.getIsChildRequired())
                                                           .accept(MediaType.APPLICATION_JSON_VALUE))
             .andDo(print())
             .andExpect(status().isOk());
