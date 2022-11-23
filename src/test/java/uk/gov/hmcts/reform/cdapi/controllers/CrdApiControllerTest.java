@@ -60,7 +60,7 @@ class CrdApiControllerTest {
     void should_return_200_with_categories_for_valid_categoryId_and_request() throws Exception {
 
         String hearingChannel = "HearingChannel";
-        CategoryRequest request = buildCategoryRequest(null, "BBA3", "1",
+        CategoryRequest request = buildCategoryRequest("HearingChannel", "BBA3", "1",
                                                        "1", "5", "y"
         );
 
@@ -71,8 +71,13 @@ class CrdApiControllerTest {
 
         //when
         ResultActions resultActions = mockMvc.perform(get(
-                "/refdata/commondata//lov/categories/{categoryId}",
-                "HearingChannel")
+                "/refdata/commondata/lov/categories/{categoryId}",
+                request.getCategoryId())
+                                                          .queryParam("serviceId",request.getServiceId())
+                                                          .queryParam("key",request.getKey())
+                                                          .queryParam("parentKey",request.getParentKey())
+                                                          .queryParam("parentCategory",request.getParentCategory())
+                                                          .queryParam("isChildRequired",request.getIsChildRequired())
                                                           .accept(MediaType.APPLICATION_JSON_VALUE))
             .andDo(print())
             .andExpect(status().isOk());
@@ -88,7 +93,7 @@ class CrdApiControllerTest {
     void should_return_200_with_categories_for_valid_categoryId_categoryRequest() throws Exception {
 
         String hearingChannel = "HearingChannel";
-        CategoryRequest request = buildCategoryRequest(null, "BBA3", "1",
+        CategoryRequest request = buildCategoryRequest("HearingChannel", "BBA3", "1",
                                                        "1", "5", "n"
         );
         List<Category> categoryList = getCategoryList(hearingChannel,request);
@@ -97,9 +102,13 @@ class CrdApiControllerTest {
 
         //when
         ResultActions resultActions = mockMvc.perform(get(
-                "/refdata/commondata//lov/categories/{categoryId}",
-                "HearingChannel"
-            ).queryParam("request", request.getIsChildRequired())
+                "/refdata/commondata/lov/categories/{categoryId}",
+                request.getCategoryId()
+            ).queryParam("serviceId",request.getServiceId())
+                                                          .queryParam("key",request.getKey())
+                                                          .queryParam("parentKey",request.getParentKey())
+                                                          .queryParam("parentCategory",request.getParentCategory())
+                                                          .queryParam("isChildRequired",request.getIsChildRequired())
                                                           .accept(MediaType.APPLICATION_JSON_VALUE))
             .andDo(print())
             .andExpect(status().isOk());
