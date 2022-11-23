@@ -287,7 +287,7 @@ class CaseFlagApiControllerTest {
         listOfValue.setId(randomAlphabetic(5));
         listOfValue.setKey(randomAlphabetic(5));
 
-        final FlagDetail childFlagDetail =
+        final FlagDetail.FlagDetailBuilder flagDetailBuilder =
             FlagDetail.builder()
                 .id(nextInt())
                 .flagCode(randomAlphabetic(5))
@@ -297,23 +297,10 @@ class CaseFlagApiControllerTest {
                 .hearingRelevant(nextBoolean())
                 .parent(nextBoolean())
                 .listOfValues(List.of(listOfValue))
-                .listOfValuesLength(nextInt())
-                .build();
+                .listOfValuesLength(nextInt());
 
-        final FlagDetail parentFlagDetail =
-            FlagDetail.builder()
-                .id(nextInt())
-                .flagCode(randomAlphabetic(5))
-                .name(randomAlphabetic(5))
-                .cateGoryId(nextInt())
-                .flagComment(nextBoolean())
-                .hearingRelevant(nextBoolean())
-                .parent(nextBoolean())
-                .listOfValues(List.of(listOfValue))
-                .listOfValuesLength(nextInt())
-                .childFlags(List.of(childFlagDetail))
-                .build();
-
+        final FlagDetail childFlagDetail = flagDetailBuilder.build();
+        final FlagDetail parentFlagDetail = flagDetailBuilder.childFlags(List.of(childFlagDetail)).build();
         final Flag flag = Flag.builder().flagDetails(List.of(parentFlagDetail)).build();
 
         return CaseFlag.builder().flags(List.of(flag)).build();

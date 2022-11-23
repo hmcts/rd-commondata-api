@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.cdapi.controllers;
 
-import org.apache.commons.lang3.RandomUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,6 +21,7 @@ import uk.gov.hmcts.reform.cdapi.service.impl.CrdServiceImpl;
 import java.util.List;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
+import static org.apache.commons.lang3.RandomUtils.nextLong;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -277,29 +277,19 @@ class CrdApiControllerTest {
     private static List<Category> createCategoryList(final String categoryId,
                                                      final boolean isChildRequired) {
 
-        final String valueEn = randomAlphabetic(5);
-        final String key = randomAlphabetic(5);
-        final String valueCy = randomAlphabetic(5);
-        final String hintTextEn = randomAlphabetic(5);
-        final String hintTextCy = randomAlphabetic(5);
-        final long lovOrder = RandomUtils.nextLong();
-        final String parentKey = randomAlphabetic(5);
-        final String activeFlag = randomAlphabetic(5);
-        final String parentCategory = randomAlphabetic(5);
-
         final Category.CategoryBuilder categoryBuilder =
             Category
                 .builder()
                 .categoryKey(categoryId)
-                .key(key)
-                .valueEn(valueEn)
-                .valueCy(valueCy)
-                .hintTextEn(hintTextEn)
-                .hintTextCy(hintTextCy)
-                .lovOrder(lovOrder)
-                .parentKey(parentKey)
-                .activeFlag(activeFlag)
-                .parentCategory(parentCategory);
+                .key(randomAlphabetic(5))
+                .valueEn(randomAlphabetic(5))
+                .valueCy(randomAlphabetic(5))
+                .hintTextEn(randomAlphabetic(5))
+                .hintTextCy(randomAlphabetic(5))
+                .lovOrder(nextLong())
+                .parentKey(randomAlphabetic(5))
+                .activeFlag(randomAlphabetic(5))
+                .parentCategory(randomAlphabetic(5));
 
         if (isChildRequired) {
             categoryBuilder.childNodes(List.of(categoryBuilder.categoryKey("Sub".concat(categoryId)).build()));
