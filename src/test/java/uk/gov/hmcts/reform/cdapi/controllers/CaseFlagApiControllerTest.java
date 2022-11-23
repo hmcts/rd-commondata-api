@@ -67,7 +67,7 @@ class CaseFlagApiControllerTest {
         final String flagType = null;
         final String welshRequired = null;
 
-        final CaseFlag caseFlag = getCaseFlag();
+        final CaseFlag caseFlag = createCaseFlag();
         given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired)).willReturn(caseFlag);
 
         //when
@@ -92,7 +92,7 @@ class CaseFlagApiControllerTest {
         final String flagType = "CASE";
         final String welshRequired = null;
 
-        final CaseFlag caseFlag = getCaseFlag();
+        final CaseFlag caseFlag = createCaseFlag();
         given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired)).willReturn(caseFlag);
 
         //when
@@ -118,7 +118,7 @@ class CaseFlagApiControllerTest {
         final String flagType = null;
         final String welshRequired = "Y";
 
-        final CaseFlag caseFlag = getCaseFlag();
+        final CaseFlag caseFlag = createCaseFlag();
         given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired)).willReturn(caseFlag);
 
         //when
@@ -141,7 +141,7 @@ class CaseFlagApiControllerTest {
 
         //given
         final String serviceId = "XXXX";
-        final CaseFlag caseFlag = getCaseFlag();
+        final CaseFlag caseFlag = createCaseFlag();
         final String flagType = "PARTY";
         final String welshRequired = "Y";
 
@@ -280,37 +280,39 @@ class CaseFlagApiControllerTest {
     }
 
     @NotNull
-    private CaseFlag getCaseFlag() {
+    private CaseFlag createCaseFlag() {
 
         final ListOfValue listOfValue = new ListOfValue();
         listOfValue.setValue(randomAlphabetic(5));
         listOfValue.setId(randomAlphabetic(5));
         listOfValue.setKey(randomAlphabetic(5));
 
-        final FlagDetail childFlagDetail = FlagDetail.builder()
-            .id(nextInt())
-            .flagCode(randomAlphabetic(5))
-            .name(randomAlphabetic(5))
-            .cateGoryId(nextInt())
-            .flagComment(nextBoolean())
-            .hearingRelevant(nextBoolean())
-            .parent(nextBoolean())
-            .listOfValues(List.of(listOfValue))
-            .listOfValuesLength(nextInt())
-            .build();
+        final FlagDetail childFlagDetail =
+            FlagDetail.builder()
+                .id(nextInt())
+                .flagCode(randomAlphabetic(5))
+                .name(randomAlphabetic(5))
+                .cateGoryId(nextInt())
+                .flagComment(nextBoolean())
+                .hearingRelevant(nextBoolean())
+                .parent(nextBoolean())
+                .listOfValues(List.of(listOfValue))
+                .listOfValuesLength(nextInt())
+                .build();
 
-        final FlagDetail parentFlagDetail = FlagDetail.builder()
-            .id(nextInt())
-            .flagCode(randomAlphabetic(5))
-            .name(randomAlphabetic(5))
-            .cateGoryId(nextInt())
-            .flagComment(nextBoolean())
-            .hearingRelevant(nextBoolean())
-            .parent(nextBoolean())
-            .listOfValues(List.of(listOfValue))
-            .listOfValuesLength(nextInt())
-            .childFlags(List.of(childFlagDetail))
-            .build();
+        final FlagDetail parentFlagDetail =
+            FlagDetail.builder()
+                .id(nextInt())
+                .flagCode(randomAlphabetic(5))
+                .name(randomAlphabetic(5))
+                .cateGoryId(nextInt())
+                .flagComment(nextBoolean())
+                .hearingRelevant(nextBoolean())
+                .parent(nextBoolean())
+                .listOfValues(List.of(listOfValue))
+                .listOfValuesLength(nextInt())
+                .childFlags(List.of(childFlagDetail))
+                .build();
 
         final Flag flag = Flag.builder().flagDetails(List.of(parentFlagDetail)).build();
 
