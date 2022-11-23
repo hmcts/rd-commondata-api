@@ -59,7 +59,7 @@ class CrdApiControllerTest {
     @DisplayName("Positive scenario - Should return 200 for valid categoryId and request with isChildRequired :y")
     void should_return_200_with_categories_for_valid_categoryId_and_request() throws Exception {
 
-        String hearingChannel = "HearingChannel";
+        final String hearingChannel = "HearingChannel";
         CategoryRequest request = buildCategoryRequest("HearingChannel", "BBA3", "1",
                                                        "1", "5", "y"
         );
