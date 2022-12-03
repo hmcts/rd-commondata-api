@@ -90,7 +90,7 @@ security:
     - "/csrf"
     - "/error"
     - "/favicon.ico"
-
+    - "/refdata/elinks/api/v4/proxy/**"
 idam:
   s2s-auth:
     totp_secret: ${COMMONDATA_API_S2S_SECRET:}
