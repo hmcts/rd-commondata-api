@@ -11,4 +11,10 @@ public class ElinksServiceImpl implements ElinkService {
         return null;
     }
 
+    @Override
+    public ResponseEntity<Object> retrieveLocation(String baseLocation) {
+        return null;
+    }
+
+
 }

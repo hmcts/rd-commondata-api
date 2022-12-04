@@ -6,4 +6,6 @@ public interface ElinkService {
 
     ResponseEntity<Object> retrieveBaseLocation(String baseLocation);
 
+    ResponseEntity<Object> retrieveLocation(String baseLocation);
+
 }
