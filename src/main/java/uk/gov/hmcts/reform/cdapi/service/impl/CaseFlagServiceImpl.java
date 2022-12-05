@@ -187,9 +187,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         childFlag.setChildFlags(null);
         int listOfValuesSize = ObjectUtils.isNotEmpty(listOfValues) ? listOfValues.size() : null;
         if (!isWelshRequired && listOfValuesSize > 0) {
-            listOfValues.forEach(lov -> {
-                lov.setValueCy(null);
-            });
+            listOfValues.forEach(lov -> lov.setValueCy(null));
         }
         childFlag.setListOfValuesLength(listOfValuesSize);
         childFlag.setListOfValues(listOfValues);
