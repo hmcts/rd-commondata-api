@@ -64,3 +64,7 @@ launchdarkly:
     key: ${LD_SDK_KEY:test}
     environment: ${LAUNCH_DARKLY_ENV:local}
     user: rd
+
+elinksApiKey: ${judicial_api_elinks_api_key:}
+#URL not tested , code is for developers reference
+elinksUrl: ${ELINKS_URL:https://jo-staging.elinks.judiciary.uk/api/v4}
