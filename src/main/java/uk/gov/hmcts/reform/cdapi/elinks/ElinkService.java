@@ -4,8 +4,8 @@ import org.springframework.http.ResponseEntity;
 
 public interface ElinkService {
 
-    ResponseEntity<Object> retrieveBaseLocation(String baseLocation);
+    ResponseEntity<Object> retrieveBaseLocation();
 
-    ResponseEntity<Object> retrieveLocation(String baseLocation);
+    ResponseEntity<Object> retrieveLocation();
 
 }

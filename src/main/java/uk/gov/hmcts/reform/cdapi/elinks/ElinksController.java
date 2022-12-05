@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Authorization;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +20,15 @@ import static org.springframework.http.ResponseEntity.ok;
 )
 public class ElinksController {
 
+    @Autowired
+    ElinkService elinkService;
+
+
     @ApiOperation(
         value = "Elinks API will be used to retrieve the list of location.",
 
         authorizations = {
-            @Authorization(value = "ServiceAuthorization"),
-            @Authorization(value = "Authorization")
+            @Authorization(value = "ServiceAuthorization")
         }
     )
     @ApiResponses({
@@ -55,8 +59,7 @@ public class ElinksController {
         value = "Elinks API will be used to retrieve the list of base location.",
 
         authorizations = {
-            @Authorization(value = "ServiceAuthorization"),
-            @Authorization(value = "Authorization")
+            @Authorization(value = "ServiceAuthorization")
         }
     )
     @ApiResponses({
