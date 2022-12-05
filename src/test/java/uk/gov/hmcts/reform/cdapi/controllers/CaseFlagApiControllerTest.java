@@ -151,7 +151,8 @@ class CaseFlagApiControllerTest {
     }
 
     @Test
-    @DisplayName("Positive scenario -Should return 200 with case flags for service-id, flag-type, welsh-required=y, availableExternally=y")
+    @DisplayName("Positive scenario -Should return 200 with case flags for service-id, flag-type, "
+        +"welsh-required=y, availableExternally=y")
     void should_return_200_with_caseFlags_For_serviceId_flagType_welshRequired_availableExternallyIsY()
         throws Exception {
 
