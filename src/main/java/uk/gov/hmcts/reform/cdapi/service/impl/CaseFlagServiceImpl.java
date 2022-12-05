@@ -172,14 +172,15 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                 throw new InvalidRequestException("invalid lov flag");
         }
         childFlag.setChildFlags(null);
-        if (!isWelshRequired && listOfValues != null && listOfValues.size() > 0) {
+        int listOfValuesSize = listOfValues!=null?listOfValues.size():null;
+        if (!isWelshRequired && listOfValuesSize > 0) {
             listOfValues.forEach(lov -> {
                 lov.setValueCy(null);
             });
         }
-        childFlag.setListOfValuesLength(listOfValues.size());
+        childFlag.setListOfValuesLength(listOfValuesSize);
         childFlag.setListOfValues(listOfValues);
-        log.info("Added Lov: " + listOfValues.size());
+        log.info("Added Lov: " + listOfValuesSize);
     }
 
     /**
