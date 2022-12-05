@@ -157,7 +157,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
      * Retrieve list of values based on switch condition.
      *
      * @param childFlag               flag detail object
-     * @param isWelshRequired
+     * @param isWelshRequired               welsh flag
      */
     private void retrieveListOfValues(FlagDetail childFlag, boolean isWelshRequired) {
         List<ListOfValue> listOfValues;
