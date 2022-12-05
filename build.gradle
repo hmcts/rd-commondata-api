@@ -262,6 +262,7 @@ sonarqube {
     property "sonar.pitest.reportsDirectory", "build/reports/pitest"
     property "sonar.exclusions", "src/main/java/uk/gov/hmcts/reform/cdapi/config/**," +
       "src/main/java/uk/gov/hmcts/reform/cdapi/CommonDataApplication.java," +
+      "src/main/java/uk/gov/hmcts/reform/cdapi/elinks/**," +
       "src/main/java/uk/gov/hmcts/reform/cdapi/domain/**"
   }
 }
