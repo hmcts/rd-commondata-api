@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.cdapi.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -160,7 +161,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
      * @param isWelshRequired               welsh flag
      */
     private void retrieveListOfValues(FlagDetail childFlag, boolean isWelshRequired) {
-        List<ListOfValue> listOfValues = null;
+        List<ListOfValue> listOfValues;
         switch (childFlag.getFlagCode()) {
             case FLAG_PF0015:
                 listOfValues = listOfVenueRepository.findListOfValues(CATEGORY_KEY_LANGUAGE_INTERPRETER);
@@ -172,7 +173,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                 throw new InvalidRequestException("invalid lov flag");
         }
         childFlag.setChildFlags(null);
-        int listOfValuesSize = listOfValues != null ? listOfValues.size() : null;
+        int listOfValuesSize = ObjectUtils.isNotEmpty(listOfValues) ? listOfValues.size() : null;
         if (!isWelshRequired && listOfValuesSize > 0) {
             listOfValues.forEach(lov -> {
                 lov.setValueCy(null);
