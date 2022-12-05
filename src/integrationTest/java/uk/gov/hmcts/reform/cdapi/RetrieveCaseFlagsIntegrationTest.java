@@ -132,10 +132,10 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
             assertEquals(false, flagDetail.getExternallyAvailable() == null);
             assertEquals(false, flagDetail.getDefaultStatus() == null);
             if (flagDetail.getParent()) {
-                flagDetail.getChildFlags().forEach(cf -> assertNull(cf.getName_cy()));
+                flagDetail.getChildFlags().forEach(cf -> assertNull(cf.getNameCy()));
                 flagDetail.getChildFlags().forEach(cf -> {
                     if (cf.getListOfValuesLength() != null && cf.getListOfValuesLength() > 0) {
-                        cf.getListOfValues().forEach(lov -> assertNull(lov.getValue_cy()));
+                        cf.getListOfValues().forEach(lov -> assertNull(lov.getValueCy()));
                     }
                 });
             }
@@ -156,7 +156,7 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
             if (flagDetail.getParent()) {
                 flagDetail.getChildFlags().forEach(cf -> {
                     if (!cf.getName().equalsIgnoreCase("Other")) {
-                        assertNotNull(cf.getName_cy());
+                        assertNotNull(cf.getNameCy());
                         assertNotNull(cf.getExternallyAvailable());
                         assertNotNull(cf.getDefaultStatus());
                     }
@@ -182,12 +182,12 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
                 for (FlagDetail childFlag : flagDetail.getChildFlags()) {
                     //child flag
                     if (childFlag.getFlagCode().equalsIgnoreCase("PF0027")) {
-                        assertEquals("Test27", childFlag.getName_cy());
+                        assertEquals("Test27", childFlag.getNameCy());
                     }
                     //List Of Values
                     if (childFlag.getFlagCode().equals("PF0015")) {
                         assertEquals(1, childFlag.getListOfValuesLength());
-                        assertEquals("test2", childFlag.getListOfValues().get(0).getValue_cy());
+                        assertEquals("test2", childFlag.getListOfValues().get(0).getValueCy());
                     }
                 }
             }

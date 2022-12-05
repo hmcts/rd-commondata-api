@@ -20,5 +20,5 @@ public class ListOfValue {
     private String value;
     @Column(name = "value_cy")
     @JsonProperty("value_cy")
-    private String value_cy;
+    private String valueCy;
 }

@@ -301,7 +301,7 @@ class CaseFlagApiControllerTest {
                 .parent(nextBoolean())
                 .defaultStatus("Active")
                 .externallyAvailable(true)
-                .name_cy("Test")
+                .nameCy("Test")
                 .listOfValues(List.of(listOfValue))
                 .listOfValuesLength(nextInt());
 

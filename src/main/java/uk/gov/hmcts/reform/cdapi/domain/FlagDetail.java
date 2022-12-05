@@ -25,7 +25,8 @@ public class FlagDetail {
     private Boolean flagComment;
     private String defaultStatus;
     private Boolean externallyAvailable;
-    private String name_cy;
+    @JsonProperty("name_cy")
+    private String nameCy;
     private String flagCode;
     @JsonIgnore
     private Integer cateGoryId;

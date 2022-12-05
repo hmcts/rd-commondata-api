@@ -139,7 +139,7 @@ class CaseFlagServiceImplTest {
         verify(caseFlagRepository, times(1)).findAll(anyString());
         caseFlag.getFlags().forEach(caseFlagObj -> {
             for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
-                assertNotNull(flagDetail.getName_cy());
+                assertNotNull(flagDetail.getNameCy());
                 assertNotNull(flagDetail.getDefaultStatus());
                 assertNotNull(flagDetail.getExternallyAvailable());
             }
@@ -156,7 +156,7 @@ class CaseFlagServiceImplTest {
         verify(caseFlagRepository, times(1)).findAll(anyString());
         caseFlag.getFlags().forEach(caseFlagObj -> {
             for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
-                assertNull(flagDetail.getName_cy());
+                assertNull(flagDetail.getNameCy());
                 assertNotNull(flagDetail.getDefaultStatus());
                 assertNotNull(flagDetail.getExternallyAvailable());
             }
@@ -173,7 +173,7 @@ class CaseFlagServiceImplTest {
         verify(caseFlagRepository, times(1)).findAll(anyString());
         caseFlag.getFlags().forEach(caseFlagObj->{
             for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
-                assertNull(flagDetail.getName_cy());
+                assertNull(flagDetail.getNameCy());
                 assertNotNull(flagDetail.getDefaultStatus());
                 assertNotNull(flagDetail.getExternallyAvailable());
                 assertTrue(flagDetail.getExternallyAvailable());
@@ -191,7 +191,7 @@ class CaseFlagServiceImplTest {
         verify(caseFlagRepository, times(1)).findAll(anyString());
         caseFlag.getFlags().forEach(caseFlagObj->{
             for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
-                assertNotNull(flagDetail.getName_cy());
+                assertNotNull(flagDetail.getNameCy());
                 assertNotNull(flagDetail.getDefaultStatus());
                 assertNotNull(flagDetail.getExternallyAvailable());
             }
@@ -346,9 +346,9 @@ class CaseFlagServiceImplTest {
         list.setKey("EN");
         list.setValue("ENGLISH");
         if(isWelshRequired){
-            list.setValue_cy("CY ENGLISH");
+            list.setValueCy("CY ENGLISH");
         }else {
-            list.setValue_cy(null);
+            list.setValueCy(null);
         }
 
         var listOfValues = new ArrayList<ListOfValue>();
@@ -362,9 +362,9 @@ class CaseFlagServiceImplTest {
         list.setKey("AF");
         list.setValue("AFRICAN");
         if(isWelshRequired){
-            list.setValue_cy("CY AFRICAN");
+            list.setValueCy("CY AFRICAN");
         }else {
-            list.setValue_cy(null);
+            list.setValueCy(null);
         }
         var listOfValues = new ArrayList<ListOfValue>();
         listOfValues.add(list);

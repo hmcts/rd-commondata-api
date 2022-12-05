@@ -91,7 +91,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                     .id(caseFlagDto.getId())
                     .cateGoryId(caseFlagDto.getCategoryId());
                 if (isWelshRequired) {
-                    flagDetail.name_cy(caseFlagDto.getValueCy())
+                    flagDetail.nameCy(caseFlagDto.getValueCy())
                         .defaultStatus(caseFlagDto.getDefaultStatus())
                         .externallyAvailable(caseFlagDto.getExternallyAvailable());
                 } else {
@@ -136,7 +136,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                     .cateGoryId(caseFlagDto.getCategoryId())
                     .id(caseFlagDto.getId());
                 if (isWelshRequired) {
-                    childFlag.name_cy(caseFlagDto.getValueCy())
+                    childFlag.nameCy(caseFlagDto.getValueCy())
                         .defaultStatus(caseFlagDto.getDefaultStatus())
                         .externallyAvailable(caseFlagDto.getExternallyAvailable());
                 } else {
@@ -174,7 +174,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         childFlag.setChildFlags(null);
         if (!isWelshRequired && listOfValues != null && listOfValues.size() > 0) {
             listOfValues.forEach(lov -> {
-                lov.setValue_cy(null);
+                lov.setValueCy(null);
             });
         }
         childFlag.setListOfValuesLength(listOfValues.size());
