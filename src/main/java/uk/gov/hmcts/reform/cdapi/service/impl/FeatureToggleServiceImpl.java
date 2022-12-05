@@ -11,7 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 
-import static uk.gov.hmcts.reform.cdapi.elinks.ElinksConstants.RD_ELINKS_API_PROXY;
+import static uk.gov.hmcts.reform.cdapi.elinks.util.RefDataConstants.RD_ELINKS_API_PROXY;
+
 
 @Service
 public class FeatureToggleServiceImpl implements FeatureToggleService {
