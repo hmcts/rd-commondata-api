@@ -7,6 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -151,7 +152,7 @@ class CaseFlagApiControllerTest {
 
     @Test
     @DisplayName("Positive scenario -Should return 200 with case flags for service-id, flag-type, "
-        +"welsh-required=y, availableExternally=y")
+        + "welsh-required=y, availableExternally=y")
     void should_return_200_with_caseFlags_For_serviceId_flagType_welshRequired_availableExternallyIsY()
         throws Exception {
 
@@ -242,6 +243,8 @@ class CaseFlagApiControllerTest {
 
     @InjectMocks
     CaseFlagApiController caseFlagApiController;
+    @Mock
+    CaseFlagServiceImpl caseFlagServiceTmp;
 
     @Test
     void testGetCaseFlag_ByLowerCaseFlagType_Returns200() {
@@ -251,8 +254,8 @@ class CaseFlagApiControllerTest {
             );
         assertNotNull(responseEntity);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        verify(caseFlagService, times(1))
-            .retrieveCaseFlagByServiceId("XXXX", "case", "N","N");
+        verify(caseFlagServiceTmp, times(1))
+            .retrieveCaseFlagByServiceId("XXXX", "case", "N", "N");
     }
 
 
