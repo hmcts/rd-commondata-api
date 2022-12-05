@@ -34,7 +34,7 @@ class ValidationUtilTest {
     void test_welshrequiredWhenNotYorN() {
         InvalidRequestException invalidRequestException = assertThrows(
             InvalidRequestException.class,
-            () -> ValidationUtil.validationWelshRequired(
+            () -> ValidationUtil.validateValueForYorNRequired(
                 "test"
             )
         );
@@ -43,8 +43,29 @@ class ValidationUtilTest {
 
     @Test
     void test_validation_welshRequired() {
-        Assertions.assertDoesNotThrow(() -> ValidationUtil.validationWelshRequired(
+        Assertions.assertDoesNotThrow(() -> ValidationUtil.validateValueForYorNRequired(
             "Y"));
 
     }
+
+    @Test
+    void test_availableExternalFlagWhenNotYorN() {
+        InvalidRequestException invalidRequestException = assertThrows(
+            InvalidRequestException.class,
+            () -> ValidationUtil.validateValueForYorNRequired(
+                "X"
+            )
+        );
+        Assertions.assertEquals("Allowed values are Y or N", invalidRequestException.getMessage());
+    }
+
+    @Test
+    void test_validation_availableExternalFlag() {
+        Assertions.assertDoesNotThrow(() -> ValidationUtil.validateValueForYorNRequired(
+            "Y"));
+        Assertions.assertDoesNotThrow(() -> ValidationUtil.validateValueForYorNRequired(
+            "N"));
+
+    }
+
 }

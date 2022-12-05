@@ -52,7 +52,7 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
         final var response = (ErrorResponse)
             commonDataApiClient.retrieveCaseFlagsByServiceId(
                 HttpStatus.BAD_REQUEST,
-                "hello"
+                "service-id=XXXX?flag-type=hello"
             );
         assertNotNull(response);
         assertEquals("Allowed values are PARTY or CASE", response.getErrorDescription());
@@ -342,6 +342,91 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
         } else {
             assertEquals(NOT_FOUND.value(), response.getStatusCode());
         }
+    }
+
+    @Test
+    @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
+    @ExtendWith(FeatureToggleConditionExtension.class)
+    void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithWelshFlagIsY() {
+        final var response = (Response)
+            commonDataApiClient.retrieveCaseFlagsByServiceId(
+                OK,
+                "service-id=XXXX?welsh-required=Y"
+            );
+        this.validateSuccessRetriveCaseFlagResponse(response);
+    }
+
+    @Test
+    @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
+    @ExtendWith(FeatureToggleConditionExtension.class)
+    void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithWelshFlagIsN() {
+
+        final var response = (Response)
+            commonDataApiClient.retrieveCaseFlagsByServiceId(
+                OK,
+                "service-id=XXXX?welsh-required=N"
+            );
+        this.validateSuccessRetriveCaseFlagResponse(response);
+    }
+
+    @Test
+    @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
+    @ExtendWith(FeatureToggleConditionExtension.class)
+    void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithAvailableExternalFlagIsY() {
+        final var response = (Response)
+            commonDataApiClient.retrieveCaseFlagsByServiceId(
+                OK,
+                "service-id=XXXX?available-external-flag=Y"
+            );
+        this.validateSuccessRetriveCaseFlagResponse(response);
+    }
+
+    @Test
+    @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
+    @ExtendWith(FeatureToggleConditionExtension.class)
+    void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithAvailableExternalFlagIsN() {
+        final var response = (Response)
+            commonDataApiClient.retrieveCaseFlagsByServiceId(
+                OK,
+                "service-id=XXXX?available-external-flag=N"
+            );
+        this.validateSuccessRetriveCaseFlagResponse(response);
+    }
+
+    @Test
+    @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
+    @ExtendWith(FeatureToggleConditionExtension.class)
+    void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithoutWelshFlagAndAvailableExternalFlag() {
+
+        final var response = (Response)
+            commonDataApiClient.retrieveCaseFlagsByServiceId(
+                OK,
+                "service-id=XXXX"
+            );
+        this.validateSuccessRetriveCaseFlagResponse(response);
+    }
+
+    private void validateSuccessRetriveCaseFlagResponse(Response response) {
+        if (OK.value() == response.getStatusCode()) {
+            var caseFlags = response.getBody().as(CaseFlag.class);
+            assertNotNull(caseFlags);
+            assertThat(caseFlags.getFlags()).hasSizeGreaterThanOrEqualTo(1);
+        } else {
+            assertEquals(NOT_FOUND.value(), response.getStatusCode());
+        }
+    }
+
+    @Test
+    @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
+    @ExtendWith(FeatureToggleConditionExtension.class)
+    void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithAvailableExternalFlagIsEmpty() {
+        final var response = (ErrorResponse)
+            commonDataApiClient.retrieveCaseFlagsByServiceId(
+                HttpStatus.BAD_REQUEST,
+                "service-id=XXXX?available-external-flag="
+            );
+        assertEquals(response.getErrorCode(),400);
+        assertEquals(response.getErrorDescription(),"Allowed values are Y or N");
     }
 
 }

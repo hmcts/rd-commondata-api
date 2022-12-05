@@ -40,10 +40,11 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     List<String> flaglistLov;
 
     @Override
-    public CaseFlag retrieveCaseFlagByServiceId(String serviceId, String flagType, String welshRequired) {
+    public CaseFlag retrieveCaseFlagByServiceId(String serviceId, String flagType,
+                                                String welshRequired, String availableExternalFlag) {
         var caseFlagDtoList = caseFlagRepository.findAll(serviceId.trim().toUpperCase());
-        var flagDetails = addTopLevelFlag(caseFlagDtoList, welshRequired);
-        addChildLevelFlag(caseFlagDtoList, flagDetails, welshRequired);
+        var flagDetails = addTopLevelFlag(caseFlagDtoList, welshRequired, availableExternalFlag);
+        addChildLevelFlag(caseFlagDtoList, flagDetails, welshRequired, availableExternalFlag);
         addOtherFlag(flagDetails);
         log.info("Added other flag");
         var flag = new Flag();
@@ -64,13 +65,21 @@ public class CaseFlagServiceImpl implements CaseFlagService {
      * @param caseFlagDtoList caseFlagDtoList
      * @return list of flagdetail with toplevel flags
      */
-    public List<FlagDetail> addTopLevelFlag(List<CaseFlagDto> caseFlagDtoList, String welshRequired) {
+    public List<FlagDetail> addTopLevelFlag(List<CaseFlagDto> caseFlagDtoList, String welshRequired,
+                                            String availableExternalFlag) {
         var flagDetails = new ArrayList<FlagDetail>();
+        var isWelshRequired = (StringUtils.isNotEmpty(welshRequired)
+            && (welshRequired.trim().equalsIgnoreCase("y")));
+        var isAvailableExternalFlag = (StringUtils.isNotEmpty(availableExternalFlag)
+            && (availableExternalFlag.trim().equalsIgnoreCase(
+            "y")));
         for (CaseFlagDto caseFlagDto : caseFlagDtoList) {
+            if (isAvailableExternalFlag && Boolean.FALSE.equals(caseFlagDto.getExternallyAvailable())) {
+                continue;
+            }
             //creating top level flags
             if (caseFlagDto.getCategoryId() == 0) {
-                String name = (StringUtils.isNotEmpty(welshRequired) && (welshRequired.trim().equalsIgnoreCase("y")))
-                    ? caseFlagDto.getValueCy() : caseFlagDto.getValueEn();
+                String name = isWelshRequired ? caseFlagDto.getValueCy() : caseFlagDto.getValueEn();
                 var flagDetail = FlagDetail.builder()
                     .name(name)
                     .flagCode(caseFlagDto.getFlagCode())
@@ -80,8 +89,17 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                     .path(Arrays.stream(caseFlagDto.getCategoryPath().split("/")).collect(Collectors.toList()))
                     .childFlags(new ArrayList<>())
                     .id(caseFlagDto.getId())
-                    .cateGoryId(caseFlagDto.getCategoryId()).build();
-                flagDetails.add(flagDetail);
+                    .cateGoryId(caseFlagDto.getCategoryId());
+                if (isWelshRequired) {
+                    flagDetail.name_cy(caseFlagDto.getValueCy())
+                        .defaultStatus(caseFlagDto.getDefaultStatus())
+                        .externallyAvailable(caseFlagDto.getExternallyAvailable());
+                } else {
+                    flagDetail.defaultStatus(caseFlagDto.getDefaultStatus())
+                        .externallyAvailable(caseFlagDto.getExternallyAvailable());
+                }
+                FlagDetail flagDetailObj = flagDetail.build();
+                flagDetails.add(flagDetailObj);
             }
         }
         log.info("Added top level flag : " + flagDetails.size());
@@ -95,12 +113,19 @@ public class CaseFlagServiceImpl implements CaseFlagService {
      * @param flagDetails     list of flagdetail with toplevel flags
      */
     public void addChildLevelFlag(List<CaseFlagDto> caseFlagDtoList, List<FlagDetail> flagDetails,
-                                  String welshRequired) {
+                                  String welshRequired, String availableExternalFlag) {
+        var isWelshRequired = (StringUtils.isNotEmpty(welshRequired)
+            && (welshRequired.trim().equalsIgnoreCase("y")));
+        var isAvailableExternalFlag = (StringUtils.isNotEmpty(availableExternalFlag)
+            && (availableExternalFlag.trim().equalsIgnoreCase(
+            "y")));
         for (CaseFlagDto caseFlagDto : caseFlagDtoList) {
             //creating child level flags
+            if (isAvailableExternalFlag && Boolean.FALSE.equals(caseFlagDto.getExternallyAvailable())) {
+                continue;
+            }
             if (caseFlagDto.getCategoryId() != 0) {
-                String name = (StringUtils.isNotEmpty(welshRequired) && (welshRequired.trim().equalsIgnoreCase("y")))
-                    ? caseFlagDto.getValueCy() : caseFlagDto.getValueEn();
+                String name = isWelshRequired ? caseFlagDto.getValueCy() : caseFlagDto.getValueEn();
                 var childFlag = FlagDetail.builder()
                     .name(name)
                     .flagCode(caseFlagDto.getFlagCode())
@@ -109,11 +134,20 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                     .hearingRelevant(caseFlagDto.getHearingRelevant())
                     .path(Arrays.stream(caseFlagDto.getCategoryPath().split("/")).collect(Collectors.toList()))
                     .cateGoryId(caseFlagDto.getCategoryId())
-                    .id(caseFlagDto.getId()).build();
-                if (flaglistLov.contains(caseFlagDto.getFlagCode())) {
-                    retrieveListOfValues(childFlag);
+                    .id(caseFlagDto.getId());
+                if (isWelshRequired) {
+                    childFlag.name_cy(caseFlagDto.getValueCy())
+                        .defaultStatus(caseFlagDto.getDefaultStatus())
+                        .externallyAvailable(caseFlagDto.getExternallyAvailable());
+                } else {
+                    childFlag.defaultStatus(caseFlagDto.getDefaultStatus())
+                        .externallyAvailable(caseFlagDto.getExternallyAvailable());
                 }
-                addChildFlag(flagDetails, childFlag);
+                FlagDetail childFlagObj = childFlag.build();
+                if (flaglistLov.contains(caseFlagDto.getFlagCode())) {
+                    retrieveListOfValues(childFlagObj,isWelshRequired);
+                }
+                addChildFlag(flagDetails, childFlagObj);
             }
         }
         log.info("Added all child flag");
@@ -122,9 +156,10 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     /**
      * Retrieve list of values based on switch condition.
      *
-     * @param childFlag flag detail object
+     * @param childFlag               flag detail object
+     * @param isWelshRequired
      */
-    private void retrieveListOfValues(FlagDetail childFlag) {
+    private void retrieveListOfValues(FlagDetail childFlag, boolean isWelshRequired) {
         List<ListOfValue> listOfValues;
         switch (childFlag.getFlagCode()) {
             case FLAG_PF0015:
@@ -137,6 +172,11 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                 throw new InvalidRequestException("invalid lov flag");
         }
         childFlag.setChildFlags(null);
+        if (!isWelshRequired && listOfValues != null && listOfValues.size() > 0) {
+            listOfValues.forEach(lov -> {
+                lov.setValue_cy(null);
+            });
+        }
         childFlag.setListOfValuesLength(listOfValues.size());
         childFlag.setListOfValues(listOfValues);
         log.info("Added Lov: " + listOfValues.size());

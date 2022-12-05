@@ -23,6 +23,9 @@ public class FlagDetail {
     private String name;
     private Boolean hearingRelevant;
     private Boolean flagComment;
+    private String defaultStatus;
+    private Boolean externallyAvailable;
+    private String name_cy;
     private String flagCode;
     @JsonIgnore
     private Integer cateGoryId;
