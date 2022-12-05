@@ -145,7 +145,8 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         log.info("Added all child flag");
     }
 
-    private void setCaseFlagByWelshRequired(boolean isWelshRequired, FlagDetail.FlagDetailBuilder childFlag, CaseFlagDto caseFlagDto) {
+    private void setCaseFlagByWelshRequired(boolean isWelshRequired, FlagDetail.FlagDetailBuilder childFlag,
+                                            CaseFlagDto caseFlagDto) {
         if (isWelshRequired) {
             childFlag.nameCy(caseFlagDto.getValueCy())
                 .defaultStatus(caseFlagDto.getDefaultStatus())
