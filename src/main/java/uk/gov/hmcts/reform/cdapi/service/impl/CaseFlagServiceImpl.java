@@ -160,7 +160,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
      * @param isWelshRequired               welsh flag
      */
     private void retrieveListOfValues(FlagDetail childFlag, boolean isWelshRequired) {
-        List<ListOfValue> listOfValues;
+        List<ListOfValue> listOfValues = null;
         switch (childFlag.getFlagCode()) {
             case FLAG_PF0015:
                 listOfValues = listOfVenueRepository.findListOfValues(CATEGORY_KEY_LANGUAGE_INTERPRETER);
