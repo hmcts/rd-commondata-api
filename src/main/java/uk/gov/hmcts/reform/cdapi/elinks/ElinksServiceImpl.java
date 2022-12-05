@@ -15,7 +15,6 @@ public class ElinksServiceImpl implements ElinkService {
     @Override
     public ResponseEntity<Object> retrieveBaseLocation() {
 
-
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(elinksUrl);

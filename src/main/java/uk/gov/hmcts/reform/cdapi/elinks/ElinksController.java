@@ -52,7 +52,7 @@ public class ElinksController {
     })
     @GetMapping("/location")
     public ResponseEntity<Object> getLocations() {
-        return ok("eLinks location");
+        return elinkService.retrieveLocation();
     }
 
     @ApiOperation(
@@ -83,6 +83,6 @@ public class ElinksController {
     })
     @GetMapping("/base_location")
     public ResponseEntity<Object> getBaseLocations() {
-        return ok("eLinks Base location");
+        return elinkService.retrieveBaseLocation();
     }
 }
