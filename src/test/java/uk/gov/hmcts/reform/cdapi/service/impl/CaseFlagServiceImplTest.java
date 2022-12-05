@@ -90,7 +90,8 @@ class CaseFlagServiceImplTest {
     @Test
     void testGetCaseFlag_WhenLanguageInterpreterFlag_return200() {
         when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoListWithLanguageInterpreter());
-        when(listOfVenueRepository.findListOfValues(anyString())).thenReturn(getListOfValuesForLanguageInterPreter(false));
+        when(listOfVenueRepository.findListOfValues(anyString()))
+            .thenReturn(getListOfValuesForLanguageInterPreter(false));
         var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "PARTY", "N", "");
         assertNotNull(caseFlag);
         verify(caseFlagRepository, times(1)).findAll(anyString());
@@ -101,7 +102,8 @@ class CaseFlagServiceImplTest {
     @Test
     void testGetCaseFlag_WhenLanguageInterpreterFlagAndWelshIsY_return200() {
         when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoListWithLanguageInterpreter());
-        when(listOfVenueRepository.findListOfValues(anyString())).thenReturn(getListOfValuesForLanguageInterPreter(true));
+        when(listOfVenueRepository.findListOfValues(anyString()))
+            .thenReturn(getListOfValuesForLanguageInterPreter(true));
         var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "PARTY", "Y", "");
         assertNotNull(caseFlag);
         verify(caseFlagRepository, times(1)).findAll(anyString());
@@ -112,7 +114,8 @@ class CaseFlagServiceImplTest {
     @Test
     void testGetCaseFlag_WhenSignLanguageFlag_return200() {
         when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoListWithSignLanguage());
-        when(listOfVenueRepository.findListOfValues(anyString())).thenReturn(getListOfValuesForSignLanguage(false));
+        when(listOfVenueRepository.findListOfValues(anyString()))
+            .thenReturn(getListOfValuesForSignLanguage(false));
         var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "PARTY", "N", "");
         assertNotNull(caseFlag);
         verify(caseFlagRepository, times(1)).findAll(anyString());
@@ -171,7 +174,7 @@ class CaseFlagServiceImplTest {
         assertEquals(1, caseFlag.getFlags().size());
         assertEquals(1, caseFlag.getFlags().get(0).getFlagDetails().size());
         verify(caseFlagRepository, times(1)).findAll(anyString());
-        caseFlag.getFlags().forEach(caseFlagObj->{
+        caseFlag.getFlags().forEach(caseFlagObj -> {
             for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
                 assertNull(flagDetail.getNameCy());
                 assertNotNull(flagDetail.getDefaultStatus());
@@ -189,7 +192,7 @@ class CaseFlagServiceImplTest {
         assertEquals(1, caseFlag.getFlags().size());
         assertEquals(1, caseFlag.getFlags().get(0).getFlagDetails().size());
         verify(caseFlagRepository, times(1)).findAll(anyString());
-        caseFlag.getFlags().forEach(caseFlagObj->{
+        caseFlag.getFlags().forEach(caseFlagObj -> {
             for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
                 assertNotNull(flagDetail.getNameCy());
                 assertNotNull(flagDetail.getDefaultStatus());
@@ -197,6 +200,7 @@ class CaseFlagServiceImplTest {
             }
         });
     }
+
     List<CaseFlagDto> getCaseFlagDtoList() {
         var caseFlagDto1 = new CaseFlagDto();
         caseFlagDto1.setFlagCode("CATEGORY");
@@ -345,9 +349,9 @@ class CaseFlagServiceImplTest {
         list.setId("1");
         list.setKey("EN");
         list.setValue("ENGLISH");
-        if(isWelshRequired){
+        if (isWelshRequired) {
             list.setValueCy("CY ENGLISH");
-        }else {
+        } else {
             list.setValueCy(null);
         }
 
@@ -361,9 +365,9 @@ class CaseFlagServiceImplTest {
         list.setId("2");
         list.setKey("AF");
         list.setValue("AFRICAN");
-        if(isWelshRequired){
+        if (isWelshRequired) {
             list.setValueCy("CY AFRICAN");
-        }else {
+        } else {
             list.setValueCy(null);
         }
         var listOfValues = new ArrayList<ListOfValue>();

@@ -68,7 +68,8 @@ class CaseFlagApiControllerTest {
         final String welshRequired = null;
         final String availableExternal = null;
         final CaseFlag caseFlag = createCaseFlag();
-        given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired,availableExternal)).willReturn(caseFlag);
+        given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired, availableExternal))
+            .willReturn(caseFlag);
 
         //when
         final ResultActions resultActions =
@@ -80,7 +81,8 @@ class CaseFlagApiControllerTest {
 
         //then
         assertResponseContent(resultActions, caseFlag);
-        then(caseFlagService).should().retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired,availableExternal);
+        then(caseFlagService).should()
+            .retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired, availableExternal);
     }
 
     @Test
@@ -93,7 +95,8 @@ class CaseFlagApiControllerTest {
         final String welshRequired = null;
         final String availableExternal = null;
         final CaseFlag caseFlag = createCaseFlag();
-        given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired, availableExternal)).willReturn(caseFlag);
+        given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired, availableExternal))
+            .willReturn(caseFlag);
 
         //when
         final ResultActions resultActions =
@@ -106,7 +109,8 @@ class CaseFlagApiControllerTest {
 
         //then
         assertResponseContent(resultActions, caseFlag);
-        then(caseFlagService).should().retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired, availableExternal);
+        then(caseFlagService).should()
+            .retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired, availableExternal);
     }
 
     @Test
@@ -119,7 +123,8 @@ class CaseFlagApiControllerTest {
         final String welshRequired = "Y";
         final String availableExternal = "Y";
         final CaseFlag caseFlag = createCaseFlag();
-        given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired,availableExternal)).willReturn(caseFlag);
+        given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired, availableExternal))
+            .willReturn(caseFlag);
 
         //when
         final ResultActions resultActions =
@@ -133,12 +138,14 @@ class CaseFlagApiControllerTest {
 
         //then
         assertResponseContent(resultActions, caseFlag);
-        then(caseFlagService).should().retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired, availableExternal);
+        then(caseFlagService).should()
+            .retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired, availableExternal);
     }
 
     @Test
     @DisplayName("Positive scenario -Should return 200 with case flags for service-id, flag-type and welsh-required")
-    void should_return_200_with_caseFlags_For_serviceId_flagType_welshRequired_availableExternallyIsY() throws Exception {
+    void should_return_200_with_caseFlags_For_serviceId_flagType_welshRequired_availableExternallyIsY()
+        throws Exception {
 
         //given
         final String serviceId = "XXXX";
@@ -146,7 +153,8 @@ class CaseFlagApiControllerTest {
         final String flagType = "PARTY";
         final String welshRequired = "Y";
         final String availableExternal = "Y";
-        given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired, availableExternal)).willReturn(caseFlag);
+        given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired, availableExternal))
+            .willReturn(caseFlag);
 
         //when
         final ResultActions resultActions =
@@ -161,7 +169,12 @@ class CaseFlagApiControllerTest {
 
         //then
         assertResponseContent(resultActions, caseFlag);
-        then(caseFlagService).should().retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired, availableExternal);
+        then(caseFlagService).should().retrieveCaseFlagByServiceId(
+            serviceId,
+            flagType,
+            welshRequired,
+            availableExternal
+        );
     }
 
     @Test
