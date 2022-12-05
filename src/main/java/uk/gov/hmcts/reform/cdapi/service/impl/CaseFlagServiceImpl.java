@@ -172,7 +172,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                 throw new InvalidRequestException("invalid lov flag");
         }
         childFlag.setChildFlags(null);
-        int listOfValuesSize = listOfValues!=null?listOfValues.size():null;
+        int listOfValuesSize = listOfValues != null ? listOfValues.size() : null;
         if (!isWelshRequired && listOfValuesSize > 0) {
             listOfValues.forEach(lov -> {
                 lov.setValueCy(null);
