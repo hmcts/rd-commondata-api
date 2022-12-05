@@ -11,14 +11,12 @@ import uk.gov.hmcts.reform.cdapi.elinks.configuration.ElinksFeignInterceptorConf
     configuration = ElinksFeignInterceptorConfiguration.class)
 public interface ElinksFeignClient {
 
-    //URL not tested , code is for developers reference
     @GetMapping(value = "/reference_data/location")
     @RequestLine("GET /reference_data/location")
     @Headers({"Authorization: {authorization}",
         "Content-Type: application/json"})
     Response getLocationDetails();
 
-    //URL not tested , code is for developers reference
     @GetMapping(value = "/reference_data/base_location")
     @RequestLine("GET /reference_data/base_location")
     @Headers({"Authorization: {authorization}",
