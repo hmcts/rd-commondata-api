@@ -280,7 +280,8 @@ class CaseFlagApiControllerTest {
             arguments(null, "PARTY", "Y", "Y", serviceIdErrorDesc),
             arguments("XXXX", "", "Y", "Y", flagTypeErrorDesc),
             arguments("XXXX", "CASE", "", "", welshRequiredErrorDesc),
-            arguments("XXXX", "CASE", "", "", welshRequiredErrorDesc)
+            arguments("XXXX", "CASE", "", "", welshRequiredErrorDesc),
+            arguments("XXXX", "CASE", "Y", "", welshRequiredErrorDesc)
         );
     }
 
