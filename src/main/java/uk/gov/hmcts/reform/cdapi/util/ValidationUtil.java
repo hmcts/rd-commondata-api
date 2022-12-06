@@ -33,4 +33,11 @@ public class ValidationUtil {
             throw new InvalidRequestException("Allowed values are Y or N");
         }
     }
+
+    public static boolean sampleMethod(boolean isTrue) {
+        if (isTrue) {
+            return true;
+        }
+        return false;
+    }
 }
