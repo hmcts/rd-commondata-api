@@ -60,6 +60,16 @@ class CaseFlagServiceImplTest {
     }
 
     @Test
+    void testGetCaseFlag_ByServiceId_Returns_200() {
+        when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
+        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "", "N");
+        assertNotNull(caseFlag);
+        assertEquals(2, caseFlag.getFlags().get(0).getFlagDetails().size());
+        assertEquals(1, caseFlag.getFlags().size());
+        verify(caseFlagRepository, times(1)).findAll(anyString());
+    }
+
+    @Test
     void testGetCaseFlag_ByServiceIdAndFlagTypeParty() {
         when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
         var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "PARTY", null);
