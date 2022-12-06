@@ -57,7 +57,7 @@ withPipeline(type, product, component) {
     env.execution_environment = "aat"
   }
 
-  afterSuccess('sonarscan') {
+  after('sonarscan') {
     publishHTML target: [
       allowMissing         : true,
       alwaysLinkToLastBuild: true,
@@ -77,7 +77,7 @@ withPipeline(type, product, component) {
     ]
   }
 
-  afterSuccess('smoketest:preview') {
+  after('smoketest:preview') {
     publishHTML target: [
       allowMissing         : true,
       alwaysLinkToLastBuild: true,
@@ -88,7 +88,7 @@ withPipeline(type, product, component) {
     ]
   }
 
-  afterSuccess('smoketest:aat') {
+  after('smoketest:aat') {
     publishHTML target: [
       allowMissing         : true,
       alwaysLinkToLastBuild: true,
@@ -99,7 +99,7 @@ withPipeline(type, product, component) {
     ]
   }
 
-  afterSuccess('functionalTest:aat') {
+  after('functionalTest:aat') {
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
     publishHTML target: [
       allowMissing         : true,
@@ -111,7 +111,7 @@ withPipeline(type, product, component) {
     ]
   }
 
-  afterSuccess('functionalTest:preview') {
+  after('functionalTest:preview') {
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
     publishHTML target: [
       allowMissing         : true,
@@ -123,7 +123,7 @@ withPipeline(type, product, component) {
     ]
   }
 
-  afterSuccess('pact-provider-verification') {
+  after('pact-provider-verification') {
     publishHTML target: [
       allowMissing         : true,
       alwaysLinkToLastBuild: true,
