@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.cdapi.util;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -31,7 +32,15 @@ class ValidationUtilTest {
     }
 
     @Test
-    void test_welshrequiredWhenNotYorN() {
+    @DisplayName("Positive Case: validation Case flagtype")
+    void test_validation_case_flagtype() {
+        Assertions.assertDoesNotThrow(() -> ValidationUtil.validationFlagType(
+            "Case"));
+
+    }
+
+    @Test
+    void test_welshRequiredWhenNotYorN() {
         InvalidRequestException invalidRequestException = assertThrows(
             InvalidRequestException.class,
             () -> ValidationUtil.validateValueForYorNRequired(
