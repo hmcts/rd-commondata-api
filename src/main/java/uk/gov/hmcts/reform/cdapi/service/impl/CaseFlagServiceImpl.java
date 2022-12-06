@@ -44,7 +44,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                                                 String welshRequired, String availableExternalFlag) {
         var caseFlagDtoList = caseFlagRepository.findAll(serviceId.trim().toUpperCase());
         var flagDetails = addTopLevelFlag(caseFlagDtoList, welshRequired);
-        log.debug("availableExternalFlag {}", availableExternalFlag);
+        log.debug("availableExternalFlag :: {} ", availableExternalFlag);
         addChildLevelFlag(caseFlagDtoList, flagDetails, welshRequired);
         addOtherFlag(flagDetails);
         log.info("Added other flag");
