@@ -6,11 +6,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -33,11 +37,15 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -214,6 +222,24 @@ class CaseFlagApiControllerTest {
             ));
     }
 
+    /*Temporary added to test the coverage which is not reflected in Sonar Report*/
+
+    @InjectMocks
+    CaseFlagApiController caseFlagApiController;
+    @Mock
+    CaseFlagServiceImpl caseFlagServiceTmp;
+
+    @Test
+    void testGetCaseFlag_ByLowerCaseFlagType_Returns200() {
+        ResponseEntity<CaseFlag> responseEntity =
+            caseFlagApiController.retrieveCaseFlagsByServiceId("XXXX",
+                                                               "case", "N", "N"
+            );
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        verify(caseFlagServiceTmp, times(1))
+            .retrieveCaseFlagByServiceId("XXXX", "case", "N");
+    }
 
     private void assertResponseContent(final ResultActions resultActions,
                                        final CaseFlag caseFlag) throws Exception {
