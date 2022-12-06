@@ -52,7 +52,7 @@ class CaseFlagServiceImplTest {
     @Test
     void testGetCaseFlag_ByServiceId_Returns200() {
         when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
-        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "", "N");
+        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "", "N", "N");
         assertNotNull(caseFlag);
         assertEquals(1, caseFlag.getFlags().size());
         assertEquals(2, caseFlag.getFlags().get(0).getFlagDetails().size());
@@ -62,7 +62,7 @@ class CaseFlagServiceImplTest {
     @Test
     void testGetCaseFlag_ByServiceIdAndFlagTypeParty() {
         when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
-        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "PARTY", null);
+        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "PARTY", null, "N");
         assertNotNull(caseFlag);
         assertEquals(1, caseFlag.getFlags().get(0).getFlagDetails().size());
         assertEquals("PARTY", caseFlag.getFlags().get(0).getFlagDetails().get(0).getName());
@@ -72,7 +72,7 @@ class CaseFlagServiceImplTest {
     @Test
     void testGetCaseFlag_ByServiceIdAndFlagTypeCase() {
         when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
-        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "CASE", "n");
+        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "CASE", "n", "n");
         assertNotNull(caseFlag);
         assertEquals(1, caseFlag.getFlags().get(0).getFlagDetails().size());
         assertEquals("CASE", caseFlag.getFlags().get(0).getFlagDetails().get(0).getName());
@@ -83,14 +83,14 @@ class CaseFlagServiceImplTest {
     void testGetCaseFlag_ByServiceIdAndWelshRequiredasY() {
         when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
         assertThrows(ResourceNotFoundException.class, () ->
-            caseFlagService.retrieveCaseFlagByServiceId("XXXX", "CASE", "y"));
+            caseFlagService.retrieveCaseFlagByServiceId("XXXX", "CASE", "y", "y"));
     }
 
     @Test
     void testGetCaseFlag_WhenLanguageInterpreterFlag_return200() {
         when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoListWithLanguageInterpreter());
         when(listOfVenueRepository.findListOfValues(anyString())).thenReturn(getListOfValuesForLanguageInterPreter());
-        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "PARTY", "");
+        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "PARTY", "", "");
         assertNotNull(caseFlag);
         verify(caseFlagRepository, times(1)).findAll(anyString());
         verify(listOfVenueRepository, times(1)).findListOfValues(anyString());
@@ -101,7 +101,7 @@ class CaseFlagServiceImplTest {
     void testGetCaseFlag_WhenSignLanguageFlag_return200() {
         when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoListWithSignLanguage());
         when(listOfVenueRepository.findListOfValues(anyString())).thenReturn(getListOfValuesForSignLanguage());
-        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "PARTY", "");
+        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "PARTY", "", "");
         assertNotNull(caseFlag);
         verify(caseFlagRepository, times(1)).findAll(anyString());
         verify(listOfVenueRepository, times(1)).findListOfValues(anyString());
@@ -113,7 +113,7 @@ class CaseFlagServiceImplTest {
         when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
         assertThrows(
             ResourceNotFoundException.class,
-            () -> caseFlagService.retrieveCaseFlagByServiceId("XXXX", "Hello", "")
+            () -> caseFlagService.retrieveCaseFlagByServiceId("XXXX", "Hello", "", "")
         );
     }
 

@@ -40,9 +40,11 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     List<String> flaglistLov;
 
     @Override
-    public CaseFlag retrieveCaseFlagByServiceId(String serviceId, String flagType, String welshRequired) {
+    public CaseFlag retrieveCaseFlagByServiceId(String serviceId, String flagType,
+                                                String welshRequired, String availableExternalFlag) {
         var caseFlagDtoList = caseFlagRepository.findAll(serviceId.trim().toUpperCase());
         var flagDetails = addTopLevelFlag(caseFlagDtoList, welshRequired);
+        log.debug("availableExternalFlag {}", availableExternalFlag);
         addChildLevelFlag(caseFlagDtoList, flagDetails, welshRequired);
         addOtherFlag(flagDetails);
         log.info("Added other flag");
