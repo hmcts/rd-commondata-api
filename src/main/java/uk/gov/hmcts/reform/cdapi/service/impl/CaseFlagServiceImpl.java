@@ -74,28 +74,24 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         var flagDetails = new ArrayList<FlagDetail>();
         var isWelshRequired = (StringUtils.isNotEmpty(welshRequired) && (welshRequired.trim().equalsIgnoreCase("y")));
         for (CaseFlagDto caseFlagDto : caseFlagDtoList) {
-            this.buildFlagDetails(flagDetails,caseFlagDto,  isWelshRequired);
+            //creating top level flags
+            if (caseFlagDto.getCategoryId() == 0) {
+                String name = isWelshRequired ? caseFlagDto.getValueCy() : caseFlagDto.getValueEn();
+                var flagDetail = FlagDetail.builder()
+                    .name(name)
+                    .flagCode(caseFlagDto.getFlagCode())
+                    .flagComment(caseFlagDto.getRequestReason())
+                    .parent(caseFlagDto.getIsParent())
+                    .hearingRelevant(caseFlagDto.getHearingRelevant())
+                    .path(Arrays.stream(caseFlagDto.getCategoryPath().split("/")).collect(Collectors.toList()))
+                    .childFlags(new ArrayList<>())
+                    .id(caseFlagDto.getId())
+                    .cateGoryId(caseFlagDto.getCategoryId()).build();
+                flagDetails.add(flagDetail);
+            }
         }
         log.info("Added top level flag : " + flagDetails.size());
         return flagDetails;
-    }
-
-    private void buildFlagDetails(ArrayList<FlagDetail> flagDetails, CaseFlagDto caseFlagDto, boolean isWelshRequired) {
-        //creating top level flags
-        if (caseFlagDto.getCategoryId() == 0) {
-            String name = isWelshRequired ? caseFlagDto.getValueCy() : caseFlagDto.getValueEn();
-            var flagDetail = FlagDetail.builder()
-                .name(name)
-                .flagCode(caseFlagDto.getFlagCode())
-                .flagComment(caseFlagDto.getRequestReason())
-                .parent(caseFlagDto.getIsParent())
-                .hearingRelevant(caseFlagDto.getHearingRelevant())
-                .path(Arrays.stream(caseFlagDto.getCategoryPath().split("/")).collect(Collectors.toList()))
-                .childFlags(new ArrayList<>())
-                .id(caseFlagDto.getId())
-                .cateGoryId(caseFlagDto.getCategoryId()).build();
-            flagDetails.add(flagDetail);
-        }
     }
 
     /**
