@@ -214,6 +214,32 @@ class CaseFlagApiControllerTest {
             ));
     }
 
+    @Test
+    @DisplayName("Positive scenario -Should return 200 with case flags only for service-id and "
+        + "available-external-flag = Y")
+    void should_return_200_with_caseFlags_for_serviceIdAndAvailableExternally_Y() throws Exception {
+
+        //given
+        final String serviceId = "XXXX";
+        final String flagType = null;
+        final String welshRequired = null;
+
+        final CaseFlag caseFlag = createCaseFlag();
+        given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired)).willReturn(caseFlag);
+
+        //when
+        final ResultActions resultActions =
+            mockMvc.perform(
+                    get("/refdata/commondata/caseflags/service-id={service-id}", serviceId)
+                        .queryParam("available-external-flag", "y")
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andExpect(status().isOk());
+        //then
+        assertResponseContent(resultActions, caseFlag);
+        then(caseFlagService).should().retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired);
+    }
+
     private void assertResponseContent(final ResultActions resultActions,
                                        final CaseFlag caseFlag) throws Exception {
         final FlagDetail parentFlagDetail = caseFlag.getFlags().get(0).getFlagDetails().get(0);
