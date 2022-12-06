@@ -200,6 +200,7 @@ class CaseFlagApiControllerTest {
     void should_return_400_for_all_negative_serviceId_flagType_Welsh_required(final String serviceId,
                                                                               final String flagType,
                                                                               final String welshRequired,
+                                                                              final String availableExternally,
                                                                               final String expectedErrorDescription)
         throws Exception {
 
@@ -208,6 +209,7 @@ class CaseFlagApiControllerTest {
                 get("/refdata/commondata/caseflags/service-id={service-id}", serviceId)
                     .queryParam("flag-type", flagType)
                     .queryParam("welsh-required", welshRequired)
+                    .queryParam("available-external-flag", availableExternally)
                     .accept(MediaType.APPLICATION_JSON_VALUE))
             .andDo(print())
             //then
@@ -220,25 +222,6 @@ class CaseFlagApiControllerTest {
             ))
             .andExpect(jsonPath("$.errorDescription", is(expectedErrorDescription)
             ));
-    }
-
-    /*Temporary added to test the coverage which is not reflected in Sonar Report*/
-
-    @InjectMocks
-    CaseFlagApiController caseFlagApiController;
-    @Mock
-    CaseFlagServiceImpl caseFlagServiceTmp;
-
-    @Test
-    void testGetCaseFlag_ByLowerCaseFlagType_Returns200() {
-        ResponseEntity<CaseFlag> responseEntity =
-            caseFlagApiController.retrieveCaseFlagsByServiceId("XXXX",
-                                                               "case", "N", "N"
-            );
-        assertNotNull(responseEntity);
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        verify(caseFlagServiceTmp, times(1))
-            .retrieveCaseFlagByServiceId("XXXX", "case", "N");
     }
 
     private void assertResponseContent(final ResultActions resultActions,
@@ -299,10 +282,11 @@ class CaseFlagApiControllerTest {
         final String welshRequiredErrorDesc = "Allowed values are Y or N";
 
         return Stream.of(
-            arguments("", "PARTY", "Y", serviceIdErrorDesc),
-            arguments(null, "PARTY", "Y", serviceIdErrorDesc),
-            arguments("XXXX", "", "Y", flagTypeErrorDesc),
-            arguments("XXXX", "CASE", "", welshRequiredErrorDesc)
+            arguments("", "PARTY", "Y", "Y", serviceIdErrorDesc),
+            arguments(null, "PARTY", "Y", "Y", serviceIdErrorDesc),
+            arguments("XXXX", "", "Y", "Y", flagTypeErrorDesc),
+            arguments("XXXX", "CASE", "", "", welshRequiredErrorDesc),
+            arguments("XXXX", "CASE", "", "", welshRequiredErrorDesc)
         );
     }
 
