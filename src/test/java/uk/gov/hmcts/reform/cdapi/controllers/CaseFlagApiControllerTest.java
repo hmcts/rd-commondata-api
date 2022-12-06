@@ -33,6 +33,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -180,6 +181,43 @@ class CaseFlagApiControllerTest {
                 .andExpect(status().isOk());
 
         //then
+        assertResponseContent(resultActions, caseFlag);
+        then(caseFlagService).should().retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired,
+                                                                   availableExternalFlag
+        );
+    }
+
+    @Test
+    @DisplayName("Positive scenario -Should return 200 with case flags for service-id, flag-type, welsh-required"
+        +" and availableExternally")
+    void should_return_200_with_caseFlags_For_serviceId_flagType_welshRequired_availableExternally()
+        throws Exception {
+
+        //given
+        final String serviceId = "XXXX";
+        final CaseFlag caseFlag = createCaseFlag();
+        final String flagType = "CASE";
+        final String welshRequired = "Y";
+        final String availableExternalFlag = "Y";
+
+
+        given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired,
+                                                          availableExternalFlag
+        )).willReturn(caseFlag);
+
+        //when
+        final ResultActions resultActions =
+            mockMvc.perform(
+                    get("/refdata/commondata/caseflags/service-id={service-id}", serviceId)
+                        .queryParam("flag-type", flagType)
+                        .queryParam("welsh-required", welshRequired)
+                        .queryParam("available-external-flag", availableExternalFlag)
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        //then
+        assertNotNull(resultActions);
         assertResponseContent(resultActions, caseFlag);
         then(caseFlagService).should().retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired,
                                                                    availableExternalFlag
