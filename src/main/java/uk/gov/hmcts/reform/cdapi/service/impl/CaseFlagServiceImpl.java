@@ -45,7 +45,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         var flagDetails = addTopLevelFlag(caseFlagDtoList, welshRequired);
         addChildLevelFlag(caseFlagDtoList, flagDetails, welshRequired);
         addOtherFlag(flagDetails);
-        log.info("Added other flag");
+        log.info("Added other flag :: {} ", welshRequired);
         var flag = new Flag();
         flag.setFlagDetails(filterFlagType(flagDetails, flagType));
         if (flag.getFlagDetails().isEmpty()) {
