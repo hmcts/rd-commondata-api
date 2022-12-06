@@ -55,26 +55,8 @@ public class CrdServiceImpl implements CrdService {
         return channelList;
     }
 
-    public List<Category> retrieveListOfValuesByCategoryTest(CategoryRequest request) {
-        boolean isChildRequired = isChildRequired(request);
-
-        Specification<ListOfValueDto> query = prepareBaseQuerySpecification(request);
-        if (isChildRequired) {
-            query = query.or(parentCategory(request.getCategoryId()).and(parentKey(request.getKey()))
-                                 .and(serviceId(request.getServiceId())));
-        }
-
-        List<ListOfValueDto> list = listOfValuesRepository.findAll(query);
-        if (list.isEmpty()) {
-            throw new ResourceNotFoundException("Data not found");
-        }
-
-        List<Category> channelList = convertCategoryList(list);
-
-        if (isChildRequired) {
-            channelList = mapToParentCategory(channelList);
-        }
-        return channelList;
+    public boolean retrieveListOfValuesByCategoryTest() {
+        return true;
     }
 
     private boolean isChildRequired(CategoryRequest request) {
