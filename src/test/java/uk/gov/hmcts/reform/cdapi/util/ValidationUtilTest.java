@@ -68,4 +68,9 @@ class ValidationUtilTest {
 
     }
 
+    @Test
+    void test_methodTorF() {
+        Assertions.assertTrue(ValidationUtil.sampleMethod(true));
+        Assertions.assertFalse(ValidationUtil.sampleMethod(false));
+    }
 }
