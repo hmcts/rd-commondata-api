@@ -87,13 +87,7 @@ class CrdServiceImplTest {
         assertEquals("n", result.get(2).getActiveFlag());
     }
 
-    @Test
-    void retrieveCategoriesByAllParamsTest() {
-          Boolean result = crdServiceImpl.retrieveListOfValuesByCategoryTest();
 
-        assertNotNull(result);
-
-    }
 
     @NotNull
     private List<ListOfValueDto> buildListOfValuesDtos() {

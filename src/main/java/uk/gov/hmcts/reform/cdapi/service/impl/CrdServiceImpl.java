@@ -55,10 +55,6 @@ public class CrdServiceImpl implements CrdService {
         return channelList;
     }
 
-    public boolean retrieveListOfValuesByCategoryTest() {
-        return true;
-    }
-
     private boolean isChildRequired(CategoryRequest request) {
         return "Y".equalsIgnoreCase(request.getIsChildRequired())
             && request.getParentCategory() == null && request.getParentKey() == null;
