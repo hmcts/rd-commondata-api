@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.cdapi.service.impl;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -195,6 +196,24 @@ class CaseFlagServiceImplTest {
         caseFlag.getFlags().forEach(caseFlagObj -> {
             for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
                 assertNotNull(flagDetail.getNameCy());
+                assertNotNull(flagDetail.getDefaultStatus());
+                assertNotNull(flagDetail.getExternallyAvailable());
+            }
+        });
+    }
+
+    @Test
+    @DisplayName("Positive scenario -Should return 200 with Welsh-Required=N and available-externally=N")
+    void testGetCaseFlag_ByServiceIWithWelshRequiredIsNandAvailableExternallyIsN_Returns200() {
+        when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
+        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "", "N", "N");
+        assertNotNull(caseFlag);
+        assertEquals(1, caseFlag.getFlags().size());
+        assertEquals(2, caseFlag.getFlags().get(0).getFlagDetails().size());
+        verify(caseFlagRepository, times(1)).findAll(anyString());
+        caseFlag.getFlags().forEach(caseFlagObj -> {
+            for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
+                assertNull(flagDetail.getNameCy());
                 assertNotNull(flagDetail.getDefaultStatus());
                 assertNotNull(flagDetail.getExternallyAvailable());
             }
