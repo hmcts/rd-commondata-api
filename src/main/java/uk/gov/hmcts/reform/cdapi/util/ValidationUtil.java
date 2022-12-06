@@ -34,10 +34,4 @@ public class ValidationUtil {
         }
     }
 
-    public static boolean sampleMethod(boolean isTrue) {
-        if (isTrue) {
-            return true;
-        }
-        return false;
-    }
 }

@@ -78,7 +78,11 @@ public class CaseFlagApiController {
         @RequestParam(value = "welsh-required", required = false)
         @ApiParam(name = "welsh-required",
             value = "Allowed Values are Y or N")
-            String welshRequired
+            String welshRequired,
+        @RequestParam(value = "available-external-flag", required = false)
+        @ApiParam(name = "available-external-flag",
+            value = "Allowed Values are Y or N")
+        String availableExternalFlag
     ) {
         if (StringUtils.isEmpty(serviceId)) {
             throw new InvalidRequestException("service Id can not be null or empty");
@@ -88,6 +92,9 @@ public class CaseFlagApiController {
         }
         if (null != welshRequired) {
             validationWelshRequired(welshRequired.trim());
+        }
+        if (null != availableExternalFlag) {
+            validationWelshRequired(availableExternalFlag.trim());
         }
         log.info("Calling Service layer");
         var caseFlag = caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired);
