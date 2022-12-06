@@ -87,7 +87,28 @@ class CrdServiceImplTest {
         assertEquals("n", result.get(2).getActiveFlag());
     }
 
+    @Test
+    void retrieveCategoriesByAllParamsTest() {
+        List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
+        ListOfValueDto inactiveCategory = CrdTestSupport.createListOfCategoriesDtoMock("HearingChannel",
+                                                                                       "BBA3", null, null, "telephone");
+        inactiveCategory.setActive("n");
+        listOfValueDtos.add(inactiveCategory);
 
+        doReturn(listOfValueDtos).when(listOfValuesRepository)
+            .findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any());
+
+        CategoryRequest request = buildCategoryRequest("HearingChannel", "BBA3", "telephone",
+                                                       "HearingChannel", "telephone","y");
+        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategoryTest(request);
+
+        assertNotNull(result);
+        assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
+        assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
+        assertEquals("y", result.get(0).getActiveFlag());
+        assertEquals("y", result.get(1).getActiveFlag());
+        assertEquals("n", result.get(2).getActiveFlag());
+    }
 
     @NotNull
     private List<ListOfValueDto> buildListOfValuesDtos() {
