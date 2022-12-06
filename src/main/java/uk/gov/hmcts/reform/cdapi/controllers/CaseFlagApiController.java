@@ -20,8 +20,8 @@ import uk.gov.hmcts.reform.cdapi.exception.InvalidRequestException;
 import uk.gov.hmcts.reform.cdapi.service.CaseFlagService;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static uk.gov.hmcts.reform.cdapi.util.ValidationUtil.validateFlag;
 import static uk.gov.hmcts.reform.cdapi.util.ValidationUtil.validationFlagType;
-import static uk.gov.hmcts.reform.cdapi.util.ValidationUtil.validationWelshRequired;
 
 @RestController
 @Slf4j
@@ -91,10 +91,10 @@ public class CaseFlagApiController {
             validationFlagType(flagType.trim());
         }
         if (null != welshRequired) {
-            validationWelshRequired(welshRequired.trim());
+            validateFlag(welshRequired.trim());
         }
         if (null != availableExternalFlag) {
-            validationWelshRequired(availableExternalFlag.trim());
+            validateFlag(availableExternalFlag.trim());
         }
         log.info("Calling Service layer");
         var caseFlag = caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired);

@@ -34,7 +34,7 @@ class ValidationUtilTest {
     void test_welshrequiredWhenNotYorN() {
         InvalidRequestException invalidRequestException = assertThrows(
             InvalidRequestException.class,
-            () -> ValidationUtil.validationWelshRequired(
+            () -> ValidationUtil.validateFlag(
                 "test"
             )
         );
@@ -43,7 +43,7 @@ class ValidationUtilTest {
 
     @Test
     void test_validation_welshRequired() {
-        Assertions.assertDoesNotThrow(() -> ValidationUtil.validationWelshRequired(
+        Assertions.assertDoesNotThrow(() -> ValidationUtil.validateFlag(
             "Y"));
 
     }
