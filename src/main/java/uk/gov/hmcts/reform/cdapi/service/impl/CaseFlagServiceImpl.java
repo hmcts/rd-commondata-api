@@ -49,12 +49,14 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         var flag = new Flag();
         flag.setFlagDetails(filterFlagType(flagDetails, flagType));
         if (flag.getFlagDetails().isEmpty()) {
+            log.info("getFlagDetails is empty");
             throw new ResourceNotFoundException("Data not found");
         }
         var flags = new ArrayList<Flag>();
         flags.add(flag);
         var caseFlag = new CaseFlag();
         caseFlag.setFlags(flags);
+        log.info("flags {} ", caseFlag);
         return caseFlag;
     }
 
