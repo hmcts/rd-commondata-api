@@ -28,9 +28,9 @@ public class ElinksServiceImpl implements ElinkService {
         try {
             response = elinksFeignClient.getLocationDetails();
             log.info("ElinksServiceImpl.elinksFeignClient Response == " + response.body());
-        } catch (Exception exp ){
+        } catch (Exception exp) {
             log.error(exp.getMessage());
-        }finally {
+        } finally {
             if (nonNull(response)) {
                 response.close();
             }
@@ -49,13 +49,13 @@ public class ElinksServiceImpl implements ElinkService {
         try {
             response = elinksFeignClient.getBaseLocationDetails();
             log.info("ElinksServiceImpl.elinksFeignClient Response == " + response.body());
-        } catch (Exception exp ){
+        } catch (Exception exp) {
             log.error(exp.getMessage());
-        }finally {
-        if (nonNull(response)) {
-            response.close();
+        } finally {
+            if (nonNull(response)) {
+                response.close();
+            }
         }
-    }
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(response);
