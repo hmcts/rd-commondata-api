@@ -42,25 +42,19 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     @Override
     public CaseFlag retrieveCaseFlagByServiceId(String serviceId, String flagType, String welshRequired) {
         var caseFlagDtoList = caseFlagRepository.findAll(serviceId.trim().toUpperCase());
-        log.info("caseFlagDtoList {} ", caseFlagDtoList);
         var flagDetails = addTopLevelFlag(caseFlagDtoList, welshRequired);
-        log.info("flagDetails {} ", flagDetails);
         addChildLevelFlag(caseFlagDtoList, flagDetails, welshRequired);
-        log.info("caseFlagDtoList {} ", caseFlagDtoList);
         addOtherFlag(flagDetails);
-        log.info("Added other flag :: {} ", welshRequired);
+        log.info("Added other flag");
         var flag = new Flag();
         flag.setFlagDetails(filterFlagType(flagDetails, flagType));
         if (flag.getFlagDetails().isEmpty()) {
-            log.info("getFlagDetails is empty");
             throw new ResourceNotFoundException("Data not found");
         }
         var flags = new ArrayList<Flag>();
         flags.add(flag);
-        log.info("flags :: {}", flags);
         var caseFlag = new CaseFlag();
         caseFlag.setFlags(flags);
-        log.info("flags {} ", caseFlag);
         return caseFlag;
     }
 
