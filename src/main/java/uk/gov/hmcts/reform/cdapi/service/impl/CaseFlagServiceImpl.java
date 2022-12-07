@@ -108,8 +108,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         for (CaseFlagDto caseFlagDto : caseFlagDtoList) {
             //creating child level flags
             if (caseFlagDto.getCategoryId() != 0) {
-                String name = (StringUtils.isNotEmpty(welshRequired) && (welshRequired.trim().equalsIgnoreCase("y")))
-                    ? caseFlagDto.getValueCy() : caseFlagDto.getValueEn();
+                String name = this.isFlagTorF(welshRequired) ? caseFlagDto.getValueCy() : caseFlagDto.getValueEn();
                 var childFlag = FlagDetail.builder()
                     .name(name)
                     .flagCode(caseFlagDto.getFlagCode())
@@ -119,9 +118,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                     .path(Arrays.stream(caseFlagDto.getCategoryPath().split("/")).collect(Collectors.toList()))
                     .cateGoryId(caseFlagDto.getCategoryId())
                     .id(caseFlagDto.getId());
-                this.setCaseFlagByWelshRequired(
-                    (StringUtils.isNotEmpty(welshRequired) && (welshRequired.trim().equalsIgnoreCase("y"))),
-                                                childFlag, caseFlagDto);
+                this.setCaseFlagByWelshRequired(this.isFlagTorF(welshRequired), childFlag, caseFlagDto);
                 FlagDetail childFlagObj = childFlag.build();
                 if (flaglistLov.contains(caseFlagDto.getFlagCode())) {
                     retrieveListOfValues(childFlagObj);
@@ -144,6 +141,10 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         }
     }
 
+    private boolean isFlagTorF(String flag) {
+        return (StringUtils.isNotEmpty(flag)
+            && (flag.trim().equalsIgnoreCase("y")));
+    }
 
     /**
      * Retrieve list of values based on switch condition.
