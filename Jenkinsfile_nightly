@@ -64,7 +64,7 @@ withNightlyPipeline(type, product, component) {
   enableSecurityScan()
   enableFortifyScan()
 
-  after('mutationTest') {
+  afterSuccess('mutationTest') {
     publishHTML target: [
       allowMissing         : true,
       alwaysLinkToLastBuild: true,
@@ -74,7 +74,7 @@ withNightlyPipeline(type, product, component) {
       reportName           : "Mutation Test Report"
     ]
   }
-  after('fullFunctionalTest') {
+  afterSuccess('fullFunctionalTest') {
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
     publishHTML target: [
@@ -87,7 +87,7 @@ withNightlyPipeline(type, product, component) {
     ]
   }
 
-  after('fortify-scan') {
+  afterSuccess('fortify-scan') {
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
   }
 }
