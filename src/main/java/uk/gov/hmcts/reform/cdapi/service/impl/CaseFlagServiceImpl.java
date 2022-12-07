@@ -80,8 +80,17 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                     .path(Arrays.stream(caseFlagDto.getCategoryPath().split("/")).collect(Collectors.toList()))
                     .childFlags(new ArrayList<>())
                     .id(caseFlagDto.getId())
-                    .cateGoryId(caseFlagDto.getCategoryId()).build();
-                flagDetails.add(flagDetail);
+                    .cateGoryId(caseFlagDto.getCategoryId());
+                if ((StringUtils.isNotEmpty(welshRequired) && (welshRequired.trim().equalsIgnoreCase("y")))) {
+                    flagDetail.nameCy(caseFlagDto.getValueCy())
+                        .defaultStatus(caseFlagDto.getDefaultStatus())
+                        .externallyAvailable(caseFlagDto.getExternallyAvailable());
+                } else {
+                    flagDetail.defaultStatus(caseFlagDto.getDefaultStatus())
+                        .externallyAvailable(caseFlagDto.getExternallyAvailable());
+                }
+                FlagDetail flagDetailObj = flagDetail.build();
+                flagDetails.add(flagDetailObj);
             }
         }
         log.info("Added top level flag : " + flagDetails.size());
@@ -109,15 +118,32 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                     .hearingRelevant(caseFlagDto.getHearingRelevant())
                     .path(Arrays.stream(caseFlagDto.getCategoryPath().split("/")).collect(Collectors.toList()))
                     .cateGoryId(caseFlagDto.getCategoryId())
-                    .id(caseFlagDto.getId()).build();
+                    .id(caseFlagDto.getId());
+                this.setCaseFlagByWelshRequired(
+                    (StringUtils.isNotEmpty(welshRequired) && (welshRequired.trim().equalsIgnoreCase("y"))),
+                                                childFlag, caseFlagDto);
+                FlagDetail childFlagObj = childFlag.build();
                 if (flaglistLov.contains(caseFlagDto.getFlagCode())) {
-                    retrieveListOfValues(childFlag);
+                    retrieveListOfValues(childFlagObj);
                 }
-                addChildFlag(flagDetails, childFlag);
+                addChildFlag(flagDetails, childFlagObj);
             }
         }
         log.info("Added all child flag");
     }
+
+    private void setCaseFlagByWelshRequired(boolean isWelshRequired, FlagDetail.FlagDetailBuilder childFlag,
+                                            CaseFlagDto caseFlagDto) {
+        if (isWelshRequired) {
+            childFlag.nameCy(caseFlagDto.getValueCy())
+                .defaultStatus(caseFlagDto.getDefaultStatus())
+                .externallyAvailable(caseFlagDto.getExternallyAvailable());
+        } else {
+            childFlag.defaultStatus(caseFlagDto.getDefaultStatus())
+                .externallyAvailable(caseFlagDto.getExternallyAvailable());
+        }
+    }
+
 
     /**
      * Retrieve list of values based on switch condition.
