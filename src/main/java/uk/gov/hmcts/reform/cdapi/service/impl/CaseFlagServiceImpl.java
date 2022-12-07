@@ -81,10 +81,9 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                     .childFlags(new ArrayList<>())
                     .id(caseFlagDto.getId())
                     .cateGoryId(caseFlagDto.getCategoryId()).build();
-                    flagDetail.setNameCy(caseFlagDto.getValueCy());
-                    flagDetail.setDefaultStatus(caseFlagDto.getDefaultStatus());
-                    flagDetail.setExternallyAvailable(caseFlagDto.getExternallyAvailable());
-
+                if (flagDetail != null) {
+                    log.info("flagDetail is present");
+                }
                 flagDetails.add(flagDetail);
             }
         }
