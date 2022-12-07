@@ -81,7 +81,14 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                     .childFlags(new ArrayList<>())
                     .id(caseFlagDto.getId())
                     .cateGoryId(caseFlagDto.getCategoryId()).build();
-
+                if ((StringUtils.isNotEmpty(welshRequired) && (welshRequired.trim().equalsIgnoreCase("y")))) {
+                    flagDetail.setNameCy(caseFlagDto.getValueCy());
+                    flagDetail.setDefaultStatus(caseFlagDto.getDefaultStatus());
+                    flagDetail.setExternallyAvailable(caseFlagDto.getExternallyAvailable());
+                } else {
+                    flagDetail.setDefaultStatus(caseFlagDto.getDefaultStatus());
+                    flagDetail.setExternallyAvailable(caseFlagDto.getExternallyAvailable());
+                }
                 flagDetails.add(flagDetail);
             }
         }
