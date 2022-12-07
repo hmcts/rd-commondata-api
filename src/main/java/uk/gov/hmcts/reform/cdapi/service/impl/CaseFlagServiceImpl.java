@@ -69,18 +69,16 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     public List<FlagDetail> addTopLevelFlag(List<CaseFlagDto> caseFlagDtoList, String welshRequired,
                                             String availableExternalFlag) {
         var flagDetails = new ArrayList<FlagDetail>();
-        var isWelshRequired = (StringUtils.isNotEmpty(welshRequired)
-            && (welshRequired.trim().equalsIgnoreCase("y")));
-        var isAvailableExternalFlag = (StringUtils.isNotEmpty(availableExternalFlag)
-            && (availableExternalFlag.trim().equalsIgnoreCase(
-            "y")));
         for (CaseFlagDto caseFlagDto : caseFlagDtoList) {
-            if (isAvailableExternalFlag && Boolean.FALSE.equals(caseFlagDto.getExternallyAvailable())) {
+            if ((StringUtils.isNotEmpty(availableExternalFlag)
+                && (availableExternalFlag.trim().equalsIgnoreCase(
+                "y"))) && Boolean.FALSE.equals(caseFlagDto.getExternallyAvailable())) {
                 continue;
             }
             //creating top level flags
             if (caseFlagDto.getCategoryId() == 0) {
-                String name = isWelshRequired ? caseFlagDto.getValueCy() : caseFlagDto.getValueEn();
+                String name = (StringUtils.isNotEmpty(welshRequired) && (welshRequired.trim().equalsIgnoreCase("y")))
+                    ? caseFlagDto.getValueCy() : caseFlagDto.getValueEn();
                 var flagDetail = FlagDetail.builder()
                     .name(name)
                     .flagCode(caseFlagDto.getFlagCode())
@@ -91,7 +89,8 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                     .childFlags(new ArrayList<>())
                     .id(caseFlagDto.getId())
                     .cateGoryId(caseFlagDto.getCategoryId());
-                if (isWelshRequired) {
+                if ((StringUtils.isNotEmpty(welshRequired)
+                    && (welshRequired.trim().equalsIgnoreCase("y")))) {
                     flagDetail.nameCy(caseFlagDto.getValueCy())
                         .defaultStatus(caseFlagDto.getDefaultStatus())
                         .externallyAvailable(caseFlagDto.getExternallyAvailable());
