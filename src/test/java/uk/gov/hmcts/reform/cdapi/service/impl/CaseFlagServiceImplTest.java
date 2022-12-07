@@ -70,6 +70,26 @@ class CaseFlagServiceImplTest {
     }
 
     @Test
+    void testGetCaseFlag_ByServiceId_Welsh_Y_Returns_200() {
+        when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
+        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "", "Y");
+        assertNotNull(caseFlag);
+        assertEquals(2, caseFlag.getFlags().get(0).getFlagDetails().size());
+        assertEquals(1, caseFlag.getFlags().size());
+        verify(caseFlagRepository, times(1)).findAll(anyString());
+    }
+
+    @Test
+    void testGetCaseFlag_ByServiceId_Welsh_N_Returns_200() {
+        when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
+        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "", "N");
+        assertNotNull(caseFlag);
+        assertEquals(2, caseFlag.getFlags().get(0).getFlagDetails().size());
+        assertEquals(1, caseFlag.getFlags().size());
+        verify(caseFlagRepository, times(1)).findAll(anyString());
+    }
+
+    @Test
     void testGetCaseFlag_ByServiceIdAndFlagTypeParty() {
         when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
         var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "PARTY", null);
@@ -137,6 +157,8 @@ class CaseFlagServiceImplTest {
         caseFlagDto1.setRequestReason(false);
         caseFlagDto1.setValueEn("PARTY");
         caseFlagDto1.setValueCy("");
+        caseFlagDto1.setDefaultStatus("Active");
+        caseFlagDto1.setExternallyAvailable(true);
         caseFlagDto1.setIsParent(true);
 
         var caseFlagDto2 = new CaseFlagDto();
@@ -148,6 +170,8 @@ class CaseFlagServiceImplTest {
         caseFlagDto2.setRequestReason(false);
         caseFlagDto2.setValueEn("REASONABLE ADJUSTMENT");
         caseFlagDto2.setValueCy("");
+        caseFlagDto2.setDefaultStatus("Active");
+        caseFlagDto2.setExternallyAvailable(false);
         caseFlagDto2.setIsParent(true);
 
         var caseFlagDto3 = new CaseFlagDto();
@@ -160,6 +184,8 @@ class CaseFlagServiceImplTest {
         caseFlagDto3.setValueEn("CHILD OF REASONABLE ADJUSTMENT");
         caseFlagDto3.setValueCy("");
         caseFlagDto3.setIsParent(false);
+        caseFlagDto1.setDefaultStatus("Active");
+        caseFlagDto1.setExternallyAvailable(false);
 
         var caseFlagDto4 = new CaseFlagDto();
         caseFlagDto4.setFlagCode("CATEGORY");
@@ -171,6 +197,8 @@ class CaseFlagServiceImplTest {
         caseFlagDto4.setValueEn("CASE");
         caseFlagDto4.setValueCy("");
         caseFlagDto4.setIsParent(true);
+        caseFlagDto4.setDefaultStatus("Active");
+        caseFlagDto4.setExternallyAvailable(false);
 
         var caseFlagDto5 = new CaseFlagDto();
         caseFlagDto5.setFlagCode("CATEGORY");
@@ -182,6 +210,8 @@ class CaseFlagServiceImplTest {
         caseFlagDto5.setValueEn("COMPLEX CASE");
         caseFlagDto5.setValueCy("");
         caseFlagDto5.setIsParent(false);
+        caseFlagDto5.setDefaultStatus("Active");
+        caseFlagDto5.setExternallyAvailable(false);
 
 
         var caseFlagDtoList = new ArrayList<CaseFlagDto>();
