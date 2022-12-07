@@ -238,6 +238,8 @@ class CaseFlagApiControllerTest {
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].listOfValues[0].key", is(parentListOfValue.getKey())))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].listOfValues[0].value", is(parentListOfValue.getValue())))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].Path", is(nullValue())))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].defaultStatus", is(notNullValue())))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].externallyAvailable", is(notNullValue())))
 
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags", hasSize(1)))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].name", is(childFlagDetail.getName())))
@@ -296,6 +298,8 @@ class CaseFlagApiControllerTest {
                 .flagComment(nextBoolean())
                 .hearingRelevant(nextBoolean())
                 .parent(nextBoolean())
+                .defaultStatus("Active")
+                .externallyAvailable(nextBoolean())
                 .listOfValues(List.of(listOfValue))
                 .listOfValuesLength(nextInt());
 
