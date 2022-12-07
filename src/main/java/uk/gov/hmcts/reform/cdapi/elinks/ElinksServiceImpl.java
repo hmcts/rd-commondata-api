@@ -23,9 +23,23 @@ public class ElinksServiceImpl implements ElinkService {
     @Override
     public ResponseEntity<Object> retrieveLocation() {
 
+        log.info("ElinksServiceImpl.retrieveLocation  Start ============");
+        Response response = null;
+        try {
+            response = elinksFeignClient.getLocationDetails();
+            log.info("ElinksServiceImpl.elinksFeignClient Response == " + response.body());
+        } catch (Exception exp ){
+            log.error(exp.getMessage());
+        }finally {
+            if (nonNull(response)) {
+                response.close();
+            }
+        }
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(elinksFeignClient.getLocationDetails());
+            .body(response);
+
+
     }
 
     @Override
