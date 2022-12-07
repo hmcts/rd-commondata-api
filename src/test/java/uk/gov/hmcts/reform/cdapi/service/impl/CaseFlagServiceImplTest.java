@@ -184,8 +184,8 @@ class CaseFlagServiceImplTest {
         caseFlagDto3.setValueEn("CHILD OF REASONABLE ADJUSTMENT");
         caseFlagDto3.setValueCy("");
         caseFlagDto3.setIsParent(false);
-        caseFlagDto1.setDefaultStatus("Active");
-        caseFlagDto1.setExternallyAvailable(false);
+        caseFlagDto3.setDefaultStatus("Active");
+        caseFlagDto3.setExternallyAvailable(false);
 
         var caseFlagDto4 = new CaseFlagDto();
         caseFlagDto4.setFlagCode("CATEGORY");
