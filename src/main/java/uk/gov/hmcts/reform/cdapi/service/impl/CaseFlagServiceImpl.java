@@ -66,12 +66,11 @@ public class CaseFlagServiceImpl implements CaseFlagService {
      */
     public List<FlagDetail> addTopLevelFlag(List<CaseFlagDto> caseFlagDtoList, String welshRequired) {
         var flagDetails = new ArrayList<FlagDetail>();
-        boolean isWelshRequired =
-            (StringUtils.isNotEmpty(welshRequired) && (welshRequired.trim().equalsIgnoreCase("y")));
         for (CaseFlagDto caseFlagDto : caseFlagDtoList) {
             //creating top level flags
             if (caseFlagDto.getCategoryId() == 0) {
-                String name = isWelshRequired ? caseFlagDto.getValueCy() : caseFlagDto.getValueEn();
+                String name = (StringUtils.isNotEmpty(welshRequired) && (welshRequired.trim().equalsIgnoreCase("y")))
+                    ? caseFlagDto.getValueCy() : caseFlagDto.getValueEn();
                 var flagDetail = FlagDetail.builder()
                     .name(name)
                     .flagCode(caseFlagDto.getFlagCode())
