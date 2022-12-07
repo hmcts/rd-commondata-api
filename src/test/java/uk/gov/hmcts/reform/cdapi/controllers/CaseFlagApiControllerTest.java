@@ -26,9 +26,9 @@ import uk.gov.hmcts.reform.cdapi.service.impl.CaseFlagServiceImpl;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
-import static org.apache.commons.lang3.RandomUtils.nextBoolean;
-import static org.apache.commons.lang3.RandomUtils.nextInt;
+import static com.microsoft.applicationinsights.boot.dependencies.apachecommons.lang3.RandomStringUtils.randomAlphabetic;
+import static com.microsoft.applicationinsights.boot.dependencies.apachecommons.lang3.RandomUtils.nextBoolean;
+import static com.microsoft.applicationinsights.boot.dependencies.apachecommons.lang3.RandomUtils.nextInt;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -237,6 +237,8 @@ class CaseFlagApiControllerTest {
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].listOfValues", hasSize(1)))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].listOfValues[0].key", is(parentListOfValue.getKey())))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].listOfValues[0].value", is(parentListOfValue.getValue())))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].listOfValues[0].value_cy",
+                                is(parentListOfValue.getValueCy())))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].Path", is(nullValue())))
 
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags", hasSize(1)))
@@ -262,6 +264,10 @@ class CaseFlagApiControllerTest {
                 "$.flags[0].FlagDetails[0].childFlags[0].listOfValues[0].value",
                 is(childListOfValue.getValue())
             ))
+            .andExpect(jsonPath(
+                "$.flags[0].FlagDetails[0].childFlags[0].listOfValues[0].value_cy",
+                is(childListOfValue.getValueCy())
+            ))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].isParent", is(childFlagDetail.getParent())))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].Path", is(nullValue())));
     }
@@ -286,6 +292,7 @@ class CaseFlagApiControllerTest {
         listOfValue.setValue(randomAlphabetic(5));
         listOfValue.setId(randomAlphabetic(5));
         listOfValue.setKey(randomAlphabetic(5));
+        listOfValue.setValueCy(randomAlphabetic(5));
 
         final FlagDetail.FlagDetailBuilder flagDetailBuilder =
             FlagDetail.builder()

@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface ListOfVenueRepository extends JpaRepository<ListOfValue, Long> {
-    @Query(value = "select ctid, key,value_en as value from "
+    @Query(value = "select ctid, key, value_en, value_cy as value from "
         + "list_of_values where categoryKey = :categoryKey", nativeQuery = true)
     List<ListOfValue> findListOfValues(@Param("categoryKey") String categoryKey);
 }
