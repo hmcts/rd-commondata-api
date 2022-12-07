@@ -90,7 +90,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                 flagDetails.add(flagDetail);
             }
         }
-        this.testMethod(isWelshRequired);
+        this.testMethod(true);
         log.info("Added top level flag : " + flagDetails.size());
         return flagDetails;
     }
