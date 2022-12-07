@@ -28,4 +28,9 @@ public class CaseFlagDto {
     Boolean requestReason;
     @Column(name = "isparent")
     Boolean isParent;
+    @Column(name = "default_status")
+    String defaultStatus;
+    @Column(name = "available_externally")
+    Boolean externallyAvailable;
+
 }
