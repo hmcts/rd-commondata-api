@@ -80,17 +80,9 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                     .path(Arrays.stream(caseFlagDto.getCategoryPath().split("/")).collect(Collectors.toList()))
                     .childFlags(new ArrayList<>())
                     .id(caseFlagDto.getId())
-                    .cateGoryId(caseFlagDto.getCategoryId());
-                if ((StringUtils.isNotEmpty(welshRequired) && (welshRequired.trim().equalsIgnoreCase("y")))) {
-                    flagDetail.nameCy(caseFlagDto.getValueCy())
-                        .defaultStatus(caseFlagDto.getDefaultStatus())
-                        .externallyAvailable(caseFlagDto.getExternallyAvailable());
-                } else {
-                    flagDetail.defaultStatus(caseFlagDto.getDefaultStatus())
-                        .externallyAvailable(caseFlagDto.getExternallyAvailable());
-                }
-                FlagDetail flagDetailObj = flagDetail.build();
-                flagDetails.add(flagDetailObj);
+                    .cateGoryId(caseFlagDto.getCategoryId()).build();
+
+                flagDetails.add(flagDetail);
             }
         }
         log.info("Added top level flag : " + flagDetails.size());
