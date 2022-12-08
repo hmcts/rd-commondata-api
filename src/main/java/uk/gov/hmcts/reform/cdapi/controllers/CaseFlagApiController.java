@@ -1,13 +1,13 @@
 package uk.gov.hmcts.reform.cdapi.controllers;
 
 
+import com.microsoft.applicationinsights.boot.dependencies.apachecommons.lang3.StringUtils;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Authorization;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +21,7 @@ import uk.gov.hmcts.reform.cdapi.service.CaseFlagService;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.cdapi.util.ValidationUtil.validationFlagType;
-import static uk.gov.hmcts.reform.cdapi.util.ValidationUtil.validationWelshRequired;
+import static uk.gov.hmcts.reform.cdapi.util.ValidationUtil.validationYesOrNo;
 
 @RestController
 @Slf4j
@@ -78,7 +78,11 @@ public class CaseFlagApiController {
         @RequestParam(value = "welsh-required", required = false)
         @ApiParam(name = "welsh-required",
             value = "Allowed Values are Y or N")
-            String welshRequired
+            String welshRequired,
+        @RequestParam(value = "available-external-flag", required = false)
+        @ApiParam(name = "available-external-flag",
+            value = "Allowed Values are Y or N")
+            String availableExternalFlag
     ) {
         if (StringUtils.isEmpty(serviceId)) {
             throw new InvalidRequestException("service Id can not be null or empty");
@@ -87,8 +91,13 @@ public class CaseFlagApiController {
             validationFlagType(flagType.trim());
         }
         if (null != welshRequired) {
-            validationWelshRequired(welshRequired.trim());
+            validationYesOrNo(welshRequired.trim());
         }
+
+        if (null != availableExternalFlag) {
+            validationYesOrNo(availableExternalFlag.trim());
+        }
+
         log.info("Calling Service layer");
         var caseFlag = caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired);
         return ResponseEntity.ok().body(caseFlag);

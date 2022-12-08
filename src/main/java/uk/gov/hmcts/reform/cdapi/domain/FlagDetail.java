@@ -24,6 +24,10 @@ public class FlagDetail {
     private Boolean hearingRelevant;
     private Boolean flagComment;
     private String flagCode;
+    @JsonProperty("name_cy")
+    private String nameCy;
+    private String defaultStatus;
+    private String externallyAvailable;
     @JsonIgnore
     private Integer cateGoryId;
     @JsonProperty("isParent")

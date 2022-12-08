@@ -27,9 +27,9 @@ public class ValidationUtil {
         }
     }
 
-    public static void validationWelshRequired(String welshRequired) {
-        boolean validWelshLanguage = Pattern.compile(ALLOW_Y_OR_N_REGEX).matcher(welshRequired).matches();
-        if (Boolean.FALSE.equals(validWelshLanguage)) {
+    public static void validationYesOrNo(String yesOrNoParam) {
+        boolean validYesOrNoParam = Pattern.compile(ALLOW_Y_OR_N_REGEX).matcher(yesOrNoParam).matches();
+        if (Boolean.FALSE.equals(validYesOrNoParam)) {
             throw new InvalidRequestException("Allowed values are Y or N");
         }
     }
