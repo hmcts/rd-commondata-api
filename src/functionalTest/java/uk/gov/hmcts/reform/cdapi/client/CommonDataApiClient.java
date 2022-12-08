@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.rest.SerenityRest;
 import org.springframework.http.HttpStatus;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Categories;
-import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
 import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
 import uk.gov.hmcts.reform.cdapi.idam.IdamOpenIdClient;
 
@@ -68,14 +67,14 @@ public class CommonDataApiClient {
 
     public Object retrieveCaseFlagsByServiceId(HttpStatus expectedStatus, String param) {
         Response response = getMultipleAuthHeaders()
-            .get(BASE_URL_CASE_FLAGS + "/caseflags/service-id=XXXX?flag-type=" + param)
+            .get(BASE_URL_CASE_FLAGS + "/caseflags/" + param)
             .andReturn();
 
         response.then()
             .assertThat()
             .statusCode(expectedStatus.value());
         if (expectedStatus.is2xxSuccessful()) {
-            return Arrays.asList(response.getBody().as(CaseFlag[].class));
+            return response.getBody();
         } else {
             return response.getBody().as(ErrorResponse.class);
         }

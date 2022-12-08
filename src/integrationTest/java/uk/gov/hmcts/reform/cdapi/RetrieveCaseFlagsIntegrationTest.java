@@ -18,6 +18,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(SpringExtension.class)
 @WithTags({@WithTag("testType:Integration")})
@@ -115,13 +116,91 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
         assertThat((Map<String, Object>) errorResponseMap).containsEntry("http_status", HttpStatus.NOT_FOUND);
     }
 
+    @Test
+    @SuppressWarnings("unchecked")
+    void shouldRetrieveCaseFlagForWelshRequiredFlagWithNStatusCode_200()
+        throws JsonProcessingException {
+        final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
+            "AAA1" + "?available-external-flag=n&welsh-required=n",
+            CaseFlag.class,
+            path
+        );
+        assertEquals(2, response.getFlags().get(0).getFlagDetails().size());
+        verifyResponse(response.getFlags().get(0).getFlagDetails());
+        List<FlagDetail> flagDetailList = response.getFlags().get(0).getFlagDetails();
+        for (FlagDetail flagDetail : flagDetailList) {
+            assertEquals(false, flagDetail.getExternallyAvailable() == null);
+            assertEquals(false, flagDetail.getDefaultStatus() == null);
+            if (flagDetail.getParent()) {
+                flagDetail.getChildFlags().forEach(cf -> assertNull(cf.getNameCy()));
+                flagDetail.getChildFlags().forEach(childFlagObj -> {
+                    if (childFlagObj.getListOfValuesLength() != null && childFlagObj.getListOfValuesLength() > 0) {
+                        childFlagObj.getListOfValues().forEach(lov -> assertNull(lov.getValueCy()));
+                    }
+                });
+            }
+        }
+    }
+
+    @Test
+    void shouldRetrieveCaseFlagForWelshRequiredFlagWithYStatusCode_200()
+        throws JsonProcessingException {
+        final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
+            "AAA1" + "?available-external-flag=N&welsh-required=y",
+            CaseFlag.class,
+            path
+        );
+        assertEquals(2, response.getFlags().get(0).getFlagDetails().size());
+        List<FlagDetail> flagDetailList = response.getFlags().get(0).getFlagDetails();
+        for (FlagDetail flagDetail : flagDetailList) {
+            if (flagDetail.getParent()) {
+                flagDetail.getChildFlags().forEach(cf -> {
+                    if (!cf.getName().equalsIgnoreCase("Other")) {
+                        assertNotNull(cf.getNameCy());
+                        assertNotNull(cf.getExternallyAvailable());
+                        assertNotNull(cf.getDefaultStatus());
+                    }
+                });
+            }
+        }
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void shouldRetrieveCaseFlagForAvailableExternalFlagForNForGetNameCyAndLovWithStatusCode_200()
+        throws JsonProcessingException {
+
+        final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
+            "AAA1" + "?available-external-flag=N&welsh-required=Y",
+            CaseFlag.class,
+            path
+        );
+        assertEquals(2, response.getFlags().get(0).getFlagDetails().size());
+        List<FlagDetail> flagDetailList = response.getFlags().get(0).getFlagDetails();
+        for (FlagDetail flagDetail : flagDetailList) {
+            if (flagDetail.getParent()) {
+                for (FlagDetail childFlag : flagDetail.getChildFlags()) {
+                    //child flag
+                    if (childFlag.getFlagCode().equalsIgnoreCase("PF0027")) {
+                        assertEquals("Test27", childFlag.getNameCy());
+                    }
+                    //List Of Values
+                    if (childFlag.getFlagCode().equals("PF0015")) {
+                        assertEquals(1, childFlag.getListOfValuesLength());
+                        assertEquals("test2", childFlag.getListOfValues().get(0).getValueCy());
+                    }
+                }
+            }
+        }
+    }
+
     private void verifyResponse(List<FlagDetail> flagDetails) {
         for (FlagDetail flagDetail : flagDetails) {
             if (flagDetail.getName().equalsIgnoreCase(FlagType.CASE.name())) {
                 assertEquals(2, flagDetail.getChildFlags().size());
             }
             if (flagDetail.getName().equalsIgnoreCase(FlagType.PARTY.name())) {
-                assertEquals(4, flagDetail.getChildFlags().size());
+                assertEquals(7, flagDetail.getChildFlags().size());
             }
             switch (flagDetail.getFlagCode()) {
                 case "RA0004":
