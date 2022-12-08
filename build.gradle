@@ -337,12 +337,8 @@ dependencies {
   implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
 
   implementation group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '5.10.2'
-  implementation (group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: versions.reformS2sClient)
-    {
-      exclude group: "commons-io",module: "commons-io"
-      exclude group: "commons-codec", module: "commons-codec"
-        exclude group: "commons-fileupload", module: "commons-fileupload"
-      }
+  implementation group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: versions.reformS2sClient
+
 
   implementation group: 'javax.inject', name: 'javax.inject', version: '1'
   implementation "com.github.hmcts.java-logging:logging:${versions.reformLogging}"
