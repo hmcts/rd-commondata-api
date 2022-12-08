@@ -93,7 +93,6 @@ public class CaseFlagApiController {
         if (null != welshRequired) {
             validationYesOrNo(welshRequired.trim());
         }
-
         if (null != availableExternalFlag) {
             validationYesOrNo(availableExternalFlag.trim());
         }

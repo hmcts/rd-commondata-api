@@ -229,6 +229,9 @@ class CaseFlagApiControllerTest {
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].flagComment", is(parentFlagDetail.getFlagComment())))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].flagCode", is(parentFlagDetail.getFlagCode())))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].isParent", is(parentFlagDetail.getParent())))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].name_cy", is(parentFlagDetail.getNameCy())))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].defaultStatus", is(parentFlagDetail.getDefaultStatus())))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].externallyAvailable", is(parentFlagDetail.getExternallyAvailable())))
             .andExpect(jsonPath(
                 "$.flags[0].FlagDetails[0].listOfValuesLength",
                 is(parentFlagDetail.getListOfValuesLength())
@@ -299,6 +302,9 @@ class CaseFlagApiControllerTest {
                 .id(nextInt())
                 .flagCode(randomAlphabetic(5))
                 .name(randomAlphabetic(5))
+                .nameCy(randomAlphabetic(5))
+                .defaultStatus(randomAlphabetic(5))
+                .externallyAvailable("Y")
                 .cateGoryId(nextInt())
                 .flagComment(nextBoolean())
                 .hearingRelevant(nextBoolean())
