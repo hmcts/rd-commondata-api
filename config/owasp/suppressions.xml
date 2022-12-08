@@ -31,4 +31,10 @@
   <suppress until="2023-01-01">
     <cve>CVE-2022-31569</cve>
   </suppress>
+  <suppress>
+    <notes>
+      Awaiting fix as updating to latest available version hasn't resolved this.
+    </notes>
+    <cve>CVE-2021-37533</cve>
+  </suppress>
 </suppressions>
