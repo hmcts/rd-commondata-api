@@ -96,7 +96,7 @@ public class CaseFlagApiController {
         if (null != availableExternalFlag) {
             validateValueForYorNRequired(availableExternalFlag.trim());
         }
-        log.info("Calling Service layer");
+        log.info("Calling Service layer ");
         var caseFlag = caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType,
                                                                    welshRequired, availableExternalFlag);
         return ResponseEntity.ok().body(caseFlag);
