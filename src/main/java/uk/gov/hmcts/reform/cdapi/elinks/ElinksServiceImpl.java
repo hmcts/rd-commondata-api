@@ -36,7 +36,7 @@ public class ElinksServiceImpl implements ElinkService {
         }
         return ResponseEntity
             .status(response.status())
-            .body(response);
+            .body(response.body());
 
 
     }
@@ -57,7 +57,7 @@ public class ElinksServiceImpl implements ElinkService {
         }
         return ResponseEntity
             .status(response.status())
-            .body(response);
+            .body(response.body());
 
     }
 
