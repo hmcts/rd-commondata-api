@@ -339,9 +339,9 @@ dependencies {
   implementation group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '5.10.2'
   implementation (group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: versions.reformS2sClient)
     {
-      exclude group: "commons-io"
-      exclude group: "commons-codec"
-        exclude group: "commons-fileupload"
+      exclude group: "commons-io",module: "commons-io"
+      exclude group: "commons-codec", module: "commons-codec"
+        exclude group: "commons-fileupload", module: "commons-fileupload"
       }
 
   implementation group: 'javax.inject', name: 'javax.inject', version: '1'
