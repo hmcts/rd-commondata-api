@@ -113,15 +113,15 @@ tasks.withType(Test) {
   }
 }
 
-tasks.withType(Test.class).configureEach {
-  jacoco {
-    excludes = ["*"]
-  }
-}
+//tasks.withType(Test.class).configureEach {
+//  jacoco {
+//    excludes = ["*"]
+//  }
+//}
 
-test {
-  failFast = true
-}
+//test {
+//  failFast = true
+//}
 
 task functional(type: Test) {
   description = "Runs functional tests"
@@ -213,13 +213,14 @@ pmd {
 jacoco {
   toolVersion = "0.8.7"
 }
+
 jacocoTestCoverageVerification {
   violationRules {
     rule {
       limit {
         counter = 'LINE'
         value = 'COVEREDRATIO'
-        minimum = 0.00
+        minimum = 0.80
       }
     }
   }
