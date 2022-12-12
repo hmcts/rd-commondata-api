@@ -344,68 +344,6 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
         }
     }
 
-    @Test
-    @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
-    @ExtendWith(FeatureToggleConditionExtension.class)
-    void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithWelshFlagIsY() {
-        final var response = (Response)
-            commonDataApiClient.retrieveCaseFlagsByServiceId(
-                OK,
-                "service-id=XXXX?welsh-required=Y"
-            );
-        this.validateSuccessRetriveCaseFlagResponse(response);
-    }
-
-    @Test
-    @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
-    @ExtendWith(FeatureToggleConditionExtension.class)
-    void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithWelshFlagIsN() {
-
-        final var response = (Response)
-            commonDataApiClient.retrieveCaseFlagsByServiceId(
-                OK,
-                "service-id=XXXX?welsh-required=N"
-            );
-        this.validateSuccessRetriveCaseFlagResponse(response);
-    }
-
-    @Test
-    @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
-    @ExtendWith(FeatureToggleConditionExtension.class)
-    void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithAvailableExternalFlagIsY() {
-        final var response = (Response)
-            commonDataApiClient.retrieveCaseFlagsByServiceId(
-                OK,
-                "service-id=XXXX?available-external-flag=Y"
-            );
-        this.validateSuccessRetriveCaseFlagResponse(response);
-    }
-
-    @Test
-    @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
-    @ExtendWith(FeatureToggleConditionExtension.class)
-    void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithAvailableExternalFlagIsN() {
-        final var response = (Response)
-            commonDataApiClient.retrieveCaseFlagsByServiceId(
-                OK,
-                "service-id=XXXX?available-external-flag=N"
-            );
-        this.validateSuccessRetriveCaseFlagResponse(response);
-    }
-
-    @Test
-    @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
-    @ExtendWith(FeatureToggleConditionExtension.class)
-    void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithoutWelshFlagAndAvailableExternalFlag() {
-
-        final var response = (Response)
-            commonDataApiClient.retrieveCaseFlagsByServiceId(
-                OK,
-                "service-id=XXXX"
-            );
-        this.validateSuccessRetriveCaseFlagResponse(response);
-    }
-
     private void validateSuccessRetriveCaseFlagResponse(Response response) {
         if (OK.value() == response.getStatusCode()) {
             var caseFlags = response.getBody().as(CaseFlag.class);
@@ -417,9 +355,9 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
     }
 
     @Test
-    @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
+    @ToggleEnable(mapKey = MAP_KEY_CASE_FLAGS, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
-    void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithAvailableExternalFlagIsEmpty() {
+    void shouldReturnBadRequestForRetrieveCaseFlagsByServiceIdWithAvailableExternalFlagIsEmpty() {
         final var response = (ErrorResponse)
             commonDataApiClient.retrieveCaseFlagsByServiceId(
                 HttpStatus.BAD_REQUEST,
@@ -429,4 +367,16 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
         assertEquals(response.getErrorDescription(),"Allowed values are Y or N");
     }
 
+    @Test
+    @ToggleEnable(mapKey = MAP_KEY_CASE_FLAGS, withFeature = true)
+    @ExtendWith(FeatureToggleConditionExtension.class)
+    void shouldReturnNotFoundForRetrieveCaseFlagsByServiceIdWithAvailableExternalFlagAndDefaultStatus() {
+        final var response = (ErrorResponse)
+            commonDataApiClient.retrieveCaseFlagsByServiceId(
+                NOT_FOUND,
+                "service-id=XBBB?available-external-flag=Y&default-status=true"
+            );
+        assertEquals(response.getErrorCode(),404);
+        assertEquals(response.getErrorDescription(),"Data not found");
+    }
 }
