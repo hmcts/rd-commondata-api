@@ -113,15 +113,9 @@ tasks.withType(Test) {
   }
 }
 
-//tasks.withType(Test.class).configureEach {
-//  jacoco {
-//    excludes = ["*"]
-//  }
-//}
-//
-//test {
-//  failFast = true
-//}
+test {
+  failFast = true
+}
 
 task functional(type: Test) {
   description = "Runs functional tests"
