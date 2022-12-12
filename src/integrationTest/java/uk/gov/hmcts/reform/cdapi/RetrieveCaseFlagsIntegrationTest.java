@@ -171,7 +171,7 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
         throws JsonProcessingException {
 
         final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
-            "AAA1" + "?available-external-flag=N&welsh-required=Y",
+            "AAA1?available-external-flag=N&welsh-required=Y",
             CaseFlag.class,
             path
         );
@@ -194,13 +194,55 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
         }
     }
 
+    @Test
+    void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithWelshFlagIsY() throws JsonProcessingException {
+        final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
+            "AAA1?welsh-required=Y",
+            CaseFlag.class,
+            path
+        );
+        assertEquals(2, response.getFlags().get(0).getFlagDetails().size());
+    }
+
+    @Test
+    void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithWelshFlagIsN() throws JsonProcessingException {
+        final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
+            "AAA1?welsh-required=Y",
+            CaseFlag.class,
+            path
+        );
+        assertEquals(2, response.getFlags().get(0).getFlagDetails().size());
+    }
+
+    @Test
+    void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithAvailableExternalFlagIsN()
+        throws JsonProcessingException {
+        final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
+            "AAA1?available-external-flag=N",
+            CaseFlag.class,
+            path
+        );
+        assertEquals(2, response.getFlags().get(0).getFlagDetails().size());
+    }
+
+    @Test
+    void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithAvailableExternalFlagIsY()
+        throws JsonProcessingException {
+        final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
+            "AAA1?flag-type=PARTY&available-external-flag=Y",
+            CaseFlag.class,
+            path
+        );
+        assertEquals(1, response.getFlags().get(0).getFlagDetails().size());
+    }
+
     private void verifyResponse(List<FlagDetail> flagDetails) {
         for (FlagDetail flagDetail : flagDetails) {
             if (flagDetail.getName().equalsIgnoreCase(FlagType.CASE.name())) {
                 assertEquals(2, flagDetail.getChildFlags().size());
             }
             if (flagDetail.getName().equalsIgnoreCase(FlagType.PARTY.name())) {
-                assertEquals(7, flagDetail.getChildFlags().size());
+                assertEquals(8, flagDetail.getChildFlags().size());
             }
             switch (flagDetail.getFlagCode()) {
                 case "RA0004":

@@ -70,11 +70,6 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                                             String availableExternalFlag) {
         var flagDetails = new ArrayList<FlagDetail>();
         for (CaseFlagDto caseFlagDto : caseFlagDtoList) {
-            if ((StringUtils.isNotEmpty(availableExternalFlag)
-                && (availableExternalFlag.trim().equalsIgnoreCase(
-                "y"))) && Boolean.FALSE.equals(caseFlagDto.getExternallyAvailable())) {
-                continue;
-            }
             //creating top level flags
             if (caseFlagDto.getCategoryId() == 0) {
                 String name = (StringUtils.isNotEmpty(welshRequired) && (welshRequired.trim().equalsIgnoreCase("y")))

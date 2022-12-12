@@ -168,12 +168,12 @@ class CaseFlagServiceImplTest {
     }
 
     @Test
-    void testGetCaseFlag_ByServiceIWithWelshRequiredIsNandAvailableExternallyIsY_Returns200() {
+    void testGetCaseFlag_ByServiceIWithWelshRequiredIsN_and_AvailableExternallyIsY_Returns200() {
         when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
         var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "", "N", "Y");
         assertNotNull(caseFlag);
         assertEquals(1, caseFlag.getFlags().size());
-        assertEquals(1, caseFlag.getFlags().get(0).getFlagDetails().size());
+        assertEquals(2, caseFlag.getFlags().get(0).getFlagDetails().size());
         verify(caseFlagRepository, times(1)).findAll(anyString());
         caseFlag.getFlags().forEach(caseFlagObj -> {
             for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
@@ -191,7 +191,7 @@ class CaseFlagServiceImplTest {
         var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "", "Y", "Y");
         assertNotNull(caseFlag);
         assertEquals(1, caseFlag.getFlags().size());
-        assertEquals(1, caseFlag.getFlags().get(0).getFlagDetails().size());
+        assertEquals(2, caseFlag.getFlags().get(0).getFlagDetails().size());
         verify(caseFlagRepository, times(1)).findAll(anyString());
         caseFlag.getFlags().forEach(caseFlagObj -> {
             for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
@@ -231,7 +231,7 @@ class CaseFlagServiceImplTest {
         caseFlagDto1.setValueEn("PARTY");
         caseFlagDto1.setValueCy("");
         caseFlagDto1.setIsParent(true);
-        caseFlagDto1.setExternallyAvailable(false);
+        caseFlagDto1.setExternallyAvailable(true);
         caseFlagDto1.setDefaultStatus("Requested");
 
         var caseFlagDto2 = new CaseFlagDto();
@@ -257,7 +257,7 @@ class CaseFlagServiceImplTest {
         caseFlagDto3.setValueEn("CHILD OF REASONABLE ADJUSTMENT");
         caseFlagDto3.setValueCy("");
         caseFlagDto3.setIsParent(false);
-        caseFlagDto3.setExternallyAvailable(false);
+        caseFlagDto3.setExternallyAvailable(true);
         caseFlagDto3.setDefaultStatus("Requested");
 
         var caseFlagDto4 = new CaseFlagDto();
@@ -283,7 +283,7 @@ class CaseFlagServiceImplTest {
         caseFlagDto5.setValueEn("COMPLEX CASE");
         caseFlagDto5.setValueCy("");
         caseFlagDto5.setIsParent(false);
-        caseFlagDto5.setExternallyAvailable(false);
+        caseFlagDto5.setExternallyAvailable(true);
         caseFlagDto5.setDefaultStatus("Requested");
 
 
