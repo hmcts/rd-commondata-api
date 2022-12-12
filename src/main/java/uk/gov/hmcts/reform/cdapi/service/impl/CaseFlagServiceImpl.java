@@ -44,7 +44,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     public CaseFlag retrieveCaseFlagByServiceId(String serviceId, String flagType,
                                                 String welshRequired, String availableExternalFlag) {
         var caseFlagDtoList = caseFlagRepository.findAll(serviceId.trim().toUpperCase());
-        var flagDetails = addTopLevelFlag(caseFlagDtoList, welshRequired, availableExternalFlag);
+        var flagDetails = addTopLevelFlag(caseFlagDtoList, welshRequired);
         addChildLevelFlag(caseFlagDtoList, flagDetails, welshRequired, availableExternalFlag);
         addOtherFlag(flagDetails);
         log.info("Added other flag");
@@ -66,8 +66,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
      * @param caseFlagDtoList caseFlagDtoList
      * @return list of flagdetail with toplevel flags
      */
-    public List<FlagDetail> addTopLevelFlag(List<CaseFlagDto> caseFlagDtoList, String welshRequired,
-                                            String availableExternalFlag) {
+    public List<FlagDetail> addTopLevelFlag(List<CaseFlagDto> caseFlagDtoList, String welshRequired) {
         var flagDetails = new ArrayList<FlagDetail>();
         for (CaseFlagDto caseFlagDto : caseFlagDtoList) {
             //creating top level flags
