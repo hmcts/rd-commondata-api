@@ -89,6 +89,7 @@ public class CommonDataApiProviderTest {
         listOfValue.setValue("1");
         listOfValue.setKey("EN");
         listOfValue.setValue("English");
+        listOfValue.setValueCy("English");
         List<ListOfValue> listOfValues = new ArrayList<>();
         listOfValues.add(listOfValue);
         when(listOfVenueRepository.findListOfValues(anyString())).thenReturn(listOfValues);
@@ -101,6 +102,9 @@ public class CommonDataApiProviderTest {
         caseFlagDto1.setRequestReason(false);
         caseFlagDto1.setValueEn("E");
         caseFlagDto1.setIsParent(false);
+        caseFlagDto1.setExternallyAvailable(true);
+        caseFlagDto1.setDefaultStatus("Active");
+
 
         CaseFlagDto caseFlagDto2 = new CaseFlagDto();
         caseFlagDto2.setFlagCode("CF0001");
@@ -111,6 +115,8 @@ public class CommonDataApiProviderTest {
         caseFlagDto2.setRequestReason(false);
         caseFlagDto2.setValueEn("E");
         caseFlagDto2.setIsParent(false);
+        caseFlagDto1.setExternallyAvailable(false);
+        caseFlagDto1.setDefaultStatus("Active");
 
         List<CaseFlagDto> caseFlagDtos = new ArrayList<>();
         caseFlagDtos.add(caseFlagDto1);
