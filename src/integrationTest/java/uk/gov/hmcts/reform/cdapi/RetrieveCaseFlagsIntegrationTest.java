@@ -156,14 +156,29 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
             CaseFlag.class,
             path
         );
-        Object result = this.jsonPathResult(responseBody, "$.flags[0].FlagDetails[0].name");
-        assertNotNull(this.jsonPathResult(responseBody, "$.flags[0].FlagDetails[0].defaultStatus"), "Active");
+        assertNotNull(this.jsonPathResult(responseBody, "$.flags[0].FlagDetails[0].defaultStatus"));
         assertNotNull(this.jsonPathResult(responseBody, "$.flags[0].FlagDetails[0].externallyAvailable"));
         Exception exception = assertThrows(PathNotFoundException.class, () -> {
             this.jsonPathResult(responseBody, "$.flags[0].FlagDetails[0].name_cy");
         });
         String expectedMessage = "No results for path: $['flags'][0]['FlagDetails'][0]['name_cy']";
         String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+
+        assertNotNull(this.jsonPathResult(
+            responseBody,
+            "$.flags[0].FlagDetails[1].childFlags[0].childFlags[0].defaultStatus"
+        ), "Active");
+        assertNotNull(this.jsonPathResult(
+            responseBody,
+            "$.flags[0].FlagDetails[1].childFlags[0].childFlags[0].externallyAvailable"
+        ));
+
+        exception = assertThrows(PathNotFoundException.class, () -> {
+            this.jsonPathResult(responseBody, "$.flags[0].FlagDetails[1].childFlags[0].childFlags[0].value_cy");
+        });
+        expectedMessage = "No results for path: $['flags'][0]['FlagDetails'][1]['childFlags'][0]['childFlags'][0]['value_cy']";
+        actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
 
