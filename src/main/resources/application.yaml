@@ -90,7 +90,7 @@ security:
     - "/csrf"
     - "/error"
     - "/favicon.ico"
-
+    - "/refdata/elinks/api/v4/proxy/**"
 idam:
   s2s-auth:
     totp_secret: ${COMMONDATA_API_S2S_SECRET:}
@@ -108,3 +108,11 @@ launchdarkly:
     key: ${LD_SDK_KEY:}
     environment: ${LAUNCH_DARKLY_ENV:local}
     user: rd
+
+
+elinksApiKey: ${judicial_api_elinks_api_key:}
+#URL not tested , code is for developers reference
+elinksUrl: ${ELINKS_URL:https://jo-staging.elinks.judiciary.uk/api/v4}
+logging:
+  level:
+    uk.gov.hmcts.reform.cdapi.elinks.feign.ElinksFeignClient: DEBUG

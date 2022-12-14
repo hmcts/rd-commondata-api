@@ -29,3 +29,5 @@ java:
           alias: POSTGRES_PASSWORD
         - name: common-data-api-s2s-secret
           alias: COMMONDATA_API_S2S_SECRET
+        - name: judicial-api-elinks-api-key
+          alias: judicial_api_elinks_api_key

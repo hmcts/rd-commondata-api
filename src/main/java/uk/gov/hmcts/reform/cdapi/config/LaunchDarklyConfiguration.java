@@ -23,6 +23,7 @@ public class LaunchDarklyConfiguration implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(featureConditionEvaluation)
             .addPathPatterns("/refdata/commondata/caseflags/**")
-            .addPathPatterns("/refdata/commondata/lov/**");
+            .addPathPatterns("/refdata/commondata/lov/**")
+            .addPathPatterns("/refdata/elinks/api/v4/proxy/**");
     }
 }

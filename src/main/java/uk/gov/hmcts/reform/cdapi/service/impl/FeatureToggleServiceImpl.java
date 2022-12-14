@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 
+import static uk.gov.hmcts.reform.cdapi.elinks.util.RefDataConstants.RD_ELINKS_API_PROXY;
+
+
 @Service
 public class FeatureToggleServiceImpl implements FeatureToggleService {
 
@@ -41,6 +44,17 @@ public class FeatureToggleServiceImpl implements FeatureToggleService {
             "CrdApiController.retrieveListOfValuesByCategoryId",
             "rd_lov_api"
         );
+
+        launchDarklyMap.put(
+            "ElinksController.getLocations",
+            RD_ELINKS_API_PROXY
+        );
+
+        launchDarklyMap.put(
+            "ElinksController.getBaseLocations",
+            RD_ELINKS_API_PROXY
+        );
+
     }
 
     @Override
