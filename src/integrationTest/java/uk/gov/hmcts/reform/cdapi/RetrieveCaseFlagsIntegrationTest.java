@@ -178,7 +178,7 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
             this.jsonPathResult(responseBody, "$.flags[0].FlagDetails[1].childFlags[0].childFlags[0].value_cy");
         });
         expectedMessage = "No results for path: "
-            +"$['flags'][0]['FlagDetails'][1]['childFlags'][0]['childFlags'][0]['value_cy']";
+            + "$['flags'][0]['FlagDetails'][1]['childFlags'][0]['childFlags'][0]['value_cy']";
         actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
