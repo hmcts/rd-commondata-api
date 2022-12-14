@@ -357,16 +357,4 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
         assertEquals(response.getErrorDescription(),"Allowed values are Y or N");
     }
 
-    @Test
-    @ToggleEnable(mapKey = MAP_KEY_CASE_FLAGS, withFeature = true)
-    @ExtendWith(FeatureToggleConditionExtension.class)
-    void shouldReturnNotFoundForRetrieveCaseFlagsByServiceIdWithAvailableExternalFlagAndDefaultStatus() {
-        final var response = (ErrorResponse)
-            commonDataApiClient.retrieveCaseFlagsByServiceId(
-                NOT_FOUND,
-                "service-id=XBBB?available-external-flag=Y&default-status=true"
-            );
-        assertEquals(response.getErrorCode(),404);
-        assertEquals(response.getErrorDescription(),"Data not found");
-    }
 }

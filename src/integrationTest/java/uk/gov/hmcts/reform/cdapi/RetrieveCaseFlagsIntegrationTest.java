@@ -1,6 +1,8 @@
 package uk.gov.hmcts.reform.cdapi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.PathNotFoundException;
 import net.thucydides.core.annotations.WithTag;
 import net.thucydides.core.annotations.WithTags;
 import org.junit.jupiter.api.Test;
@@ -20,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
@@ -145,6 +148,26 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
     }
 
     @Test
+    @SuppressWarnings("unchecked")
+    void shouldRetrieveCaseFlag_WelshRequiredWithNStatusCode_200()
+        throws Exception {
+        final var responseBody = commonDataApiClient.retrieveCaseFlagsByServiceIdJsonFormat(
+            "AAA1" + "?welsh-required=n",
+            CaseFlag.class,
+            path
+        );
+        Object result = this.jsonPathResult(responseBody, "$.flags[0].FlagDetails[0].name");
+        assertNotNull(this.jsonPathResult(responseBody, "$.flags[0].FlagDetails[0].defaultStatus"), "Active");
+        assertNotNull(this.jsonPathResult(responseBody, "$.flags[0].FlagDetails[0].externallyAvailable"));
+        Exception exception = assertThrows(PathNotFoundException.class, () -> {
+            this.jsonPathResult(responseBody, "$.flags[0].FlagDetails[0].name_cy");
+        });
+        String expectedMessage = "No results for path: $['flags'][0]['FlagDetails'][0]['name_cy']";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
     void shouldRetrieveCaseFlagForWelshRequiredFlagWithYStatusCode_200()
         throws JsonProcessingException {
         final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
@@ -160,7 +183,6 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
             if (flagDetail.getParent()) {
                 flagDetail.getChildFlags().forEach(cf -> {
                     if (!cf.getName().equalsIgnoreCase("Other")) {
-                        assertNotNull(cf.getNameCy());
                         assertNotNull(cf.getExternallyAvailable());
                         assertNotNull(cf.getDefaultStatus());
                         if (nameCyFlagCodes.contains(cf.getFlagCode())) {
@@ -243,6 +265,11 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
             path
         );
         assertEquals(1, response.getFlags().get(0).getFlagDetails().size());
+    }
+
+
+    private Object jsonPathResult(Object responseBody, String jsonPath) throws Exception {
+        return JsonPath.read(responseBody.toString(), jsonPath);
     }
 
     private void verifyResponse(List<FlagDetail> flagDetails) {

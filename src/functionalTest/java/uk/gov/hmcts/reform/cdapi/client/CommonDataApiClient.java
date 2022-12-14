@@ -70,11 +70,9 @@ public class CommonDataApiClient {
         Response response = getMultipleAuthHeaders()
             .get(BASE_URL_CASE_FLAGS + "/caseflags/" + param)
             .andReturn();
-        log.info(" Path = {} ", BASE_URL_CASE_FLAGS + "/caseflags/" + param);
         response.then()
             .assertThat()
             .statusCode(expectedStatus.value());
-        log.info(" response = {} ", response);
         if (expectedStatus.is2xxSuccessful()) {
             return response.getBody();
         } else {

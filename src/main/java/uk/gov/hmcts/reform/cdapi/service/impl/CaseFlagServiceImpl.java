@@ -40,6 +40,8 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     @Value("${flaglist}")
     List<String> flaglistLov;
 
+    public static final String IGNORE_JSON = "IGNORE_JSON";
+
     @Override
     public CaseFlag retrieveCaseFlagByServiceId(String serviceId, String flagType,
                                                 String welshRequired, String availableExternalFlag) {
@@ -85,10 +87,11 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                     .cateGoryId(caseFlagDto.getCategoryId());
                 if ((StringUtils.isNotEmpty(welshRequired)
                     && (welshRequired.trim().equalsIgnoreCase("y")))) {
-                    flagDetail.nameCy(caseFlagDto.getValueCy())
+                    flagDetail.nameCy(this.setNullValue(caseFlagDto.getValueCy()))
                         .defaultStatus(caseFlagDto.getDefaultStatus())
                         .externallyAvailable(caseFlagDto.getExternallyAvailable());
                 } else {
+                    this.ignoreNameCy(flagDetail);
                     flagDetail.defaultStatus(caseFlagDto.getDefaultStatus())
                         .externallyAvailable(caseFlagDto.getExternallyAvailable());
                 }
@@ -141,13 +144,22 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     private void setCaseFlagByWelshRequired(boolean isWelshRequired, FlagDetail.FlagDetailBuilder childFlag,
                                             CaseFlagDto caseFlagDto) {
         if (isWelshRequired) {
-            childFlag.nameCy(caseFlagDto.getValueCy())
+            childFlag.nameCy(this.setNullValue(caseFlagDto.getValueCy()))
                 .defaultStatus(caseFlagDto.getDefaultStatus())
                 .externallyAvailable(caseFlagDto.getExternallyAvailable());
         } else {
+            this.ignoreNameCy(childFlag);
             childFlag.defaultStatus(caseFlagDto.getDefaultStatus())
                 .externallyAvailable(caseFlagDto.getExternallyAvailable());
         }
+    }
+
+    private String setNullValue(String value) {
+        return ObjectUtils.isEmpty(value) ? null : value;
+    }
+
+    private void ignoreNameCy(FlagDetail.FlagDetailBuilder flagDetail) {
+        flagDetail.nameCy(IGNORE_JSON);
     }
 
     private String getNameByValue(boolean isWelshRequired, CaseFlagDto caseFlagDto) {
@@ -180,7 +192,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         childFlag.setChildFlags(null);
         int listOfValuesSize = ObjectUtils.isNotEmpty(listOfValues) ? listOfValues.size() : null;
         if (!isWelshRequired && listOfValuesSize > 0) {
-            listOfValues.forEach(lov -> lov.setValueCy(null));
+            listOfValues.forEach(lov -> lov.setValueCy(IGNORE_JSON));
         }
         childFlag.setListOfValuesLength(listOfValuesSize);
         childFlag.setListOfValues(listOfValues);
