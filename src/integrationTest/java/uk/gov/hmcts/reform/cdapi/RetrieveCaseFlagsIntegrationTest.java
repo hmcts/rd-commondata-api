@@ -163,9 +163,9 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
                         assertNotNull(cf.getNameCy());
                         assertNotNull(cf.getExternallyAvailable());
                         assertNotNull(cf.getDefaultStatus());
-                        if(nameCyFlagCodes.contains(cf.getFlagCode())){
-                            assertEquals("Test",cf.getNameCy());
-                            assertEquals(Boolean.FALSE,cf.getExternallyAvailable());
+                        if (nameCyFlagCodes.contains(cf.getFlagCode())) {
+                            assertEquals("Test", cf.getNameCy());
+                            assertEquals(Boolean.FALSE, cf.getExternallyAvailable());
                             assertTrue(sampleDefaultStatus.contains(cf.getDefaultStatus()));
                         }
                     }
