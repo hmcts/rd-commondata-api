@@ -31,6 +31,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.cdapi.controllers.constant.Constant.FLAG_PF0015;
 import static uk.gov.hmcts.reform.cdapi.controllers.constant.Constant.FLAG_RA0042;
+import static uk.gov.hmcts.reform.cdapi.service.impl.CaseFlagServiceImpl.IGNORE_JSON;
 
 @ExtendWith(MockitoExtension.class)
 class CaseFlagServiceImplTest {
@@ -143,7 +144,6 @@ class CaseFlagServiceImplTest {
         verify(caseFlagRepository, times(1)).findAll(anyString());
         caseFlag.getFlags().forEach(caseFlagObj -> {
             for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
-                assertNotNull(flagDetail.getNameCy());
                 assertNotNull(flagDetail.getDefaultStatus());
                 assertNotNull(flagDetail.getExternallyAvailable());
             }
@@ -160,7 +160,7 @@ class CaseFlagServiceImplTest {
         verify(caseFlagRepository, times(1)).findAll(anyString());
         caseFlag.getFlags().forEach(caseFlagObj -> {
             for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
-                assertNull(flagDetail.getNameCy());
+                assertEquals(flagDetail.getNameCy(),IGNORE_JSON);
                 assertNotNull(flagDetail.getDefaultStatus());
                 assertNotNull(flagDetail.getExternallyAvailable());
             }
@@ -177,7 +177,7 @@ class CaseFlagServiceImplTest {
         verify(caseFlagRepository, times(1)).findAll(anyString());
         caseFlag.getFlags().forEach(caseFlagObj -> {
             for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
-                assertNull(flagDetail.getNameCy());
+                assertEquals(flagDetail.getNameCy(),IGNORE_JSON);
                 assertNotNull(flagDetail.getDefaultStatus());
                 assertNotNull(flagDetail.getExternallyAvailable());
                 assertTrue(flagDetail.getExternallyAvailable());
@@ -195,7 +195,6 @@ class CaseFlagServiceImplTest {
         verify(caseFlagRepository, times(1)).findAll(anyString());
         caseFlag.getFlags().forEach(caseFlagObj -> {
             for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
-                assertNotNull(flagDetail.getNameCy());
                 assertNotNull(flagDetail.getDefaultStatus());
                 assertNotNull(flagDetail.getExternallyAvailable());
             }
@@ -213,7 +212,7 @@ class CaseFlagServiceImplTest {
         verify(caseFlagRepository, times(1)).findAll(anyString());
         caseFlag.getFlags().forEach(caseFlagObj -> {
             for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
-                assertNull(flagDetail.getNameCy());
+                assertEquals(flagDetail.getNameCy(),IGNORE_JSON);
                 assertNotNull(flagDetail.getDefaultStatus());
                 assertNotNull(flagDetail.getExternallyAvailable());
             }
@@ -371,7 +370,7 @@ class CaseFlagServiceImplTest {
         if (isWelshRequired) {
             list.setValueCy("CY ENGLISH");
         } else {
-            list.setValueCy(null);
+            list.setValueCy(IGNORE_JSON);
         }
 
         var listOfValues = new ArrayList<ListOfValue>();
@@ -387,7 +386,7 @@ class CaseFlagServiceImplTest {
         if (isWelshRequired) {
             list.setValueCy("CY AFRICAN");
         } else {
-            list.setValueCy(null);
+            list.setValueCy(IGNORE_JSON);
         }
         var listOfValues = new ArrayList<ListOfValue>();
         listOfValues.add(list);
