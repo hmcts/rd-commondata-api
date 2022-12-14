@@ -344,16 +344,6 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
         }
     }
 
-    private void validateSuccessRetriveCaseFlagResponse(Response response) {
-        if (OK.value() == response.getStatusCode()) {
-            var caseFlags = response.getBody().as(CaseFlag.class);
-            assertNotNull(caseFlags);
-            assertThat(caseFlags.getFlags()).hasSizeGreaterThanOrEqualTo(1);
-        } else {
-            assertEquals(NOT_FOUND.value(), response.getStatusCode());
-        }
-    }
-
     @Test
     @ToggleEnable(mapKey = MAP_KEY_CASE_FLAGS, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)

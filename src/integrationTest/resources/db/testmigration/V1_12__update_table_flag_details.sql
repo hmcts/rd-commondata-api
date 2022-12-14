@@ -16,4 +16,6 @@ insert into flag_service(id, service_id, hearing_relevant, request_reason, flag_
 
 UPDATE flag_service SET available_externally=true where 1=1;
 UPDATE flag_service SET available_externally=false where flag_code in ('PF0015','PF0016','PF0011','PF0012','RA0004');
+UPDATE flag_details SET value_cy='Test' where flag_code in ('PF0011','PF0012','PF0015');
+
 COMMIT;

@@ -12,6 +12,7 @@ import uk.gov.hmcts.reform.cdapi.domain.FlagDetail;
 import uk.gov.hmcts.reform.cdapi.domain.FlagType;
 import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @WithTags({@WithTag("testType:Integration")})
@@ -152,6 +154,8 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
         );
         assertEquals(2, response.getFlags().get(0).getFlagDetails().size());
         List<FlagDetail> flagDetailList = response.getFlags().get(0).getFlagDetails();
+        List<String> nameCyFlagCodes = Arrays.asList("PF0011", "PF0012", "PF0015");
+        List<String> sampleDefaultStatus = Arrays.asList("Active", "Requested");
         for (FlagDetail flagDetail : flagDetailList) {
             if (flagDetail.getParent()) {
                 flagDetail.getChildFlags().forEach(cf -> {
@@ -159,6 +163,11 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
                         assertNotNull(cf.getNameCy());
                         assertNotNull(cf.getExternallyAvailable());
                         assertNotNull(cf.getDefaultStatus());
+                        if(nameCyFlagCodes.contains(cf.getFlagCode())){
+                            assertEquals("Test",cf.getNameCy());
+                            assertEquals(Boolean.FALSE,cf.getExternallyAvailable());
+                            assertTrue(sampleDefaultStatus.contains(cf.getDefaultStatus()));
+                        }
                     }
                 });
             }
