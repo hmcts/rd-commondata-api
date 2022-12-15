@@ -160,7 +160,7 @@ class CaseFlagServiceImplTest {
         verify(caseFlagRepository, times(1)).findAll(anyString());
         caseFlag.getFlags().forEach(caseFlagObj -> {
             for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
-                assertEquals(flagDetail.getNameCy(),IGNORE_JSON);
+                assertEquals(IGNORE_JSON, flagDetail.getNameCy());
                 assertNotNull(flagDetail.getDefaultStatus());
                 assertNotNull(flagDetail.getExternallyAvailable());
             }
@@ -177,7 +177,7 @@ class CaseFlagServiceImplTest {
         verify(caseFlagRepository, times(1)).findAll(anyString());
         caseFlag.getFlags().forEach(caseFlagObj -> {
             for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
-                assertEquals(flagDetail.getNameCy(),IGNORE_JSON);
+                assertEquals(IGNORE_JSON, flagDetail.getNameCy());
                 assertNotNull(flagDetail.getDefaultStatus());
                 assertNotNull(flagDetail.getExternallyAvailable());
                 assertTrue(flagDetail.getExternallyAvailable());
@@ -212,7 +212,7 @@ class CaseFlagServiceImplTest {
         verify(caseFlagRepository, times(1)).findAll(anyString());
         caseFlag.getFlags().forEach(caseFlagObj -> {
             for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
-                assertEquals(flagDetail.getNameCy(),IGNORE_JSON);
+                assertEquals(IGNORE_JSON, flagDetail.getNameCy());
                 assertNotNull(flagDetail.getDefaultStatus());
                 assertNotNull(flagDetail.getExternallyAvailable());
             }
