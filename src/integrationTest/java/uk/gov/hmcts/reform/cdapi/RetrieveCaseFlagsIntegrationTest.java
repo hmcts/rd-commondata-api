@@ -55,7 +55,7 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
         throws JsonProcessingException {
 
         final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
-            "AAA1" + "?flag-type=party",
+            "AAA1" + "?flag-type=party&available-external-flag=N",
             CaseFlag.class,
             path
         );
@@ -70,7 +70,7 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
         throws JsonProcessingException {
 
         final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
-            "AAA1" + "?flag-type=case",
+            "AAA1" + "?flag-type=case&available-external-flag=N",
             CaseFlag.class,
             path
         );
@@ -156,8 +156,11 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
             CaseFlag.class,
             path
         );
-        assertNotNull(this.jsonPathResult(responseBody, "$.flags[0].FlagDetails[0].defaultStatus"));
-        assertNotNull(this.jsonPathResult(responseBody, "$.flags[0].FlagDetails[0].externallyAvailable"));
+
+        verifyWelshIsNorNullorEmpty(responseBody);
+    }
+
+    private void verifyWelshIsNorNullorEmpty(Object responseBody) throws Exception {
         Exception exception = assertThrows(PathNotFoundException.class, () -> {
             this.jsonPathResult(responseBody, "$.flags[0].FlagDetails[0].name_cy");
         });
@@ -165,17 +168,20 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
 
-        assertNotNull(this.jsonPathResult(
+        assertThat(jsonPathResult(
             responseBody,
             "$.flags[0].FlagDetails[1].childFlags[0].childFlags[0].defaultStatus"
-        ), "Active");
-        assertNotNull(this.jsonPathResult(
+        )).isNotNull().isEqualTo("Active");
+
+        assertThat(this.jsonPathResult(
             responseBody,
             "$.flags[0].FlagDetails[1].childFlags[0].childFlags[0].externallyAvailable"
-        ));
+        )).isNotNull().isEqualTo(false);
+
 
         exception = assertThrows(PathNotFoundException.class, () -> {
-            this.jsonPathResult(responseBody, "$.flags[0].FlagDetails[1].childFlags[0].childFlags[0].value_cy");
+            this.jsonPathResult(responseBody,
+                                "$.flags[0].FlagDetails[1].childFlags[0].childFlags[0].value_cy");
         });
         expectedMessage = "No results for path: "
             + "$['flags'][0]['FlagDetails'][1]['childFlags'][0]['childFlags'][0]['value_cy']";
@@ -191,55 +197,9 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
             CaseFlag.class,
             path
         );
-        assertEquals(2, response.getFlags().get(0).getFlagDetails().size());
-        List<FlagDetail> flagDetailList = response.getFlags().get(0).getFlagDetails();
-        List<String> nameCyFlagCodes = Arrays.asList("PF0011", "PF0012", "PF0015");
-        List<String> sampleDefaultStatus = Arrays.asList("Active", "Requested");
-        for (FlagDetail flagDetail : flagDetailList) {
-            if (flagDetail.getParent()) {
-                flagDetail.getChildFlags().forEach(cf -> {
-                    if (!cf.getName().equalsIgnoreCase("Other")) {
-                        assertNotNull(cf.getExternallyAvailable());
-                        assertNotNull(cf.getDefaultStatus());
-                        if (nameCyFlagCodes.contains(cf.getFlagCode())) {
-                            assertEquals("Test", cf.getNameCy());
-                            assertEquals(Boolean.FALSE, cf.getExternallyAvailable());
-                            assertTrue(sampleDefaultStatus.contains(cf.getDefaultStatus()));
-                        }
-                    }
-                });
-            }
-        }
+        assertResponseContent(response);
     }
 
-    @Test
-    @SuppressWarnings("unchecked")
-    void shouldRetrieveCaseFlagForAvailableExternalFlagForNForGetNameCyAndLovWithStatusCode_200()
-        throws JsonProcessingException {
-
-        final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
-            "AAA1?available-external-flag=N&welsh-required=Y",
-            CaseFlag.class,
-            path
-        );
-        assertEquals(2, response.getFlags().get(0).getFlagDetails().size());
-        List<FlagDetail> flagDetailList = response.getFlags().get(0).getFlagDetails();
-        for (FlagDetail flagDetail : flagDetailList) {
-            if (flagDetail.getParent()) {
-                for (FlagDetail childFlag : flagDetail.getChildFlags()) {
-                    //child flag
-                    if (childFlag.getFlagCode().equalsIgnoreCase("PF0027")) {
-                        assertEquals("Test27", childFlag.getNameCy());
-                    }
-                    //List Of Values
-                    if (childFlag.getFlagCode().equals("PF0015")) {
-                        assertEquals(1, childFlag.getListOfValuesLength());
-                        assertEquals("test2", childFlag.getListOfValues().get(0).getValueCy());
-                    }
-                }
-            }
-        }
-    }
 
     @Test
     void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithWelshFlagIsY() throws JsonProcessingException {
@@ -248,41 +208,63 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
             CaseFlag.class,
             path
         );
-        assertEquals(2, response.getFlags().get(0).getFlagDetails().size());
+        assertResponseContent(response);
     }
 
     @Test
-    void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithWelshFlagIsN() throws JsonProcessingException {
-        final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
-            "AAA1?welsh-required=Y",
-            CaseFlag.class,
-            path
-        );
-        assertEquals(2, response.getFlags().get(0).getFlagDetails().size());
-    }
-
-    @Test
-    void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithAvailableExternalFlagIsN()
+    void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithAvailableExternalFlagIsY_200()
         throws JsonProcessingException {
         final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
-            "AAA1?available-external-flag=N",
-            CaseFlag.class,
-            path
-        );
-        assertEquals(2, response.getFlags().get(0).getFlagDetails().size());
-    }
-
-    @Test
-    void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithAvailableExternalFlagIsY()
-        throws JsonProcessingException {
-        final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
-            "AAA1?flag-type=PARTY&available-external-flag=Y",
+            "AAA1?flag-type=party&available-external-flag=Y",
             CaseFlag.class,
             path
         );
         assertEquals(1, response.getFlags().get(0).getFlagDetails().size());
+        List<FlagDetail> parentFlags = response.getFlags().get(0).getFlagDetails();
+        List<String> sampleDefaultStatus = Arrays.asList("Active", "Requested");
+        for (FlagDetail parentFlag : parentFlags) {
+            if (parentFlag.getParent()) {
+                assertNotNull(parentFlag);
+                parentFlag.getChildFlags().forEach(childFlag -> {
+                    if (!childFlag.getName().equalsIgnoreCase("Other")) {
+                        assertEquals(true, childFlag.getExternallyAvailable());
+                        assertTrue(sampleDefaultStatus.contains(childFlag.getDefaultStatus()));
+                    }
+                });
+            }
+        }
     }
 
+
+    private static void assertResponseContent(CaseFlag response) {
+        assertEquals(2, response.getFlags().get(0).getFlagDetails().size());
+        List<FlagDetail> flagDetailList = response.getFlags().get(0).getFlagDetails();
+        List<String> nameCyFlagCodes = Arrays.asList("PF0011", "PF0012", "PF0015");
+        List<String> sampleDefaultStatus = Arrays.asList("Active", "Requested");
+        for (FlagDetail flagDetail : flagDetailList) {
+            if (flagDetail.getParent()) {
+                flagDetail.getChildFlags().forEach(childFlag -> {
+                    if (!childFlag.getName().equalsIgnoreCase("Other")) {
+                        assertNotNull(childFlag.getExternallyAvailable());
+                        assertNotNull(childFlag.getDefaultStatus());
+                        if (nameCyFlagCodes.contains(childFlag.getFlagCode())) {
+                            assertEquals("Test", childFlag.getNameCy());
+                            assertEquals(Boolean.FALSE, childFlag.getExternallyAvailable());
+                            assertTrue(sampleDefaultStatus.contains(childFlag.getDefaultStatus()));
+                        }
+                        if (childFlag.getFlagCode().equalsIgnoreCase("PF0027")) {
+                            assertEquals("Test27", childFlag.getNameCy());
+                        }
+                        //List Of Values
+                        if (childFlag.getFlagCode().equals("PF0015")) {
+                            assertEquals(1, childFlag.getListOfValuesLength());
+                            assertEquals("test2", childFlag.getListOfValues().get(0).getValueCy());
+                        }
+                    }
+                });
+            }
+        }
+    }
 
     private Object jsonPathResult(Object responseBody, String jsonPath) throws Exception {
         return JsonPath.read(responseBody.toString(), jsonPath);
