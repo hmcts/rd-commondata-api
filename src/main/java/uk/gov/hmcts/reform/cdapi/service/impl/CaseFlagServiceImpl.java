@@ -160,13 +160,13 @@ public class CaseFlagServiceImpl implements CaseFlagService {
             newChildFlag.setDefaultStatus(newChildFlag.getDefaultStatus());
             newChildFlag.setExternallyAvailable(newChildFlag.getExternallyAvailable());
         } else {
-            this.ignoreNameCy(newChildFlag);
+            this.ignoreNameCyValue(newChildFlag);
             newChildFlag.setDefaultStatus(newChildFlag.getDefaultStatus());
             newChildFlag.setExternallyAvailable(newChildFlag.getExternallyAvailable());
         }
     }
 
-    private void ignoreNameCy(FlagDetail childFlag) {
+    private void ignoreNameCyValue(FlagDetail childFlag) {
         childFlag.setNameCy(IGNORE_JSON);
     }
 
@@ -246,7 +246,8 @@ public class CaseFlagServiceImpl implements CaseFlagService {
             return;
         }
         for (FlagDetail flagDetail : flagDetails) {
-            if (Boolean.TRUE.equals(flagDetail.getParent()) && (ObjectUtils.isNotEmpty(flagDetail.getChildFlags()) && flagDetail.getChildFlags().size() > 0)) {
+            if (Boolean.TRUE.equals(flagDetail.getParent())
+                && (ObjectUtils.isNotEmpty(flagDetail.getChildFlags()) && flagDetail.getChildFlags().size() > 0)) {
                 flagDetail.getChildFlags().add(otherFlagBuilder(flagDetail
                                                                     .getChildFlags()
                                                                     .stream()
