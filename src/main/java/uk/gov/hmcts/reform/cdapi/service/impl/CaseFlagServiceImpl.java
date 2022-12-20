@@ -154,6 +154,22 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         }
     }
 
+    private void setChildCaseFlagByWelshRequired(boolean isWelshRequired, FlagDetail childFlag, FlagDetail newChildFlag) {
+        if (isWelshRequired) {
+            newChildFlag.setNameCy(this.setNullValue(newChildFlag.getNameCy()));
+            newChildFlag.setDefaultStatus(newChildFlag.getDefaultStatus());
+            newChildFlag.setExternallyAvailable(newChildFlag.getExternallyAvailable());
+        } else {
+            this.ignoreNameCy(newChildFlag);
+            newChildFlag.setDefaultStatus(newChildFlag.getDefaultStatus());
+            newChildFlag.setExternallyAvailable(newChildFlag.getExternallyAvailable());
+        }
+    }
+
+    private void ignoreNameCy(FlagDetail childFlag) {
+        childFlag.setNameCy(IGNORE_JSON);
+    }
+
     private String setNullValue(String value) {
         return ObjectUtils.isEmpty(value) ? null : value;
     }
@@ -212,6 +228,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
 
         for (FlagDetail flagDetail : flagDetails) {
             if (flagDetail.getId().equals(newChildFlag.getCateGoryId())) {
+                this.setChildCaseFlagByWelshRequired(true, flagDetail, newChildFlag);
                 flagDetail.getChildFlags().add(newChildFlag);
                 break;
             }
@@ -229,7 +246,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
             return;
         }
         for (FlagDetail flagDetail : flagDetails) {
-            if (Boolean.TRUE.equals(flagDetail.getParent())) {
+            if (Boolean.TRUE.equals(flagDetail.getParent()) && (ObjectUtils.isNotEmpty(flagDetail.getChildFlags()) && flagDetail.getChildFlags().size() > 0)) {
                 flagDetail.getChildFlags().add(otherFlagBuilder(flagDetail
                                                                     .getChildFlags()
                                                                     .stream()
@@ -245,6 +262,9 @@ public class CaseFlagServiceImpl implements CaseFlagService {
             .flagCode("OT0001")
             .hearingRelevant(true)
             .parent(false)
+            .defaultStatus("Active")
+            .nameCy("Other")
+            .externallyAvailable(false)
             .childFlags(new ArrayList<>())
             .path(path)
             .flagComment(true).build();
