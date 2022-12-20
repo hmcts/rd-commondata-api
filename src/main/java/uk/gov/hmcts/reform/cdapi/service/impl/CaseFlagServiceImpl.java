@@ -154,7 +154,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         }
     }
 
-    private void setChildCaseFlagByWelshRequired(boolean isWelshRequired, FlagDetail childFlag, FlagDetail newChildFlag) {
+    private void setChildCaseFlagByWelshRequired(boolean isWelshRequired, FlagDetail newChildFlag) {
         if (isWelshRequired) {
             newChildFlag.setNameCy(this.setNullValue(newChildFlag.getNameCy()));
             newChildFlag.setDefaultStatus(newChildFlag.getDefaultStatus());
@@ -228,7 +228,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
 
         for (FlagDetail flagDetail : flagDetails) {
             if (flagDetail.getId().equals(newChildFlag.getCateGoryId())) {
-                this.setChildCaseFlagByWelshRequired(true, flagDetail, newChildFlag);
+                this.setChildCaseFlagByWelshRequired(true, newChildFlag);
                 flagDetail.getChildFlags().add(newChildFlag);
                 break;
             }
