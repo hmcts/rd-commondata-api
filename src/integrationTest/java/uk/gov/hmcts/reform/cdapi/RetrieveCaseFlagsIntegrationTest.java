@@ -137,8 +137,10 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
             assertEquals(false, flagDetail.getExternallyAvailable() == null);
             assertEquals(false, flagDetail.getDefaultStatus() == null);
             if (flagDetail.getParent()) {
-                flagDetail.getChildFlags().forEach(cf -> assertNull(cf.getNameCy()));
                 flagDetail.getChildFlags().forEach(childFlagObj -> {
+                    if (childFlagObj.getFlagCode().equalsIgnoreCase("Other")) {
+                        flagDetail.getChildFlags().forEach(cf -> assertEquals("Other", cf.getNameCy()));
+                    }
                     if (childFlagObj.getListOfValuesLength() != null && childFlagObj.getListOfValuesLength() > 0) {
                         childFlagObj.getListOfValues().forEach(lov -> assertNull(lov.getValueCy()));
                     }
