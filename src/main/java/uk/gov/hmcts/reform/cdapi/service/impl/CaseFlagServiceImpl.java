@@ -73,10 +73,8 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         for (CaseFlagDto caseFlagDto : caseFlagDtoList) {
             //creating top level flags
             if (caseFlagDto.getCategoryId() == 0) {
-                String name = (StringUtils.isNotEmpty(welshRequired) && (welshRequired.trim().equalsIgnoreCase("y")))
-                    ? caseFlagDto.getValueCy() : caseFlagDto.getValueEn();
                 var flagDetail = FlagDetail.builder()
-                    .name(name)
+                    .name(caseFlagDto.getValueEn())
                     .flagCode(caseFlagDto.getFlagCode())
                     .flagComment(caseFlagDto.getRequestReason())
                     .parent(caseFlagDto.getIsParent())
@@ -120,9 +118,8 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                 continue;
             }
             if (caseFlagDto.getCategoryId() != 0) {
-                String name = this.getNameByValue(isWelshRequired, caseFlagDto);
                 var childFlag = FlagDetail.builder()
-                    .name(name)
+                    .name(caseFlagDto.getValueEn())
                     .flagCode(caseFlagDto.getFlagCode())
                     .flagComment(caseFlagDto.getRequestReason())
                     .parent(caseFlagDto.getIsParent())
@@ -176,10 +173,6 @@ public class CaseFlagServiceImpl implements CaseFlagService {
 
     private void ignoreNameCy(FlagDetail.FlagDetailBuilder flagDetail) {
         flagDetail.nameCy(IGNORE_JSON);
-    }
-
-    private String getNameByValue(boolean isWelshRequired, CaseFlagDto caseFlagDto) {
-        return isWelshRequired ? caseFlagDto.getValueCy() : caseFlagDto.getValueEn();
     }
 
     private boolean getFlagYorN(String flag) {
