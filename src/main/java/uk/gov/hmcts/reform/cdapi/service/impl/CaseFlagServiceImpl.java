@@ -45,8 +45,9 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     @Override
     public CaseFlag retrieveCaseFlagByServiceId(String serviceId, String flagType,
                                                 String welshRequired, String availableExternalFlag) {
-        var caseFlagDtoList = caseFlagRepository.findAll(serviceId.trim().toUpperCase());
-        var flagDetails = addTopLevelFlag(caseFlagDtoList, welshRequired);
+        var isAvailableExternalFlag = this.getFlagYorN(availableExternalFlag);
+        var caseFlagDtoList = caseFlagRepository.findAll(serviceId.trim().toUpperCase(), isAvailableExternalFlag);
+        var flagDetails = addTopLevelFlag(caseFlagDtoList, welshRequired, availableExternalFlag);
         addChildLevelFlag(caseFlagDtoList, flagDetails, welshRequired, availableExternalFlag);
         addOtherFlag(flagDetails);
         log.info("Added other flag");
@@ -68,9 +69,14 @@ public class CaseFlagServiceImpl implements CaseFlagService {
      * @param caseFlagDtoList caseFlagDtoList
      * @return list of flagdetail with toplevel flags
      */
-    public List<FlagDetail> addTopLevelFlag(List<CaseFlagDto> caseFlagDtoList, String welshRequired) {
+    public List<FlagDetail> addTopLevelFlag(List<CaseFlagDto> caseFlagDtoList,
+                                            String welshRequired, String availableExternalFlag) {
         var flagDetails = new ArrayList<FlagDetail>();
+        var isAvailableExternalFlag = this.getFlagYorN(availableExternalFlag);
         for (CaseFlagDto caseFlagDto : caseFlagDtoList) {
+            if (isAvailableExternalFlag && Boolean.FALSE.equals(caseFlagDto.getExternallyAvailable())) {
+                continue;
+            }
             //creating top level flags
             if (caseFlagDto.getCategoryId() == 0) {
                 var flagDetail = FlagDetail.builder()

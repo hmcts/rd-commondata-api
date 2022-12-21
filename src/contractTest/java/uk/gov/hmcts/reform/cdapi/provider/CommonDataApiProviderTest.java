@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Objects.nonNull;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -121,7 +122,7 @@ public class CommonDataApiProviderTest {
         List<CaseFlagDto> caseFlagDtos = new ArrayList<>();
         caseFlagDtos.add(caseFlagDto1);
         caseFlagDtos.add(caseFlagDto2);
-        when(caseFlagRepository.findAll(anyString())).thenReturn(caseFlagDtos);
+        when(caseFlagRepository.findAll(anyString(), anyBoolean())).thenReturn(caseFlagDtos);
     }
 
     @State({"ListOfCategories Details Exist"})
