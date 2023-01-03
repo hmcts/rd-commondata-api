@@ -138,7 +138,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                 if (flaglistLov.contains(caseFlagDto.getFlagCode())) {
                     retrieveListOfValues(childFlagObj, isWelshRequired);
                 }
-                addChildFlag(flagDetails, childFlagObj);
+                addChildFlag(flagDetails, childFlagObj, isWelshRequired);
             }
         }
         log.info("Added all child flag");
@@ -217,21 +217,22 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     /**
      * This method will run recursively to add child flag based on condition.
      *
-     * @param flagDetails  list of existing flags.
-     * @param newChildFlag new child flag which need to be added.
+     * @param flagDetails     list of existing flags.
+     * @param newChildFlag    new child flag which need to be added.
+     * @param isWelshRequired flag
      */
-    private void addChildFlag(List<FlagDetail> flagDetails, FlagDetail newChildFlag) {
+    private void addChildFlag(List<FlagDetail> flagDetails, FlagDetail newChildFlag, boolean isWelshRequired) {
         if (null == flagDetails) {
             return;
         }
 
         for (FlagDetail flagDetail : flagDetails) {
             if (flagDetail.getId().equals(newChildFlag.getCateGoryId())) {
-                this.setChildCaseFlagByWelshRequired(true, newChildFlag);
+                this.setChildCaseFlagByWelshRequired(isWelshRequired, newChildFlag);
                 flagDetail.getChildFlags().add(newChildFlag);
                 break;
             }
-            this.addChildFlag(flagDetail.getChildFlags(), newChildFlag);
+            this.addChildFlag(flagDetail.getChildFlags(), newChildFlag, isWelshRequired);
         }
     }
 
