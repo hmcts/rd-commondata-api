@@ -45,10 +45,13 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     @Override
     public CaseFlag retrieveCaseFlagByServiceId(String serviceId, String flagType,
                                                 String welshRequired, String availableExternalFlag) {
+        var caseFlagDtoList = caseFlagRepository.findAll(serviceId.trim().toUpperCase());
         var isAvailableExternalFlag = this.getFlagYorN(availableExternalFlag);
-        var caseFlagDtoList = caseFlagRepository.findAll(serviceId.trim().toUpperCase(), isAvailableExternalFlag);
-        var flagDetails = addTopLevelFlag(caseFlagDtoList, welshRequired, availableExternalFlag);
-        addChildLevelFlag(caseFlagDtoList, flagDetails, welshRequired, availableExternalFlag);
+        var flagDetails = addTopLevelFlag(caseFlagDtoList, welshRequired);
+        addChildLevelFlag(caseFlagDtoList, flagDetails, welshRequired, isAvailableExternalFlag);
+        if (isAvailableExternalFlag) {
+            removeFlags(flagDetails);
+        }
         addOtherFlag(flagDetails, welshRequired);
         log.info("Added other flag");
         var flag = new Flag();
@@ -63,6 +66,17 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         return caseFlag;
     }
 
+    private void removeFlags(List<FlagDetail> flagDetails) {
+        if (flagDetails == null) {
+            return;
+        }
+        flagDetails.stream().forEach(flagDetail -> removeFlags(flagDetail.getChildFlags()));
+        flagDetails.removeIf(flagDetail ->
+                                 (flagDetail.getChildFlags() == null
+                                     || flagDetail.getChildFlags().size() == 0)
+                                     && flagDetail.getParent());
+    }
+
     /**
      * Adding top level flag i.e case & party.
      *
@@ -70,13 +84,9 @@ public class CaseFlagServiceImpl implements CaseFlagService {
      * @return list of flagdetail with toplevel flags
      */
     public List<FlagDetail> addTopLevelFlag(List<CaseFlagDto> caseFlagDtoList,
-                                            String welshRequired, String availableExternalFlag) {
+                                            String welshRequired) {
         var flagDetails = new ArrayList<FlagDetail>();
-        var isAvailableExternalFlag = this.getFlagYorN(availableExternalFlag);
         for (CaseFlagDto caseFlagDto : caseFlagDtoList) {
-            if (isAvailableExternalFlag && Boolean.FALSE.equals(caseFlagDto.getExternallyAvailable())) {
-                continue;
-            }
             //creating top level flags
             if (caseFlagDto.getCategoryId() == 0) {
                 var flagDetail = FlagDetail.builder()
@@ -114,13 +124,12 @@ public class CaseFlagServiceImpl implements CaseFlagService {
      * @param flagDetails     list of flagdetail with toplevel flags
      */
     public void addChildLevelFlag(List<CaseFlagDto> caseFlagDtoList, List<FlagDetail> flagDetails,
-                                  String welshRequired, String availableExternalFlag) {
+                                  String welshRequired, boolean isAvailableExternalFlag) {
         var isWelshRequired = this.getFlagYorN(welshRequired);
-        var isAvailableExternalFlag = this.getFlagYorN(availableExternalFlag);
-
         for (CaseFlagDto caseFlagDto : caseFlagDtoList) {
             //creating child level flags
-            if (isAvailableExternalFlag && Boolean.FALSE.equals(caseFlagDto.getExternallyAvailable())) {
+            if (isAvailableExternalFlag && Boolean.FALSE.equals(caseFlagDto.getExternallyAvailable())
+                && !caseFlagDto.getIsParent()) {
                 continue;
             }
             if (caseFlagDto.getCategoryId() != 0) {
@@ -189,8 +198,8 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     /**
      * Retrieve list of values based on switch condition.
      *
-     * @param childFlag               flag detail object
-     * @param isWelshRequired               welsh flag
+     * @param childFlag       flag detail object
+     * @param isWelshRequired welsh flag
      */
     private void retrieveListOfValues(FlagDetail childFlag, boolean isWelshRequired) {
         List<ListOfValue> listOfValues;

@@ -76,12 +76,11 @@ public interface CaseFlagRepository extends JpaRepository<CaseFlagDto, Long> {
         + "UNION "
         + "SELECT q.id, 'CATGRY' AS flag_code, q.value_en, q.value_cy, q.category_id, '' AS categorypath, "
         + "       'FALSE' AS hearing_relevant, 'FALSE' AS request_reason, 'Active' as default_status, "
-        + ":availableExternally as available_externally, 'TRUE' AS isparent "
+        + "'FALSE' as available_externally, 'TRUE' AS isparent "
         + "  FROM flag_details q "
         + " INNER JOIN relevantcategories r "
         + "         ON r.id = q.id "
         + "      WHERE r.category_id = 0 "
         + "ORDER BY 1", nativeQuery = true)
-    List<CaseFlagDto> findAll(@Param("serviceId") String serviceId,
-                              @Param("availableExternally") boolean availableExternally);
+    List<CaseFlagDto> findAll(@Param("serviceId") String serviceId);
 }
