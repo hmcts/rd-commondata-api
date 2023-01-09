@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Objects.nonNull;
-import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -78,7 +77,7 @@ public class CommonDataApiProviderTest {
     void before(PactVerificationContext context) {
         MockMvcTestTarget testTarget = new MockMvcTestTarget();
         testTarget.setControllers(
-            caseFlagApiController,crdApiController);
+            caseFlagApiController, crdApiController);
         if (nonNull(context)) {
             context.setTarget(testTarget);
         }
@@ -129,10 +128,12 @@ public class CommonDataApiProviderTest {
     public void toReturnListOfCategoriesWithChildNodesByCategoryId() {
         List<ListOfValueDto> listOfValueDtos = List.of(
             buildListOfValueDto("HearingChannel", "video", "Video",
-                                null, null),
+                                null, null
+            ),
             buildListOfValueDto("HearingSubChannel", "video-cvp", "Video - CVP",
-                                "HearingChannel", "video")
-            );
+                                "HearingChannel", "video"
+            )
+        );
 
         when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
             .thenReturn(listOfValueDtos);
