@@ -228,7 +228,7 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
             if (parentFlag.getParent()) {
                 assertNotNull(parentFlag);
                 parentFlag.getChildFlags().forEach(childFlag -> {
-                    if (!childFlag.getName().equalsIgnoreCase("Other")) {
+                    if (!childFlag.getName().equalsIgnoreCase("Other") && !childFlag.getParent()) {
                         assertEquals(true, childFlag.getExternallyAvailable());
                         assertTrue(sampleDefaultStatus.contains(childFlag.getDefaultStatus()));
                     }
