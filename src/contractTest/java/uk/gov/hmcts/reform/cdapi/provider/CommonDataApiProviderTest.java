@@ -122,7 +122,7 @@ public class CommonDataApiProviderTest {
         List<CaseFlagDto> caseFlagDtos = new ArrayList<>();
         caseFlagDtos.add(caseFlagDto1);
         caseFlagDtos.add(caseFlagDto2);
-        when(caseFlagRepository.findAll(anyString(), anyBoolean())).thenReturn(caseFlagDtos);
+        when(caseFlagRepository.findAll(anyString())).thenReturn(caseFlagDtos);
     }
 
     @State({"ListOfCategories Details Exist"})
