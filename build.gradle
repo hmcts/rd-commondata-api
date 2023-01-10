@@ -113,12 +113,6 @@ tasks.withType(Test) {
   }
 }
 
-tasks.withType(Test.class).configureEach {
-  jacoco {
-    excludes = ["*"]
-  }
-}
-
 test {
   failFast = true
 }

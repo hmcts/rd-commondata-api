@@ -66,9 +66,12 @@ class CaseFlagApiControllerTest {
         final String serviceId = "XXXX";
         final String flagType = null;
         final String welshRequired = null;
+        final String availableExternalFlag = null;
 
         final CaseFlag caseFlag = createCaseFlag();
-        given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired)).willReturn(caseFlag);
+        given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired,
+                                                          availableExternalFlag
+        )).willReturn(caseFlag);
 
         //when
         final ResultActions resultActions =
@@ -80,7 +83,9 @@ class CaseFlagApiControllerTest {
 
         //then
         assertResponseContent(resultActions, caseFlag);
-        then(caseFlagService).should().retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired);
+        then(caseFlagService).should().retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired,
+                                                                   availableExternalFlag
+        );
     }
 
     @Test
@@ -91,22 +96,28 @@ class CaseFlagApiControllerTest {
         final String serviceId = "XXXX";
         final String flagType = "CASE";
         final String welshRequired = null;
+        final String availableExternalFlag = null;
 
         final CaseFlag caseFlag = createCaseFlag();
-        given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired)).willReturn(caseFlag);
+        given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired,
+                                                          availableExternalFlag
+        )).willReturn(caseFlag);
 
         //when
         final ResultActions resultActions =
             mockMvc.perform(
                     get("/refdata/commondata/caseflags/service-id={service-id}", serviceId)
                         .queryParam("flag-type", flagType)
+                        .queryParam("available-external-flag", availableExternalFlag)
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         //then
         assertResponseContent(resultActions, caseFlag);
-        then(caseFlagService).should().retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired);
+        then(caseFlagService).should().retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired,
+                                                                   availableExternalFlag
+        );
     }
 
     @Test
@@ -117,22 +128,28 @@ class CaseFlagApiControllerTest {
         final String serviceId = "XXXX";
         final String flagType = null;
         final String welshRequired = "Y";
+        final String availableExternalFlag = "Y";
 
         final CaseFlag caseFlag = createCaseFlag();
-        given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired)).willReturn(caseFlag);
+        given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired,
+                                                          availableExternalFlag
+        )).willReturn(caseFlag);
 
         //when
         final ResultActions resultActions =
             mockMvc.perform(
                     get("/refdata/commondata/caseflags/service-id={service-id}", serviceId)
                         .queryParam("welsh-required", welshRequired)
+                        .queryParam("available-external-flag", availableExternalFlag)
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         //then
         assertResponseContent(resultActions, caseFlag);
-        then(caseFlagService).should().retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired);
+        then(caseFlagService).should().retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired,
+                                                                   availableExternalFlag
+        );
     }
 
     @Test
@@ -144,8 +161,12 @@ class CaseFlagApiControllerTest {
         final CaseFlag caseFlag = createCaseFlag();
         final String flagType = "PARTY";
         final String welshRequired = "Y";
+        final String availableExternalFlag = "Y";
 
-        given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired)).willReturn(caseFlag);
+
+        given(caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired,
+                                                          availableExternalFlag
+        )).willReturn(caseFlag);
 
         //when
         final ResultActions resultActions =
@@ -153,13 +174,16 @@ class CaseFlagApiControllerTest {
                     get("/refdata/commondata/caseflags/service-id={service-id}", serviceId)
                         .queryParam("flag-type", flagType)
                         .queryParam("welsh-required", welshRequired)
+                        .queryParam("available-external-flag", availableExternalFlag)
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         //then
         assertResponseContent(resultActions, caseFlag);
-        then(caseFlagService).should().retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired);
+        then(caseFlagService).should().retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired,
+                                                                   availableExternalFlag
+        );
     }
 
     @Test
@@ -168,13 +192,14 @@ class CaseFlagApiControllerTest {
 
         //given
         doThrow(ResourceNotFoundException.class).when(caseFlagService)
-            .retrieveCaseFlagByServiceId(anyString(), anyString(), anyString());
+            .retrieveCaseFlagByServiceId(anyString(), anyString(), anyString(), anyString());
 
         //when
         mockMvc.perform(
                 get("/refdata/commondata/caseflags/service-id={service-id}", "XXXX")
                     .queryParam("flag-type", "PARTY")
                     .queryParam("welsh-required", "N")
+                    .queryParam("available-external-flag", "N")
                     .accept(MediaType.APPLICATION_JSON_VALUE))
             .andDo(print())
             //then
@@ -183,7 +208,8 @@ class CaseFlagApiControllerTest {
             .andExpect(jsonPath("$.status", is("Not Found")))
             .andExpect(jsonPath("$.errorMessage", is("4 : Resource not found")));
 
-        then(caseFlagService).should().retrieveCaseFlagByServiceId(anyString(), anyString(), anyString());
+        then(caseFlagService).should().retrieveCaseFlagByServiceId(anyString(), anyString(), anyString(),
+                                                                   anyString());
     }
 
     @ParameterizedTest
@@ -192,6 +218,7 @@ class CaseFlagApiControllerTest {
     void should_return_400_for_all_negative_serviceId_flagType_Welsh_required(final String serviceId,
                                                                               final String flagType,
                                                                               final String welshRequired,
+                                                                              final String availableExternally,
                                                                               final String expectedErrorDescription)
         throws Exception {
 
@@ -200,6 +227,7 @@ class CaseFlagApiControllerTest {
                 get("/refdata/commondata/caseflags/service-id={service-id}", serviceId)
                     .queryParam("flag-type", flagType)
                     .queryParam("welsh-required", welshRequired)
+                    .queryParam("available-external-flag", availableExternally)
                     .accept(MediaType.APPLICATION_JSON_VALUE))
             .andDo(print())
             //then
@@ -272,10 +300,12 @@ class CaseFlagApiControllerTest {
         final String welshRequiredErrorDesc = "Allowed values are Y or N";
 
         return Stream.of(
-            arguments("", "PARTY", "Y", serviceIdErrorDesc),
-            arguments(null, "PARTY", "Y", serviceIdErrorDesc),
-            arguments("XXXX", "", "Y", flagTypeErrorDesc),
-            arguments("XXXX", "CASE", "", welshRequiredErrorDesc)
+            arguments("", "PARTY", "Y", "Y", serviceIdErrorDesc),
+            arguments(null, "PARTY", "Y", "Y", serviceIdErrorDesc),
+            arguments("XXXX", "", "Y", "Y", flagTypeErrorDesc),
+            arguments("XXXX", "CASE", "", "", welshRequiredErrorDesc),
+            arguments("XXXX", "CASE", "", "", welshRequiredErrorDesc),
+            arguments("XXXX", "CASE", "Y", "", welshRequiredErrorDesc)
         );
     }
 

@@ -58,6 +58,12 @@ public class CommonDataApiClient {
         return mapCaseFlagsByServiceIdResponse(responseEntity, clazz);
     }
 
+    public Object retrieveCaseFlagsByServiceIdJsonFormat(String queryParam, Class<?> clazz,
+                                                         String path) {
+        ResponseEntity<Object> responseEntity = getRequest(APP_BASE_PATH + path + queryParam, String.class, "");
+        return responseEntity.getBody();
+    }
+
     private Object mapCaseFlagsByServiceIdResponse(ResponseEntity<Object> responseEntity,
                                                    Class<?> clazz) throws JsonProcessingException {
         HttpStatus status = responseEntity.getStatusCode();

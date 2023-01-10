@@ -52,7 +52,7 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
         final var response = (ErrorResponse)
             commonDataApiClient.retrieveCaseFlagsByServiceId(
                 HttpStatus.BAD_REQUEST,
-                "hello"
+                "service-id=XXXX?flag-type=hello"
             );
         assertNotNull(response);
         assertEquals("Allowed values are PARTY or CASE", response.getErrorDescription());
@@ -342,6 +342,19 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
         } else {
             assertEquals(NOT_FOUND.value(), response.getStatusCode());
         }
+    }
+
+    @Test
+    @ToggleEnable(mapKey = MAP_KEY_CASE_FLAGS, withFeature = true)
+    @ExtendWith(FeatureToggleConditionExtension.class)
+    void shouldReturnBadRequestForRetrieveCaseFlagsByServiceIdWithAvailableExternalFlagIsEmpty() {
+        final var response = (ErrorResponse)
+            commonDataApiClient.retrieveCaseFlagsByServiceId(
+                HttpStatus.BAD_REQUEST,
+                "service-id=XXXX?available-external-flag="
+            );
+        assertEquals(response.getErrorCode(),400);
+        assertEquals(response.getErrorDescription(),"Allowed values are Y or N");
     }
 
 }

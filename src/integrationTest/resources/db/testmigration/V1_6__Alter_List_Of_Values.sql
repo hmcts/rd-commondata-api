@@ -13,5 +13,7 @@ VALUES ('HearingChannel','BBA3','telephone','Telephone',null,null,null,2,null,nu
 ('HearingSubChannel','BBA3','telephone-btMeetMe','Telephone - BTMeetme',null,null,null,null,'HearingChannel','telephone','Y'),
 ('ListingStatus','','test','test',null,null,null,null,null,null,'Y'),
 ('EmptySubCategory','','test','test',null,null,null,null,null,null,'Y'),
-('ListingStatusSubChannel','','test','test',null,null,null,null,'ListingStatus','test','Y');
+('ListingStatusSubChannel','','test','test',null,null,null,null,'ListingStatus','test','Y'),
+('InterpreterLanguage','BBA1','test2','test2','test2',null,null,null,'HearingChannel','test','Y'),
+('SignLanguage','BBA1','test4','test4','test4',null,null,null,'HearingChannel','test','Y');
 
