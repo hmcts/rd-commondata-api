@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.cdapi.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,7 +74,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         flagDetails.stream().forEach(flagDetail -> removeFlags(flagDetail.getChildFlags()));
         flagDetails.removeIf(flagDetail ->
                                  (flagDetail.getChildFlags() == null
-                                     || flagDetail.getChildFlags().size() == 0)
+                                     || flagDetail.getChildFlags().isEmpty())
                                      && flagDetail.getParent());
     }
 
@@ -129,7 +130,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         for (CaseFlagDto caseFlagDto : caseFlagDtoList) {
             //creating child level flags
             if (isAvailableExternalFlag && Boolean.FALSE.equals(caseFlagDto.getExternallyAvailable())
-                && !caseFlagDto.getIsParent()) {
+                && BooleanUtils.isNotTrue(caseFlagDto.getIsParent())) {
                 continue;
             }
             if (caseFlagDto.getCategoryId() != 0) {
@@ -258,7 +259,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         var isWelshRequired = this.getFlagYorN(welshRequired);
         for (FlagDetail flagDetail : flagDetails) {
             if (Boolean.TRUE.equals(flagDetail.getParent())
-                && (ObjectUtils.isNotEmpty(flagDetail.getChildFlags()) && flagDetail.getChildFlags().size() > 0)) {
+                && (ObjectUtils.isNotEmpty(flagDetail.getChildFlags()) && !(flagDetail.getChildFlags().isEmpty()))) {
                 flagDetail.getChildFlags().add(otherFlagBuilder(
                     flagDetail
                         .getChildFlags()
