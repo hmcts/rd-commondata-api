@@ -371,7 +371,7 @@ dependencies {
   implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: versions.log4j
 
   testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.17.2'
-  testImplementation "org.testcontainers:junit-jupiter:1.17.2"
+  testImplementation "org.testcontainers:junit-jupiter:1.17.6"
   testImplementation "org.testcontainers:testcontainers:1.16.2"
   //implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.14'
   testImplementation(platform('org.junit:junit-bom:5.8.2'))
