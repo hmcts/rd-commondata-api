@@ -51,15 +51,18 @@ public class CrdApiController {
         ),
         @ApiResponse(
             responseCode = "400",
-            description = "Bad Request"
+            description = "Bad Request",
+            content = @Content
         ),
         @ApiResponse(
             responseCode = "401",
-            description = "Forbidden Error: Access denied"
+            description = "Forbidden Error: Access denied",
+            content = @Content
         ),
         @ApiResponse(
             responseCode = "500",
-            description = "Internal Server Error"
+            description = "Internal Server Error",
+            content = @Content
         )
     })
     @GetMapping(
@@ -68,7 +71,7 @@ public class CrdApiController {
     )
     public ResponseEntity<Categories> retrieveListOfValuesByCategoryId(
         @Parameter(name = "categoryId", description = "Any Valid String is allowed", required = true)
-        @PathVariable(value = "categoryId") Optional<String> categoryId,
+        @PathVariable(value = "categoryId", required = false) Optional<String> categoryId,
         CategoryRequest categoryRequest) {
 
         if (!categoryId.isPresent()) {

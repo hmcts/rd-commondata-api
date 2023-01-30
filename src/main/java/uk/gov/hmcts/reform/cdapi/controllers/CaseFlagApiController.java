@@ -53,15 +53,18 @@ public class CaseFlagApiController {
         ),
         @ApiResponse(
             responseCode = "400",
-            description = "Bad Request"
+            description = "Bad Request",
+            content = @Content
         ),
         @ApiResponse(
             responseCode = "401",
-            description = "Forbidden Error: Access denied"
+            description = "Forbidden Error: Access denied",
+            content = @Content
         ),
         @ApiResponse(
             responseCode = "500",
-            description = "Internal Server Error"
+            description = "Internal Server Error",
+            content = @Content
         )
     })
     @GetMapping(
