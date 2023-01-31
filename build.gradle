@@ -370,15 +370,11 @@ dependencies {
   implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.8'
   implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.5'
 
-//  testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.17.2'
-//  testImplementation "org.testcontainers:junit-jupiter:1.17.2"
-//  testImplementation "org.testcontainers:testcontainers:1.16.2"
 
   testImplementation group: 'org.testcontainers', name: 'postgresql', version: versions.testContainer_postgresql
   testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: versions.testContainer_postgresql
   testImplementation group: 'org.testcontainers', name: 'testcontainers', version: versions.testContainer_postgresql
 
-  //implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.14'
   testImplementation(platform('org.junit:junit-bom:5.8.2'))
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
     exclude group: 'junit', module: 'junit'
