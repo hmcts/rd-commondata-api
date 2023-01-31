@@ -404,7 +404,7 @@ dependencies {
 
   testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.7'
   testImplementation group: 'com.github.mifmif', name: 'generex', version: '1.0.2'
-  testImplementation 'io.github.openfeign:feign-jackson:11.0'
+  testImplementation 'io.github.openfeign:feign-jackson:12.1'
   testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
   testImplementation 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.7.0'
   testImplementation group: 'org.pitest', name: 'pitest-junit5-plugin', version: '0.15'
