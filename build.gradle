@@ -43,8 +43,9 @@ def versions = [
   launchDarklySdk : "5.8.1",
   reformS2sClient : '4.0.0',
   serenity        : '2.0.76',
+  springHystrix   : '2.2.10.RELEASE',
   restAssured     : '4.3.3',
-  springVersion   : '5.3.20',
+  springVersion   : '5.3.22',
   logback         : '1.2.10',
   feign           : '3.8.0',
   bytebuddy       : '1.12.7',
@@ -282,7 +283,10 @@ dependencyManagement {
       entry 'tomcat-embed-el'
       entry 'tomcat-embed-websocket'
     }
+    // CVE-2021-22060, CVE-2022-22965, CVE-2022-22950, CVE-2022-22971, CVE-2022-22968, CVE-2022-22970
+    dependency(group: 'org.springframework', name: 'spring-corespring-core', version: '5.3.22') //remove this line after spring boot upgrade to 2.7.7 and spring frame work to 6.0
   }
+
 }
 
 // https://jeremylong.github.io/DependencyCheck/dependency-check-gradle/configuration.html
@@ -327,7 +331,9 @@ dependencies {
   implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.5.12'
   implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
   implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
+  implementation group: 'org.springframework.security', name: 'spring-security-core', version: '5.7.5'
 
+  implementation group: 'org.bouncycastle', name: 'bcpkix-jdk15on', version: '1.70'
   implementation group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '5.10.2'
   implementation group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: versions.reformS2sClient
   implementation group: 'javax.inject', name: 'javax.inject', version: '1'
