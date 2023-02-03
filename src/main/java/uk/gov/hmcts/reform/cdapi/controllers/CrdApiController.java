@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,11 +68,12 @@ public class CrdApiController {
     })
     @GetMapping(
         produces = APPLICATION_JSON_VALUE,
-        path = {"/lov/categories", "/lov/categories/{categoryId}"}
+        path = {"/lov/categories/{categoryId}"}
     )
     public ResponseEntity<Categories> retrieveListOfValuesByCategoryId(
         @Parameter(name = "categoryId", description = "Any Valid String is allowed", required = true)
         @PathVariable(value = "categoryId", required = false) Optional<String> categoryId,
+        @ParameterObject
         CategoryRequest categoryRequest) {
 
         if (!categoryId.isPresent()) {

@@ -69,7 +69,7 @@ public class CaseFlagApiController {
     })
     @GetMapping(
         produces = APPLICATION_JSON_VALUE,
-        path = {"/caseflags", "/caseflags/service-id={service-id}"}
+        path = {"/caseflags/service-id={service-id}"}
     )
     public ResponseEntity<CaseFlag> retrieveCaseFlagsByServiceId(
         @PathVariable(value = "service-id")
