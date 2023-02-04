@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.cdapi.exception;
+package uk.gov.hmcts.reform.cdapi.util;
 
 import lombok.Builder;
 import lombok.Getter;
