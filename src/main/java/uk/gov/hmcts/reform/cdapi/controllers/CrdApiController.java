@@ -73,8 +73,7 @@ public class CrdApiController {
     public ResponseEntity<Categories> retrieveListOfValuesByCategoryId(
         @Parameter(name = "categoryId", description = "Any Valid String is allowed", required = true)
         @PathVariable(value = "categoryId", required = false) Optional<String> categoryId,
-        @ParameterObject
-        CategoryRequest categoryRequest) {
+        @ParameterObject CategoryRequest categoryRequest) {
 
         if (!categoryId.isPresent()) {
             throw new InvalidRequestException("Syntax error or Bad request");

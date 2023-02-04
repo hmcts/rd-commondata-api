@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.rest.SerenityRest;
 import org.springframework.http.HttpStatus;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Categories;
+import uk.gov.hmcts.reform.cdapi.exception.ErrorInvalidRequestResponse;
 import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
 import uk.gov.hmcts.reform.cdapi.idam.IdamOpenIdClient;
 
@@ -91,7 +92,7 @@ public class CommonDataApiClient {
         if (expectedStatus.is2xxSuccessful()) {
             return Arrays.asList(response.getBody().as(Categories[].class));
         } else {
-            return response.getBody().as(ErrorResponse.class);
+            return response.getBody().as(ErrorInvalidRequestResponse.class);
         }
     }
 

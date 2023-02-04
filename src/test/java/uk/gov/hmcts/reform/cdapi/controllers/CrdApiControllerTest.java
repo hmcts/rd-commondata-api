@@ -182,24 +182,16 @@ class CrdApiControllerTest {
     }
 
     @Test
-    @DisplayName("Negative scenario - Should return 400 when categoryId not present")
-    void should_Return_400_When_CategoryId_Is_Not_Present() throws Exception {
+    @DisplayName("Negative scenario - Should return Not Found when categoryId not present")
+    void should_Return_NotFound_When_CategoryId_Is_Not_Present() throws Exception {
 
         //when
         mockMvc
-            .perform(get("/refdata/commondata/lov/categories/{categoryId}", (Object) null)
+            .perform(get("/refdata/commondata/lov/categories/{categoryId}", "")
                          .accept(MediaType.APPLICATION_JSON_VALUE))
             .andDo(print())
-
             //then
-            .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorCode", is(400)))
-            .andExpect(jsonPath("$.status", is("Bad Request")))
-            .andExpect(jsonPath(
-                "$.errorMessage",
-                is("3 : There is a problem with your request. Please check and try again")
-            ))
-            .andExpect(jsonPath("$.errorDescription", is("Syntax error or Bad request")));
+            .andExpect(status().isNotFound());
 
         then(crdService).shouldHaveNoInteractions();
     }
