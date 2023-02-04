@@ -72,7 +72,7 @@ public class CrdApiController {
     )
     public ResponseEntity<Categories> retrieveListOfValuesByCategoryId(
         @Parameter(name = "categoryId", description = "Any Valid String is allowed", required = true)
-        @PathVariable(value = "categoryId", required = false) Optional<String> categoryId,
+        @PathVariable(value = "categoryId") Optional<String> categoryId,
         @ParameterObject CategoryRequest categoryRequest) {
 
         if (!categoryId.isPresent()) {
