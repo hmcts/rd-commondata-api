@@ -204,6 +204,25 @@ class CaseFlagServiceImplTest {
     }
 
     @Test
+    void testGetCaseFlag_ByServiceIWithFlagDetailsNull_Returns200() {
+        when(caseFlagRepository.findAll(anyString())).thenReturn(getEmptyCaseFlagDtoList(getCaseFlagDtoList()));
+        when(listOfVenueRepository.findListOfValues(anyString()))
+            .thenReturn(getListOfValuesForLanguageInterPreter(false));
+
+        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "", "N", "Y");
+        assertNotNull(caseFlag);
+        assertEquals(1, caseFlag.getFlags().size());
+        assertEquals(2, caseFlag.getFlags().get(0).getFlagDetails().size());
+        verify(caseFlagRepository, times(1)).findAll(anyString());
+        caseFlag.getFlags().forEach(caseFlagObj -> {
+            for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
+                assertNotNull(flagDetail.getDefaultStatus());
+                assertNotNull(flagDetail.getExternallyAvailable());
+            }
+        });
+    }
+
+    @Test
     @DisplayName("Positive scenario -Should return 200 with Welsh-Required=N and available-externally=N")
     void testGetCaseFlag_ByServiceIWithWelshRequiredIsNandAvailableExternallyIsN_Returns200() {
         when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
@@ -219,6 +238,35 @@ class CaseFlagServiceImplTest {
                 assertNotNull(flagDetail.getExternallyAvailable());
             }
         });
+    }
+
+    List<CaseFlagDto> getEmptyCaseFlagDtoList(List<CaseFlagDto> caseFlagDtoList) {
+        var caseFlagDto6 = new CaseFlagDto();
+        caseFlagDto6.setFlagCode("CATEGORY");
+        caseFlagDto6.setCategoryId(4);
+        caseFlagDto6.setCategoryPath("CASE");
+        caseFlagDto6.setId(5);
+        caseFlagDto6.setHearingRelevant(true);
+        caseFlagDto6.setRequestReason(false);
+        caseFlagDto6.setValueEn("COMPLEX CASE");
+        caseFlagDto6.setValueCy("");
+        caseFlagDto6.setIsParent(false);
+        caseFlagDto6.setExternallyAvailable(false);
+        caseFlagDto6.setDefaultStatus("Requested");
+        var caseFlagDto3 = new CaseFlagDto();
+        caseFlagDto3.setFlagCode("PF0015");
+        caseFlagDto3.setCategoryId(2);
+        caseFlagDto3.setCategoryPath("PARTY/REASONABLE ADJUSTMENT");
+        caseFlagDto3.setId(3);
+        caseFlagDto3.setHearingRelevant(true);
+        caseFlagDto3.setRequestReason(false);
+        caseFlagDto3.setValueEn("CHILD OF REASONABLE ADJUSTMENT");
+        caseFlagDto3.setValueCy("");
+        caseFlagDto3.setIsParent(false);
+        caseFlagDto3.setExternallyAvailable(true);
+        caseFlagDto3.setDefaultStatus("Requested");
+        caseFlagDtoList.add(caseFlagDto3);
+        return caseFlagDtoList;
     }
 
     List<CaseFlagDto> getCaseFlagDtoList() {
