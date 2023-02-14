@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Categories;
 import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
 import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
+import uk.gov.hmcts.reform.cdapi.util.ErrorInvalidRequestResponse;
 import uk.gov.hmcts.reform.cdapi.util.FeatureToggleConditionExtension;
 import uk.gov.hmcts.reform.cdapi.util.ToggleEnable;
 import uk.gov.hmcts.reform.lib.util.serenity5.SerenityTest;
@@ -259,13 +260,13 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
     @ExtendWith(FeatureToggleConditionExtension.class)
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     void shouldThrowErrorWhenCategoryIdIsEmpty() {
-        final var response = (ErrorResponse)
+        final var response = (ErrorInvalidRequestResponse)
             commonDataApiClient.retrieveBadRequestByEmptyCategoryId(
-                HttpStatus.BAD_REQUEST,
-                " "
+                NOT_FOUND,
+                ""
             );
         assertNotNull(response);
-        assertEquals("Syntax error or Bad request", response.getErrorDescription());
+        assertEquals("Not Found", response.getError());
     }
 
     @Test
@@ -282,7 +283,7 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
             categories.getListOfCategory().forEach(h -> assertEquals("HearingChannel", h.getCategoryKey()));
             assertThat(categories.getListOfCategory()).hasSizeGreaterThan(0);
             assertThat(categories.getListOfCategory().get(0).getChildNodes()).hasSizeGreaterThan(0);
-            assertEquals("HearingChannel",categories.getListOfCategory().get(0).getChildNodes().get(0)
+            assertEquals("HearingChannel", categories.getListOfCategory().get(0).getChildNodes().get(0)
                 .getParentCategory());
 
         } else {
@@ -353,8 +354,8 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
                 HttpStatus.BAD_REQUEST,
                 "service-id=XXXX?available-external-flag="
             );
-        assertEquals(response.getErrorCode(),400);
-        assertEquals(response.getErrorDescription(),"Allowed values are Y or N");
+        assertEquals(response.getErrorCode(), 400);
+        assertEquals(response.getErrorDescription(), "Allowed values are Y or N");
     }
 
 }

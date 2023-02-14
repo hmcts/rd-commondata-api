@@ -1,11 +1,13 @@
 package uk.gov.hmcts.reform.cdapi.controllers;
 
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.Authorization;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,55 +35,59 @@ public class CaseFlagApiController {
     @Autowired
     CaseFlagService caseFlagService;
 
-    @ApiOperation(
-        value = "CommonData API will be used to retrieve the list of case flags for a "
+    @Operation(
+        summary = "CommonData API will be used to retrieve the list of case flags for a "
             + "given service id.",
-        notes = "Any valid IDAM role should be able to access this API ",
-        authorizations = {
-            @Authorization(value = "ServiceAuthorization"),
-            @Authorization(value = "Authorization")
-        }
+        description = "Any valid IDAM role should be able to access this API ",
+        security =
+            {
+                @SecurityRequirement(name = "Authorization"),
+                @SecurityRequirement(name = "ServiceAuthorization")
+            }
     )
     @ApiResponses({
         @ApiResponse(
-            code = 200,
-            message = "Successfully retrieved list of Case Flag for the request provided",
-            response = CaseFlag.class
+            responseCode = "200",
+            description = "Successfully retrieved list of Case Flag for the request provided",
+            content = @Content(schema = @Schema(implementation = CaseFlag.class))
         ),
         @ApiResponse(
-            code = 400,
-            message = "Bad Request"
+            responseCode = "400",
+            description = "Bad Request",
+            content = @Content
         ),
         @ApiResponse(
-            code = 401,
-            message = "Forbidden Error: Access denied"
+            responseCode = "401",
+            description = "Forbidden Error: Access denied",
+            content = @Content
         ),
         @ApiResponse(
-            code = 500,
-            message = "Internal Server Error"
+            responseCode = "500",
+            description = "Internal Server Error",
+            content = @Content
         )
     })
     @GetMapping(
         produces = APPLICATION_JSON_VALUE,
-        path = {"/caseflags", "/caseflags/service-id={service-id}"}
+        path = {"/caseflags/service-id={service-id}"}
     )
     public ResponseEntity<CaseFlag> retrieveCaseFlagsByServiceId(
         @PathVariable(value = "service-id")
-        @ApiParam(name = "service-id",
-            value = "Any Valid String is allowed",
+        @Parameter(name = "service-id",
+            description = "Any Valid String is allowed",
             required = true)
-            String serviceId,
+        String serviceId,
         @RequestParam(value = "flag-type", required = false)
-        @ApiParam(name = "flag-type",
-            value = "Allowed Values are PARTY or CASE")
-            String flagType,
+        @Parameter(name = "flag-type",
+            description = "Allowed Values are PARTY or CASE")
+        String flagType,
         @RequestParam(value = "welsh-required", required = false)
-        @ApiParam(name = "welsh-required",
-            value = "Allowed Values are Y or N")
-            String welshRequired,
+        @Parameter(name = "welsh-required",
+            description = "Allowed Values are Y or N")
+        String welshRequired,
         @RequestParam(value = "available-external-flag", required = false)
-        @ApiParam(name = "available-external-flag",
-            value = "Allowed Values are Y or N")
+        @Parameter(name = "available-external-flag",
+            description = "Allowed Values are Y or N")
         String availableExternalFlag
     ) {
         if (StringUtils.isEmpty(serviceId)) {

@@ -1,12 +1,15 @@
 package uk.gov.hmcts.reform.cdapi.controllers;
 
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.Authorization;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,41 +35,45 @@ public class CrdApiController {
     @Autowired
     CrdService crdService;
 
-    @ApiOperation(
-        value = "CommonData API will be used to retrieve the list of category values for a given category id.",
-        notes = "Any valid IDAM role should be able to access this API ",
-        authorizations = {
-            @Authorization(value = "ServiceAuthorization"),
-            @Authorization(value = "Authorization")
-        }
+    @Operation(
+        summary = "CommonData API will be used to retrieve the list of category values for a given category id.",
+        description = "Any valid IDAM role should be able to access this API ",
+        security =
+            {
+                @SecurityRequirement(name = "Authorization"),
+                @SecurityRequirement(name = "ServiceAuthorization")
+            }
     )
     @ApiResponses({
         @ApiResponse(
-            code = 200,
-            message = "Successfully retrieved list of Category Values for the request provided",
-            response = Categories.class
+            responseCode = "200",
+            description = "Successfully retrieved list of Category Values for the request provided",
+            content = @Content(schema = @Schema(implementation = Categories.class))
         ),
         @ApiResponse(
-            code = 400,
-            message = "Bad Request"
+            responseCode = "400",
+            description = "Bad Request",
+            content = @Content
         ),
         @ApiResponse(
-            code = 401,
-            message = "Forbidden Error: Access denied"
+            responseCode = "401",
+            description = "Forbidden Error: Access denied",
+            content = @Content
         ),
         @ApiResponse(
-            code = 500,
-            message = "Internal Server Error"
+            responseCode = "500",
+            description = "Internal Server Error",
+            content = @Content
         )
     })
     @GetMapping(
         produces = APPLICATION_JSON_VALUE,
-        path = {"/lov/categories", "/lov/categories/{categoryId}"}
+        path = {"/lov/categories/{categoryId}"}
     )
     public ResponseEntity<Categories> retrieveListOfValuesByCategoryId(
-        @ApiParam(name = "categoryId", value = "Any Valid String is allowed", required = true)
+        @Parameter(name = "categoryId", description = "Any Valid String is allowed", required = true)
         @PathVariable(value = "categoryId") Optional<String> categoryId,
-        CategoryRequest categoryRequest) {
+        @ParameterObject CategoryRequest categoryRequest) {
 
         if (!categoryId.isPresent()) {
             throw new InvalidRequestException("Syntax error or Bad request");

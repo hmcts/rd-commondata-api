@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Categories;
 import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
 import uk.gov.hmcts.reform.cdapi.idam.IdamOpenIdClient;
+import uk.gov.hmcts.reform.cdapi.util.ErrorInvalidRequestResponse;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -91,7 +92,7 @@ public class CommonDataApiClient {
         if (expectedStatus.is2xxSuccessful()) {
             return Arrays.asList(response.getBody().as(Categories[].class));
         } else {
-            return response.getBody().as(ErrorResponse.class);
+            return response.getBody().as(ErrorInvalidRequestResponse.class);
         }
     }
 
