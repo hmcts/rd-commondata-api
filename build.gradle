@@ -1,6 +1,6 @@
 buildscript {
   dependencies {
-    classpath("net.serenity-bdd:serenity-gradle-plugin:2.3.6")
+    classpath("net.serenity-bdd:serenity-gradle-plugin:2.4.34")
   }
 }
 plugins {
@@ -282,6 +282,10 @@ dependencyManagement {
       entry 'tomcat-embed-core'
       entry 'tomcat-embed-el'
       entry 'tomcat-embed-websocket'
+    }
+    //CVE-2023-24998
+    dependencySet(group: 'commons-fileupload', version: '1.5') {
+      entry 'commons-fileupload'
     }
     // CVE-2021-22060, CVE-2022-22965, CVE-2022-22950, CVE-2022-22971, CVE-2022-22968, CVE-2022-22970
     dependency(group: 'org.springframework', name: 'spring-corespring-core', version: '5.3.22') //remove this line after spring boot upgrade to 2.7.7 and spring frame work to 6.0
