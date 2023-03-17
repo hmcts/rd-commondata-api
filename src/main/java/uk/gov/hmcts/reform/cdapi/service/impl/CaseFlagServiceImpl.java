@@ -96,7 +96,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                     .flagComment(caseFlagDto.getRequestReason())
                     .parent(caseFlagDto.getIsParent())
                     .hearingRelevant(caseFlagDto.getHearingRelevant())
-                    .path(Arrays.stream(caseFlagDto.getCategoryPath().split("/")).collect(Collectors.toList()))
+                    .path(Arrays.stream(caseFlagDto.getCategoryPath().split("/")).toList())
                     .childFlags(new ArrayList<>())
                     .id(caseFlagDto.getId())
                     .cateGoryId(caseFlagDto.getCategoryId());
@@ -140,7 +140,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                     .flagComment(caseFlagDto.getRequestReason())
                     .parent(caseFlagDto.getIsParent())
                     .hearingRelevant(caseFlagDto.getHearingRelevant())
-                    .path(Arrays.stream(caseFlagDto.getCategoryPath().split("/")).collect(Collectors.toList()))
+                    .path(Arrays.stream(caseFlagDto.getCategoryPath().split("/")).toList())
                     .cateGoryId(caseFlagDto.getCategoryId())
                     .id(caseFlagDto.getId());
                 this.setCaseFlagByWelshRequired(isWelshRequired, childFlag, caseFlagDto);
@@ -296,7 +296,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
             ? flagDetail
             : flagDetail
             .stream().filter(f1 -> f1.getName().equalsIgnoreCase(
-                flagType.trim())).collect(Collectors.toList());
+                flagType.trim())).toList();
         return flagDetail;
     }
 }
