@@ -9,11 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
@@ -66,7 +62,7 @@ public class CommonDataApiClient {
 
     private Object mapCaseFlagsByServiceIdResponse(ResponseEntity<Object> responseEntity,
                                                    Class<?> clazz) throws JsonProcessingException {
-        HttpStatus status = responseEntity.getStatusCode();
+        HttpStatusCode status = responseEntity.getStatusCode();
 
         if (status.is2xxSuccessful()) {
             return objectMapper.convertValue(responseEntity.getBody(), clazz);

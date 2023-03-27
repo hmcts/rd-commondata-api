@@ -61,7 +61,7 @@ public class SecurityConfiguration {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().antMatchers(anonymousPaths.toArray(String[]::new));
+        return (web) -> web.ignoring().requestMatchers(anonymousPaths.toArray(String[]::new));
     }
 
     @Inject
@@ -79,14 +79,14 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.addFilterBefore(serviceAuthFilter, BearerTokenAuthenticationFilter.class)
+        /*http.addFilterBefore(serviceAuthFilter, BearerTokenAuthenticationFilter.class)
             .addFilterAfter(securityEndpointFilter, OAuth2AuthorizationRequestRedirectFilter.class)
 
             .sessionManagement().sessionCreationPolicy(STATELESS).and()
             .csrf().disable()
             .formLogin().disable()
             .logout().disable()
-            .authorizeRequests()
+            .authorizeRequests((auths) -> auths.anyRequest().authenticated())
             .antMatchers("/error").permitAll()
             .anyRequest()
             .authenticated()
@@ -96,7 +96,7 @@ public class SecurityConfiguration {
             .jwtAuthenticationConverter(jwtAuthenticationConverter)
             .and()
             .and()
-            .oauth2Client();
+            .oauth2Client();*/
         return http.build();
     }
 

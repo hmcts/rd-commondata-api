@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.cdapi.config;
 
 import com.auth0.jwt.JWT;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,6 @@ import uk.gov.hmcts.reform.cdapi.exception.ForbiddenException;
 import uk.gov.hmcts.reform.cdapi.service.FeatureToggleService;
 
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotNull;
 
 import static java.util.Objects.nonNull;
 import static org.apache.commons.lang3.BooleanUtils.isNotTrue;
@@ -35,9 +33,7 @@ public class FeatureConditionEvaluation implements HandlerInterceptor {
     private final FeatureToggleService featureToggleService;
 
     @Override
-    public boolean preHandle(HttpServletRequest request,
-                             @NotNull HttpServletResponse response, @NotNull Object handler) throws Exception {
-
+    public boolean preHandle(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response, Object handler) throws Exception {
         Map<String, String> launchDarklyUrlMap = featureToggleService.getLaunchDarklyMap();
         if (handler instanceof HandlerMethod) {
             String restMethod = ((HandlerMethod) handler).getMethod().getName();

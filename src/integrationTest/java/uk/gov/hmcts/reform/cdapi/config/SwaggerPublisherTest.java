@@ -34,10 +34,10 @@ class SwaggerPublisherTest extends CdAuthorizationEnabledIntegrationTest {
 
     @BeforeEach
     public void setUp() {
-        WebRequestTrackingFilter filter = new WebRequestTrackingFilter();
-        filter.init(new MockFilterConfig());
+//        WebRequestTrackingFilter filter = new WebRequestTrackingFilter();
+//        filter.init(new MockFilterConfig());
         this.mvc = webAppContextSetup(webApplicationContext)
-            .addFilter(filter)
+//            .addFilter()
             .build();
     }
 
