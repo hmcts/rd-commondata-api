@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.api.annotations.ParameterObject;
@@ -44,28 +43,27 @@ public class CrdApiController {
                 @SecurityRequirement(name = "ServiceAuthorization")
             }
     )
-    @ApiResponses({
-        @ApiResponse(
-            responseCode = "200",
-            description = "Successfully retrieved list of Category Values for the request provided",
-            content = @Content(schema = @Schema(implementation = Categories.class))
-        ),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Bad Request",
-            content = @Content
-        ),
-        @ApiResponse(
-            responseCode = "401",
-            description = "Forbidden Error: Access denied",
-            content = @Content
-        ),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Internal Server Error",
-            content = @Content
-        )
-    })
+    @ApiResponse(
+        responseCode = "200",
+        description = "Successfully retrieved list of Category Values for the request provided",
+        content = @Content(schema = @Schema(implementation = Categories.class))
+    )
+    @ApiResponse(
+        responseCode = "400",
+        description = "Bad Request",
+        content = @Content
+    )
+    @ApiResponse(
+        responseCode = "401",
+        description = "Forbidden Error: Access denied",
+        content = @Content
+    )
+
+    @ApiResponse(
+        responseCode = "500",
+        description = "Internal Server Error",
+        content = @Content
+    )
     @GetMapping(
         produces = APPLICATION_JSON_VALUE,
         path = {"/lov/categories/{categoryId}"}

@@ -21,7 +21,6 @@ import uk.gov.hmcts.reform.cdapi.service.CaseFlagService;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static uk.gov.hmcts.reform.cdapi.controllers.constant.Constant.CATEGORY_KEY_LANGUAGE_INTERPRETER;
 import static uk.gov.hmcts.reform.cdapi.controllers.constant.Constant.CATEGORY_KEY_SIGN_LANGUAGE;
@@ -96,7 +95,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                     .flagComment(caseFlagDto.getRequestReason())
                     .parent(caseFlagDto.getIsParent())
                     .hearingRelevant(caseFlagDto.getHearingRelevant())
-                    .path(Arrays.stream(caseFlagDto.getCategoryPath().split("/")).collect(Collectors.toList()))
+                    .path(Arrays.stream(caseFlagDto.getCategoryPath().split("/")).toList())
                     .childFlags(new ArrayList<>())
                     .id(caseFlagDto.getId())
                     .cateGoryId(caseFlagDto.getCategoryId());
@@ -140,7 +139,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                     .flagComment(caseFlagDto.getRequestReason())
                     .parent(caseFlagDto.getIsParent())
                     .hearingRelevant(caseFlagDto.getHearingRelevant())
-                    .path(Arrays.stream(caseFlagDto.getCategoryPath().split("/")).collect(Collectors.toList()))
+                    .path(Arrays.stream(caseFlagDto.getCategoryPath().split("/")).toList())
                     .cateGoryId(caseFlagDto.getCategoryId())
                     .id(caseFlagDto.getId());
                 this.setCaseFlagByWelshRequired(isWelshRequired, childFlag, caseFlagDto);
@@ -296,7 +295,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
             ? flagDetail
             : flagDetail
             .stream().filter(f1 -> f1.getName().equalsIgnoreCase(
-                flagType.trim())).collect(Collectors.toList());
+                flagType.trim())).toList();
         return flagDetail;
     }
 }
