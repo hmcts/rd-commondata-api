@@ -66,7 +66,7 @@ public class CommonDataApiClient {
 
     private Object mapCaseFlagsByServiceIdResponse(ResponseEntity<Object> responseEntity,
                                                    Class<?> clazz) throws JsonProcessingException {
-        HttpStatus status = responseEntity.getStatusCode();
+        HttpStatus status = (HttpStatus) responseEntity.getStatusCode();
 
         if (status.is2xxSuccessful()) {
             return objectMapper.convertValue(responseEntity.getBody(), clazz);

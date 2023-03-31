@@ -15,6 +15,7 @@ import uk.gov.hmcts.reform.cdapi.CdAuthorizationEnabledIntegrationTest;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import javax.servlet.FilterConfig;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,12 +33,13 @@ class SwaggerPublisherTest extends CdAuthorizationEnabledIntegrationTest {
 
     private MockMvc mvc;
 
+    //NeedToCheck
     @BeforeEach
     public void setUp() {
         WebRequestTrackingFilter filter = new WebRequestTrackingFilter();
-        filter.init(new MockFilterConfig());
+        filter.init((FilterConfig) new MockFilterConfig());
         this.mvc = webAppContextSetup(webApplicationContext)
-            .addFilter(filter)
+            // .addFilter(filter)
             .build();
     }
 

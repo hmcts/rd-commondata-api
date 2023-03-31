@@ -1,6 +1,8 @@
 package uk.gov.hmcts.reform.cdapi.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -9,15 +11,15 @@ import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @Component("restAuthenticationEntryPoint")
 @Slf4j
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    public void commence(HttpServletRequest request, HttpServletResponse response,
-                         AuthenticationException authenticationException) throws IOException {
+
+    public void commence(jakarta.servlet.http.HttpServletRequest request,
+                         jakarta.servlet.http.HttpServletResponse response,
+                         AuthenticationException authenticationException) throws IOException, ServletException {
 
         ObjectMapper mapper = new ObjectMapper();
         ErrorResponse errorResponse = new ErrorResponse(

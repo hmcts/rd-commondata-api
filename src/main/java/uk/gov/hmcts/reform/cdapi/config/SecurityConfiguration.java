@@ -18,7 +18,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.oauth2.jwt.JwtTimestampValidator;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationFilter;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
 import uk.gov.hmcts.reform.cdapi.oidc.JwtGrantedAuthoritiesConverter;
@@ -42,7 +42,7 @@ public class SecurityConfiguration {
     private String issuerOverride;
 
     @Order(1)
-    private  ServiceAuthFilter serviceAuthFilter;
+    private ServiceAuthFilter serviceAuthFilter;
     @Order(2)
     private final SecurityEndpointFilter securityEndpointFilter;
     List<String> anonymousPaths;
@@ -61,7 +61,7 @@ public class SecurityConfiguration {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().antMatchers(anonymousPaths.toArray(String[]::new));
+        return web -> web.ignoring().requestMatchers(anonymousPaths.toArray(String[]::new));
     }
 
     @Inject
@@ -77,6 +77,7 @@ public class SecurityConfiguration {
         this.securityEndpointFilter = securityEndpointFilter;
     }
 
+    //Functionality NeedToCheck
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.addFilterBefore(serviceAuthFilter, BearerTokenAuthenticationFilter.class)
@@ -86,8 +87,8 @@ public class SecurityConfiguration {
             .csrf().disable()
             .formLogin().disable()
             .logout().disable()
-            .authorizeRequests()
-            .antMatchers("/error").permitAll()
+            .authorizeHttpRequests()//NeedToCheck
+            .requestMatchers("/error").permitAll()
             .anyRequest()
             .authenticated()
             .and()
