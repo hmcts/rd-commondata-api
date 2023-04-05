@@ -45,7 +45,7 @@ def versions = [
   serenity        : '2.0.76',
   springHystrix   : '2.2.10.RELEASE',
   restAssured     : '4.3.3',
-  springVersion   : '5.3.22',
+  springVersion   : '5.3.26',
   logback         : '1.2.10',
   feign           : '3.8.0',
   bytebuddy       : '1.12.7',
@@ -288,7 +288,7 @@ dependencyManagement {
       entry 'commons-fileupload'
     }
     // CVE-2021-22060, CVE-2022-22965, CVE-2022-22950, CVE-2022-22971, CVE-2022-22968, CVE-2022-22970
-    dependency(group: 'org.springframework', name: 'spring-corespring-core', version: '5.3.22') //remove this line after spring boot upgrade to 2.7.7 and spring frame work to 6.0
+    dependency(group: 'org.springframework', name: 'spring-corespring-core', version: versions.springVersion) //remove this line after spring boot upgrade to 2.7.7 and spring frame work to 6.0
   }
 
 }
@@ -315,7 +315,9 @@ repositories {
 dependencies {
   testImplementation ('com.github.hmcts:rd-commons-lib:v0.0.13'){
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-web'
+    exclude group: 'org.springframework', module: 'spring-test'
   }
+  testImplementation group: 'org.springframework', name: 'spring-test', version: versions.springVersion
 
 
   implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
@@ -361,7 +363,10 @@ dependencies {
   implementation group: 'org.springframework', name: 'spring-aspects', version: versions.springVersion
   implementation group: 'org.springframework', name: 'spring-context-support', version: versions.springVersion
   implementation group: 'org.springframework', name: 'spring-context', version: versions.springVersion
-  implementation group: 'org.springframework.security', name: 'spring-security-test'
+  implementation(group: 'org.springframework.security', name: 'spring-security-test'){
+    exclude group: 'org.springframework', module: 'spring-test'
+  }
+  implementation group: 'org.springframework', name: 'spring-test', version: versions.springVersion
 
   implementation group: 'org.springframework', name: 'spring-expression', version: versions.springVersion
   implementation group: 'org.springframework', name: 'spring-jcl', version: versions.springVersion
@@ -457,8 +462,13 @@ dependencies {
   contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
   contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.7.1')
   contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
-  contractTestImplementation group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version
-  contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
+  contractTestImplementation(group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version) {
+    exclude group: 'org.springframework', module: 'spring-test'
+  }
+  contractTestImplementation(group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version) {
+    exclude group: 'org.springframework', module: 'spring-test'
+  }
+  contractTestImplementation group: 'org.springframework', name: 'spring-test', version: versions.springVersion
 
   integrationTestImplementation sourceSets.main.runtimeClasspath
   integrationTestImplementation sourceSets.test.runtimeClasspath
