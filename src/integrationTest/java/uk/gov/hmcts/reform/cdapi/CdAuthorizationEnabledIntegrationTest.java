@@ -22,6 +22,8 @@ import uk.gov.hmcts.reform.cdapi.service.impl.FeatureToggleServiceImpl;
 import uk.gov.hmcts.reform.cdapi.util.CommonDataApiClient;
 import uk.gov.hmcts.reform.cdapi.util.KeyGenUtil;
 import uk.gov.hmcts.reform.cdapi.util.WireMockExtension;
+import uk.gov.hmcts.reform.cdapi.util.WireMockUtil;
+import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -36,6 +38,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
+
 
 @Configuration
 @TestPropertySource(properties = {"S2S_URL=http://127.0.0.1:8990", "IDAM_URL:http://127.0.0.1:5000"})
@@ -85,21 +88,21 @@ public abstract class CdAuthorizationEnabledIntegrationTest extends SpringBootIn
                                                .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                                                .withBody("rd_commondata_api")));
 
+
+        UserInfo userDetails = UserInfo.builder()
+            .uid("%s")
+            .givenName("Super")
+            .familyName("User")
+            .roles(List.of("%s"))
+            .build();
+
+
         idamService.stubFor(get(urlPathMatching("/o/userinfo"))
                                 .willReturn(aResponse()
                                                 .withStatus(200)
                                                 .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                                                .withBody("{"
-                                                              + "  \"id\": \"%s\","
-                                                              + "  \"uid\": \"%s\","
-                                                              + "  \"forename\": \"Super\","
-                                                              + "  \"surname\": \"User\","
-                                                              + "  \"email\": \"super.user@hmcts.net\","
-                                                              + "  \"accountStatus\": \"active\","
-                                                              + "  \"roles\": ["
-                                                              + "  \"%s\""
-                                                              + "  ]"
-                                                              + "}")
+                                                .withBody(WireMockUtil.getObjectMapper()
+                                                              .writeValueAsString(userDetails))
                                                 .withTransformers("external_user-token-response")));
 
         mockHttpServerForOidc.stubFor(get(urlPathMatching("/jwks"))
