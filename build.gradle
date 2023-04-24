@@ -45,7 +45,7 @@ def versions = [
   serenity        : '2.0.76',
   springHystrix   : '2.2.10.RELEASE',
   restAssured     : '4.3.3',
-  springVersion   : '5.3.26',
+  springVersion   : '5.3.27',
   logback         : '1.2.10',
   feign           : '3.8.0',
   bytebuddy       : '1.12.7',
