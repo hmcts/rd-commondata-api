@@ -1,10 +1,14 @@
 package uk.gov.hmcts.reform.cdapi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jxl.common.Assert;
 import net.thucydides.core.annotations.WithTag;
 import net.thucydides.core.annotations.WithTags;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Categories;
@@ -25,6 +29,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
     private static final String path = "/lov/categories/{category-id}";
 
     @Test
+    @DisplayName("Retrieve categories for Child ")
     void shouldRetrieveCategoriesForCategoryIdWithStatusCode200()
         throws JsonProcessingException {
         final var response = (Categories)
@@ -37,11 +42,29 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
     }
 
     @Test
-    void shouldRetrieveCategoriesWithAllParamsWithStatusCode200()
+    @DisplayName("Retrieve categories for Parent ")
+    void shouldRetrieveCategoriesForChildCategoryIdWithStatusCode200()
+        throws JsonProcessingException {
+        final var response = (Categories)
+            commonDataApiClient.retrieveCaseFlagsByServiceId("HearingChannel",
+                                                             Categories.class, path
+            );
+        assertNotNull(response);
+        Assert.verify(response.getListOfCategory().size() > 0);
+        response.getListOfCategory().forEach(category -> {
+            assertThat(category.getCategoryKey()).isEqualTo("HearingChannel");
+            assertThat(category.getActiveFlag()).isEqualTo("Y");
+        });
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Y","N"})
+    void shouldRetrieveCategoriesWithAllParamsWithStatusCode200(String flag)
         throws JsonProcessingException {
         final var response = (Categories)
             commonDataApiClient.retrieveCaseFlagsByServiceId("HearingSubChannel?serviceId=BBA3"
-                                                             + "&parentCategory=HearingChannel&parentKey=telephone",
+                                                             + "&parentCategory=HearingChannel&parentKey=telephone"
+                                                                 + "&isChildRequired=" + flag,
                                                              Categories.class, path
             );
         assertNotNull(response);
@@ -49,19 +72,72 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         responseVerification(response);
     }
 
-    @Test
-    void shouldRetrieveCategoriesWithServiceIdWithChildNodes()
+    @ParameterizedTest
+    @ValueSource(strings = {"Y","N"})
+    @DisplayName("Retrieve categories for Child with Parent Category")
+    void shouldRetrieveCategoriesWithParentCategory(String flag)
+        throws JsonProcessingException {
+        final var response = (Categories)
+            commonDataApiClient.retrieveCaseFlagsByServiceId("HearingSubChannel?parentCategory"
+                                                                 + "=HearingChannel&isChildRequired=" + flag,
+                                                             Categories.class, path
+            );
+        assertNotNull(response);
+        assertEquals(1, response.getListOfCategory().size());
+        responseVerification(response);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Y","N"})
+    @DisplayName("Retrieve categories for Child with Parent Key")
+    void shouldRetrieveCategoriesWithParentKey(String flag)
+        throws JsonProcessingException {
+        final var response = (Categories)
+            commonDataApiClient.retrieveCaseFlagsByServiceId("HearingSubChannel?parentKey"
+                                                                 + "=telephone&isChildRequired=" + flag,
+                                                             Categories.class, path
+            );
+        assertNotNull(response);
+        assertEquals(1, response.getListOfCategory().size());
+        responseVerification(response);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Y","N"})
+    @DisplayName("Retrieve categories for Parent with serviceId")
+    void shouldRetrieveCategoriesWithServiceIdWithChildNodesForParents(String flag)
         throws JsonProcessingException {
         final var response = (Categories)
             commonDataApiClient.retrieveCaseFlagsByServiceId("HearingChannel?serviceId=BBA3"
-                                                                 + "&isChildRequired=Y",
+                                                                 + "&isChildRequired=" + flag,
                                                              Categories.class, path
             );
         assertNotNull(response);
         assertEquals(4, response.getListOfCategory().size());
-        assertEquals(1,response.getListOfCategory().get(0).getChildNodes().size());
-        responseVerification(response.getListOfCategory().get(0).getChildNodes().get(0));
+        if (flag.equals("Y")) {
+            assertEquals(1, response.getListOfCategory().get(0).getChildNodes().size());
+            responseVerification(response.getListOfCategory().get(0).getChildNodes().get(0));
+        } else {
+            responseVerificationWithOutChildNodes(response);
+        }
     }
+
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Y","N"})
+    @DisplayName("Retrieve categories for Child with serviceId")
+    void shouldRetrieveCategoriesWithServiceIdWithChildNodesForChild(String flag)
+        throws JsonProcessingException {
+        final var response = (Categories)
+            commonDataApiClient.retrieveCaseFlagsByServiceId("HearingSubChannel?serviceId=BBA3"
+                                                                 + "&isChildRequired=" + flag,
+                                                             Categories.class, path
+            );
+        assertNotNull(response);
+        assertEquals(1, response.getListOfCategory().size());
+        responseVerification(response.getListOfCategory().get(0));
+    }
+
 
     @Test
     @SuppressWarnings("unchecked")
@@ -82,19 +158,6 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
             null,Map.class, path);
         assertNotNull(errorResponseMap);
         assertThat((Map<String, Object>) errorResponseMap).containsEntry("http_status", HttpStatus.NOT_FOUND);
-    }
-
-    @Test
-    void shouldRetrieveCategoriesWithServiceIdWithOutChildNodes()
-        throws JsonProcessingException {
-        final var response = (Categories)
-            commonDataApiClient.retrieveCaseFlagsByServiceId("HearingChannel?serviceId=BBA3"
-                                                                 + "&isChildRequired=N",
-                                                             Categories.class, path
-            );
-        assertNotNull(response);
-        assertEquals(4, response.getListOfCategory().size());
-        responseVerificationWithOutChildNodes(response);
     }
 
     private void responseVerification(Categories response) {
