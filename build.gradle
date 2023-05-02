@@ -340,7 +340,6 @@ dependencies {
   implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.5.12'
   implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
   implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
-  implementation group: 'org.springframework.security', name: 'spring-security-core', version: '5.7.8'
 
   implementation group: 'org.bouncycastle', name: 'bcpkix-jdk15on', version: '1.70'
   implementation group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '5.10.2'
@@ -360,7 +359,7 @@ dependencies {
   implementation group: 'ch.qos.logback', name: 'logback-core', version: versions.logback
   implementation group: 'ch.qos.logback', name: 'logback-classic', version: versions.logback
   implementation group: 'org.springframework', name: 'spring-core', version: versions.springVersion
-  implementation group: 'org.springframework.security', name: 'spring-security-core', version: '5.7.5'
+  implementation group: 'org.springframework.security', name: 'spring-security-core', version: '5.7.8'
   implementation group: 'org.springframework', name: 'spring-beans', version: versions.springVersion
   implementation group: 'org.springframework', name: 'spring-aop', version: versions.springVersion
   implementation group: 'org.springframework', name: 'spring-aspects', version: versions.springVersion
