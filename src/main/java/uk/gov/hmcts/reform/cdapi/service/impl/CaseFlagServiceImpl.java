@@ -281,9 +281,9 @@ public class CaseFlagServiceImpl implements CaseFlagService {
             .flagCode("OT0001")
             .hearingRelevant(true)
             .parent(false)
-            .defaultStatus("Active")
-            .nameCy(nameCy)
-            .externallyAvailable(false)
+            .defaultStatus("Requested")
+            .nameCy("Arall")
+            .externallyAvailable(true)
             .childFlags(new ArrayList<>())
             .path(path)
             .flagComment(true).build();
