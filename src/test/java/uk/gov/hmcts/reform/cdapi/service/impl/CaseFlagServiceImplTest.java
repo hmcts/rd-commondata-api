@@ -250,8 +250,10 @@ class CaseFlagServiceImplTest {
         assertNotNull(caseFlag);
         assertEquals(1, caseFlag.getFlags().size());
         assertEquals(1, caseFlag.getFlags().get(0).getFlagDetails().size());
-        assertEquals(true,caseFlag.getFlags().get(0).getFlagDetails().get(0).getChildFlags().get(1).getExternallyAvailable());
-        assertEquals("Requested",caseFlag.getFlags().get(0).getFlagDetails().get(0).getChildFlags().get(1).getDefaultStatus());
+        assertEquals(true,caseFlag.getFlags().get(0).getFlagDetails().get(0).getChildFlags()
+            .get(1).getExternallyAvailable());
+        assertEquals("Requested",caseFlag.getFlags().get(0).getFlagDetails().get(0).getChildFlags()
+            .get(1).getDefaultStatus());
         assertEquals("Arall",caseFlag.getFlags().get(0).getFlagDetails().get(0).getChildFlags().get(1).getNameCy());
         assertEquals("Other",caseFlag.getFlags().get(0).getFlagDetails().get(0).getChildFlags().get(1).getName());
         verify(caseFlagRepository, times(1)).findAll(anyString());
