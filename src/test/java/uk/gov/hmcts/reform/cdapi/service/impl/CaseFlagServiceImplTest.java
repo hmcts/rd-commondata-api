@@ -240,6 +240,26 @@ class CaseFlagServiceImplTest {
         });
     }
 
+    @Test
+    @DisplayName("Positive scenario -Should return 200 with FlagType Other")
+    void testGetCaseFlag_ByServiceIWithCaseFlagIsOtherandAvailableExternallyIsY_Returns200() {
+        when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoListWithOther());
+        when(listOfVenueRepository.findListOfValues(anyString()))
+            .thenReturn(getListOfValuesForSignLanguage(true));
+        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "Other", "Y", "Y");
+        assertNotNull(caseFlag);
+        assertEquals(1, caseFlag.getFlags().size());
+        assertEquals(1, caseFlag.getFlags().get(0).getFlagDetails().size());
+        assertEquals(true,caseFlag.getFlags().get(0).getFlagDetails().get(0).getChildFlags()
+            .get(1).getExternallyAvailable());
+        assertEquals("Requested",caseFlag.getFlags().get(0).getFlagDetails().get(0).getChildFlags()
+            .get(1).getDefaultStatus());
+        assertEquals("Arall",caseFlag.getFlags().get(0).getFlagDetails().get(0).getChildFlags().get(1).getNameCy());
+        assertEquals("Other",caseFlag.getFlags().get(0).getFlagDetails().get(0).getChildFlags().get(1).getName());
+        verify(caseFlagRepository, times(1)).findAll(anyString());
+    }
+
+
     List<CaseFlagDto> getEmptyCaseFlagDtoList(List<CaseFlagDto> caseFlagDtoList) {
         var caseFlagDto6 = new CaseFlagDto();
         caseFlagDto6.setFlagCode("CATEGORY");
@@ -280,11 +300,11 @@ class CaseFlagServiceImplTest {
         caseFlagDto1.setValueEn("PARTY");
         caseFlagDto1.setValueCy("");
         caseFlagDto1.setIsParent(true);
+        caseFlagDto1.setFlagCode("CATEGORY");
         caseFlagDto1.setExternallyAvailable(true);
         caseFlagDto1.setDefaultStatus("Requested");
 
         var caseFlagDto2 = new CaseFlagDto();
-        caseFlagDto2.setFlagCode("CATEGORY");
         caseFlagDto2.setCategoryId(1);
         caseFlagDto2.setCategoryPath("PARTY");
         caseFlagDto2.setId(2);
@@ -411,6 +431,43 @@ class CaseFlagServiceImplTest {
 
         return caseFlagDtoList;
     }
+
+    private List<CaseFlagDto> getCaseFlagDtoListWithOther() {
+        var caseFlagDto1 = new CaseFlagDto();
+        caseFlagDto1.setFlagCode("OT0001");
+        caseFlagDto1.setCategoryId(0);
+        caseFlagDto1.setCategoryPath("");
+        caseFlagDto1.setId(1);
+        caseFlagDto1.setHearingRelevant(true);
+        caseFlagDto1.setRequestReason(false);
+        caseFlagDto1.setValueEn("Other");
+        caseFlagDto1.setValueCy("Arall");
+        caseFlagDto1.setIsParent(true);
+        caseFlagDto1.setExternallyAvailable(false);
+        caseFlagDto1.setDefaultStatus("Requested");
+
+        var caseFlagDto2 = new CaseFlagDto();
+        caseFlagDto2.setFlagCode("RA0042");
+        caseFlagDto2.setCategoryId(1);
+        caseFlagDto2.setCategoryPath("PARTY");
+        caseFlagDto2.setValueCy("PARTY");
+        caseFlagDto2.setId(2);
+        caseFlagDto2.setHearingRelevant(true);
+        caseFlagDto2.setRequestReason(false);
+        caseFlagDto2.setValueEn("Sign Language");
+        caseFlagDto2.setValueCy("");
+        caseFlagDto2.setIsParent(false);
+        caseFlagDto1.setExternallyAvailable(true);
+        caseFlagDto1.setDefaultStatus("Approved");
+
+        var caseFlagDtoList = new ArrayList<CaseFlagDto>();
+        caseFlagDtoList.add(caseFlagDto1);
+        caseFlagDtoList.add(caseFlagDto2);
+
+        return caseFlagDtoList;
+    }
+
+
 
     private List<ListOfValue> getListOfValuesForLanguageInterPreter(boolean isWelshRequired) {
         var list = new ListOfValue();
