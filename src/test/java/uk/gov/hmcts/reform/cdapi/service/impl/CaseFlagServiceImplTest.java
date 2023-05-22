@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.cdapi.service.impl;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -158,6 +159,24 @@ class CaseFlagServiceImplTest {
         });
     }
 
+    @Test
+    @DisplayName("Positive scenario -Should return 200 with Welsh-Required=N and available-externally=N")
+    void testGetCaseFlag_ByServiceIWithWelshRequiredIsNandAvailableExternallyIsN_Returns200() {
+        when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
+        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "", "N", "N");
+        assertNotNull(caseFlag);
+        assertEquals(1, caseFlag.getFlags().size());
+        assertEquals(2, caseFlag.getFlags().get(0).getFlagDetails().size());
+        verify(caseFlagRepository, times(1)).findAll(anyString());
+        caseFlag.getFlags().forEach(caseFlagObj -> {
+            for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
+                assertEquals(IGNORE_JSON, flagDetail.getNameCy());
+                assertNotNull(flagDetail.getDefaultStatus());
+                assertNotNull(flagDetail.getExternallyAvailable());
+            }
+        });
+    }
+
     List<CaseFlagDto> getEmptyCaseFlagDtoList(List<CaseFlagDto> caseFlagDtoList) {
         var caseFlagDto6 = new CaseFlagDto();
         caseFlagDto6.setFlagCode("CATEGORY");
@@ -198,11 +217,11 @@ class CaseFlagServiceImplTest {
         caseFlagDto1.setValueEn("PARTY");
         caseFlagDto1.setValueCy("");
         caseFlagDto1.setIsParent(true);
+        caseFlagDto1.setFlagCode("CATEGORY");
         caseFlagDto1.setExternallyAvailable(true);
         caseFlagDto1.setDefaultStatus("Requested");
 
         var caseFlagDto2 = new CaseFlagDto();
-        caseFlagDto2.setFlagCode("CATEGORY");
         caseFlagDto2.setCategoryId(1);
         caseFlagDto2.setCategoryPath("PARTY");
         caseFlagDto2.setId(2);
@@ -329,6 +348,43 @@ class CaseFlagServiceImplTest {
 
         return caseFlagDtoList;
     }
+
+    private List<CaseFlagDto> getCaseFlagDtoListWithOther() {
+        var caseFlagDto1 = new CaseFlagDto();
+        caseFlagDto1.setFlagCode("OT0001");
+        caseFlagDto1.setCategoryId(0);
+        caseFlagDto1.setCategoryPath("");
+        caseFlagDto1.setId(1);
+        caseFlagDto1.setHearingRelevant(true);
+        caseFlagDto1.setRequestReason(false);
+        caseFlagDto1.setValueEn("Other");
+        caseFlagDto1.setValueCy("Arall");
+        caseFlagDto1.setIsParent(true);
+        caseFlagDto1.setExternallyAvailable(false);
+        caseFlagDto1.setDefaultStatus("Requested");
+
+        var caseFlagDto2 = new CaseFlagDto();
+        caseFlagDto2.setFlagCode("RA0042");
+        caseFlagDto2.setCategoryId(1);
+        caseFlagDto2.setCategoryPath("PARTY");
+        caseFlagDto2.setValueCy("PARTY");
+        caseFlagDto2.setId(2);
+        caseFlagDto2.setHearingRelevant(true);
+        caseFlagDto2.setRequestReason(false);
+        caseFlagDto2.setValueEn("Sign Language");
+        caseFlagDto2.setValueCy("");
+        caseFlagDto2.setIsParent(false);
+        caseFlagDto1.setExternallyAvailable(true);
+        caseFlagDto1.setDefaultStatus("Approved");
+
+        var caseFlagDtoList = new ArrayList<CaseFlagDto>();
+        caseFlagDtoList.add(caseFlagDto1);
+        caseFlagDtoList.add(caseFlagDto2);
+
+        return caseFlagDtoList;
+    }
+
+
 
     private List<ListOfValue> getListOfValuesForLanguageInterPreter(boolean isWelshRequired) {
         var list = new ListOfValue();
