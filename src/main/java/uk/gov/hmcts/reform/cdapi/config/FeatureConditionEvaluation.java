@@ -33,7 +33,9 @@ public class FeatureConditionEvaluation implements HandlerInterceptor {
     private final FeatureToggleService featureToggleService;
 
     @Override
-    public boolean preHandle(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(jakarta.servlet.http.HttpServletRequest request,
+                             jakarta.servlet.http.HttpServletResponse response,
+                             Object handler) throws Exception {
         Map<String, String> launchDarklyUrlMap = featureToggleService.getLaunchDarklyMap();
         if (handler instanceof HandlerMethod) {
             String restMethod = ((HandlerMethod) handler).getMethod().getName();

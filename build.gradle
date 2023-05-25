@@ -10,7 +10,7 @@ plugins {
   id 'jacoco'
   id "org.flywaydb.flyway" version "7.0.2"
   id 'io.spring.dependency-management' version '1.1.0'
-  id 'org.springframework.boot' version '3.0.4'
+  id 'org.springframework.boot' version '3.0.6'
   id 'com.github.ben-manes.versions' version '0.39.0'
   id 'org.sonarqube' version '3.3'
   id "info.solidsoft.pitest" version '1.7.0'
@@ -45,12 +45,11 @@ def versions = [
   serenity        : '2.0.76',
   springHystrix   : '2.2.10.RELEASE',
   restAssured     : '5.3.0',
-  springVersion   : '6.0.6',
-  logback         : '1.2.10',
+  springVersion   : '6.0.8',
+  logback         : '1.4.7',
   feign           : '3.8.0',
   bytebuddy       : '1.12.7',
   testContainer_postgresql: '1.17.6'
-
 ]
 
 sourceSets {
@@ -290,8 +289,6 @@ dependencyManagement {
     dependencySet(group: 'commons-fileupload', version: '1.5') {
       entry 'commons-fileupload'
     }
-    // CVE-2021-22060, CVE-2022-22965, CVE-2022-22950, CVE-2022-22971, CVE-2022-22968, CVE-2022-22970
-    dependency(group: 'org.springframework', name: 'spring-corespring-core', version: versions.springVersion) //remove this line after spring boot upgrade to 2.7.7 and spring frame work to 6.0
   }
 
 }
@@ -316,21 +313,31 @@ repositories {
 }
 
 dependencies {
+
+  configurations.all {
+    exclude group: 'ch.qos.logback', module: 'logback-classic'
+  }
+
   testImplementation ('com.github.hmcts:rd-commons-lib:v0.0.13'){
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-web'
     exclude group: 'org.springframework', module: 'spring-test'
+    exclude group: 'ch.qos.logback', module: 'logback-classic'
   }
   testImplementation group: 'org.springframework', name: 'spring-test', version: versions.springVersion
 
+  implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: versions.log4j
+  implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: versions.log4j
 
   implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '3.0.4'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
 
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '3.0.4'
+  implementation(group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '3.0.4') {
+    exclude group: 'org.slf4j'
+  }
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-resource-server'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client'
@@ -350,12 +357,6 @@ dependencies {
   implementation group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: versions.reformS2sClient
   implementation group: 'javax.inject', name: 'javax.inject', version: '1'
   implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: '6.0.1'
-  implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: '6.0.1'
-//  constraints {
-//    implementation ('com.github.hmcts.java-logging:logging-appinsights') {
-//      implementation('')
-//    }
-//  }
   implementation group: 'uk.gov.hmcts.reform', name: 'idam-client', version: '2.0.0'
   implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '2.8.5'
   implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
@@ -366,7 +367,7 @@ dependencies {
   implementation 'commons-io:commons-io:2.8.0'
   implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.3'
   implementation group: 'ch.qos.logback', name: 'logback-core', version: versions.logback
-  implementation group: 'ch.qos.logback', name: 'logback-classic', version: versions.logback
+//  implementation group: 'ch.qos.logback', name: 'logback-classic', version: versions.logback
   implementation group: 'org.springframework', name: 'spring-core', version: versions.springVersion
   implementation group: 'org.springframework.security', name: 'spring-security-core', version: '6.0.2'
   implementation group: 'org.springframework', name: 'spring-beans', version: versions.springVersion
@@ -389,8 +390,6 @@ dependencies {
   implementation group: 'org.springframework', name: 'spring-web', version: versions.springVersion
   implementation group: 'org.springframework', name: 'spring-webmvc', version: versions.springVersion
   implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: '2.13.2.20220324', ext: 'pom'
-  implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: versions.log4j
-  implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: versions.log4j
   implementation group: 'io.github.openfeign.form', name: 'feign-form', version: versions.feign
   implementation group: 'io.github.openfeign.form', name: 'feign-form-spring', version: versions.feign
   implementation "io.github.openfeign:feign-httpclient:11.0"
@@ -398,10 +397,6 @@ dependencies {
 
   implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.8'
   implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.5'
-
-  implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.8'
-  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.5'
-
 
   testImplementation group: 'org.testcontainers', name: 'postgresql', version: versions.testContainer_postgresql
   testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: versions.testContainer_postgresql
@@ -466,7 +461,9 @@ dependencies {
   integrationTestImplementation group: 'org.junit.platform', name: 'junit-platform-commons', version: versions.junitPlatform
   integrationTestRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-engine', version: versions.junitPlatform
 
-  contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
+  contractTestImplementation (group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version) {
+    exclude group: 'org.slf4j'
+  }
   contractTestRuntimeOnly group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
   contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'java8', version: versions.pact_version
   contractTestRuntimeOnly group: 'au.com.dius.pact.consumer', name: 'java8', version: versions.pact_version
@@ -477,6 +474,7 @@ dependencies {
   contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
   contractTestImplementation(group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version) {
     exclude group: 'org.springframework', module: 'spring-test'
+    exclude group: 'ch.qos.logback', module: 'logback-classic'
   }
   contractTestImplementation(group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version) {
     exclude group: 'org.springframework', module: 'spring-test'
@@ -519,19 +517,6 @@ bootJar {
   manifest {
     attributes('Implementation-Version': project.version.toString())
   }
-}
-
-// Gradle 7.x issue, workaround from: https://github.com/gradle/gradle/issues/17236#issuecomment-894768083
-rootProject.tasks.named("processSmokeTestResources") {
-  duplicatesStrategy = 'include'
-}
-
-rootProject.tasks.named("processFunctionalTestResources") {
-  duplicatesStrategy = 'include'
-}
-
-rootProject.tasks.named("processIntegrationTestResources") {
-  duplicatesStrategy = 'include'
 }
 
 wrapper {

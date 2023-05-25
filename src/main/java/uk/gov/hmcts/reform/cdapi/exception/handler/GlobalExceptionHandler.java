@@ -133,7 +133,9 @@ public class GlobalExceptionHandler {
         return rootException;
     }
 
-    private ResponseEntity<Object> errorDetailsResponseEntity(Exception ex, HttpStatusCode httpStatus, String errorMsg) {
+    private ResponseEntity<Object> errorDetailsResponseEntity(Exception ex,
+                                                              HttpStatusCode httpStatus,
+                                                              String errorMsg) {
 
         log.info(HANDLING_EXCEPTION_TEMPLATE, loggingComponentName, ex.getMessage(), ex);
         ErrorResponse errorDetails = new ErrorResponse(
