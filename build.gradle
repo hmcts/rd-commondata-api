@@ -39,14 +39,12 @@ def versions = [
   sonarPitest     : '0.5',
   reformLogging   : '6.0.1',
   pact_version    : '4.1.7',
-  log4j           : '2.17.1',
   launchDarklySdk : "5.10.7",
   reformS2sClient : '4.0.0',
   serenity        : '2.0.76',
   springHystrix   : '2.2.10.RELEASE',
   restAssured     : '5.3.0',
   springVersion   : '6.0.8',
-  logback         : '1.4.7',
   feign           : '3.8.0',
   bytebuddy       : '1.12.7',
   testContainer_postgresql: '1.17.6'
@@ -96,6 +94,10 @@ sourceSets {
     }
     resources.srcDir file('src/pactTest/resources')
   }
+}
+
+tasks.withType(Copy).configureEach {
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 tasks.withType(JavaExec).configureEach {
@@ -305,6 +307,10 @@ dependencyCheck {
   }
 }
 
+configurations {
+  testCompile.exclude group: 'ch.qos.logback', module: 'logback-classic'
+}
+
 repositories {
   mavenLocal()
   mavenCentral()
@@ -316,26 +322,26 @@ dependencies {
 
   configurations.all {
     exclude group: 'ch.qos.logback', module: 'logback-classic'
+    exclude group: 'org.apache.logging.log4j', module: 'log4j-to-slf4j'
+    exclude group: "org.codehaus.groovy", module: "groovy"
+    exclude group: "org.codehaus.groovy", module: "groovy-xml"
+    exclude group: "org.codehaus.groovy", module: "groovy-json"
   }
 
   testImplementation ('com.github.hmcts:rd-commons-lib:v0.0.13'){
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-web'
     exclude group: 'org.springframework', module: 'spring-test'
-    exclude group: 'ch.qos.logback', module: 'logback-classic'
   }
   testImplementation group: 'org.springframework', name: 'spring-test', version: versions.springVersion
 
-  implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: versions.log4j
-  implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: versions.log4j
-
   implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '3.0.4'
+  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
 
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc'
-  implementation(group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '3.0.4') {
+  implementation(group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa') {
     exclude group: 'org.slf4j'
   }
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
@@ -366,8 +372,6 @@ dependencies {
   }
   implementation 'commons-io:commons-io:2.8.0'
   implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.3'
-  implementation group: 'ch.qos.logback', name: 'logback-core', version: versions.logback
-//  implementation group: 'ch.qos.logback', name: 'logback-classic', version: versions.logback
   implementation group: 'org.springframework', name: 'spring-core', version: versions.springVersion
   implementation group: 'org.springframework.security', name: 'spring-security-core', version: '6.0.2'
   implementation group: 'org.springframework', name: 'spring-beans', version: versions.springVersion
@@ -380,8 +384,6 @@ dependencies {
   }
   implementation group: 'org.springframework', name: 'spring-test', version: versions.springVersion
 
-  implementation group: 'org.apache.groovy', name: 'groovy-json', version: '4.0.9'
-
   implementation group: 'org.springframework', name: 'spring-expression', version: versions.springVersion
   implementation group: 'org.springframework', name: 'spring-jcl', version: versions.springVersion
   implementation group: 'org.springframework', name: 'spring-jdbc', version: versions.springVersion
@@ -393,10 +395,10 @@ dependencies {
   implementation group: 'io.github.openfeign.form', name: 'feign-form', version: versions.feign
   implementation group: 'io.github.openfeign.form', name: 'feign-form-spring', version: versions.feign
   implementation "io.github.openfeign:feign-httpclient:11.0"
-  implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: versions.log4j
 
   implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.8'
   implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.5'
+  implementation group: 'jakarta.servlet', name: 'jakarta.servlet-api', version: '6.0.0'
 
   testImplementation group: 'org.testcontainers', name: 'postgresql', version: versions.testContainer_postgresql
   testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: versions.testContainer_postgresql
@@ -413,22 +415,19 @@ dependencies {
   testImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.restAssured
   testImplementation group: 'io.rest-assured', name: 'rest-assured-common', version: versions.restAssured
 
-  testImplementation ("org.mockito:mockito-core:4.3.1") {
+  testImplementation ("org.mockito:mockito-core:5.3.1") {
     exclude group: "net.bytebuddy", module: "byte-buddy"
     exclude group: "net.bytebuddy", module: "byte-buddy-agent"
   }
-  testImplementation ("org.mockito:mockito-inline:4.3.1") {
+  testImplementation ("org.mockito:mockito-inline:5.2.0") {
     exclude group: "net.bytebuddy", module: "byte-buddy"
     exclude group: "net.bytebuddy", module: "byte-buddy-agent"
   }
   testImplementation group: 'net.bytebuddy', name: 'byte-buddy', version: versions.bytebuddy
   testImplementation group: 'net.bytebuddy', name: 'byte-buddy-agent', version: versions.bytebuddy
   testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.23.1'
-
-
-  testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '4.3.1'
-
-  testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.7'
+  testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '5.3.1'
+  testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
   testImplementation group: 'com.github.mifmif', name: 'generex', version: '1.0.2'
   testImplementation 'io.github.openfeign:feign-jackson:12.1'
   testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
@@ -440,7 +439,6 @@ dependencies {
   }
 
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.9.1'
-
 
 
   functionalTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
@@ -474,7 +472,6 @@ dependencies {
   contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
   contractTestImplementation(group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version) {
     exclude group: 'org.springframework', module: 'spring-test'
-    exclude group: 'ch.qos.logback', module: 'logback-classic'
   }
   contractTestImplementation(group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version) {
     exclude group: 'org.springframework', module: 'spring-test'
@@ -497,7 +494,6 @@ dependencies {
   pactTestImplementation sourceSets.test.runtimeClasspath
 
   compileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
-  compileOnly group: 'jakarta.servlet', name: 'jakarta.servlet-api', version: '6.0.0'
   annotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
   testCompileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
   testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
