@@ -7,6 +7,9 @@ Commondata Api
 
 Provides Data to clients, implemented as a Java/SpringBoot application.
 
+Please refer to the confluence for more information.
+https://tools.hmcts.net/confluence/display/RTRD/Common+Reference+Data
+
 ### Prerequisites
 
 To run the project you will need to have the following installed:
@@ -31,6 +34,10 @@ If running locally for development or testing you will need to set the following
 
 ### Running the application
 
+Please Make sure you are connected to the VPN before running application
+(https://portal.platform.hmcts.net/vdesk/webtop.eui?webtop=/Common/webtop_full&webtop_type=webtop_full)
+
+
 To run the API quickly use the docker helper script as follows:
 
 ```
@@ -43,7 +50,7 @@ docker-compose up
 ```
 
 
-Alternatively, you can start the application from the current source files using Gradle as follows:
+After, you can start the application from the current source files using Gradle as follows:
 
 ```
 ./gradlew clean bootRun
@@ -68,6 +75,14 @@ If the API is running, you should see this response:
 ```
 {"status":"UP"}
 ```
+
+
+If the Application is running, you can see API's in swagger :
+
+```
+http://localhost:8091/swagger-ui.html
+```
+
 
 ### DB Initialisation˙
 
@@ -143,7 +158,7 @@ ServiceAuthorization: Bearer {{token}}
 Authorization :  Bearer copy IDAM access token
 
 ### Contract testing with pact
-    
+
 To publish against remote broker:
 `./gradlew pactPublish`
 
