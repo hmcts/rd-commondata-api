@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class LDClientConfig {
+public class LaunchDarklyClientConfig {
 
     @Bean
     public LDClient ldClient(@Value("${launchdarkly.sdk.key}") String sdkKey) {
