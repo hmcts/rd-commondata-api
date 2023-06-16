@@ -1,9 +1,12 @@
 package uk.gov.hmcts.reform.cdapi;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.cloud.openfeign.FeignAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import uk.gov.hmcts.reform.idam.client.IdamApi;
@@ -13,6 +16,8 @@ import uk.gov.hmcts.reform.idam.client.IdamApi;
 @EnableJpaRepositories
 @SpringBootApplication
 @EnableCaching
+@ImportAutoConfiguration({FeignAutoConfiguration.class})
+@ComponentScan({"uk.gov.hmcts.reform.cdapi", "uk.gov.hmcts.reform"})
 @EnableFeignClients(basePackages = {
     "uk.gov.hmcts.reform.cdapi" },
     basePackageClasses = { IdamApi.class }

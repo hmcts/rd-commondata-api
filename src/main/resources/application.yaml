@@ -16,10 +16,10 @@ management:
 spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: false
+    show-sql: true
     properties:
       hibernate:
-#        default_schema: dbcommondata
+        default_schema: dbcommondata
         jdbc:
           lob:
             non_contextual_creation: true
@@ -50,9 +50,9 @@ spring:
               client-secret: ${COMMONDATA_API_S2S_SECRET:}
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5459}/${POSTGRES_NAME:dbcommondata}${POSTGRES_CONNECTION_OPTIONS:}
-    username: ${POSTGRES_USERNAME:dbcommondata}
-    password: ${POSTGRES_PASSWORD:dbcommondata}
+    url: jdbc:postgresql://${CM_DATA_POSTGRES_HOST:localhost}:${CM_DATA_POSTGRES_PORT:5432}/${CM_DATA_POSTGRES_NAME:dbcommondata}${CM_DATA_POSTGRES_CONNECTION_OPTIONS:}
+    username: ${CM_DATA_POSTGRES_USERNAME:dbcommondata}
+    password: ${CM_DATA_POSTGRES_PASSWORD:dbcommondata}
     min-idle: 1
     properties:
       charSet: UTF-8
