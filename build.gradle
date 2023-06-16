@@ -49,7 +49,6 @@ def versions = [
   serenity        : '2.0.76',
   springHystrix   : '2.2.10.RELEASE',
   restAssured     : '5.3.0',
-  springVersion   : '6.0.8',
   feign           : '3.8.0',
   bytebuddy       : '1.12.7',
   testContainer_postgresql: '1.17.6'
@@ -337,9 +336,9 @@ dependencies {
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-web'
     exclude group: 'org.springframework', module: 'spring-test'
   }
-  testImplementation group: 'org.springframework', name: 'spring-test', version: versions.springVersion
+  testImplementation group: 'org.springframework', name: 'spring-test'
 
-  implementation group: 'jakarta.validation', name: 'jakarta.validation-api', version: '2.0.1'
+  implementation group: 'jakarta.validation', name: 'jakarta.validation-api', version: '3.0.2'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
@@ -365,7 +364,7 @@ dependencies {
   implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.19.4'
   implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
   implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
-  implementation group: 'org.springframework.security', name: 'spring-security-core', version: '6.1.0'
+  implementation group: 'org.springframework.security', name: 'spring-security-core'
 
   implementation group: 'jakarta.persistence', name: 'jakarta.persistence-api', version: '3.1.0'
   implementation group: 'jakarta.annotation', name: 'jakarta.annotation-api', version: '2.1.1'
@@ -385,31 +384,32 @@ dependencies {
   }
   implementation 'commons-io:commons-io:2.8.0'
   implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.3'
-  implementation group: 'org.springframework', name: 'spring-core', version: versions.springVersion
-  implementation group: 'org.springframework.security', name: 'spring-security-core', version: '6.1.0'
-  implementation group: 'org.springframework', name: 'spring-beans', version: versions.springVersion
-  implementation group: 'org.springframework', name: 'spring-aop', version: versions.springVersion
-  implementation group: 'org.springframework', name: 'spring-aspects', version: versions.springVersion
-  implementation group: 'org.springframework', name: 'spring-context-support', version: versions.springVersion
-  implementation group: 'org.springframework', name: 'spring-context', version: versions.springVersion
+  implementation group: 'org.springframework', name: 'spring-core'
+  implementation group: 'org.springframework.security', name: 'spring-security-core'
+  implementation group: 'org.springframework', name: 'spring-beans'
+  implementation group: 'org.springframework', name: 'spring-aop'
+  implementation group: 'org.springframework', name: 'spring-aspects'
+  implementation group: 'org.springframework', name: 'spring-context-support'
+  implementation group: 'org.springframework', name: 'spring-context'
   implementation(group: 'org.springframework.security', name: 'spring-security-test'){
     exclude group: 'org.springframework', module: 'spring-test'
   }
-  implementation group: 'org.springframework', name: 'spring-test', version: versions.springVersion
+  implementation group: 'org.springframework', name: 'spring-test'
 
-  implementation group: 'org.springframework', name: 'spring-expression', version: versions.springVersion
-  implementation group: 'org.springframework', name: 'spring-jcl', version: versions.springVersion
-  implementation group: 'org.springframework', name: 'spring-jdbc', version: versions.springVersion
-  implementation group: 'org.springframework', name: 'spring-orm', version: versions.springVersion
-  implementation group: 'org.springframework', name: 'spring-tx', version: versions.springVersion
-  implementation group: 'org.springframework', name: 'spring-web', version: versions.springVersion
-  implementation group: 'org.springframework', name: 'spring-webmvc', version: versions.springVersion
+  implementation group: 'org.springframework', name: 'spring-expression'
+  implementation group: 'org.springframework', name: 'spring-jcl'
+  implementation group: 'org.springframework', name: 'spring-jdbc'
+  implementation group: 'org.springframework', name: 'spring-orm'
+  implementation group: 'org.springframework', name: 'spring-tx'
+  implementation group: 'org.springframework', name: 'spring-web'
+  implementation group: 'org.springframework', name: 'spring-webmvc'
   implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: '2.13.2.20220324', ext: 'pom'
   implementation group: 'io.github.openfeign.form', name: 'feign-form', version: versions.feign
   implementation group: 'io.github.openfeign.form', name: 'feign-form-spring', version: versions.feign
   implementation "io.github.openfeign:feign-httpclient:11.0"
 
-  implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.8'
+  implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.1.0'
+
   implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap'
   implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign'
   implementation group: 'jakarta.servlet', name: 'jakarta.servlet-api', version: '6.0.0'
@@ -490,7 +490,7 @@ dependencies {
   contractTestImplementation(group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version) {
     exclude group: 'org.springframework', module: 'spring-test'
   }
-  contractTestImplementation group: 'org.springframework', name: 'spring-test', version: versions.springVersion
+  contractTestImplementation group: 'org.springframework', name: 'spring-test'
 
   integrationTestImplementation sourceSets.main.runtimeClasspath
   integrationTestImplementation sourceSets.test.runtimeClasspath
