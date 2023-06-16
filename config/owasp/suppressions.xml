@@ -38,6 +38,8 @@
 
   <suppress>
     <cve>CVE-2022-45688</cve>
+    <cve>CVE-2008-7271</cve>
+    <cve>CVE-2010-4647</cve>
   </suppress>
 
   <suppress>
