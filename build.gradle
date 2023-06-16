@@ -365,7 +365,7 @@ dependencies {
   implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.19.4'
   implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
   implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
-  implementation group: 'org.springframework.security', name: 'spring-security-core', version: '6.0.2'
+  implementation group: 'org.springframework.security', name: 'spring-security-core', version: '6.1.0'
 
   implementation group: 'jakarta.persistence', name: 'jakarta.persistence-api', version: '3.1.0'
   implementation group: 'jakarta.annotation', name: 'jakarta.annotation-api', version: '2.1.1'
@@ -386,7 +386,7 @@ dependencies {
   implementation 'commons-io:commons-io:2.8.0'
   implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.3'
   implementation group: 'org.springframework', name: 'spring-core', version: versions.springVersion
-  implementation group: 'org.springframework.security', name: 'spring-security-core', version: '6.0.2'
+  implementation group: 'org.springframework.security', name: 'spring-security-core', version: '6.1.0'
   implementation group: 'org.springframework', name: 'spring-beans', version: versions.springVersion
   implementation group: 'org.springframework', name: 'spring-aop', version: versions.springVersion
   implementation group: 'org.springframework', name: 'spring-aspects', version: versions.springVersion
