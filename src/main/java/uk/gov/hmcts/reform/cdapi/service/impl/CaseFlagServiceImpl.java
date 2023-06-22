@@ -272,7 +272,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     }
 
     private FlagDetail otherFlagBuilder(List<String> path, boolean isWelshRequired) {
-        String nameCy = "Other";
+        String nameCy = "Arall";
         if (!isWelshRequired) {
             nameCy = IGNORE_JSON;
         }
@@ -281,9 +281,9 @@ public class CaseFlagServiceImpl implements CaseFlagService {
             .flagCode("OT0001")
             .hearingRelevant(true)
             .parent(false)
-            .defaultStatus("Active")
+            .defaultStatus("Requested")
             .nameCy(nameCy)
-            .externallyAvailable(false)
+            .externallyAvailable(true)
             .childFlags(new ArrayList<>())
             .path(path)
             .flagComment(true).build();
