@@ -17,7 +17,7 @@ import uk.gov.hmcts.reform.idam.client.IdamApi;
 @SpringBootApplication
 @EnableCaching
 @ImportAutoConfiguration({FeignAutoConfiguration.class})
-@ComponentScan({"uk.gov.hmcts.reform.cdapi"})
+@ComponentScan({"uk.gov.hmcts.reform.cdapi", "uk.gov.hmcts.reform.idam"})
 @EnableFeignClients(basePackages = {
     "uk.gov.hmcts.reform.cdapi" },
     basePackageClasses = { IdamApi.class }
