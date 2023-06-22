@@ -332,7 +332,7 @@ dependencies {
     exclude group: "org.codehaus.groovy", module: "groovy-json"
   }
 
-  testImplementation ('com.github.hmcts:rd-commons-lib:v0.0.13'){
+  testImplementation ('com.github.hmcts:rd-commons-lib:v0.0.14'){
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-web'
     exclude group: 'org.springframework', module: 'spring-test'
   }
