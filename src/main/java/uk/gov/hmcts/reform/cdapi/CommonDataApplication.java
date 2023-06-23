@@ -14,7 +14,8 @@ import uk.gov.hmcts.reform.idam.client.IdamApi;
 @EnableJpaRepositories
 @SpringBootApplication(scanBasePackages = {"uk.gov.hmcts.reform.cdapi", "uk.gov.hmcts.reform.idam"})
 @EnableCaching
-@EnableFeignClients(basePackageClasses = {IdamApi.class, ServiceAuthorisationApi.class})
+@EnableFeignClients(basePackages = {"uk.gov.hmcts.reform.cdapi" },
+    basePackageClasses = {IdamApi.class, ServiceAuthorisationApi.class})
 @SuppressWarnings("HideUtilityClassConstructor") // Spring needs a constructor, its not a utility class
 public class CommonDataApplication {
 
