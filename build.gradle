@@ -351,7 +351,7 @@ dependencies {
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-resource-server'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-cache'
-  implementation group: 'com.fasterxml.jackson', name:'jackson-bom' , version:'2.13.2.20220324'
+  implementation group: 'com.fasterxml.jackson', name:'jackson-bom' , version:'2.15.2'
 
   implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: versions.log4j
   implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: versions.log4j
@@ -398,7 +398,7 @@ dependencies {
   implementation group: 'org.springframework', name: 'spring-tx'
   implementation group: 'org.springframework', name: 'spring-web'
   implementation group: 'org.springframework', name: 'spring-webmvc'
-  implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: '2.13.2.20220324', ext: 'pom'
+  implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: '2.15.2', ext: 'pom'
   implementation group: 'io.github.openfeign.form', name: 'feign-form', version: versions.feign
   implementation group: 'io.github.openfeign.form', name: 'feign-form-spring', version: versions.feign
 
@@ -528,13 +528,6 @@ wrapper {
 dependencyManagement {
   imports {
     mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-  }
-  dependencies {
-    dependencySet(group: 'com.fasterxml.jackson.core', version: '2.14.0-rc1') {
-      entry 'jackson-databind'
-      entry 'jackson-core'
-      entry 'jackson-annotations'
-    }
   }
 }
 
