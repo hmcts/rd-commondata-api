@@ -81,7 +81,7 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.addFilterBefore(serviceAuthFilter, BearerTokenAuthenticationFilter.class)
+        return http.addFilterBefore(serviceAuthFilter, BearerTokenAuthenticationFilter.class)
             .addFilterAfter(securityEndpointFilter, OAuth2AuthorizationRequestRedirectFilter.class)
             .sessionManagement(s -> s.sessionCreationPolicy(STATELESS))
             .csrf(AbstractHttpConfigurer::disable)
@@ -90,9 +90,7 @@ public class SecurityConfiguration {
             .authorizeHttpRequests(a -> a.requestMatchers("/error").permitAll().anyRequest().authenticated())
             .oauth2ResourceServer(a -> a.authenticationEntryPoint(restAuthenticationEntryPoint)
                 .jwt(j -> j.jwtAuthenticationConverter(jwtAuthenticationConverter)))
-            .oauth2Client(Customizer.withDefaults());
-
-        return http.build();
+            .oauth2Client(Customizer.withDefaults()).build();
     }
 
     @Bean
