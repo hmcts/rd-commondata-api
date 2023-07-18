@@ -69,10 +69,8 @@ public class CommonDataApiClient {
         HttpStatusCode status = responseEntity.getStatusCode();
 
         if (status.is2xxSuccessful()) {
-            System.out.println("Success << >>");
             return objectMapper.convertValue(responseEntity.getBody(), clazz);
         } else {
-            System.out.println("Failure << >>");
             Map<String, Object> errorResponseMap = new HashMap<>();
             errorResponseMap.put(
                 "response_body",
@@ -89,11 +87,9 @@ public class CommonDataApiClient {
 
         ResponseEntity<Object> responseEntity;
         try {
-            String path = "http://localhost:" + commonDataApiPort + uriPath;
-            System.out.println("Path << >> " + path);
             HttpEntity<?> request = new HttpEntity<>(getMultipleAuthHeaders());
             responseEntity = restTemplate.exchange(
-                path,
+                "http://localhost:" + commonDataApiPort + uriPath,
                 HttpMethod.GET,
                 request,
                 clasz,
