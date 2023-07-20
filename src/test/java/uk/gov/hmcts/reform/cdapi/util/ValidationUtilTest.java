@@ -23,7 +23,6 @@ class ValidationUtilTest {
             )
         );
         Assertions.assertEquals("Allowed values are PARTY or CASE", invalidRequestException.getMessage());
-
     }
 
     @Test
