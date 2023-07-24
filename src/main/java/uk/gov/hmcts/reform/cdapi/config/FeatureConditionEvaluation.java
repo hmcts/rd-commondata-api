@@ -1,6 +1,11 @@
 package uk.gov.hmcts.reform.cdapi.config;
 
+import java.util.Map;
+
 import com.auth0.jwt.JWT;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +16,6 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import uk.gov.hmcts.reform.cdapi.exception.ForbiddenException;
 import uk.gov.hmcts.reform.cdapi.service.FeatureToggleService;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.constraints.NotNull;
-import java.util.Map;
 
 import static java.util.Objects.nonNull;
 import static org.apache.commons.lang3.BooleanUtils.isNotTrue;
