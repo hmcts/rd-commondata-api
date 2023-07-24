@@ -61,8 +61,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpStatusCodeException.class)
     public ResponseEntity<Object> handleHttpStatusException(HttpStatusCodeException ex) {
-        HttpStatusCode httpStatus = ex.getStatusCode();
-        return errorDetailsResponseEntity(ex, httpStatus, "");
+        return errorDetailsResponseEntity(ex);
     }
 
     @ExceptionHandler(InvalidRequestException.class)
@@ -133,20 +132,19 @@ public class GlobalExceptionHandler {
         return rootException;
     }
 
-    private ResponseEntity<Object> errorDetailsResponseEntity(Exception ex,
-                                                              HttpStatusCode httpStatus,
-                                                              String errorMsg) {
+    private ResponseEntity<Object> errorDetailsResponseEntity(HttpStatusCodeException ex) {
 
         log.info(HANDLING_EXCEPTION_TEMPLATE, loggingComponentName, ex.getMessage(), ex);
+        HttpStatusCode statusCode = ex.getStatusCode();
         ErrorResponse errorDetails = new ErrorResponse(
-            httpStatus.value(),
-            "",
-            errorMsg,
+            statusCode.value(),
+            ex.getStatusText(),
+            ex.getMessage(),
             getRootException(ex).getLocalizedMessage(),
             getTimeStamp()
         );
 
-        return new ResponseEntity<>(errorDetails, httpStatus);
+        return new ResponseEntity<>(errorDetails, statusCode);
     }
 
     private ResponseEntity<Object> errorDetailsResponseEntity(Exception ex, HttpStatus httpStatus, String errorMsg) {
