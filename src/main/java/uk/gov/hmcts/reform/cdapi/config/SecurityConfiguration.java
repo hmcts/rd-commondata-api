@@ -29,8 +29,6 @@ import uk.gov.hmcts.reform.cdapi.oidc.JwtGrantedAuthoritiesConverter;
 import java.util.List;
 import javax.inject.Inject;
 
-import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
-
 @Configuration
 @ConfigurationProperties(prefix = "security")
 @EnableWebSecurity
