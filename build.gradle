@@ -332,7 +332,7 @@ dependencies {
     exclude group: "org.codehaus.groovy", module: "groovy-json"
   }
 
-  testImplementation ('com.github.hmcts:rd-commons-lib:v0.0.14'){
+  testImplementation ('com.github.hmcts:rd-commons-lib:v0.0.17'){
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-web'
   }
   testImplementation group: 'org.springframework', name: 'spring-test'
@@ -445,8 +445,7 @@ dependencies {
     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
   }
 
-  testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.9.1'
-  testImplementation 'net.serenity-bdd:serenity-rest-assured:3.8.1'
+  testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.10.0'
 
 
   functionalTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
