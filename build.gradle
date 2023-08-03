@@ -327,9 +327,6 @@ dependencies {
 
   configurations.all {
     exclude group: 'org.apache.logging.log4j', module: 'log4j-to-slf4j'
-    exclude group: "org.codehaus.groovy", module: "groovy"
-    exclude group: "org.codehaus.groovy", module: "groovy-xml"
-    exclude group: "org.codehaus.groovy", module: "groovy-json"
   }
 
   testImplementation ('com.github.hmcts:rd-commons-lib:v0.0.17'){
