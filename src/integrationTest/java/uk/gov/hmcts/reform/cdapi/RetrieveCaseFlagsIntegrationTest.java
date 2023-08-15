@@ -231,14 +231,17 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
                             assertEquals("Test", childFlag.getNameCy());
                             assertEquals(Boolean.FALSE, childFlag.getExternallyAvailable());
                             assertTrue(sampleDefaultStatus.contains(childFlag.getDefaultStatus()));
+                            assertTrue(nameCyFlagCodes.contains(childFlag.getNativeFlagCode()));
                         }
                         if (childFlag.getFlagCode().equalsIgnoreCase("PF0027")) {
                             assertEquals("Test27", childFlag.getNameCy());
+                            assertEquals("PF0027", childFlag.getNativeFlagCode());
                         }
                         //List Of Values
                         if (childFlag.getFlagCode().equals("PF0015")) {
                             assertEquals(1, childFlag.getListOfValuesLength());
                             assertEquals("test2", childFlag.getListOfValues().get(0).getValueCy());
+                            assertEquals("PF0015", childFlag.getNativeFlagCode());
                         }
                     }
                 });
