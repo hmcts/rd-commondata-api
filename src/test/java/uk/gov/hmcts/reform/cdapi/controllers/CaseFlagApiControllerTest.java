@@ -279,7 +279,8 @@ class CaseFlagApiControllerTest {
                 is(childFlagDetail.getFlagComment())
             ))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].flagCode", is(childFlagDetail.getFlagCode())))
-            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].nativeFlagCode", is(childFlagDetail.getNativeFlagCode())))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].nativeFlagCode",
+                                is(childFlagDetail.getNativeFlagCode())))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].isParent", is(childFlagDetail.getParent())))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].childFlags", hasSize(0)))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].listOfValuesLength", is(notNullValue())))
