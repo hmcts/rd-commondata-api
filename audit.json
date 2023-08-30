@@ -1,4 +1,5 @@
 {
+  "10049_Storable and Cacheable Content_http://rd-location-api-aat.service.core-compute-aat.internal/v2/api-docs_GET":"ignore",
   "10010_Cookie No HttpOnly Flag_http://rd-commondata-api-aat.service.core-compute-aat.internal/_GET": "ignore",
   "10010_Cookie No HttpOnly Flag_http://rd-commondata-api-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
   "10054_Cookie without SameSite Attribute_http://rd-commondata-api-aat.service.core-compute-aat.internal/_GET": "ignore",
