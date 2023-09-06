@@ -335,7 +335,6 @@ dependencies {
     exclude group: 'org.apache.groovy', module: 'groovy-json'
     exclude group: 'org.apache.groovy', module: 'groovy'
     exclude group: 'org.apache.groovy', module: 'groovy-xml'
-    exclude group: 'io.rest-assured', module : 'rest-assured'
   }
   testImplementation group: 'org.springframework', name: 'spring-test'
 
@@ -448,7 +447,6 @@ dependencies {
   }
 
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.10.0'
-  testImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.restAssured
 
   functionalTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
   functionalTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
