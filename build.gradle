@@ -47,6 +47,7 @@ def versions = [
   launchDarklySdk : "5.10.9",
   reformS2sClient : '5.1.0',
   springHystrix   : '2.2.10.RELEASE',
+  restAssured        : '5.3.1',
   feign           : '3.8.0',
   bytebuddy       : '1.12.7',
   testContainer_postgresql: '1.17.6'
@@ -334,6 +335,7 @@ dependencies {
     exclude group: 'org.apache.groovy', module: 'groovy-json'
     exclude group: 'org.apache.groovy', module: 'groovy'
     exclude group: 'org.apache.groovy', module: 'groovy-xml'
+    exclude group: 'io.rest-assured', module : 'rest-assured'
   }
   testImplementation group: 'org.springframework', name: 'spring-test'
 
@@ -446,7 +448,7 @@ dependencies {
   }
 
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.10.0'
-
+  testImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.restAssured
 
   functionalTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
   functionalTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
