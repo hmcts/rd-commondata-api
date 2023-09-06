@@ -47,7 +47,7 @@ def versions = [
   launchDarklySdk : "5.10.9",
   reformS2sClient : '5.1.0',
   springHystrix   : '2.2.10.RELEASE',
-  restAssured        : '5.3.1',
+  restAssured     : '5.3.1',
   feign           : '3.8.0',
   bytebuddy       : '1.12.7',
   testContainer_postgresql: '1.17.6'
