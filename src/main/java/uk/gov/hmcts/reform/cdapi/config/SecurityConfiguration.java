@@ -27,7 +27,7 @@ import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
 import uk.gov.hmcts.reform.cdapi.oidc.JwtGrantedAuthoritiesConverter;
 
 import java.util.List;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 @Configuration
 @ConfigurationProperties(prefix = "security")
