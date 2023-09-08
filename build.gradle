@@ -423,8 +423,8 @@ dependencies {
   testImplementation("com.github.tomakehurst:wiremock-jre8-standalone:2.35.0") {
     exclude group: 'com.github.jknack'
   }
-  testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0'
-  testImplementation group: 'io.rest-assured', name: 'rest-assured-common', version: '4.2.0'
+  testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '5.3.1'
+  testImplementation group: 'io.rest-assured', name: 'rest-assured-common', version: '5.3.1'
 
   testImplementation ("org.mockito:mockito-core:5.3.1") {
     exclude group: "net.bytebuddy", module: "byte-buddy"
