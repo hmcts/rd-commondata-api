@@ -46,8 +46,9 @@ def versions = [
   log4j           : '2.20.0',
   launchDarklySdk : "5.10.9",
   reformS2sClient : '5.1.0',
+  serenity        : '2.0.76',
   springHystrix   : '2.2.10.RELEASE',
-  restAssured     : '5.3.1',
+  restAssured     : '4.3.3',
   feign           : '3.8.0',
   bytebuddy       : '1.12.7',
   testContainer_postgresql: '1.17.6'
@@ -422,6 +423,8 @@ dependencies {
   testImplementation("com.github.tomakehurst:wiremock-jre8-standalone:2.35.0") {
     exclude group: 'com.github.jknack'
   }
+  testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0'
+  testImplementation group: 'io.rest-assured', name: 'rest-assured-common', version: '4.2.0'
 
   testImplementation ("org.mockito:mockito-core:5.3.1") {
     exclude group: "net.bytebuddy", module: "byte-buddy"
@@ -447,7 +450,6 @@ dependencies {
   }
 
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.10.0'
-  testImplementation 'net.serenity-bdd:serenity-rest-assured:3.8.1'
 
   functionalTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
   functionalTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
