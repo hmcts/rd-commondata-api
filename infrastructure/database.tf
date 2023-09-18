@@ -4,7 +4,7 @@ module "postgresql" {
   source = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=master"
 
   providers = {
-    azurerm.postgres_network = azurerm.private_endpoint
+    azurerm.postgres_network = azurerm.postgres_network
   }
 
   admin_user_object_id = var.jenkins_AAD_objectId
