@@ -19,8 +19,7 @@ module "postgresql" {
   ]
   pgsql_version        = "14"
   product              = var.product
-  postgresql_user    = "dbcommondata"
-  database_name      = "dbcommondata"
+
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
