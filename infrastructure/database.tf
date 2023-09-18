@@ -61,7 +61,7 @@ data "azurerm_key_vault" "s2s_key_vault" {
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   name          = join("-", [var.component, "POSTGRES-DATABASE"])
-  value         = module.db-common-data-v11.postgresql_database
+  value         = "dbcommondata"
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
