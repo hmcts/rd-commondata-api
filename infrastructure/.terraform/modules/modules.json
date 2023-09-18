@@ -1,0 +1,1 @@
+{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"postgresql","Source":"git::ssh://git@github.com/hmcts/terraform-module-postgresql-flexible?ref=master","Dir":".terraform/modules/postgresql"}]}
