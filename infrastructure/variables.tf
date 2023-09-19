@@ -48,6 +48,12 @@ variable shared_product_name {
 variable database_storage_mb {
   default = "358400"
 }
+variable sku_name {
+  default = "GP_Gen5_4"
+}
+variable sku_capacity {
+  default = "4"
+}
 variable idam_api_base_uri {
   default = "https://idam-api.aat.platform.hmcts.net"
 }
