@@ -34,7 +34,7 @@ resource "azurerm_key_vault_secret" "POSTGRES-USER" {
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
   name          = join("-", [var.component, "POSTGRES-PASS"])
-  value         = module.db-v14.postgresql_password
+  value         = "dbcommondata"
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 

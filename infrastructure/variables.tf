@@ -58,3 +58,7 @@ variable idam_api_base_uri {
   default = "https://idam-api.aat.platform.hmcts.net"
 }
 
+variable open_id_api_base_uri {
+  default = "https://idam-api.demo.platform.hmcts.net/o"
+}
+
