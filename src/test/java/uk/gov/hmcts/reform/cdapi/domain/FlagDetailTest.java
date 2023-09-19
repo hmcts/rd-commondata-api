@@ -15,6 +15,7 @@ class FlagDetailTest {
         var flagDetail1 = FlagDetail.builder()
             .name("PARTY")
             .flagCode("CATEGORY")
+            .nativeFlagCode("RA00001")
             .id(1)
             .cateGoryId(1)
             .flagComment(true)
@@ -28,6 +29,7 @@ class FlagDetailTest {
             .build();
         assertEquals("PARTY", flagDetail1.getName());
         assertEquals("CATEGORY", flagDetail1.getFlagCode());
+        assertEquals("RA00001", flagDetail1.getNativeFlagCode());
         assertEquals(1, flagDetail1.getId());
         assertEquals(1, flagDetail1.getCateGoryId());
         assertEquals(true, flagDetail1.getFlagComment());
