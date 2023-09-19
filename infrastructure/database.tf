@@ -14,7 +14,7 @@ module "postgresql" {
   env                  = var.env
   pgsql_databases = [
     {
-      name = "rd-commondata-api-postgres-db-v14-demo"
+      name = "rd-commondata-api"
     }
   ]
   pgsql_version        = "14"
