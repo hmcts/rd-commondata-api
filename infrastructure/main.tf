@@ -84,8 +84,6 @@ module "db-v14" {
   pgsql_sku            = var.pgsql_sku
   pgsql_storage_mb     = var.pgsql_storage_mb
 
-  postgresql_user    = "dbcommondata"
-
 }
 
 locals {
