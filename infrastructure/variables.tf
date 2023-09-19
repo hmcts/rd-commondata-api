@@ -45,3 +45,10 @@ variable "pgsql_storage_mb" {
 variable shared_product_name {
   default = "rd"
 }
+variable database_storage_mb {
+  default = "358400"
+}
+variable idam_api_base_uri {
+  default = "https://idam-api.aat.platform.hmcts.net"
+}
+
