@@ -180,7 +180,7 @@ Publish via the gradle command
 Once Verify on url `http://localhost:9292/`
 The pact contract(s) should be published
 
-Remember to return the localhost back to the remote broker
+Remember to return the localhost back to the remote broker.
 
 for more information, Please refer to the confluence on how to run and publish PACT tests.
 https://tools.hmcts.net/confluence/display/RTRD/PACT+testing
