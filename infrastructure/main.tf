@@ -61,13 +61,12 @@ resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
 data "azurerm_key_vault_secret" "s2s_secret" {
   name          = "microservicekey-rd-commondata-api"
   key_vault_id  = data.azurerm_key_vault.s2s_key_vault.id
-  value="RCOYOD3IMKTVUQZV"
 }
 
 
 resource "azurerm_key_vault_secret" "common_data_s2s_secret" {
   name          = "common-data-api-s2s-secret"
-  value         = "RCOYOD3IMKTVUQZV"
+  value         = data.azurerm_key_vault_secret.s2s_secret.value
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
