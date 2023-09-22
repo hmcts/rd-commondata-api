@@ -32,41 +32,42 @@ module "postgresql" {
   env                  = var.env
   pgsql_databases = [
     {
-      name = "rd-commondata-api"
+      name = "rd-commondata-api-db"
     }
   ]
   pgsql_version        = "14"
   product              = var.product
-  name               = join("-", [var.product, var.component, "postgres-db", "v14"])
+  name               = join("-", [var.product, var.component, "v14","demo"])
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
   name          = join("-", [var.component, "POSTGRES-USER"])
-  value         = "dbcommondata"
+  value         = "dbcommondata@rd-commondata-api-postgres-db-v11-demo"
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
   name          = join("-", [var.component, "POSTGRES-PASS"])
-  value         = "dbcommondata"
+  value         = "!mbj?Q[wDX9w=@ua"
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
   name          = join("-", [var.component, "POSTGRES-HOST"])
-  value         = module.postgresql.fqdn
+  value         = "rd-commondata-api-postgres-db-v11-demo.postgres.database.azure.com"
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
 data "azurerm_key_vault_secret" "s2s_secret" {
   name          = "microservicekey-rd-commondata-api"
   key_vault_id  = data.azurerm_key_vault.s2s_key_vault.id
+  value="RCOYOD3IMKTVUQZV"
 }
 
 
 resource "azurerm_key_vault_secret" "common_data_s2s_secret" {
   name          = "common-data-api-s2s-secret"
-  value         = data.azurerm_key_vault_secret.s2s_secret.value
+  value         = "RCOYOD3IMKTVUQZV"
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
