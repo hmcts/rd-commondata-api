@@ -107,13 +107,13 @@ data "azurerm_key_vault" "rd_key_vault" {
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER-V14" {
-  name          = join("-", [var.component, "POSTGRES-USER"])
+  name          = join("-", [var.component, "POSTGRES-USER-V14"])
   value         = module.db-common-data-v14.user_name
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST-V14" {
-  name          = join("-", [var.component, "POSTGRES-HOST"])
+  name          = join("-", [var.component, "POSTGRES-HOST-V14"])
   value         = module.db-common-data-v14.host_name
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
