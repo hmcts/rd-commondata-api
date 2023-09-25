@@ -5,7 +5,7 @@ GRADLE_INSTALL=true
 
 clean_old_docker_artifacts() {
 
-    docker stop rd-commondata-dbRR
+    docker stop rd-commondata-db
 
     docker rm rd-commondata-db
 
