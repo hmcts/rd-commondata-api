@@ -25,11 +25,6 @@ module "db-common-data-v11" {
   postgresql_version = "11"
 }
 
-data "azurerm_key_vault" "rd_key_vault" {
-  name                = local.key_vault_name
-  resource_group_name = local.key_vault_name
-}
-
 data "azurerm_key_vault" "s2s_key_vault" {
   name                = local.s2s_key_vault_name
   resource_group_name = local.s2s_vault_resource_group
