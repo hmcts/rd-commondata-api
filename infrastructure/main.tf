@@ -17,6 +17,7 @@ module "db-common-data-v11" {
   component          = var.component
   name               = join("-", [var.product, var.component, "postgres-db", "v11"])
   location           = var.location
+
   subscription       = var.subscription
   env                = var.env
   postgresql_user    = "dbcommondata"
@@ -94,6 +95,7 @@ module "db-common-data-v14" {
   pgsql_version        = "14"
   product              = var.product
   name               = join("-", [var.product, var.component, "v14","demo"])
+
 }
 
 data "azurerm_key_vault" "rd_key_vault" {
@@ -103,12 +105,13 @@ data "azurerm_key_vault" "rd_key_vault" {
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER-V14" {
   name          = join("-", [var.component, "POSTGRES-USER-V14"])
-  value         = module.db-common-data-v14.user_name
+  value         = module.db-common-data-v14.username
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST-V14" {
   name          = join("-", [var.component, "POSTGRES-HOST-V14"])
-  value         = module.db-common-data-v14.host_name
+  value         = module.db-common-data-v14.fqdn
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
+
