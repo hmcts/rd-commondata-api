@@ -1,13 +1,16 @@
 variable "product" {
   type = string
-  default = "rd-commondata-api"
 }
 
 variable "component" {
   type = string
-  default="postgres-db-v14"
+  default="postgres-db-v11"
 }
 
+variable "component-V14" {
+  type = string
+  default="postgres-db-v14"
+}
 variable "location" {
   type = string
   default = "UK South"
