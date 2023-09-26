@@ -94,7 +94,6 @@ module "db-common-data-v15" {
   pgsql_version        = "15"
   product              = var.product
   name               = join("-", [var.product, var.component, "v15",var.env])
-
 }
 
 data "azurerm_key_vault" "rd_key_vault" {
