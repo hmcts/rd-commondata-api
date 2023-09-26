@@ -98,7 +98,7 @@ module "db-common-data-v15" {
   ]
   pgsql_version        = "15"
   product              = var.product
-  name               = join("-", [var.product, var.component-V15, "v15"])
+  name               = join("-", [var.product, var.component-V15, var.env])
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER-V15" {
