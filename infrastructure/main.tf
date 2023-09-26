@@ -25,6 +25,11 @@ module "db-common-data-v11" {
   postgresql_version = "11"
 }
 
+data "azurerm_key_vault" "rd_key_vault" {
+  name                = local.key_vault_name
+  resource_group_name = local.key_vault_name
+}
+
 data "azurerm_key_vault" "s2s_key_vault" {
   name                = local.s2s_key_vault_name
   resource_group_name = local.s2s_vault_resource_group
@@ -61,7 +66,7 @@ resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   name          = join("-", [var.component, "POSTGRES-DATABASE"])
-  value         = "dbcommondata"
+  value         = module.db-common-data-v11.postgresql_database
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
@@ -96,11 +101,6 @@ module "db-common-data-v15" {
   name               = join("-", [var.product, var.component, "v15",var.env])
 }
 
-data "azurerm_key_vault" "rd_key_vault" {
-  name                = local.key_vault_name
-  resource_group_name = local.key_vault_name
-}
-
 resource "azurerm_key_vault_secret" "POSTGRES-USER-V15" {
   name          = join("-", [var.component, "POSTGRES-USER-V15"])
   value         = module.db-common-data-v15.username
@@ -121,7 +121,7 @@ resource "azurerm_key_vault_secret" "POSTGRES-PASS-V15" {
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE-V15" {
   name          = join("-", [var.component, "POSTGRES-DATABASE-V15"])
-  value         =
+  value         = "rd-commondata-api-db"
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
