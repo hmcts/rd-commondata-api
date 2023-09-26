@@ -17,7 +17,6 @@ module "db-common-data-v11" {
   component          = var.component
   name               = join("-", [var.product, var.component, "postgres-db", "v11"])
   location           = var.location
-
   subscription       = var.subscription
   env                = var.env
   postgresql_user    = "dbcommondata"
