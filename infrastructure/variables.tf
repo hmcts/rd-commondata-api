@@ -7,9 +7,9 @@ variable "component" {
   default="postgres-db-v11"
 }
 
-variable "component-V14" {
+variable "component-V15" {
   type = string
-  default="postgres-db-v14"
+  default="postgres-db-v15"
 }
 variable "location" {
   type = string

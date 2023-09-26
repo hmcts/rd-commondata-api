@@ -74,7 +74,7 @@ resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
 
 # Create the database server
 # Name and resource group name will be defaults (<product>-<component>-<env> and <product>-<component>-data-<env> respectively)
-module "db-common-data-v14" {
+module "db-common-data-v15" {
   source = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=master"
 
   providers = {
@@ -84,16 +84,16 @@ module "db-common-data-v14" {
   admin_user_object_id = var.jenkins_AAD_objectId
   business_area        = "cft"
   common_tags          = var.common_tags
-  component            = var.component-V14
+  component            = var.component-V15
   env                  = var.env
   pgsql_databases = [
     {
       name = "rd-commondata-api-db"
     }
   ]
-  pgsql_version        = "14"
+  pgsql_version        = "15"
   product              = var.product
-  name               = join("-", [var.product, var.component, "v14",var.env])
+  name               = join("-", [var.product, var.component, "v15",var.env])
 
 }
 
@@ -102,15 +102,32 @@ data "azurerm_key_vault" "rd_key_vault" {
   resource_group_name = local.key_vault_name
 }
 
-resource "azurerm_key_vault_secret" "POSTGRES-USER-V14" {
-  name          = join("-", [var.component, "POSTGRES-USER-V14"])
-  value         = module.db-common-data-v14.username
+resource "azurerm_key_vault_secret" "POSTGRES-USER-V15" {
+  name          = join("-", [var.component, "POSTGRES-USER-V15"])
+  value         = module.db-common-data-v15.username
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
-resource "azurerm_key_vault_secret" "POSTGRES_HOST-V14" {
-  name          = join("-", [var.component, "POSTGRES-HOST-V14"])
-  value         = module.db-common-data-v14.fqdn
+resource "azurerm_key_vault_secret" "POSTGRES_HOST-V15" {
+  name          = join("-", [var.component, "POSTGRES-HOST-V15"])
+  value         = module.db-common-data-v15.fqdn
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
+resource "azurerm_key_vault_secret" "POSTGRES-PASS-V15" {
+  name          = join("-", [var.component, "POSTGRES-PASS-V15"])
+  value         = module.db-common-data-v15.postgresql_password
+  key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES_DATABASE-V15" {
+  name          = join("-", [var.component, "POSTGRES-DATABASE-V15"])
+  value         = module.db-common-data-v15.postgresql_database
+  key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES_PORT-V15" {
+  name          = join("-", [var.component, "POSTGRES-PORT-V15"])
+  value         = "5432"
+  key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
+}
