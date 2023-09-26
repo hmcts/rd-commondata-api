@@ -93,7 +93,7 @@ module "db-common-data-v14" {
   ]
   pgsql_version        = "14"
   product              = var.product
-  name               = join("-", [var.product, var.component, "v14","demo"])
+  name               = join("-", [var.product, var.component, "v14",var.env])
 
 }
 
