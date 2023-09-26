@@ -61,7 +61,7 @@ resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   name          = join("-", [var.component, "POSTGRES-DATABASE"])
-  value         = module.db-common-data-v11.postgresql_database
+  value         = "dbcommondata"
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
@@ -115,13 +115,13 @@ resource "azurerm_key_vault_secret" "POSTGRES_HOST-V15" {
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS-V15" {
   name          = join("-", [var.component, "POSTGRES-PASS-V15"])
-  value         = module.db-common-data-v15.postgresql_password
+  value         = module.db-common-data-v15.password
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE-V15" {
   name          = join("-", [var.component, "POSTGRES-DATABASE-V15"])
-  value         = module.db-common-data-v15.postgresql_database
+  value         =
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
