@@ -1,5 +1,6 @@
 variable "product" {
   type = string
+  default="rd-commondata-api"
 }
 
 variable "component" {
