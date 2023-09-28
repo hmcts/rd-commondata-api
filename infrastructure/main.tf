@@ -89,7 +89,7 @@ module "db-common-data-v15" {
   admin_user_object_id = var.jenkins_AAD_objectId
   business_area        = "cft"
   common_tags          = var.common_tags
-  component            = var.component-V15
+  component            = var.component
   env                  = var.env
   pgsql_databases = [
     {
@@ -98,7 +98,8 @@ module "db-common-data-v15" {
   ]
   pgsql_version        = "15"
   product              = var.product
-  name               = join("-", [var.product, var.component-V15])
+  name               = join("-", [var.product, var.component, "postgres-db", "v15"])
+
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER-V15" {
