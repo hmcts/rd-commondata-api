@@ -62,3 +62,30 @@ variable open_id_api_base_uri {
   default = "https://idam-api.demo.platform.hmcts.net/o"
 }
 
+variable "product-V15" {
+  type = string
+  default="rd-commondata-api"
+}
+
+variable "component-V15" {
+  type = string
+  default="postgres-db-v15"
+}
+
+variable "team_contact" {
+  type        = string
+  description = "The name of your Slack channel people can use to contact your team about your infrastructure"
+  default     = "#refdata-pet"
+}
+variable "destroy_me" {
+  type        = string
+  description = "In the future if this is set to Yes then automation will delete this resource on a schedule. Please set to No unless you know what you are doing"
+  default     = "No"
+}
+variable "sku" {
+  type        = string
+  default     = "Premium"
+  description = "SKU type(Basic, Standard and Premium)"
+}x
+
+
