@@ -1,5 +1,9 @@
 variable "product" {
   type = string
+}
+
+variable "product-V15" {
+  type = string
   default="rd-commondata-api"
 }
 
