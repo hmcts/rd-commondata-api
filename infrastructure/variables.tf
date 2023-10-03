@@ -59,3 +59,17 @@ variable "jenkins_AAD_objectId" {
   type        = string
   description = "(Required) The Azure AD object ID of a user, service principal or security group in the Azure Active Directory tenant for the vault. The object ID must be unique for the list of access policies."
 }
+pgsql_server_configuration = [
+  {
+    name  = azure.extensions
+    value = "plpgsql"
+  },
+  {
+    name  = azure.extensions
+    value = "pg_stat_statements"
+  },
+  {
+    name  = azure.extensions
+    value = "pg_buffercache"
+  }
+]
