@@ -77,7 +77,7 @@ resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
 }
 
 
-# Create the database server
+# Create the database server V15
 # Name and resource group name will be defaults (<product>-<component>-<env> and <product>-<component>-data-<env> respectively)
 module "db-common-data-v15" {
   source = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=master"
@@ -97,9 +97,10 @@ module "db-common-data-v15" {
     }
   ]
   pgsql_version        = "15"
-  product              = var.product
-  name               = join("-", [var.product, var.component-V15])
+  product              = var.product-V15
+  name               = join("-", [var.product-V15, var.component-V15])
 }
+
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER-V15" {
   name          = join("-", [var.component, "POSTGRES-USER-V15"])
@@ -130,3 +131,4 @@ resource "azurerm_key_vault_secret" "POSTGRES_PORT-V15" {
   value         = "5432"
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
+
