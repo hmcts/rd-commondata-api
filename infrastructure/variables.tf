@@ -9,13 +9,8 @@ variable "product-V15" {
 
 variable "component" {
   type = string
-  default="postgres-db-v11"
 }
 
-variable "component-V15" {
-  type = string
-  default="postgres-db-v15"
-}
 variable "location" {
   type = string
   default = "UK South"
