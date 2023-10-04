@@ -2,19 +2,16 @@ variable "product" {
   type = string
 }
 
-variable "product-V15" {
-  type = string
-  default="rd-commondata-api"
-}
-
 variable "component" {
   type = string
 }
+
 
 variable "component-V15" {
   type = string
   default="postgres-db-v15"
 }
+
 
 variable "location" {
   type = string
@@ -32,6 +29,7 @@ variable "subscription" {
 variable "common_tags" {
   type = map(any)
 }
+
 variable "aks_subscription_id" {
 }
 variable "team_contact" {
