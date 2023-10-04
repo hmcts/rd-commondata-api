@@ -67,15 +67,15 @@ variable "pgsql_server_configuration" {
   default = [
     {
       name  = "azure.extensions"
-      value = "plpgsql"
+      value = "PLPSQL"
     },
     {
       name  = "azure.extensions"
-      value = "pg_stat_statements"
+      value = "PG_STAT_STATEMENTS"
     },
     {
       name  = "azure.extensions"
-      value = "pg_buffercache"
+      value = "PG_BUFFERCACHE"
     }
   ]
 }
