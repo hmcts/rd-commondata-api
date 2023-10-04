@@ -63,5 +63,6 @@ variable "jenkins_AAD_objectId" {
 variable "pgsql_server_configuration" {
   description = "Postgres server configuration"
   type        = list(object({ name : string, value : string }))
-  value     = "PLPGSQL,PG_STAT_STATEMENTS,PG_BUFFERCACHE"
+  default     = "PLPGSQL,PG_STAT_STATEMENTS,PG_BUFFERCACHE"
 }
+
