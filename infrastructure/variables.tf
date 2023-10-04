@@ -11,6 +11,11 @@ variable "component" {
   type = string
 }
 
+variable "component-V15" {
+  type = string
+  default="postgres-db-v15"
+}
+
 variable "location" {
   type = string
   default = "UK South"
