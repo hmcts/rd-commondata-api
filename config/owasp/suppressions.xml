@@ -35,6 +35,8 @@
 
   <suppress>
     <cve>CVE-2022-45688</cve>
+    <cve>CVE-2008-7271</cve>
+    <cve>CVE-2010-4647</cve>
   </suppress>
 
   <suppress>
@@ -43,14 +45,6 @@ file name: launchdarkly-java-server-sdk-5.10.2.jar (shaded: org.yaml:snakeyaml:1
 ]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.yaml/snakeyaml@.*$</packageUrl>
     <cve>CVE-2022-1471</cve>
-  </suppress>
-  <suppress>
-    <notes></notes>
-    <cve>CVE-2023-20873</cve>
-  </suppress>
-  <suppress>
-    <notes></notes>
-    <cve>CVE-2023-20862</cve>
   </suppress>
   <suppress>
     <notes>Suppressing disputed CVE: https://github.com/FasterXML/jackson-databind/issues/3972</notes>
