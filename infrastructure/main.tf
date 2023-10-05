@@ -94,7 +94,7 @@ module "db-common-data-v15" {
   env                  = var.env
   pgsql_databases = [
     {
-      name = "rd-commondata-api-db"
+      name = "dbcommondata"
     }
   ]
   pgsql_version        = "15"
@@ -123,7 +123,7 @@ resource "azurerm_key_vault_secret" "POSTGRES-PASS-V15" {
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE-V15" {
   name          = join("-", [var.component, "POSTGRES-DATABASE-V15"])
-  value         = "rd-commondata-api-db"
+  value         = "dbcommondata"
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
