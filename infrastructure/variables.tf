@@ -16,6 +16,11 @@ variable "component-V15" {
   default="postgres-db-v15"
 }
 
+variable "database_name" {
+  type = string
+  default="dbcommondata"
+}
+
 variable "location" {
   type = string
   default = "UK South"
