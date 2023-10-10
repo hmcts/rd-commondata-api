@@ -23,7 +23,7 @@ variable "database_name" {
 
 variable "username" {
   type = string
-  default=join("@", [var.database_name, join("-", [var.product-V15, var.component-V15])])
+  default= join("@", [var.database_name, join("-", [var.product-V15, var.component-V15])])
 }
 
 
