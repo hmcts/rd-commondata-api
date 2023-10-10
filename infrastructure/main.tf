@@ -103,7 +103,7 @@ module "db-common-data-v15" {
 }
 
 resource "azurerm_postgresql_flexible_server" "pgsql_server" {
-  administrator_login =var.server_user_name
+  administrator_login = var.server_user_name
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER-V15" {
