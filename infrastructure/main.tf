@@ -97,15 +97,15 @@ module "db-common-data-v15" {
       name = "dbcommondata"
     }
   ]
-  pgsql_version        = "15"
-  product              = var.product-V15
-  name               = join("-", [var.product-V15, var.component-V15])
+  pgsql_version   = "15"
+  product         = var.product-V15
+  name            = join("-", [var.product-V15, var.component-V15])
+  username        =  join("@", [var.database_name, join("-", [var.product-V15, var.component-V15])])
 }
-
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER-V15" {
   name          = join("-", [var.component, "POSTGRES-USER-V15"])
-  value         = join("@", [var.database_name, join("-", [var.product-V15, var.component-V15])])
+  value         = module.db-common-data-v15.username
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
