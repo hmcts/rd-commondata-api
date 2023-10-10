@@ -16,17 +16,6 @@ variable "component-V15" {
   default="postgres-db-v15"
 }
 
-variable "database_name" {
-  type = string
-  default="dbcommondata"
-}
-
-variable "username" {
-  type = string
-  default= join("@", [var.database_name, join("-", [var.product-V15, var.component-V15])])
-}
-
-
 variable "location" {
   type = string
   default = "UK South"
