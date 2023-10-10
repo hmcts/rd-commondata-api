@@ -100,7 +100,7 @@ module "db-common-data-v15" {
   pgsql_version   = "15"
   product         = var.product-V15
   name            = join("-", [var.product-V15, var.component-V15])
-  username        =  join("@", [var.database_name, join("-", [var.product-V15, var.component-V15])])
+  username        = join("@", [var.database_name, join("-", [var.product-V15, var.component-V15])])
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER-V15" {
