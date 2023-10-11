@@ -63,7 +63,7 @@ variable "jenkins_AAD_objectId" {
 variable "pgsql_admin_username" {
   description = "Admin username"
   type        = string
-  default = "dbcommondata@rd-commondata-api-postgres-db-v15"
+  default     = "dbcommondata@rd-commondata-api-postgres-db-v15"+var.env
 }
 
 variable "pgsql_server_configuration" {
