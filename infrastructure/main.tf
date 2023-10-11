@@ -122,7 +122,7 @@ resource "azurerm_key_vault_secret" "POSTGRES-PASS-V15" {
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE-V15" {
   name          = join("-", [var.component, "POSTGRES-DATABASE-V15"])
-  value         = var.database_name
+  value         = "dbcommondata"
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
