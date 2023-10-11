@@ -102,10 +102,6 @@ module "db-common-data-v15" {
   name               = join("-", [var.product-V15, var.component-V15])
 }
 
-resource "azurerm_postgresql_server" "pssql_db"{
-  administrator_login = "${var.pgsql_admin_username}-${var.env}"
-}
-
 resource "azurerm_key_vault_secret" "POSTGRES-USER-V15" {
   name          = join("-", [var.component, "POSTGRES-USER-V15"])
   value         = "${var.pgsql_admin_username}-${var.env}"
