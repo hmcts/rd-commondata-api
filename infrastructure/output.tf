@@ -1,3 +1,3 @@
 output "username" {
-  value         = module.db-common-data-v15.username
+  value         = var.pgsql_admin_username
 }
