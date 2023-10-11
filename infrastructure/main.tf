@@ -9,6 +9,7 @@ locals {
   key_vault_name          = join("-", [var.product, var.env])
   s2s_key_vault_name        = join("-", ["s2s", var.env])
   s2s_vault_resource_group  = join("-", ["rpe-service-auth-provider", var.env])
+  postgresql_user = "${var.pgsql_admin_username}-${var.env}"
 }
 
 module "db-common-data-v11" {
@@ -86,7 +87,7 @@ module "db-common-data-v15" {
   providers = {
     azurerm.postgres_network = azurerm.postgres_network
   }
-
+  pgsql_admin_username = local.postgresql_user
   admin_user_object_id = var.jenkins_AAD_objectId
   business_area        = "cft"
   common_tags          = var.common_tags
