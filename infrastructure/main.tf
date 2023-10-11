@@ -100,7 +100,6 @@ module "db-common-data-v15" {
   pgsql_version        = "15"
   product              = var.product-V15
   name               = join("-", [var.product-V15, var.component-V15])
-  user_name          = join("-", [var.pgsql_admin_username, var.env])
 }
 
 
