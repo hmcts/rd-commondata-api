@@ -105,7 +105,7 @@ module "db-common-data-v15" {
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER-V15" {
   name          = join("-", [var.component, "POSTGRES-USER-V15"])
-  value         = module.db-common-data-v15.username
+  value         = "${var.pgsql_admin_username}-${var.env}"
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
