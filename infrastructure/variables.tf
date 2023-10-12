@@ -60,12 +60,6 @@ variable "jenkins_AAD_objectId" {
   description = "(Required) The Azure AD object ID of a user, service principal or security group in the Azure Active Directory tenant for the vault. The object ID must be unique for the list of access policies."
 }
 
-variable "pgsql_admin_username" {
-  description = "Admin username"
-  type        = string
-  default     = "dbcommondata@rd-commondata-api-postgres-db-v15"
-}
-
 variable "pgsql_server_configuration" {
   description = "Postgres server configuration"
   type        = list(object({ name : string, value : string }))
