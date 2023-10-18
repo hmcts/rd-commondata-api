@@ -22,17 +22,29 @@ For information about the software versions used to build this API and a complet
 While not essential, it is highly recommended to use the pre-push git hook included in this repository to ensure that all tests are passing. This can be done by running the following command:
 `$ git config core.hooksPath .githooks`
 
+### Running the application
 ### Environment Vars
 
-If running locally for development or testing you will need to set the following environment variables
+If running locally for development or testing you will need to set some environment variables within the application.yaml.
+Some of these values can be found in the 'secrets' section of the Azure rd-aat key vault.
 
-* export POSTGRES_USERNAME=dbrefdata
-* export POSTGRES_PASSWORD=<The database password. Please check with the dev team for more information.>
-* export client-secret=<The actual client-secret. Please check with the dev team for more information.>
-* export totp_secret=<The actual totp_secret. Please check with the dev team for more information.>
-* export key=<The actual key. Please check with the dev team for more information.>
+- Uncomment line 22 if running a local database in docker.
+- line 50 - add the COMMONDATA_API_S2S_SECRET value.
+- line 53 - Replace ${POSTGRES_CONNECTION_OPTIONS:} with ?currentSchema=dbcommondata
+- line 98 - add the COMMONDATA_API_S2S_SECRET value.
+- line 110 - add the LD_SDK_KEY value.
 
-### Running the application
+### Changes to V1_1_init_tables.sql
+We will be using the schema name 'dbcommondata' instead of the default of 'public' which is usually used, so you will need to make the following updates to 'src/main/resources/db/migration/V1_1__init_tables.sql'. Easiest to do a find on the file and search for 'public.' and you should find the two entries which need to be updated to 'dbcommondata.':
+
+Update (around line 12):
+-INSERT INTO public.flag_details (id,flag_code,value_en,value_cy,category_id) VALUES
++INSERT INTO dbcommondata.flag_details (id,flag_code,value_en,value_cy,category_id) VALUES
+
+Update (around line 1780):
+- INSERT INTO public.panel_member_type (categorykey,serviceid,"key",value_en,value_cy,hinttext_en,hinttext_cy,lov_order,parentcategory,parentkey,active) VALUES
++ INSERT INTO dbcommondata.panel_member_type (categorykey,serviceid,"key",value_en,value_cy,hinttext_en,hinttext_cy,lov_order,parentcategory,parentkey,active) VALUES
+
 
 Please Make sure you are connected to the VPN before running application
 (https://portal.platform.hmcts.net/vdesk/webtop.eui?webtop=/Common/webtop_full&webtop_type=webtop_full)
