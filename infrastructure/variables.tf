@@ -4,7 +4,6 @@ variable "product" {
 
 variable "component" {
   type = string
-  default="postgres-db-v11"
 }
 
 variable "location" {
@@ -23,7 +22,6 @@ variable "subscription" {
 variable "common_tags" {
   type = map(any)
 }
-
 
 variable "product-V15" {
   type = string
