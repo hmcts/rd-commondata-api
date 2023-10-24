@@ -45,7 +45,6 @@ Update (around line 1780):
 - INSERT INTO public.panel_member_type (categorykey,serviceid,"key",value_en,value_cy,hinttext_en,hinttext_cy,lov_order,parentcategory,parentkey,active) VALUES
 + INSERT INTO dbcommondata.panel_member_type (categorykey,serviceid,"key",value_en,value_cy,hinttext_en,hinttext_cy,lov_order,parentcategory,parentkey,active) VALUES
 
-
 Please Make sure you are connected to the VPN before running application
 (https://portal.platform.hmcts.net/vdesk/webtop.eui?webtop=/Common/webtop_full&webtop_type=webtop_full)
 
