@@ -48,7 +48,6 @@ Update (around line 1780):
 Please Make sure you are connected to the VPN before running application
 (https://portal.platform.hmcts.net/vdesk/webtop.eui?webtop=/Common/webtop_full&webtop_type=webtop_full)
 
-
 To run the API quickly use the docker helper script as follows:
 
 ```
