@@ -4,6 +4,7 @@ variable "product" {
 
 variable "component" {
   type = string
+  default="postgres-db-v11"
 }
 
 variable "location" {

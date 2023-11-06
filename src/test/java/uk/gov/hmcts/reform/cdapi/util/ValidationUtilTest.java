@@ -1,3 +1,4 @@
+
 package uk.gov.hmcts.reform.cdapi.util;
 
 import org.junit.jupiter.api.Assertions;
@@ -22,13 +23,13 @@ class ValidationUtilTest {
             )
         );
         Assertions.assertEquals("Allowed values are PARTY or CASE", invalidRequestException.getMessage());
+
     }
 
     @Test
     void test_validation_flagtype() {
         Assertions.assertDoesNotThrow(() -> ValidationUtil.validationFlagType(
             "Party"));
-
     }
 
     @Test
