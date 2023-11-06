@@ -353,7 +353,7 @@ dependencies {
   implementation "com.github.hmcts.java-logging:logging:${versions.reformLogging}"
   implementation "com.github.hmcts.java-logging:logging-appinsights:5.1.7"
   implementation group: 'uk.gov.hmcts.reform', name: 'idam-client', version: '2.0.0'
-  implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '2.8.5'
+  implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '2.9.3'
   implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
   implementation(group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0') {
     exclude group: "com.sun.xml.bind", module: "jaxb-osgi"
