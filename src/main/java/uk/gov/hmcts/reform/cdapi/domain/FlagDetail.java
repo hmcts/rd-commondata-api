@@ -30,6 +30,7 @@ public class FlagDetail {
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = IgnoreJsonFilter.class)
     private String nameCy;
     private String flagCode;
+    private String nativeFlagCode;
     @JsonIgnore
     private Integer cateGoryId;
     @JsonProperty("isParent")
