@@ -7,6 +7,8 @@ import net.thucydides.core.annotations.WithTag;
 import net.thucydides.core.annotations.WithTags;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
@@ -30,32 +32,30 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegrationTest {
     private static final String path = "/caseflags/service-id={service-id}";
 
-    @Test
-    void shouldRetrieveCaseFlagForServiceIdWithStatusCode_200()
+    @ParameterizedTest
+    @ValueSource(strings = {"AAA1", "XXXX"})
+    void shouldRetrieveCaseFlagForServiceIdWithStatusCode_200(String serviceId)
         throws JsonProcessingException {
 
-        final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId("AAA1", CaseFlag.class, path);
+        final var response = (CaseFlag) commonDataApiClient
+            .retrieveCaseFlagsByServiceId(serviceId, CaseFlag.class, path);
         assertNotNull(response);
-        assertEquals(2, response.getFlags().get(0).getFlagDetails().size());
-        verifyResponse(response.getFlags().get(0).getFlagDetails());
+        if (("AAA1").equals(serviceId)) {
+            assertEquals(2, response.getFlags().get(0).getFlagDetails().size());
+            verifyResponse(response.getFlags().get(0).getFlagDetails());
+        } else {
+            assertEquals(1, response.getFlags().get(0).getFlagDetails().size());
+        }
+
     }
 
-    @Test
-    void shouldRetrieveCaseFlagForDefaultServiceId()
-        throws JsonProcessingException {
-
-        final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId("XXXX", CaseFlag.class, path);
-        assertNotNull(response);
-        assertNotNull(response.getFlags().get(0).getFlagDetails());
-        assertEquals(1, response.getFlags().get(0).getFlagDetails().size());
-    }
-
-    @Test
-    void shouldRetrieveCaseFlagForServiceIdFlagTypeAsParty()
+    @ParameterizedTest
+    @ValueSource(strings = {"party", "case"})
+    void shouldRetrieveCaseFlagForServiceIdFlagTypeAsParty(String serviceId)
         throws JsonProcessingException {
 
         final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
-            "AAA1" + "?flag-type=party&available-external-flag=N",
+            "AAA1" + "?flag-type=" + serviceId + "&available-external-flag=N",
             CaseFlag.class,
             path
         );
@@ -65,46 +65,24 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
 
     }
 
-    @Test
-    void shouldRetrieveCaseFlagForServiceIdFlagTypeAsCase()
-        throws JsonProcessingException {
-
-        final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
-            "AAA1" + "?flag-type=case&available-external-flag=N",
-            CaseFlag.class,
-            path
-        );
-        assertNotNull(response);
-        assertEquals(1, response.getFlags().get(0).getFlagDetails().size());
-        verifyResponse(response.getFlags().get(0).getFlagDetails());
-    }
-
-    @Test
+    @ParameterizedTest
+    @ValueSource(strings = {"hello", "case"})
     @SuppressWarnings("unchecked")
-    void shouldRetrieveCaseFlagForServiceIdWithStatusCode_400()
+    void shouldRetrieveCaseFlagForServiceIdWithStatusCode_400(String serviceId)
         throws JsonProcessingException {
 
         var errorResponseMap = commonDataApiClient.retrieveCaseFlagsByServiceId(
-            "XXXX?flag-type=hello",
+            "XXXX?flag-type=" + serviceId,
             ErrorResponse.class,
             path
         );
         assertNotNull(errorResponseMap);
-        assertThat((Map<String, Object>) errorResponseMap).containsEntry("http_status", HttpStatus.BAD_REQUEST);
-    }
+        if (("hello").equals(serviceId)) {
+            assertThat((Map<String, Object>) errorResponseMap).containsEntry("http_status", HttpStatus.BAD_REQUEST);
+        } else if (("case").equals(serviceId)) {
+            assertThat((Map<String, Object>) errorResponseMap).containsEntry("http_status", HttpStatus.NOT_FOUND);
+        }
 
-    @Test
-    @SuppressWarnings("unchecked")
-    void shouldRetrieveCaseFlag_For_ServiceId_WithStatusCode_404()
-        throws JsonProcessingException {
-
-        var errorResponseMap = commonDataApiClient.retrieveCaseFlagsByServiceId(
-            "XXXX?flag-type=case",
-            ErrorResponse.class,
-            path
-        );
-        assertNotNull(errorResponseMap);
-        assertThat((Map<String, Object>) errorResponseMap).containsEntry("http_status", HttpStatus.NOT_FOUND);
     }
 
     @Test
@@ -253,14 +231,17 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
                             assertEquals("Test", childFlag.getNameCy());
                             assertEquals(Boolean.FALSE, childFlag.getExternallyAvailable());
                             assertTrue(sampleDefaultStatus.contains(childFlag.getDefaultStatus()));
+                            assertTrue(nameCyFlagCodes.contains(childFlag.getNativeFlagCode()));
                         }
                         if (childFlag.getFlagCode().equalsIgnoreCase("PF0027")) {
                             assertEquals("Test27", childFlag.getNameCy());
+                            assertEquals("PF0027", childFlag.getNativeFlagCode());
                         }
                         //List Of Values
                         if (childFlag.getFlagCode().equals("PF0015")) {
                             assertEquals(1, childFlag.getListOfValuesLength());
                             assertEquals("test2", childFlag.getListOfValues().get(0).getValueCy());
+                            assertEquals("PF0015", childFlag.getNativeFlagCode());
                         }
                     }
                 });

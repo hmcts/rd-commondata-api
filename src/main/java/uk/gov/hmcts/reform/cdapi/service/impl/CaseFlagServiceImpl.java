@@ -92,6 +92,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                 var flagDetail = FlagDetail.builder()
                     .name(caseFlagDto.getValueEn())
                     .flagCode(caseFlagDto.getFlagCode())
+                    .nativeFlagCode(caseFlagDto.getNativeFlagCode())
                     .flagComment(caseFlagDto.getRequestReason())
                     .parent(caseFlagDto.getIsParent())
                     .hearingRelevant(caseFlagDto.getHearingRelevant())
@@ -136,6 +137,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                 var childFlag = FlagDetail.builder()
                     .name(caseFlagDto.getValueEn())
                     .flagCode(caseFlagDto.getFlagCode())
+                    .nativeFlagCode(caseFlagDto.getNativeFlagCode())
                     .flagComment(caseFlagDto.getRequestReason())
                     .parent(caseFlagDto.getIsParent())
                     .hearingRelevant(caseFlagDto.getHearingRelevant())
@@ -272,18 +274,19 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     }
 
     private FlagDetail otherFlagBuilder(List<String> path, boolean isWelshRequired) {
-        String nameCy = "Other";
+        String nameCy = "Arall";
         if (!isWelshRequired) {
             nameCy = IGNORE_JSON;
         }
         return FlagDetail.builder()
             .name("Other")
             .flagCode("OT0001")
+            .nativeFlagCode("OT0001")
             .hearingRelevant(true)
             .parent(false)
-            .defaultStatus("Active")
+            .defaultStatus("Requested")
             .nameCy(nameCy)
-            .externallyAvailable(false)
+            .externallyAvailable(true)
             .childFlags(new ArrayList<>())
             .path(path)
             .flagComment(true).build();

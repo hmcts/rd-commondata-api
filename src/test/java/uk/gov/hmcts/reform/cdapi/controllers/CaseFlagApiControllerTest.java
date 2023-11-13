@@ -256,6 +256,7 @@ class CaseFlagApiControllerTest {
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].hearingRelevant", is(parentFlagDetail.getHearingRelevant())))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].flagComment", is(parentFlagDetail.getFlagComment())))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].flagCode", is(parentFlagDetail.getFlagCode())))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].nativeFlagCode", is(parentFlagDetail.getNativeFlagCode())))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].isParent", is(parentFlagDetail.getParent())))
             .andExpect(jsonPath(
                 "$.flags[0].FlagDetails[0].listOfValuesLength",
@@ -278,6 +279,8 @@ class CaseFlagApiControllerTest {
                 is(childFlagDetail.getFlagComment())
             ))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].flagCode", is(childFlagDetail.getFlagCode())))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].nativeFlagCode",
+                                is(childFlagDetail.getNativeFlagCode())))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].isParent", is(childFlagDetail.getParent())))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].childFlags", hasSize(0)))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].listOfValuesLength", is(notNullValue())))
@@ -316,11 +319,13 @@ class CaseFlagApiControllerTest {
         listOfValue.setValue(randomAlphabetic(5));
         listOfValue.setId(randomAlphabetic(5));
         listOfValue.setKey(randomAlphabetic(5));
+        String flagCode = randomAlphabetic(5);
 
         final FlagDetail.FlagDetailBuilder flagDetailBuilder =
             FlagDetail.builder()
                 .id(nextInt())
-                .flagCode(randomAlphabetic(5))
+                .flagCode(flagCode)
+                .nativeFlagCode(flagCode)
                 .name(randomAlphabetic(5))
                 .cateGoryId(nextInt())
                 .flagComment(nextBoolean())

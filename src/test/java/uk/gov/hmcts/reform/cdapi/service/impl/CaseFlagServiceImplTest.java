@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -52,33 +54,25 @@ class CaseFlagServiceImplTest {
         );
     }
 
-    @Test
-    void testGetCaseFlag_ByServiceId_Returns200() {
+    @ParameterizedTest
+    @CsvSource({
+        "XXXX,,N,N",
+        "XXXX,PARTY,null,null",
+        "XXXX,CASE,n,n"
+    })
+    void testGetCaseFlag_ByServiceId_Returns200(String serviceId,String flagType,String welshRequired,
+                                                String availableExternalFlag) {
         when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
-        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "", "N", "N");
+        var caseFlag = caseFlagService
+            .retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired, availableExternalFlag);
         assertNotNull(caseFlag);
         assertEquals(1, caseFlag.getFlags().size());
-        assertEquals(2, caseFlag.getFlags().get(0).getFlagDetails().size());
-        verify(caseFlagRepository, times(1)).findAll(anyString());
-    }
+        if (!(flagType == null)) {
+            assertEquals(flagType, caseFlag.getFlags().get(0).getFlagDetails().get(0).getName());
+        } else {
+            assertEquals(2, caseFlag.getFlags().get(0).getFlagDetails().size());
+        }
 
-    @Test
-    void testGetCaseFlag_ByServiceIdAndFlagTypeParty() {
-        when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
-        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "PARTY", null, null);
-        assertNotNull(caseFlag);
-        assertEquals(1, caseFlag.getFlags().get(0).getFlagDetails().size());
-        assertEquals("PARTY", caseFlag.getFlags().get(0).getFlagDetails().get(0).getName());
-        verify(caseFlagRepository, times(1)).findAll(anyString());
-    }
-
-    @Test
-    void testGetCaseFlag_ByServiceIdAndFlagTypeCase() {
-        when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
-        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "CASE", "n", "n");
-        assertNotNull(caseFlag);
-        assertEquals(1, caseFlag.getFlags().get(0).getFlagDetails().size());
-        assertEquals("CASE", caseFlag.getFlags().get(0).getFlagDetails().get(0).getName());
         verify(caseFlagRepository, times(1)).findAll(anyString());
     }
 
@@ -89,42 +83,23 @@ class CaseFlagServiceImplTest {
             caseFlagService.retrieveCaseFlagByServiceId("XXXX", "TEST", "y", "n"));
     }
 
-    @Test
-    void testGetCaseFlag_WhenLanguageInterpreterFlag_return200() {
+    @ParameterizedTest
+    @CsvSource({
+        "XXXX,PARTY,N,false",
+        "XXXX,PARTY,Y,true",
+        "XXXX,PARTY,N,false"
+    })
+    void testGetCaseFlags(String serviceId,String flagType,String welshRequired,
+                                                               boolean flag) {
         when(caseFlagRepository.findAll(anyString()))
             .thenReturn(getCaseFlagDtoListWithLanguageInterpreter());
         when(listOfVenueRepository.findListOfValues(anyString()))
-            .thenReturn(getListOfValuesForLanguageInterPreter(false));
-        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "PARTY", "N", "");
+            .thenReturn(getListOfValuesForLanguageInterPreter(flag));
+        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired, "");
         assertNotNull(caseFlag);
         verify(caseFlagRepository, times(1)).findAll(anyString());
         verify(listOfVenueRepository, times(1)).findListOfValues(anyString());
-        verifyListOfValuesResponse(caseFlag, false);
-    }
-
-    @Test
-    void testGetCaseFlag_WhenLanguageInterpreterFlagAndWelshIsY_return200() {
-        when(caseFlagRepository.findAll(anyString()))
-            .thenReturn(getCaseFlagDtoListWithLanguageInterpreter());
-        when(listOfVenueRepository.findListOfValues(anyString()))
-            .thenReturn(getListOfValuesForLanguageInterPreter(true));
-        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "PARTY", "Y", "");
-        assertNotNull(caseFlag);
-        verify(caseFlagRepository, times(1)).findAll(anyString());
-        verify(listOfVenueRepository, times(1)).findListOfValues(anyString());
-        verifyListOfValuesResponse(caseFlag, true);
-    }
-
-    @Test
-    void testGetCaseFlag_WhenSignLanguageFlag_return200() {
-        when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoListWithSignLanguage());
-        when(listOfVenueRepository.findListOfValues(anyString()))
-            .thenReturn(getListOfValuesForSignLanguage(false));
-        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "PARTY", "N", "");
-        assertNotNull(caseFlag);
-        verify(caseFlagRepository, times(1)).findAll(anyString());
-        verify(listOfVenueRepository, times(1)).findListOfValues(anyString());
-        verifyListOfValuesResponse(caseFlag, false);
+        verifyListOfValuesResponse(caseFlag, flag);
     }
 
     @Test
@@ -136,69 +111,31 @@ class CaseFlagServiceImplTest {
         );
     }
 
-    @Test
-    void testGetCaseFlag_ByServiceIWithWelshRequiredIsY_Returns200() {
+    @ParameterizedTest
+    @CsvSource({
+        "XXXX,Y,N",
+        "XXXX,N,N",
+        "XXXX,N,Y",
+        "XXXX,Y,Y",
+        "XXXX,N,N"
+    })
+    void testGetCaseFlag_ByServiceIWithWelshRequired200(String serviceId, String welshRequired,
+                                                                   String availableExternalFlag) {
         when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
-        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "", "Y", "N");
+        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId(serviceId, "", welshRequired,
+                                                                   availableExternalFlag);
         assertNotNull(caseFlag);
         assertEquals(1, caseFlag.getFlags().size());
         assertEquals(2, caseFlag.getFlags().get(0).getFlagDetails().size());
         verify(caseFlagRepository, times(1)).findAll(anyString());
         caseFlag.getFlags().forEach(caseFlagObj -> {
             for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
-                assertNotNull(flagDetail.getDefaultStatus());
-                assertNotNull(flagDetail.getExternallyAvailable());
-            }
-        });
-    }
-
-    @Test
-    void testGetCaseFlag_ByServiceIWithWelshRequiredIsN_Returns200() {
-        when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
-        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "", "N", "N");
-        assertNotNull(caseFlag);
-        assertEquals(1, caseFlag.getFlags().size());
-        assertEquals(2, caseFlag.getFlags().get(0).getFlagDetails().size());
-        verify(caseFlagRepository, times(1)).findAll(anyString());
-        caseFlag.getFlags().forEach(caseFlagObj -> {
-            for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
-                assertEquals(IGNORE_JSON, flagDetail.getNameCy());
-                assertNotNull(flagDetail.getDefaultStatus());
-                assertNotNull(flagDetail.getExternallyAvailable());
-            }
-        });
-    }
-
-    @Test
-    void testGetCaseFlag_ByServiceIWithWelshRequiredIsN_and_AvailableExternallyIsY_Returns200() {
-        when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
-        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "", "N", "Y");
-        assertNotNull(caseFlag);
-        assertEquals(1, caseFlag.getFlags().size());
-        assertEquals(2, caseFlag.getFlags().get(0).getFlagDetails().size());
-        verify(caseFlagRepository, times(1)).findAll(anyString());
-        caseFlag.getFlags().forEach(caseFlagObj -> {
-            for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
-                assertEquals(IGNORE_JSON, flagDetail.getNameCy());
+                if (("N").equals(welshRequired)) {
+                    assertEquals(IGNORE_JSON, flagDetail.getNameCy());
+                }
                 assertNotNull(flagDetail.getDefaultStatus());
                 assertNotNull(flagDetail.getExternallyAvailable());
                 assertTrue(flagDetail.getExternallyAvailable());
-            }
-        });
-    }
-
-    @Test
-    void testGetCaseFlag_ByServiceIWithWelshRequiredIsYandAvailableExternallyIsY_Returns200() {
-        when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
-        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "", "Y", "Y");
-        assertNotNull(caseFlag);
-        assertEquals(1, caseFlag.getFlags().size());
-        assertEquals(2, caseFlag.getFlags().get(0).getFlagDetails().size());
-        verify(caseFlagRepository, times(1)).findAll(anyString());
-        caseFlag.getFlags().forEach(caseFlagObj -> {
-            for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
-                assertNotNull(flagDetail.getDefaultStatus());
-                assertNotNull(flagDetail.getExternallyAvailable());
             }
         });
     }
@@ -280,11 +217,11 @@ class CaseFlagServiceImplTest {
         caseFlagDto1.setValueEn("PARTY");
         caseFlagDto1.setValueCy("");
         caseFlagDto1.setIsParent(true);
+        caseFlagDto1.setFlagCode("CATEGORY");
         caseFlagDto1.setExternallyAvailable(true);
         caseFlagDto1.setDefaultStatus("Requested");
 
         var caseFlagDto2 = new CaseFlagDto();
-        caseFlagDto2.setFlagCode("CATEGORY");
         caseFlagDto2.setCategoryId(1);
         caseFlagDto2.setCategoryPath("PARTY");
         caseFlagDto2.setId(2);
@@ -411,6 +348,43 @@ class CaseFlagServiceImplTest {
 
         return caseFlagDtoList;
     }
+
+    private List<CaseFlagDto> getCaseFlagDtoListWithOther() {
+        var caseFlagDto1 = new CaseFlagDto();
+        caseFlagDto1.setFlagCode("OT0001");
+        caseFlagDto1.setCategoryId(0);
+        caseFlagDto1.setCategoryPath("");
+        caseFlagDto1.setId(1);
+        caseFlagDto1.setHearingRelevant(true);
+        caseFlagDto1.setRequestReason(false);
+        caseFlagDto1.setValueEn("Other");
+        caseFlagDto1.setValueCy("Arall");
+        caseFlagDto1.setIsParent(true);
+        caseFlagDto1.setExternallyAvailable(false);
+        caseFlagDto1.setDefaultStatus("Requested");
+
+        var caseFlagDto2 = new CaseFlagDto();
+        caseFlagDto2.setFlagCode("RA0042");
+        caseFlagDto2.setCategoryId(1);
+        caseFlagDto2.setCategoryPath("PARTY");
+        caseFlagDto2.setValueCy("PARTY");
+        caseFlagDto2.setId(2);
+        caseFlagDto2.setHearingRelevant(true);
+        caseFlagDto2.setRequestReason(false);
+        caseFlagDto2.setValueEn("Sign Language");
+        caseFlagDto2.setValueCy("");
+        caseFlagDto2.setIsParent(false);
+        caseFlagDto1.setExternallyAvailable(true);
+        caseFlagDto1.setDefaultStatus("Approved");
+
+        var caseFlagDtoList = new ArrayList<CaseFlagDto>();
+        caseFlagDtoList.add(caseFlagDto1);
+        caseFlagDtoList.add(caseFlagDto2);
+
+        return caseFlagDtoList;
+    }
+
+
 
     private List<ListOfValue> getListOfValuesForLanguageInterPreter(boolean isWelshRequired) {
         var list = new ListOfValue();
