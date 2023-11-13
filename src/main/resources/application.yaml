@@ -19,11 +19,11 @@ spring:
     show-sql: false
     properties:
       hibernate:
-        default_schema: dbcommondata
         jdbc:
           lob:
             non_contextual_creation: true
           time_zone: UTC
+        default_schema: dbcommondata
     cache:
       cache-names: token
       caffeine:
@@ -31,6 +31,8 @@ spring:
   flyway:
     enabled: true
     locations: ${COMMONDATA_DB:classpath:db/migration}
+    schemas:
+      - dbcommondata
   config:
     import: "optional:configtree:/mnt/secrets/rd/"
   main:
