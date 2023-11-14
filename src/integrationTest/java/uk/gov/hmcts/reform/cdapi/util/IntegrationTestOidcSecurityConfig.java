@@ -11,6 +11,8 @@ import org.springframework.security.oauth2.client.registration.InMemoryClientReg
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.web.context.ContextCleanupListener;
 
+import java.util.HashMap;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
@@ -45,15 +47,17 @@ public class IntegrationTestOidcSecurityConfig extends ContextCleanupListener {
 
     public void setUpMockServiceForOidc() throws JsonProcessingException, JOSEException {
 
+        HashMap<String,String> data = new HashMap<>();
+        data.put("issuer","http://0.0.0.0:6000/o");
+        data.put("jwks_uri","http://0.0.0.0:7000/jwks");
+
         mockHttpServerForOidc.stubFor(get(urlPathMatching("/o/.well-known/openid-configuration"))
                                           .willReturn(aResponse()
                                                           .withStatus(200)
                                                           .withHeader("Content-Type", "application/json")
                                                           .withBody(
-                                                              "  {"
-                                                                  + "  \"issuer\": \"http://0.0.0.0:6000/o\","
-                                                                  + "  \"jwks_uri\": \"http://0.0.0.0:7000/jwks\" "
-                                                                  + "}")));
+                                                              WireMockUtil.getObjectMapper().writeValueAsString(data)
+                                                          )));
 
         if (!mockHttpServerForOidc.isRunning()) {
             mockHttpServerForOidc.start();
