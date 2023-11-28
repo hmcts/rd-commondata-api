@@ -77,7 +77,6 @@ resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
 }
 
 
-
 # Create the database server V15
 # Name and resource group name will be defaults (<product>-<component>-<env> and <product>-<component>-data-<env> respectively)
 module "db-common-data-v15" {

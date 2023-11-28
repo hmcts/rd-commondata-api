@@ -32,6 +32,7 @@ variable "subscription" {
 variable "common_tags" {
   type = map(any)
 }
+
 variable "aks_subscription_id" {
 }
 variable "team_contact" {
