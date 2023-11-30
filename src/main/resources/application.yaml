@@ -19,11 +19,11 @@ spring:
     show-sql: false
     properties:
       hibernate:
-#        default_schema: dbcommondata
         jdbc:
           lob:
             non_contextual_creation: true
           time_zone: UTC
+    #    default_schema: dbcommondata
     cache:
       cache-names: token
       caffeine:

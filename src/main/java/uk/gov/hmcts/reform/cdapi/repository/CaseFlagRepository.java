@@ -73,6 +73,7 @@ public interface CaseFlagRepository extends JpaRepository<CaseFlagDto, Long> {
         + "   FROM flagdetailscategorypath d "
         + " INNER JOIN flagserviceconsolidated e "
         + "         ON d.flag_code = e.flag_code "
+        + "         WHERE d.id not in (SELECT category_id from flagdetailscategorypath)"
         + " UNION "
         + " SELECT p.id, 'CATGRY' AS flag_code, p.native_flag_code, p.value_en, p.value_cy, "
         + " p.category_id, p.categorypath, "
