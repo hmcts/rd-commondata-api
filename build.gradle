@@ -49,8 +49,8 @@ def versions = [
   logback         : '1.2.10',
   feign           : '3.8.0',
   bytebuddy       : '1.12.7',
-  testContainer_postgresql: '1.17.6'
-
+  testContainer_postgresql: '1.17.6',
+  bouncycastle    : '1.77'
 ]
 
 sourceSets {
@@ -346,13 +346,9 @@ dependencies {
   implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.5.12'
   implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
   implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
-  implementation group: 'org.bouncycastle', name: 'bcpkix-jdk18on', version: '1.77'
+  implementation group: 'org.bouncycastle', name: 'bcpkix-jdk18on', version: versions.bouncycastle
   implementation group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '5.10.9'
-  implementation (group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client',
-    version: versions.reformS2sClient) {
-    exclude group: 'org.bouncycastle', module: 'bcprov-jdk15on'
-    exclude group: 'org.bouncycastle', module: 'bcprov-jdk18on'
-  }
+  implementation group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: versions.reformS2sClient
   implementation group: 'javax.inject', name: 'javax.inject', version: '1'
   implementation "com.github.hmcts.java-logging:logging:${versions.reformLogging}"
   implementation "com.github.hmcts.java-logging:logging-appinsights:5.1.7"
@@ -522,7 +518,7 @@ configurations.all {
   resolutionStrategy.eachDependency { details ->
     if (details.requested.group == 'org.bouncycastle'
       && details.requested.name == 'bcpkix-jdk18on' ){
-      details.useVersion "1.77"
+      details.useVersion versions.bouncycastle
     }
   }
 }
