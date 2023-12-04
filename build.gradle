@@ -348,7 +348,11 @@ dependencies {
   implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
   implementation group: 'org.bouncycastle', name: 'bcpkix-jdk18on', version: '1.77'
   implementation group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '5.10.9'
-  implementation group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: versions.reformS2sClient
+  implementation (group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client',
+    version: versions.reformS2sClient) {
+    exclude group: 'org.bouncycastle', module: 'bcprov-jdk15on'
+    exclude group: 'org.bouncycastle', module: 'bcprov-jdk18on'
+  }
   implementation group: 'javax.inject', name: 'javax.inject', version: '1'
   implementation "com.github.hmcts.java-logging:logging:${versions.reformLogging}"
   implementation "com.github.hmcts.java-logging:logging-appinsights:5.1.7"
@@ -511,6 +515,23 @@ bootJar {
 
   manifest {
     attributes('Implementation-Version': project.version.toString())
+  }
+}
+
+configurations.all {
+  resolutionStrategy.eachDependency { details ->
+    if (details.requested.group == 'org.bouncycastle'
+      && details.requested.name == 'bcpkix-jdk18on' ){
+      details.useVersion "1.77"
+    }
+  }
+}
+
+dependencies {
+  modules {
+    module("org.bouncycastle:bcpkix-jdk15on") {
+      replacedBy("org.bouncycastle:bcpkix-jdk18on")
+    }
   }
 }
 
