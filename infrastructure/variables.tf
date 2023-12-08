@@ -2,7 +2,7 @@ variable "product" {
   type = string
 }
 
-variable "product-V15" {
+variable "product-v16" {
   type = string
   default="rd-commondata-api"
 }
@@ -11,7 +11,7 @@ variable "component" {
   type = string
 }
 
-variable "component-V15" {
+variable "component-v16" {
   type = string
   default="postgres-db-v15"
 }
