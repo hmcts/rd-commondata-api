@@ -95,7 +95,8 @@ module "db-common-data-v16" {
       name = "dbcommondata"
     }
   ]
-  pgsql_version        = "15"
+  subnet_suffix        = "expanded"
+  pgsql_version        = "16"
   product              = var.product-v16
   name               = join("-", [var.product-v16, var.component-v16])
 }
