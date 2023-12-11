@@ -80,7 +80,6 @@ module "db-common-data-v16" {
   }
   admin_user_object_id = var.jenkins_AAD_objectId
   business_area        = "cft"
-  subnet_suffix        = "expanded"
   common_tags          = var.common_tags
   component            = var.component
   env                  = var.env
