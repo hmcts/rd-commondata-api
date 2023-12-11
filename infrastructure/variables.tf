@@ -2,14 +2,17 @@ variable "product" {
   type = string
 }
 
+
 variable "product-v16" {
   type = string
   default="rd-commondata-api"
 }
 
+
 variable "component" {
   type = string
 }
+
 
 variable "component-v16" {
   type = string

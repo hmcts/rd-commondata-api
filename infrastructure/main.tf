@@ -1,11 +1,4 @@
 locals {
-  tags = (merge(
-    var.common_tags,
-    tomap({
-      "Team Contact" = var.team_contact
-      "Destroy Me"   = var.destroy_me
-    })
-  ))
   key_vault_name          = join("-", [var.product, var.env])
   s2s_key_vault_name        = join("-", ["s2s", var.env])
   s2s_vault_resource_group  = join("-", ["rpe-service-auth-provider", var.env])
@@ -87,6 +80,7 @@ module "db-common-data-v16" {
   }
   admin_user_object_id = var.jenkins_AAD_objectId
   business_area        = "cft"
+  subnet_suffix        = "expanded"
   common_tags          = var.common_tags
   component            = var.component
   env                  = var.env
