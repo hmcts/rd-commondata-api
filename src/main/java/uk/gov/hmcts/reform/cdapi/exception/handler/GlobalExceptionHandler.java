@@ -60,7 +60,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpStatusCodeException.class)
     public ResponseEntity<Object> handleHttpStatusException(HttpStatusCodeException ex) {
-        HttpStatus httpStatus = ex.getStatusCode();
+        HttpStatus httpStatus = checkAndRetrieveExceptionStatusCode(ex);
         return errorDetailsResponseEntity(ex, httpStatus, httpStatus.getReasonPhrase());
     }
 
@@ -144,5 +144,9 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(errorDetails, httpStatus);
+    }
+
+    private HttpStatus checkAndRetrieveExceptionStatusCode(final HttpStatusCodeException exception) {
+        return HttpStatus.valueOf(exception.getStatusCode().value());
     }
 }

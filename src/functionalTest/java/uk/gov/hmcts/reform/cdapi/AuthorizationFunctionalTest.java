@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.cdapi;
 
 import io.restassured.parsing.Parser;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.rest.SerenityRest;
 import org.junit.jupiter.api.AfterAll;
@@ -17,7 +18,6 @@ import uk.gov.hmcts.reform.lib.client.response.S2sClient;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.PostConstruct;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.junit.jupiter.api.Assertions.assertEquals;

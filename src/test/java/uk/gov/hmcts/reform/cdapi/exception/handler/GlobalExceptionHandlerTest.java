@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -111,7 +112,7 @@ class GlobalExceptionHandlerTest {
     @Test
     void test_handle_http_status_code_exception() {
         HttpStatusCodeException exception = mock(HttpStatusCodeException.class);
-        HttpStatus httpStatus = mock(HttpStatus.class);
+        HttpStatusCode httpStatus = HttpStatusCode.valueOf(404);
 
         when(exception.getStatusCode()).thenReturn(httpStatus);
 
