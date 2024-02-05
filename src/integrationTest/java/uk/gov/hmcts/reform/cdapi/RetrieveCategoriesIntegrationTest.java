@@ -115,8 +115,8 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         assertNotNull(response);
         assertEquals(4, response.getListOfCategory().size());
         if (flag.equals("Y")) {
-            assertEquals(1, response.getListOfCategory().get(0).getChildNodes().size());
-            responseVerification(response.getListOfCategory().get(0).getChildNodes().get(0));
+            assertEquals(1, response.getListOfCategory().get(1).getChildNodes().size());
+            responseVerification(response.getListOfCategory().get(1).getChildNodes().get(0));
         } else {
             responseVerificationWithOutChildNodes(response);
         }
