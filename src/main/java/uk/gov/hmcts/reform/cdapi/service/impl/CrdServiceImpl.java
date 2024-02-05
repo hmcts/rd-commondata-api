@@ -52,6 +52,9 @@ public class CrdServiceImpl implements CrdService {
         if (isChildRequired) {
             channelList = mapToParentCategory(channelList);
         }
+
+        channelList.sort(Comparator.comparingLong(Category::getLovOrder));
+        
         return channelList;
     }
 
