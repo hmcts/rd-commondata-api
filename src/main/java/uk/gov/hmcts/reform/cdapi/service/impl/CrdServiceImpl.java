@@ -54,8 +54,6 @@ public class CrdServiceImpl implements CrdService {
             channelList = mapToParentCategory(channelList);
         }
 
-        channelList.sort(Comparator.comparingLong(Category::getLovOrder));
-        
         return channelList;
     }
 
@@ -99,6 +97,8 @@ public class CrdServiceImpl implements CrdService {
                 .valueEn(dto.getValueEn())
                 .parentCategory(dto.getParentCategory())
                 .parentKey(dto.getParentKey())
-                .build()).collect(Collectors.toUnmodifiableList());
+                .build())
+            .sorted(Comparator.comparingLong(Category::getLovOrder))
+            .collect(Collectors.toUnmodifiableList());
     }
 }
