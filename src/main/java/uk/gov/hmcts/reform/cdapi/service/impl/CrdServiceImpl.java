@@ -98,7 +98,8 @@ public class CrdServiceImpl implements CrdService {
                 .parentCategory(dto.getParentCategory())
                 .parentKey(dto.getParentKey())
                 .build())
-            .sorted(Comparator.comparingLong(Category::getLovOrder))
+            .sorted(Comparator.comparingLong(category -> category.getLovOrder() == null?
+                        Long.MAX_VALUE : category.getLovOrder()))
             .collect(Collectors.toUnmodifiableList());
     }
 }
