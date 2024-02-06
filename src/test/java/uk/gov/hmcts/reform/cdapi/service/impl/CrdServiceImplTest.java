@@ -232,5 +232,37 @@ class CrdServiceImplTest {
             .getCategoryKey());
     }
 
+    @NotNull
+    private List<ListOfValueDto> buildListOfValuesDtosWithListOfValuesOrders() {
+        List<ListOfValueDto> listOfValueDtos = new ArrayList<>();
+        listOfValueDtos.add(CrdTestSupport.createListOfCategoriesDtoMock("HearingChannel", "BBA3",
+                                                                         null, null,
+                                                                         "telephone", 1L));
+        listOfValueDtos.add(CrdTestSupport.createListOfCategoriesDtoMock("HearingSubChannel", "BBA3",
+                                                                         "HearingChannel",
+                                                                         "telephone", "telephone", 3L));
+        listOfValueDtos.add(CrdTestSupport.createListOfCategoriesDtoMock("HearingSubChannel", "BBA3",
+                                                                         "HearingChannel",
+                                                                         "telephone", "telephone", 2L));
+        return listOfValueDtos;
+    }
+    @Test
+    void retrieveCategoriesByServiceIdWithNoChildNodes2() {
+        List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtosWithListOfValuesOrders();
+        doReturn(listOfValueDtos).when(listOfValuesRepository)
+            .findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any());
 
+        CategoryRequest request = buildCategoryRequest("HearingChannel",  "BBA3", null,
+                                                       null,null, "n");
+        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
+
+        assertNotNull(result);
+        assertEquals(listOfValueDtos.get(0).getCategoryKey().getServiceId(), result.get(0).getServiceId());
+        assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
+        assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActiveFlag());
+        assertNull(result.get(0).getChildNodes());
+        assertEquals(listOfValueDtos.get(0).getLovOrder(), result.get(0).getLovOrder());
+        assertEquals(listOfValueDtos.get(2).getLovOrder(), result.get(1).getLovOrder());
+        assertEquals(listOfValueDtos.get(1).getLovOrder(), result.get(2).getLovOrder());
+    }
 }
