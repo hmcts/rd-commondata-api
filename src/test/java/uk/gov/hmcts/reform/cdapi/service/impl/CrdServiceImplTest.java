@@ -83,8 +83,8 @@ class CrdServiceImplTest {
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
         assertEquals("y", result.get(0).getActiveFlag());
-        assertEquals("y", result.get(1).getActiveFlag());
-        assertEquals("n", result.get(2).getActiveFlag());
+        assertEquals("n", result.get(1).getActiveFlag());
+        assertEquals("y", result.get(2).getActiveFlag());
     }
 
 

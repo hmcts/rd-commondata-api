@@ -21,6 +21,7 @@ public class CrdTestSupport {
         listOfValueDtoMock.setCategoryKey(categoryKey);
         listOfValueDtoMock.setParentCategory(parentCategory);
         listOfValueDtoMock.setParentKey(parentKey);
+        listOfValueDtoMock.setValueEn(String.join("-","test", categoryId, serviceId));
         return listOfValueDtoMock;
     }
 
