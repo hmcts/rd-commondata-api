@@ -12,6 +12,7 @@ import uk.gov.hmcts.reform.cdapi.repository.ListOfValuesRepository;
 import uk.gov.hmcts.reform.cdapi.service.CrdService;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +53,7 @@ public class CrdServiceImpl implements CrdService {
         if (isChildRequired) {
             channelList = mapToParentCategory(channelList);
         }
+
         return channelList;
     }
 
@@ -95,6 +97,10 @@ public class CrdServiceImpl implements CrdService {
                 .valueEn(dto.getValueEn())
                 .parentCategory(dto.getParentCategory())
                 .parentKey(dto.getParentKey())
-                .build()).collect(Collectors.toUnmodifiableList());
+                .build())
+            .sorted(Comparator.comparing(category -> category.getLovOrder() == null
+                ? category.getValueEn() == null ? "" : category.getValueEn()
+                : Long.toString(category.getLovOrder())))
+            .collect(Collectors.toUnmodifiableList());
     }
 }
