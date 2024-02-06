@@ -246,6 +246,7 @@ class CrdServiceImplTest {
                                                                          "telephone", "telephone", 2L));
         return listOfValueDtos;
     }
+
     @Test
     void retrieveCategoriesByServiceIdWithNoChildNodes2() {
         List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtosWithListOfValuesOrders();
