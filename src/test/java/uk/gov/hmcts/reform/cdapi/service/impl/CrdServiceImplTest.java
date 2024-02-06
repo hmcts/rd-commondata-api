@@ -248,7 +248,7 @@ class CrdServiceImplTest {
     }
 
     @Test
-    void retrieveCategoriesByServiceIdWithNoChildNodes2() {
+    void retrieveCategoriesByServiceIdWithListOfValuesOrders() {
         List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtosWithListOfValuesOrders();
         doReturn(listOfValueDtos).when(listOfValuesRepository)
             .findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any());
