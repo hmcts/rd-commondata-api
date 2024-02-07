@@ -20,10 +20,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doReturn;
 import static uk.gov.hmcts.reform.cdapi.helper.CrdTestSupport.buildCategoryRequest;
 
@@ -265,5 +262,70 @@ class CrdServiceImplTest {
         assertEquals(listOfValueDtos.get(0).getLovOrder(), result.get(0).getLovOrder());
         assertEquals(listOfValueDtos.get(2).getLovOrder(), result.get(1).getLovOrder());
         assertEquals(listOfValueDtos.get(1).getLovOrder(), result.get(2).getLovOrder());
+    }
+
+    @NotNull
+    private List<ListOfValueDto> buildListOfValuesDtosWithDefaultOrdering() {
+        List<ListOfValueDto> listOfValueDtos = new ArrayList<>();
+        final var listOfValueMock1 = CrdTestSupport.createListOfCategoriesDtoMock("HearingChannel", "BBA3",
+                                                                                         null, null,
+                                                                                         "telephone"
+        );
+        listOfValueMock1.setValueEn("third");
+        listOfValueDtos.add(listOfValueMock1);
+
+        final var listOfValueMock2 = CrdTestSupport.createListOfCategoriesDtoMock("HearingSubChannel", "BBA3",
+                                                                                         "HearingChannel",
+                                                                                         "telephone", "telephone"
+        );
+        listOfValueMock2.setValueEn("first");
+        listOfValueDtos.add(listOfValueMock2);
+        final var listOfValueMock3 = CrdTestSupport.createListOfCategoriesDtoMock("HearingSubChannel", "BBA3",
+                                                                                         "HearingChannel",
+                                                                                         "telephone", "telephone"
+        );
+        listOfValueMock3.setValueEn("second");
+        listOfValueDtos.add(listOfValueMock3);
+        return listOfValueDtos;
+    }
+
+    @Test
+    void retrieveCategoriesByServiceIdWithDefaultOrdering() {
+        List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtosWithDefaultOrdering();
+        doReturn(listOfValueDtos).when(listOfValuesRepository)
+            .findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any());
+
+        CategoryRequest request = buildCategoryRequest("HearingChannel",  "BBA3", null,
+                                                       null,null, "n");
+        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
+
+        assertNotNull(result);
+        assertEquals(listOfValueDtos.get(1).getCategoryKey().getServiceId(), result.get(1).getServiceId());
+        assertEquals(listOfValueDtos.get(1).getCategoryKey().getCategoryKey(), result.get(1).getCategoryKey());
+        assertEquals(listOfValueDtos.get(1).getActive(), result.get(1).getActiveFlag());
+        assertNull(result.get(1).getChildNodes());
+        assertEquals(listOfValueDtos.get(0).getLovOrder(), result.get(2).getLovOrder());
+        assertEquals(listOfValueDtos.get(1).getLovOrder(), result.get(0).getLovOrder());
+        assertEquals(listOfValueDtos.get(2).getLovOrder(), result.get(1).getLovOrder());
+    }
+
+    @Test
+    void retrieveCategoriesByServiceIdWithDefaultOrderingThrowsNullPointerExceptionForMissingDefault() {
+        List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtosWithDefaultOrdering();
+
+        listOfValueDtos.get(1).setValueEn(null);
+
+        doReturn(listOfValueDtos).when(listOfValuesRepository)
+            .findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any());
+
+        CategoryRequest request = buildCategoryRequest("HearingChannel",  "BBA3", null,
+                                                       null,null, "n");
+
+        final var nullPointerException = assertThrows(NullPointerException.class, () ->
+                                                          crdServiceImpl.retrieveListOfValuesByCategory(request),
+                                                      "Expected NPE to be thrown"
+        );
+
+        assertNotNull(nullPointerException);
     }
 }
