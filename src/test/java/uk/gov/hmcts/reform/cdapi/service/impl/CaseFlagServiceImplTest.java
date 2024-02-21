@@ -1,5 +1,8 @@
 package uk.gov.hmcts.reform.cdapi.service.impl;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.util.ResourceUtils;
 import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
 import uk.gov.hmcts.reform.cdapi.domain.CaseFlagDto;
 import uk.gov.hmcts.reform.cdapi.domain.FlagDetail;
@@ -18,10 +22,14 @@ import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
 import uk.gov.hmcts.reform.cdapi.repository.CaseFlagRepository;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfVenueRepository;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -46,6 +54,8 @@ class CaseFlagServiceImplTest {
 
     @Mock
     ListOfVenueRepository listOfVenueRepository;
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @BeforeEach
     void setUp() {
@@ -175,6 +185,74 @@ class CaseFlagServiceImplTest {
                 assertNotNull(flagDetail.getExternallyAvailable());
             }
         });
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "XXXX,PARTY,N,N",
+        "XXXX,PARTY,N,Y"
+    })
+    @DisplayName("Externally available true or false flags")
+    void externallyAvailableFlagsShouldBeIgnored(String serviceId,
+                                                 String flagType,
+                                                 String welshRequired,
+                                                 String availableExternalFlag) throws IOException {
+        List<CaseFlagDto> caseFlagDtoList = readFlagDetails();
+        when(caseFlagRepository.findAll(anyString())).thenReturn(caseFlagDtoList);
+        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId(serviceId,
+                                                                   flagType,
+                                                                   welshRequired,
+                                                                   availableExternalFlag);
+        validateCaseFlags(caseFlag, availableExternalFlag);
+    }
+
+    private Boolean booleanValue(String value) {
+        return value.equalsIgnoreCase("y")
+            || value.equalsIgnoreCase("true");
+    }
+
+    private void validateCaseFlags(CaseFlag caseFlags, String flag) {
+        boolean externallyAvailable = (StringUtils.isNotEmpty(flag) && (flag.trim().equalsIgnoreCase("y")));
+        assertNotNull(caseFlags);
+        assertNotNull(caseFlags.getFlags());
+        if (externallyAvailable) {
+            caseFlags.getFlags().stream().forEach(caseFlag -> {
+                assertNotNull(caseFlag.getFlagDetails());
+                List<FlagDetail> flagDetailsList = caseFlag.getFlagDetails();
+                flagDetailsList.stream().forEach(flagDetail -> {
+                    boolean flagExternallyAvailable = flagDetail.getExternallyAvailable();
+                    assertThat(flagExternallyAvailable, anyOf(is(true), is(false)));
+                    assertTrue(flagDetail.getParent());
+                    validateChildFlags(flagDetail.getChildFlags(), externallyAvailable);
+                });
+            });
+        } else {
+            caseFlags.getFlags().stream().forEach(caseFlag -> {
+                assertNotNull(caseFlag.getFlagDetails());
+                List<FlagDetail> flagDetailsList = caseFlag.getFlagDetails();
+                flagDetailsList.stream().forEach(flagDetail -> {
+                    boolean flagExternallyAvailable = flagDetail.getExternallyAvailable();
+                    assertThat(flagExternallyAvailable, anyOf(is(false)));
+                    assertTrue(flagDetail.getParent());
+                    validateChildFlags(flagDetail.getChildFlags(), externallyAvailable);
+                });
+            });
+        }
+    }
+
+    private void validateChildFlags(List<FlagDetail> flagDetails,
+                                    boolean externallyAvailable) {
+        if (flagDetails != null) {
+            flagDetails.stream()
+                .forEach(flagDetail -> {
+                    if (externallyAvailable) {
+                        assertThat(flagDetail.getExternallyAvailable(), anyOf(is(false), is(true)));
+                    } else {
+                        assertThat(flagDetail.getExternallyAvailable(), anyOf(is(false)));
+                    }
+                    validateChildFlags(flagDetail.getChildFlags(), externallyAvailable);
+                });
+        }
     }
 
     List<CaseFlagDto> getEmptyCaseFlagDtoList(List<CaseFlagDto> caseFlagDtoList) {
@@ -434,5 +512,9 @@ class CaseFlagServiceImplTest {
         }
         assertEquals(2, caseFlag.getFlags()
             .get(0).getFlagDetails().get(0).getChildFlags().size());
+    }
+
+    private List<CaseFlagDto> readFlagDetails() throws IOException {
+        return MAPPER.readValue(ResourceUtils.getFile("classpath:Flag-Details.json"), new TypeReference<>() {});
     }
 }
