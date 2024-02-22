@@ -1328,5 +1328,33 @@
     "defaultStatus": "Active",
     "externallyAvailable": false,
     "isParent": "FALSE"
+  },
+  {
+    "id": 90,
+    "flagCode": "CATGRY",
+    "nativeFlagCode": "PF0001",
+    "valueEn": "Party",
+    "valueCy": "Parti",
+    "categoryId": 0,
+    "categoryPath": "",
+    "hearingRelevant": false,
+    "requestReason": false,
+    "defaultStatus": "Active",
+    "externallyAvailable": true,
+    "isParent": "TRUE"
+  },
+  {
+    "id": 91,
+    "flagCode": "CATGRY",
+    "nativeFlagCode": "PF0001",
+    "valueEn": "High Profile Case",
+    "valueCy": "Achos Proffil Uchel",
+    "categoryId": 90,
+    "categoryPath": "Case",
+    "hearingRelevant": true,
+    "requestReason": true,
+    "defaultStatus": "Active",
+    "externallyAvailable": true,
+    "isParent": "FALSE"
   }
 ]

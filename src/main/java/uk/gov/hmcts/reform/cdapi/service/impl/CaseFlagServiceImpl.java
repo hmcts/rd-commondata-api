@@ -45,7 +45,8 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     @Override
     public CaseFlag retrieveCaseFlagByServiceId(String serviceId, String flagType,
                                                 String welshRequired, String availableExternalFlag) {
-        var isAvailableExternalFlag = this.getFlagYorN(availableExternalFlag);
+        var isAvailableExternalFlag = StringUtils.isEmpty(availableExternalFlag)
+            || availableExternalFlag.trim().equalsIgnoreCase("y");
         var caseFlagDtoList = filterCaseFlags(caseFlagRepository.findAll(serviceId.trim().toUpperCase()),
                                               isAvailableExternalFlag);
         var flagDetails = addTopLevelFlag(caseFlagDtoList, welshRequired);
@@ -53,7 +54,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         if (isAvailableExternalFlag) {
             removeFlags(flagDetails);
         }
-        addOtherFlag(flagDetails, welshRequired, isAvailableExternalFlag);
+        addOtherFlag(flagDetails, welshRequired);
         log.info("Added other flag");
         var flag = new Flag();
         flag.setFlagDetails(filterFlagType(flagDetails, flagType));
@@ -68,12 +69,12 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     }
 
     private List<CaseFlagDto> filterCaseFlags(List<CaseFlagDto> caseFlagDtoList, boolean isAvailableExternalFlag) {
-        if (isAvailableExternalFlag) {
+        if (!isAvailableExternalFlag) {
             return caseFlagDtoList;
         }
         return caseFlagDtoList.parallelStream().filter(caseFlagDto -> {
             Boolean externallyAvailable = caseFlagDto.getExternallyAvailable();
-            return externallyAvailable == null || externallyAvailable.booleanValue() == false;
+            return externallyAvailable == null || externallyAvailable.booleanValue() == true;
         }).toList();
     }
 
@@ -265,9 +266,8 @@ public class CaseFlagServiceImpl implements CaseFlagService {
      * @param welshRequired it is flag decide to display the name_cy values
      */
     private void addOtherFlag(List<FlagDetail> flagDetails,
-                              String welshRequired,
-                              boolean isAvailableExternalFlag) {
-        if (null == flagDetails || !isAvailableExternalFlag) {
+                              String welshRequired) {
+        if (null == flagDetails) {
             return;
         }
         var isWelshRequired = this.getFlagYorN(welshRequired);
@@ -282,7 +282,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                     isWelshRequired
                 ));
             }
-            addOtherFlag(flagDetail.getChildFlags(), welshRequired, isAvailableExternalFlag);
+            addOtherFlag(flagDetail.getChildFlags(), welshRequired);
         }
     }
 

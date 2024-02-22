@@ -190,7 +190,8 @@ class CaseFlagServiceImplTest {
     @ParameterizedTest
     @CsvSource({
         "XXXX,PARTY,N,N",
-        "XXXX,PARTY,N,Y"
+        "XXXX,PARTY,N,Y",
+        "XXXX,PARTY,N,"
     })
     @DisplayName("Externally available true or false flags")
     void externallyAvailableFlagsShouldBeIgnored(String serviceId,
@@ -206,11 +207,6 @@ class CaseFlagServiceImplTest {
         validateCaseFlags(caseFlag, availableExternalFlag);
     }
 
-    private Boolean booleanValue(String value) {
-        return value.equalsIgnoreCase("y")
-            || value.equalsIgnoreCase("true");
-    }
-
     private void validateCaseFlags(CaseFlag caseFlags, String flag) {
         boolean externallyAvailable = (StringUtils.isNotEmpty(flag) && (flag.trim().equalsIgnoreCase("y")));
         assertNotNull(caseFlags);
@@ -221,7 +217,7 @@ class CaseFlagServiceImplTest {
                 List<FlagDetail> flagDetailsList = caseFlag.getFlagDetails();
                 flagDetailsList.stream().forEach(flagDetail -> {
                     boolean flagExternallyAvailable = flagDetail.getExternallyAvailable();
-                    assertThat(flagExternallyAvailable, anyOf(is(true), is(false)));
+                    assertThat(flagExternallyAvailable, anyOf(is(true)));
                     assertTrue(flagDetail.getParent());
                     validateChildFlags(flagDetail.getChildFlags(), externallyAvailable);
                 });
@@ -232,7 +228,7 @@ class CaseFlagServiceImplTest {
                 List<FlagDetail> flagDetailsList = caseFlag.getFlagDetails();
                 flagDetailsList.stream().forEach(flagDetail -> {
                     boolean flagExternallyAvailable = flagDetail.getExternallyAvailable();
-                    assertThat(flagExternallyAvailable, anyOf(is(false)));
+                    assertThat(flagExternallyAvailable, anyOf(is(false), is(true)));
                     assertTrue(flagDetail.getParent());
                     validateChildFlags(flagDetail.getChildFlags(), externallyAvailable);
                 });
@@ -246,9 +242,9 @@ class CaseFlagServiceImplTest {
             flagDetails.stream()
                 .forEach(flagDetail -> {
                     if (externallyAvailable) {
-                        assertThat(flagDetail.getExternallyAvailable(), anyOf(is(false), is(true)));
+                        assertThat(flagDetail.getExternallyAvailable(), anyOf(is(true)));
                     } else {
-                        assertThat(flagDetail.getExternallyAvailable(), anyOf(is(false)));
+                        assertThat(flagDetail.getExternallyAvailable(), anyOf(is(false), is(true)));
                     }
                     validateChildFlags(flagDetail.getChildFlags(), externallyAvailable);
                 });
