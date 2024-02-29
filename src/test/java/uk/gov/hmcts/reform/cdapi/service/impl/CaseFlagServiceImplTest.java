@@ -69,9 +69,6 @@ class CaseFlagServiceImplTest {
         ReflectionTestUtils.setField(caseFlagService, "flaglistLov",
                                      Arrays.asList("PF0015", "RA0042")
         );
-        UserInfo userInfo = mock(UserInfo.class);
-        when(userInfo.getRoles()).thenReturn(Collections.emptyList());
-        when(jwtGrantedAuthoritiesConverter.getUserInfo()).thenReturn(userInfo);
     }
 
     @ParameterizedTest
@@ -208,6 +205,10 @@ class CaseFlagServiceImplTest {
                                                  String flagType,
                                                  String welshRequired,
                                                  String availableExternalFlag) throws IOException {
+        UserInfo userInfo = mock(UserInfo.class);
+        when(userInfo.getRoles()).thenReturn(Collections.emptyList());
+        when(jwtGrantedAuthoritiesConverter.getUserInfo()).thenReturn(userInfo);
+
         List<CaseFlagDto> caseFlagDtoList = readFlagDetails();
         when(caseFlagRepository.findAll(anyString())).thenReturn(caseFlagDtoList);
         var caseFlag = caseFlagService.retrieveCaseFlagByServiceId(serviceId,
