@@ -88,7 +88,7 @@ module "db-common-data-v16" {
     }
   ]
   # Setup Access Reader db user
-  force_user_permissions_trigger = "1"
+  force_user_permissions_trigger = "2"
 
   subnet_suffix        = "expanded"
   pgsql_version        = "16"
