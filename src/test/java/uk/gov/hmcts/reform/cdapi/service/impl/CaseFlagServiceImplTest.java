@@ -19,12 +19,15 @@ import uk.gov.hmcts.reform.cdapi.domain.CaseFlagDto;
 import uk.gov.hmcts.reform.cdapi.domain.FlagDetail;
 import uk.gov.hmcts.reform.cdapi.domain.ListOfValue;
 import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
+import uk.gov.hmcts.reform.cdapi.oidc.JwtGrantedAuthoritiesConverter;
 import uk.gov.hmcts.reform.cdapi.repository.CaseFlagRepository;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfVenueRepository;
+import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -36,6 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -55,6 +59,9 @@ class CaseFlagServiceImplTest {
     @Mock
     ListOfVenueRepository listOfVenueRepository;
 
+    @Mock
+    private JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter;
+
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @BeforeEach
@@ -62,6 +69,9 @@ class CaseFlagServiceImplTest {
         ReflectionTestUtils.setField(caseFlagService, "flaglistLov",
                                      Arrays.asList("PF0015", "RA0042")
         );
+        UserInfo userInfo = mock(UserInfo.class);
+        when(userInfo.getRoles()).thenReturn(Collections.emptyList());
+        when(jwtGrantedAuthoritiesConverter.getUserInfo()).thenReturn(userInfo);
     }
 
     @ParameterizedTest
