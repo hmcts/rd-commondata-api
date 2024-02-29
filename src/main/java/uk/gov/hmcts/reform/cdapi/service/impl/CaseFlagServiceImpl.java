@@ -82,6 +82,8 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     }
 
     private List<CaseFlagDto> filterCaseFlags(List<CaseFlagDto> caseFlagDtoList, boolean isAvailableExternalFlag) {
+        log.info("Data passed to filter size <<>>"+ caseFlagDtoList.size());
+        log.info("Data passed to filter <<>>"+ caseFlagDtoList);
         if (!isAvailableExternalFlag) {
             return caseFlagDtoList;
         }
