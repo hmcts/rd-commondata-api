@@ -45,7 +45,7 @@ def versions = [
   serenity        : '2.0.76',
   springHystrix   : '2.2.10.RELEASE',
   restAssured     : '4.3.3',
-  springVersion   : '5.3.30',
+  springVersion   : '5.3.31',
   logback         : '1.2.13',
   feign           : '3.8.0',
   bytebuddy       : '1.12.7',
@@ -292,7 +292,7 @@ dependencyManagement {
       entry 'commons-fileupload'
     }
     //CVE-2021-22044
-    dependencySet(group: 'org.springframework.cloud', version: '3.1.8') {
+    dependencySet(group: 'org.springframework.cloud', version: '3.1.9') {
       entry 'spring-cloud-starter-openfeign'
       entry 'spring-cloud-openfeign-core'
     }
@@ -364,7 +364,7 @@ dependencies {
   implementation group: 'ch.qos.logback', name: 'logback-core', version: versions.logback
   implementation group: 'ch.qos.logback', name: 'logback-classic', version: versions.logback
   implementation group: 'org.springframework', name: 'spring-core', version: versions.springVersion
-  implementation group: 'org.springframework.security', name: 'spring-security-core', version: '5.7.10'
+  implementation group: 'org.springframework.security', name: 'spring-security-core', version: '5.7.11'
   implementation group: 'org.springframework', name: 'spring-beans', version: versions.springVersion
   implementation group: 'org.springframework', name: 'spring-aop', version: versions.springVersion
   implementation group: 'org.springframework', name: 'spring-aspects', version: versions.springVersion
@@ -391,10 +391,10 @@ dependencies {
   implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: versions.log4j
 
   implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.8'
-  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.7'
+  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.8'
 
   implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.8'
-  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.7'
+  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.8'
 
 
   testImplementation group: 'org.testcontainers', name: 'postgresql', version: versions.testContainer_postgresql
