@@ -14,9 +14,13 @@ import uk.gov.hmcts.reform.cdapi.domain.FlagDetail;
 import uk.gov.hmcts.reform.cdapi.domain.ListOfValue;
 import uk.gov.hmcts.reform.cdapi.exception.InvalidRequestException;
 import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
+import uk.gov.hmcts.reform.cdapi.oidc.JwtGrantedAuthoritiesConverter;
 import uk.gov.hmcts.reform.cdapi.repository.CaseFlagRepository;
+import uk.gov.hmcts.reform.cdapi.repository.IdamRepository;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfVenueRepository;
 import uk.gov.hmcts.reform.cdapi.service.CaseFlagService;
+import uk.gov.hmcts.reform.cdapi.util.UserInfoUtil;
+import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,6 +41,9 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     @Autowired
     ListOfVenueRepository listOfVenueRepository;
 
+    @Autowired
+    private JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter;
+
     @Value("${flaglist}")
     List<String> flaglistLov;
 
@@ -45,8 +52,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     @Override
     public CaseFlag retrieveCaseFlagByServiceId(String serviceId, String flagType,
                                                 String welshRequired, String availableExternalFlag) {
-        var isAvailableExternalFlag = StringUtils.isEmpty(availableExternalFlag)
-            || availableExternalFlag.trim().equalsIgnoreCase("y");
+        var isAvailableExternalFlag = availableExternally(availableExternalFlag);
         var caseFlagDtoList = filterCaseFlags(caseFlagRepository.findAll(serviceId.trim().toUpperCase()),
                                               isAvailableExternalFlag);
         var flagDetails = addTopLevelFlag(caseFlagDtoList, welshRequired);
@@ -66,6 +72,14 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         var caseFlag = new CaseFlag();
         caseFlag.setFlags(flags);
         return caseFlag;
+    }
+
+    private boolean availableExternally(String availableExternalFlag) {
+        if (UserInfoUtil.hasPrdRoles(jwtGrantedAuthoritiesConverter.getUserInfo())) {
+            return false;
+        }
+        return StringUtils.isEmpty(availableExternalFlag)
+            || availableExternalFlag.trim().equalsIgnoreCase("y");
     }
 
     private List<CaseFlagDto> filterCaseFlags(List<CaseFlagDto> caseFlagDtoList, boolean isAvailableExternalFlag) {
