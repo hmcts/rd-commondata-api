@@ -102,21 +102,21 @@ class CaseFlagServiceImplTest {
 
     @ParameterizedTest
     @CsvSource({
-        "XXXX,PARTY,N,false",
-        "XXXX,PARTY,Y,true",
-        "XXXX,PARTY,N,false"
+        "XXXX,PARTY,N,N",
+        "XXXX,PARTY,Y,Y",
+        "XXXX,PARTY,N,N"
     })
-    void testGetCaseFlags(String serviceId,String flagType,String welshRequired,
-                                                               boolean flag) {
+    void testGetCaseFlags(String serviceId,String flagType, String welshRequired,
+                                                               String flag) {
         when(caseFlagRepository.findAll(anyString()))
-            .thenReturn(getCaseFlagDtoListWithLanguageInterpreter());
+            .thenReturn(getCaseFlagDtoListWithLanguageInterpreter(getBooleanValue(flag)));
         when(listOfVenueRepository.findListOfValues(anyString()))
-            .thenReturn(getListOfValuesForLanguageInterPreter(flag));
-        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired, "");
+            .thenReturn(getListOfValuesForLanguageInterPreter(getBooleanValue(welshRequired)));
+        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId(serviceId, flagType, welshRequired, flag);
         assertNotNull(caseFlag);
         verify(caseFlagRepository, times(1)).findAll(anyString());
         verify(listOfVenueRepository, times(1)).findListOfValues(anyString());
-        verifyListOfValuesResponse(caseFlag, flag);
+        verifyListOfValuesResponse(caseFlag, getBooleanValue(flag));
     }
 
     @Test
@@ -392,7 +392,7 @@ class CaseFlagServiceImplTest {
         return caseFlagDtoList;
     }
 
-    List<CaseFlagDto> getCaseFlagDtoListWithLanguageInterpreter() {
+    List<CaseFlagDto> getCaseFlagDtoListWithLanguageInterpreter(boolean flag) {
         var caseFlagDto1 = new CaseFlagDto();
         caseFlagDto1.setFlagCode("CATEGORY");
         caseFlagDto1.setCategoryId(0);
@@ -414,7 +414,7 @@ class CaseFlagServiceImplTest {
         caseFlagDto2.setValueEn("Language Interpreter");
         caseFlagDto2.setValueCy("Language Interpreter");
         caseFlagDto2.setIsParent(false);
-        caseFlagDto1.setExternallyAvailable(false);
+        caseFlagDto1.setExternallyAvailable(flag);
         caseFlagDto1.setDefaultStatus("Requested");
 
         var caseFlagDtoList = new ArrayList<CaseFlagDto>();
@@ -544,6 +544,10 @@ class CaseFlagServiceImplTest {
         }
         assertEquals(2, caseFlag.getFlags()
             .get(0).getFlagDetails().get(0).getChildFlags().size());
+    }
+
+    private boolean getBooleanValue(String flag) {
+        return flag != null && flag.equalsIgnoreCase("y");
     }
 
     private List<CaseFlagDto> readFlagDetails() throws IOException {
