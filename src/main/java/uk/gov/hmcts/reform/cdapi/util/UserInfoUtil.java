@@ -14,7 +14,9 @@ public class UserInfoUtil {
                                                                      "pui-case-manager",
                                                                      "pui-caa",
                                                                      "prd-aac-system");
-    private UserInfoUtil() {}
+
+    private UserInfoUtil() {
+    }
 
     public static boolean hasPrdRoles(UserInfo userInfo) {
         if (userInfo != null) {
