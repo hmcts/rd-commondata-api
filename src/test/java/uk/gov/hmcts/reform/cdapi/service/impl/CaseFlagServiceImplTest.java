@@ -217,6 +217,31 @@ class CaseFlagServiceImplTest {
         validateCaseFlags(caseFlag, availableExternalFlag);
     }
 
+    @ParameterizedTest
+    @CsvSource({
+        "XXXX,PARTY,N,Y",
+    })
+    @DisplayName("Externally available should be ignored and return only flags with status externally available false")
+    void externallyAvailableFlagsShouldBeIgnoredForPrdRoleUser(String serviceId,
+                                                 String flagType,
+                                                 String welshRequired,
+                                                 String availableExternalFlag) throws IOException {
+
+        UserInfo userInfo = mock(UserInfo.class);
+        List<String> roles = new ArrayList<>();
+        roles.add("prd-admin");
+        when(userInfo.getRoles()).thenReturn(roles);
+        when(jwtGrantedAuthoritiesConverter.getUserInfo()).thenReturn(userInfo);
+
+        List<CaseFlagDto> caseFlagDtoList = readFlagDetails();
+        when(caseFlagRepository.findAll(anyString())).thenReturn(caseFlagDtoList);
+        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId(serviceId,
+                                                                   flagType,
+                                                                   welshRequired,
+                                                                   availableExternalFlag);
+        validateCaseFlags(caseFlag, "N");
+    }
+
     private void validateCaseFlags(CaseFlag caseFlags, String flag) {
         boolean externallyAvailable = (StringUtils.isNotEmpty(flag) && (flag.trim().equalsIgnoreCase("y")));
         assertNotNull(caseFlags);
