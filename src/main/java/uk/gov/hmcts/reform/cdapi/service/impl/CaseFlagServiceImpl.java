@@ -50,6 +50,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     @Override
     public CaseFlag retrieveCaseFlagByServiceId(String serviceId, String flagType,
                                                 String welshRequired, String availableExternalFlag) {
+        log.info("Service Id <<< >>>" + serviceId);
         var isAvailableExternalFlag = availableExternally(availableExternalFlag);
         var caseFlagDtoList = filterCaseFlags(caseFlagRepository.findAll(serviceId.trim().toUpperCase()),
                                               isAvailableExternalFlag);
