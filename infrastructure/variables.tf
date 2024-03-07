@@ -81,7 +81,7 @@ variable "force_schema_ownership_trigger" {
 }
 
 variable "kv_subscription" {
-  default     = "DCD-CNP-Prod"
+  default     = "DCD-CNP-DEV"
   type        = string
   description = "Update this with the name of the subscription where the single server key vault is. Defaults to DCD-CNP-DEV."
 }
