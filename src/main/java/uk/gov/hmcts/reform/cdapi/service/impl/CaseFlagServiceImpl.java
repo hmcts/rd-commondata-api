@@ -50,7 +50,6 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     @Override
     public CaseFlag retrieveCaseFlagByServiceId(String serviceId, String flagType,
                                                 String welshRequired, String availableExternalFlag) {
-        log.info("Service Id <<< >>>" + serviceId);
         var isAvailableExternalFlag = availableExternally(availableExternalFlag);
         var caseFlagDtoList = filterCaseFlags(caseFlagRepository.findAll(serviceId.trim().toUpperCase()),
                                               isAvailableExternalFlag);
@@ -77,13 +76,11 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         if (UserInfoUtil.hasPrdRoles(jwtGrantedAuthoritiesConverter.getUserInfo())) {
             return false;
         }
-        return StringUtils.isEmpty(availableExternalFlag)
-            || availableExternalFlag.trim().equalsIgnoreCase("y");
+        return StringUtils.isNotEmpty(availableExternalFlag) &&
+            availableExternalFlag.trim().equalsIgnoreCase("y");
     }
 
     private List<CaseFlagDto> filterCaseFlags(List<CaseFlagDto> caseFlagDtoList, boolean isAvailableExternalFlag) {
-        log.info("Data passed to filter size <<>>"+ caseFlagDtoList.size());
-        log.info("Data passed to filter <<>>"+ caseFlagDtoList);
         if (!isAvailableExternalFlag) {
             return caseFlagDtoList;
         }

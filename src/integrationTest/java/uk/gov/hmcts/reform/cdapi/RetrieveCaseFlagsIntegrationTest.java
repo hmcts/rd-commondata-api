@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.cdapi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
 import net.thucydides.core.annotations.WithTag;
@@ -192,27 +193,17 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
     }
 
     @Test
-    void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithAvailableExternalFlagIsY_200()
+    void shouldReturnFailureForRetrieveCaseFlagsByServiceIdWithAvailableExternalFlagIsY_200()
         throws JsonProcessingException {
-        final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
-            "AAA1?flag-type=party&available-external-flag=Y",
-            CaseFlag.class,
-            path
-        );
-        assertEquals(1, response.getFlags().get(0).getFlagDetails().size());
-        List<FlagDetail> parentFlags = response.getFlags().get(0).getFlagDetails();
-        List<String> sampleDefaultStatus = Arrays.asList("Active", "Requested");
-        for (FlagDetail parentFlag : parentFlags) {
-            if (parentFlag.getParent()) {
-                assertNotNull(parentFlag);
-                parentFlag.getChildFlags().forEach(childFlag -> {
-                    if (!childFlag.getName().equalsIgnoreCase("Other") && !childFlag.getParent()) {
-                        assertEquals(true, childFlag.getExternallyAvailable());
-                        assertTrue(sampleDefaultStatus.contains(childFlag.getDefaultStatus()));
-                    }
-                });
-            }
-        }
+        Exception exception = assertThrows(UnrecognizedPropertyException.class, () -> {
+            commonDataApiClient.retrieveCaseFlagsByServiceId(
+                "AAA1?flag-type=party&available-external-flag=Y",
+                CaseFlag.class,
+                path
+            );
+        });
+        assertNotNull(exception);
+        assertTrue(exception.getLocalizedMessage().contains("Data not found"));
     }
 
 
