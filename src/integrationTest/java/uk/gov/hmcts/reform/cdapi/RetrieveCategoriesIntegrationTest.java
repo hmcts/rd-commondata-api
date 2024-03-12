@@ -240,4 +240,62 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         assertThat(category.getActiveFlag()).isEqualTo("Y");
         assertNull(category.getChildNodes());
     }
+
+
+
+
+    @SuppressWarnings("unchecked")
+    @DisplayName("Retrieve categories for empty ServiceId ")
+    @ParameterizedTest
+    @ValueSource(strings = {" ", "XXXX", ""})
+    void retrieveCategoriesWithInvalidServiceIdWithStatusCode400(String serviceId)
+        throws JsonProcessingException {
+
+        var errorResponseMap = commonDataApiClient
+            .retrieveCaseFlagsByServiceId("CaseLinkingReasonCode?serviceId=" + serviceId,
+                                                                                ErrorResponse.class, path);
+        assertNotNull(errorResponseMap);
+        assertThat((Map<String, Object>)errorResponseMap).extractingByKey("response_body")
+                .hasFieldOrPropertyWithValue("errorDescription","Data not found");
+        assertThat((Map<String, Object>)errorResponseMap).extractingByKey("response_body")
+                .hasFieldOrPropertyWithValue("errorMessage","4 : Resource not found");
+        assertThat((Map<String, Object>) errorResponseMap).containsEntry("http_status", HttpStatus.NOT_FOUND);
+
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    @DisplayName("Retrieve categories for null ServiceId ")
+    void retrieveCategoriesWithNullServiceIdWithStatusCode400()
+        throws JsonProcessingException {
+
+        var errorResponseMap = commonDataApiClient.retrieveCaseFlagsByServiceId("CaseLinkingReasonCode?serviceId=null",
+                                                                                    ErrorResponse.class, path);
+        assertNotNull(errorResponseMap);
+        assertThat((Map<String, Object>)errorResponseMap).extractingByKey("response_body")
+                .hasFieldOrPropertyWithValue("errorDescription","Data not found");
+        assertThat((Map<String, Object>)errorResponseMap).extractingByKey("response_body")
+                .hasFieldOrPropertyWithValue("errorMessage","4 : Resource not found");
+        assertThat((Map<String, Object>) errorResponseMap).containsEntry("http_status", HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    @DisplayName("Retrieve categories for valid ServiceId ")
+    void shouldRetrieveCategoriesWithValidServiceIdWithStatusCode200()
+        throws JsonProcessingException {
+        final var response = (Categories)
+            commonDataApiClient.retrieveCaseFlagsByServiceId("CaseLinkingReasonCode?serviceId=ABA3",
+                                                             Categories.class, path
+            );
+        assertNotNull(response);
+        assertEquals(2, response.getListOfCategory().size());
+        assertThat(response.getListOfCategory().get(1).getKey()).isEqualTo("CLRC002");
+        assertThat(response.getListOfCategory().get(1).getValueEn()).isEqualTo("Related proceedings");
+        assertThat(response.getListOfCategory().get(1).getActiveFlag()).isEqualTo("Y");
+        assertThat(response.getListOfCategory().get(0).getKey()).isEqualTo("CLRC017");
+        assertThat(response.getListOfCategory().get(0).getValueEn()).isEqualTo("Linked for a hearing");
+        assertThat(response.getListOfCategory().get(0).getActiveFlag()).isEqualTo("Y");
+    }
+
+
 }
