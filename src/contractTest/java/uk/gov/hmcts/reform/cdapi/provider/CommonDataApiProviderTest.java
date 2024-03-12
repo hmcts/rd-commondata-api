@@ -25,17 +25,21 @@ import uk.gov.hmcts.reform.cdapi.domain.CaseFlagDto;
 import uk.gov.hmcts.reform.cdapi.domain.CategoryKey;
 import uk.gov.hmcts.reform.cdapi.domain.ListOfValue;
 import uk.gov.hmcts.reform.cdapi.domain.ListOfValueDto;
+import uk.gov.hmcts.reform.cdapi.oidc.JwtGrantedAuthoritiesConverter;
 import uk.gov.hmcts.reform.cdapi.repository.CaseFlagRepository;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfValuesRepository;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfVenueRepository;
 import uk.gov.hmcts.reform.cdapi.service.impl.CaseFlagServiceImpl;
 import uk.gov.hmcts.reform.cdapi.service.impl.CrdServiceImpl;
+import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.Objects.nonNull;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -65,6 +69,9 @@ public class CommonDataApiProviderTest {
     @MockBean
     ListOfValuesRepository listOfValuesRepository;
 
+    @MockBean
+    JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter;
+
     @TestTemplate
     @ExtendWith(PactVerificationInvocationContextProvider.class)
     void pactVerificationTestTemplate(PactVerificationContext context) {
@@ -81,6 +88,10 @@ public class CommonDataApiProviderTest {
         if (nonNull(context)) {
             context.setTarget(testTarget);
         }
+
+        UserInfo userInfo = mock(UserInfo.class);
+        when(userInfo.getRoles()).thenReturn(Collections.emptyList());
+        when(jwtGrantedAuthoritiesConverter.getUserInfo()).thenReturn(userInfo);
     }
 
     @State({"Case Flag Details Exist"})
