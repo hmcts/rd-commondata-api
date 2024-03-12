@@ -76,8 +76,8 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         if (UserInfoUtil.hasPrdRoles(jwtGrantedAuthoritiesConverter.getUserInfo())) {
             return false;
         }
-        return StringUtils.isNotEmpty(availableExternalFlag) &&
-            availableExternalFlag.trim().equalsIgnoreCase("y");
+        return StringUtils.isNotEmpty(availableExternalFlag)
+            && availableExternalFlag.trim().equalsIgnoreCase("y");
     }
 
     private List<CaseFlagDto> filterCaseFlags(List<CaseFlagDto> caseFlagDtoList, boolean isAvailableExternalFlag) {
