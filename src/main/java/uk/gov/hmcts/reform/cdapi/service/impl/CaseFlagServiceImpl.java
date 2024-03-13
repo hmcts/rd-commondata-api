@@ -18,7 +18,6 @@ import uk.gov.hmcts.reform.cdapi.oidc.JwtGrantedAuthoritiesConverter;
 import uk.gov.hmcts.reform.cdapi.repository.CaseFlagRepository;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfVenueRepository;
 import uk.gov.hmcts.reform.cdapi.service.CaseFlagService;
-import uk.gov.hmcts.reform.cdapi.util.UserInfoUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
