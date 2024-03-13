@@ -247,29 +247,20 @@ class CaseFlagServiceImplTest {
         boolean externallyAvailable = (StringUtils.isNotEmpty(flag) && (flag.trim().equalsIgnoreCase("y")));
         assertNotNull(caseFlags);
         assertNotNull(caseFlags.getFlags());
-        if (externallyAvailable) {
-            caseFlags.getFlags().stream().forEach(caseFlag -> {
-                assertNotNull(caseFlag.getFlagDetails());
-                List<FlagDetail> flagDetailsList = caseFlag.getFlagDetails();
-                flagDetailsList.stream().forEach(flagDetail -> {
-                    boolean flagExternallyAvailable = flagDetail.getExternallyAvailable();
+        caseFlags.getFlags().stream().forEach(caseFlag -> {
+            assertNotNull(caseFlag.getFlagDetails());
+            List<FlagDetail> flagDetailsList = caseFlag.getFlagDetails();
+            flagDetailsList.stream().forEach(flagDetail -> {
+                boolean flagExternallyAvailable = flagDetail.getExternallyAvailable();
+                if (externallyAvailable) {
                     assertThat(flagExternallyAvailable, anyOf(is(true)));
-                    assertTrue(flagDetail.getParent());
-                    validateChildFlags(flagDetail.getChildFlags(), externallyAvailable);
-                });
-            });
-        } else {
-            caseFlags.getFlags().stream().forEach(caseFlag -> {
-                assertNotNull(caseFlag.getFlagDetails());
-                List<FlagDetail> flagDetailsList = caseFlag.getFlagDetails();
-                flagDetailsList.stream().forEach(flagDetail -> {
-                    boolean flagExternallyAvailable = flagDetail.getExternallyAvailable();
+                } else {
                     assertThat(flagExternallyAvailable, anyOf(is(false), is(true)));
-                    assertTrue(flagDetail.getParent());
-                    validateChildFlags(flagDetail.getChildFlags(), externallyAvailable);
-                });
+                }
+                assertTrue(flagDetail.getParent());
+                validateChildFlags(flagDetail.getChildFlags(), externallyAvailable);
             });
-        }
+        });
     }
 
     private void validateChildFlags(List<FlagDetail> flagDetails,

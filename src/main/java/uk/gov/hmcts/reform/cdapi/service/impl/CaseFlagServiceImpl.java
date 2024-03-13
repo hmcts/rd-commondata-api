@@ -28,6 +28,7 @@ import static uk.gov.hmcts.reform.cdapi.controllers.constant.Constant.CATEGORY_K
 import static uk.gov.hmcts.reform.cdapi.controllers.constant.Constant.CATEGORY_KEY_SIGN_LANGUAGE;
 import static uk.gov.hmcts.reform.cdapi.controllers.constant.Constant.FLAG_PF0015;
 import static uk.gov.hmcts.reform.cdapi.controllers.constant.Constant.FLAG_RA0042;
+import static uk.gov.hmcts.reform.cdapi.util.UserInfoUtil.hasPrdRoles;
 
 @Service
 @Slf4j
@@ -73,7 +74,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     }
 
     private boolean availableExternally(String availableExternalFlag) {
-        if (UserInfoUtil.hasPrdRoles(jwtGrantedAuthoritiesConverter.getUserInfo())) {
+        if (hasPrdRoles(jwtGrantedAuthoritiesConverter.getUserInfo())) {
             return false;
         }
         return StringUtils.isNotEmpty(availableExternalFlag)
@@ -84,9 +85,9 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         if (!isAvailableExternalFlag) {
             return caseFlagDtoList;
         }
-        return caseFlagDtoList.parallelStream().filter(caseFlagDto -> {
+        return caseFlagDtoList.stream().filter(caseFlagDto -> {
             Boolean externallyAvailable = caseFlagDto.getExternallyAvailable();
-            return externallyAvailable == null || externallyAvailable.booleanValue() == true;
+            return externallyAvailable == null || externallyAvailable.booleanValue();
         }).toList();
     }
 
