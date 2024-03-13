@@ -406,7 +406,7 @@ dependencies {
     exclude group: 'junit', module: 'junit'
     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
   }
-  testImplementation("com.github.tomakehurst:wiremock-jre8:2.35.1") {
+  testImplementation("com.github.tomakehurst:wiremock-jre8:2.35.2") {
     exclude group: 'com.github.jknack'
   }
   testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0'
