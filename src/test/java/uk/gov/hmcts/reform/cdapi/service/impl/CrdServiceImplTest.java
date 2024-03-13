@@ -11,7 +11,6 @@ import org.springframework.data.jpa.domain.Specification;
 import uk.gov.hmcts.reform.cdapi.controllers.request.CategoryRequest;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
 import uk.gov.hmcts.reform.cdapi.domain.ListOfValueDto;
-import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
 import uk.gov.hmcts.reform.cdapi.helper.CrdTestSupport;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfValuesRepository;
 
@@ -182,7 +181,7 @@ class CrdServiceImplTest {
     }
 
     @Test
-    void shouldThrowNotFoundExceptionWithUnMappedParams() {
+    void shouldNotThrowNotFoundExceptionWithUnMappedParams() {
         List<ListOfValueDto> listOfValueDtos = new ArrayList<>();
 
         doReturn(listOfValueDtos).when(listOfValuesRepository)
@@ -190,7 +189,9 @@ class CrdServiceImplTest {
 
         CategoryRequest request = buildCategoryRequest("HearingChannel",  null, null,
                                                        null,null, "n");
-        assertThrows(ResourceNotFoundException.class, () -> crdServiceImpl.retrieveListOfValuesByCategory(request));
+        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
+        assertNotNull(result);
+        assertThat(result, hasSize(0));
     }
 
     @Test

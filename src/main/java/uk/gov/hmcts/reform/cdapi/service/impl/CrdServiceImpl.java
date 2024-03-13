@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.cdapi.controllers.request.CategoryRequest;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
 import uk.gov.hmcts.reform.cdapi.domain.ListOfValueDto;
-import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfValuesRepository;
 import uk.gov.hmcts.reform.cdapi.service.CrdService;
 
@@ -44,7 +43,13 @@ public class CrdServiceImpl implements CrdService {
 
         List<ListOfValueDto> list = listOfValuesRepository.findAll(query);
         if (list.isEmpty()) {
-            throw new ResourceNotFoundException("Data not found");
+            request.setServiceId("");
+            query = prepareBaseQuerySpecification(request);
+            if (isChildRequired) {
+                query = query.or(parentCategory(request.getCategoryId()).and(parentKey(request.getKey()))
+                                     .and(serviceId(request.getServiceId())));
+            }
+            list = listOfValuesRepository.findAll(query);
         }
 
         List<Category> channelList = convertCategoryList(list);
