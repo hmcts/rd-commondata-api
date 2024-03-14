@@ -1,5 +1,13 @@
 package uk.gov.hmcts.reform.cdapi;
 
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jxl.common.Assert;
 import net.thucydides.core.annotations.WithTag;
@@ -14,14 +22,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Categories;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
 import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
-
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(SpringExtension.class)
 @WithTags({@WithTag("testType:Integration")})
@@ -328,11 +328,27 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
     @Test
     @SuppressWarnings("unchecked")
     @DisplayName("Retrieve categories where Service Id provided does"
+        + " not exist and data exists with empty service ids for the category and isChildRequired N")
+    void retrieveCategoriesWithNotExistingServiceIdAndResultNotEmptyAndChildNotRequiredWithStatusCode200()
+        throws JsonProcessingException {
+        final var response = (Categories)
+            commonDataApiClient.retrieveCaseFlagsByServiceId("CaseLinkingReasonCode?isChildRequired=N&serviceId='XXX'",
+                                                             Categories.class, path);
+        assertNotNull(response);
+        assertEquals(1, response.getListOfCategory().size());
+        assertThat(response.getListOfCategory().get(0).getKey()).isEqualTo("CLRC006");
+        assertThat(response.getListOfCategory().get(0).getValueEn()).isEqualTo("Guardian");
+        assertThat(response.getListOfCategory().get(0).getActiveFlag()).isEqualTo("Y");
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    @DisplayName("Retrieve categories where Service Id provided does"
         + " not exist and no data exists with empty service ids for the category and isChildRequired Y")
     void retrieveCategoriesWithNotExistingServiceIdAndResultEmptyAnChildRequiredWithStatusCode200()
         throws JsonProcessingException {
         final var response = (Categories)
-            commonDataApiClient.retrieveCaseFlagsByServiceId("HearingChannel?isChildRequired=Y?serviceId='XXX'",
+            commonDataApiClient.retrieveCaseFlagsByServiceId("HearingChannel?isChildRequired=Y&serviceId='XXX'",
                                                              Categories.class, path);
         assertNotNull(response);
         assertEquals(0, response.getListOfCategory().size());
