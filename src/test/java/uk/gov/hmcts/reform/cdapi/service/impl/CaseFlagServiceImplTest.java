@@ -12,6 +12,9 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.ResourceUtils;
 import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
@@ -29,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.anyOf;
@@ -70,6 +74,12 @@ class CaseFlagServiceImplTest {
         ReflectionTestUtils.setField(caseFlagService, "flaglistLov",
                                      Arrays.asList("PF0015", "RA0042")
         );
+        Jwt jwt = Jwt.withTokenValue("test")
+            .header("alg", "RS256")
+            .claim("sub", UUID.randomUUID().toString())
+            .claim("emails", List.of("test.user@example.com", "test.user2@example.com"))
+            .build();
+        SecurityContextHolder.getContext().setAuthentication(new JwtAuthenticationToken(jwt));
     }
 
     @ParameterizedTest
