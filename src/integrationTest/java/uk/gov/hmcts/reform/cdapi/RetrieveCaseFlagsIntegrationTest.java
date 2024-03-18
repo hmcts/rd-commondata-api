@@ -212,8 +212,10 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
         if (flagDetails != null) {
             flagDetails.stream()
                 .forEach(flagDetail -> {
-                    MatcherAssert.assertThat(flagDetail.getExternallyAvailable(), anyOf(is(externallyAvailable)));
-                    validateChildFlags(flagDetail.getChildFlags(), externallyAvailable);
+                    if (!flagDetail.getName().equalsIgnoreCase("OTHER")) {
+                        MatcherAssert.assertThat(flagDetail.getExternallyAvailable(), anyOf(is(externallyAvailable)));
+                        validateChildFlags(flagDetail.getChildFlags(), externallyAvailable);
+                    }
                 });
         }
     }

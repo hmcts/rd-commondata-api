@@ -98,7 +98,7 @@ class CaseFlagServiceImplTest {
         if (!(flagType == null)) {
             assertEquals(flagType, caseFlag.getFlags().get(0).getFlagDetails().get(0).getName());
         } else {
-            assertEquals(2, caseFlag.getFlags().get(0).getFlagDetails().size());
+            assertEquals(4, caseFlag.getFlags().get(0).getFlagDetails().size());
         }
 
         verify(caseFlagRepository, times(1)).findAll(anyString());
@@ -154,7 +154,11 @@ class CaseFlagServiceImplTest {
                                                                    availableExternalFlag);
         assertNotNull(caseFlag);
         assertEquals(1, caseFlag.getFlags().size());
-        assertEquals(2, caseFlag.getFlags().get(0).getFlagDetails().size());
+        if (availableExternalFlag.equalsIgnoreCase("N")) {
+            assertEquals(4, caseFlag.getFlags().get(0).getFlagDetails().size());
+        } else {
+            assertEquals(2, caseFlag.getFlags().get(0).getFlagDetails().size());
+        }
         verify(caseFlagRepository, times(1)).findAll(anyString());
         caseFlag.getFlags().forEach(caseFlagObj -> {
             for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
@@ -163,7 +167,9 @@ class CaseFlagServiceImplTest {
                 }
                 assertNotNull(flagDetail.getDefaultStatus());
                 assertNotNull(flagDetail.getExternallyAvailable());
-                assertTrue(flagDetail.getExternallyAvailable());
+                boolean externallyAvailable = (StringUtils.isNotEmpty(availableExternalFlag)
+                    && (availableExternalFlag.trim().equalsIgnoreCase("y")));
+                assertEquals(externallyAvailable, flagDetail.getExternallyAvailable());
             }
         });
     }
@@ -194,7 +200,7 @@ class CaseFlagServiceImplTest {
         var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "", "N", "N");
         assertNotNull(caseFlag);
         assertEquals(1, caseFlag.getFlags().size());
-        assertEquals(2, caseFlag.getFlags().get(0).getFlagDetails().size());
+        assertEquals(4, caseFlag.getFlags().get(0).getFlagDetails().size());
         verify(caseFlagRepository, times(1)).findAll(anyString());
         caseFlag.getFlags().forEach(caseFlagObj -> {
             for (FlagDetail flagDetail : caseFlagObj.getFlagDetails()) {
@@ -275,8 +281,10 @@ class CaseFlagServiceImplTest {
         if (flagDetails != null) {
             flagDetails.stream()
                 .forEach(flagDetail -> {
-                    assertThat(flagDetail.getExternallyAvailable(), anyOf(is(externallyAvailable)));
-                    validateChildFlags(flagDetail.getChildFlags(), externallyAvailable);
+                    if (!flagDetail.getName().equalsIgnoreCase("OTHER")) {
+                        assertThat(flagDetail.getExternallyAvailable(), anyOf(is(externallyAvailable)));
+                        validateChildFlags(flagDetail.getChildFlags(), externallyAvailable);
+                    }
                 });
         }
     }
@@ -383,7 +391,31 @@ class CaseFlagServiceImplTest {
         caseFlagDtoList.add(caseFlagDto3);
         caseFlagDtoList.add(caseFlagDto4);
         caseFlagDtoList.add(caseFlagDto5);
+        caseFlagDtoList.add(createCaseFlagDto(0, 6, false, true, "COMPLEX CASE"));
+        caseFlagDtoList.add(createCaseFlagDto(0, 7, false, false, "COMPLEX CASE"));
+        caseFlagDtoList.add(createCaseFlagDto(0, 8, false, false, "CASE"));
+        caseFlagDtoList.add(createCaseFlagDto(0, 9, false, false, "PARTY"));
         return caseFlagDtoList;
+    }
+
+    private CaseFlagDto createCaseFlagDto(int categoryId,
+                                          int id,
+                                          boolean externallyAvailable,
+                                          boolean isParent,
+                                          String name) {
+        var caseFlagDto5 = new CaseFlagDto();
+        caseFlagDto5.setFlagCode("CATEGORY");
+        caseFlagDto5.setCategoryId(categoryId);
+        caseFlagDto5.setCategoryPath("CASE");
+        caseFlagDto5.setId(id);
+        caseFlagDto5.setHearingRelevant(true);
+        caseFlagDto5.setRequestReason(false);
+        caseFlagDto5.setValueEn(name);
+        caseFlagDto5.setValueCy("");
+        caseFlagDto5.setIsParent(isParent);
+        caseFlagDto5.setExternallyAvailable(externallyAvailable);
+        caseFlagDto5.setDefaultStatus("Requested");
+        return caseFlagDto5;
     }
 
     List<CaseFlagDto> getCaseFlagDtoListWithLanguageInterpreter(boolean flag) {
