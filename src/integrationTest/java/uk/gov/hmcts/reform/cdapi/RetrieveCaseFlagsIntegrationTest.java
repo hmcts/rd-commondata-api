@@ -6,22 +6,34 @@ import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
 import net.thucydides.core.annotations.WithTag;
 import net.thucydides.core.annotations.WithTags;
+import org.apache.commons.lang3.StringUtils;
+import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
 import uk.gov.hmcts.reform.cdapi.domain.FlagDetail;
 import uk.gov.hmcts.reform.cdapi.domain.FlagType;
 import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
+import uk.gov.hmcts.reform.cdapi.util.WireMockUtil;
+import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -130,6 +142,44 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
 
     @Test
     @SuppressWarnings("unchecked")
+    void shouldRetrieveCaseFlagForWelshRequiredFlagPrdRoleWithNStatusCode_200()
+        throws JsonProcessingException {
+        UserInfo userDetails = UserInfo.builder()
+            .uid(UUID.randomUUID().toString())
+            .givenName("Super")
+            .familyName("User")
+            .roles(List.of("pui-organisation-manager"))
+            .build();
+        idamService.stubFor(get(urlPathMatching("/o/userinfo"))
+                                .willReturn(aResponse()
+                                                .withStatus(200)
+                                                .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                                                .withBody(WireMockUtil.getObjectMapper()
+                                                              .writeValueAsString(userDetails))
+                                                .withTransformers("external_user-token-response")));
+
+        final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
+            "AAA1" + "?available-external-flag=n&welsh-required=n",
+            CaseFlag.class,
+            path
+        );
+        validateCaseFlags(response, "n");
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void shouldRetrieveCaseFlagForWithNStatusCode_200()
+        throws JsonProcessingException {
+        final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
+            "AAA1" + "?available-external-flag=y",
+            CaseFlag.class,
+            path
+        );
+        validateCaseFlags(response, "y");
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
     void shouldRetrieveCaseFlag_WelshRequiredWithNStatusCode_200()
         throws Exception {
         final var responseBody = commonDataApiClient.retrieveCaseFlagsByServiceIdJsonFormat(
@@ -139,6 +189,33 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
         );
 
         verifyWelshIsNorNullorEmpty(responseBody);
+    }
+
+    private void validateCaseFlags(CaseFlag caseFlags, String flag) {
+        boolean externallyAvailable = (StringUtils.isNotEmpty(flag) && (flag.trim().equalsIgnoreCase("y")));
+        assertNotNull(caseFlags);
+        assertNotNull(caseFlags.getFlags());
+        caseFlags.getFlags().stream().forEach(caseFlag -> {
+            assertNotNull(caseFlag.getFlagDetails());
+            List<FlagDetail> flagDetailsList = caseFlag.getFlagDetails();
+            flagDetailsList.stream().forEach(flagDetail -> {
+                boolean flagExternallyAvailable = flagDetail.getExternallyAvailable();
+                MatcherAssert.assertThat(flagExternallyAvailable, anyOf(is(externallyAvailable)));
+                assertTrue(flagDetail.getParent());
+                validateChildFlags(flagDetail.getChildFlags(), externallyAvailable);
+            });
+        });
+    }
+
+    private void validateChildFlags(List<FlagDetail> flagDetails,
+                                    boolean externallyAvailable) {
+        if (flagDetails != null) {
+            flagDetails.stream()
+                .forEach(flagDetail -> {
+                    MatcherAssert.assertThat(flagDetail.getExternallyAvailable(), anyOf(is(externallyAvailable)));
+                    validateChildFlags(flagDetail.getChildFlags(), externallyAvailable);
+                });
+        }
     }
 
     private void verifyWelshIsNorNullorEmpty(Object responseBody) throws Exception {
@@ -193,7 +270,7 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
     }
 
     @Test
-    void shouldReturnFailureForRetrieveCaseFlagsByServiceIdWithAvailableExternalFlagIsY_200()
+    void shouldReturnFailureForRetrieveCaseFlagsByServiceIdWithAvailableExternalFlagIsY()
         throws JsonProcessingException {
         Exception exception = assertThrows(UnrecognizedPropertyException.class, () -> {
             commonDataApiClient.retrieveCaseFlagsByServiceId(

@@ -6,6 +6,8 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
 import uk.gov.hmcts.reform.cdapi.domain.CaseFlagDto;
@@ -14,8 +16,8 @@ import uk.gov.hmcts.reform.cdapi.domain.FlagDetail;
 import uk.gov.hmcts.reform.cdapi.domain.ListOfValue;
 import uk.gov.hmcts.reform.cdapi.exception.InvalidRequestException;
 import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
-import uk.gov.hmcts.reform.cdapi.oidc.JwtGrantedAuthoritiesConverter;
 import uk.gov.hmcts.reform.cdapi.repository.CaseFlagRepository;
+import uk.gov.hmcts.reform.cdapi.repository.IdamRepository;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfVenueRepository;
 import uk.gov.hmcts.reform.cdapi.service.CaseFlagService;
 
@@ -40,7 +42,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     ListOfVenueRepository listOfVenueRepository;
 
     @Autowired
-    private JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter;
+    private IdamRepository idamRepository;
 
     @Value("${flaglist}")
     List<String> flaglistLov;
@@ -73,20 +75,22 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     }
 
     private boolean availableExternally(String availableExternalFlag) {
-        if (hasPrdRoles(jwtGrantedAuthoritiesConverter.getUserInfo())) {
+        if (hasPrdRoles(idamRepository.getUserInfo(getUserToken()))) {
             return false;
         }
         return StringUtils.isNotEmpty(availableExternalFlag)
             && availableExternalFlag.trim().equalsIgnoreCase("y");
     }
 
+    private String getUserToken() {
+        var jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return jwt.getTokenValue();
+    }
+
     private List<CaseFlagDto> filterCaseFlags(List<CaseFlagDto> caseFlagDtoList, boolean isAvailableExternalFlag) {
-        if (!isAvailableExternalFlag) {
-            return caseFlagDtoList;
-        }
         return caseFlagDtoList.stream().filter(caseFlagDto -> {
             Boolean externallyAvailable = caseFlagDto.getExternallyAvailable();
-            return externallyAvailable == null || externallyAvailable.booleanValue();
+            return externallyAvailable == null || externallyAvailable.booleanValue() == isAvailableExternalFlag;
         }).toList();
     }
 

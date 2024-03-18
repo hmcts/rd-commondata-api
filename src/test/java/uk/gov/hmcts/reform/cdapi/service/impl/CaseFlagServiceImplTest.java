@@ -19,8 +19,8 @@ import uk.gov.hmcts.reform.cdapi.domain.CaseFlagDto;
 import uk.gov.hmcts.reform.cdapi.domain.FlagDetail;
 import uk.gov.hmcts.reform.cdapi.domain.ListOfValue;
 import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
-import uk.gov.hmcts.reform.cdapi.oidc.JwtGrantedAuthoritiesConverter;
 import uk.gov.hmcts.reform.cdapi.repository.CaseFlagRepository;
+import uk.gov.hmcts.reform.cdapi.repository.IdamRepository;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfVenueRepository;
 import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
@@ -38,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -60,7 +61,7 @@ class CaseFlagServiceImplTest {
     ListOfVenueRepository listOfVenueRepository;
 
     @Mock
-    private JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter;
+    private IdamRepository idamRepository;
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -207,7 +208,7 @@ class CaseFlagServiceImplTest {
                                                  String availableExternalFlag) throws IOException {
         UserInfo userInfo = mock(UserInfo.class);
         when(userInfo.getRoles()).thenReturn(Collections.emptyList());
-        when(jwtGrantedAuthoritiesConverter.getUserInfo()).thenReturn(userInfo);
+        when(idamRepository.getUserInfo(any())).thenReturn(userInfo);
 
         List<CaseFlagDto> caseFlagDtoList = readFlagDetails();
         when(caseFlagRepository.findAll(anyString())).thenReturn(caseFlagDtoList);
@@ -232,7 +233,7 @@ class CaseFlagServiceImplTest {
         List<String> roles = new ArrayList<>();
         roles.add("prd-admin");
         when(userInfo.getRoles()).thenReturn(roles);
-        when(jwtGrantedAuthoritiesConverter.getUserInfo()).thenReturn(userInfo);
+        when(idamRepository.getUserInfo(any())).thenReturn(userInfo);
 
         List<CaseFlagDto> caseFlagDtoList = readFlagDetails();
         when(caseFlagRepository.findAll(anyString())).thenReturn(caseFlagDtoList);
@@ -252,11 +253,7 @@ class CaseFlagServiceImplTest {
             List<FlagDetail> flagDetailsList = caseFlag.getFlagDetails();
             flagDetailsList.stream().forEach(flagDetail -> {
                 boolean flagExternallyAvailable = flagDetail.getExternallyAvailable();
-                if (externallyAvailable) {
-                    assertThat(flagExternallyAvailable, anyOf(is(true)));
-                } else {
-                    assertThat(flagExternallyAvailable, anyOf(is(false), is(true)));
-                }
+                assertThat(flagExternallyAvailable, anyOf(is(externallyAvailable)));
                 assertTrue(flagDetail.getParent());
                 validateChildFlags(flagDetail.getChildFlags(), externallyAvailable);
             });
@@ -268,11 +265,7 @@ class CaseFlagServiceImplTest {
         if (flagDetails != null) {
             flagDetails.stream()
                 .forEach(flagDetail -> {
-                    if (externallyAvailable) {
-                        assertThat(flagDetail.getExternallyAvailable(), anyOf(is(true)));
-                    } else {
-                        assertThat(flagDetail.getExternallyAvailable(), anyOf(is(false), is(true)));
-                    }
+                    assertThat(flagDetail.getExternallyAvailable(), anyOf(is(externallyAvailable)));
                     validateChildFlags(flagDetail.getChildFlags(), externallyAvailable);
                 });
         }
