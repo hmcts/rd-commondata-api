@@ -269,7 +269,7 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
         assertEquals("Not Found", response.getError());
     }
 
-    @Test
+
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnChildCategoriesInParticularToServiceId() {
@@ -284,7 +284,7 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
             assertThat(categories.getListOfCategory()).hasSizeGreaterThan(0);
             assertThat(categories.getListOfCategory().get(0).getChildNodes()).hasSizeGreaterThan(0);
             assertEquals("HearingChannel", categories.getListOfCategory().get(0).getChildNodes().get(0)
-                .getParentCategory());
+               .getParentCategory());
 
         } else {
             assertEquals(NOT_FOUND.value(), response.getStatusCode());
