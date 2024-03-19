@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.cdapi.helper.CrdTestSupport;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfValuesRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,6 +27,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.powermock.api.mockito.PowerMockito.doNothing;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static uk.gov.hmcts.reform.cdapi.helper.CrdTestSupport.buildCategoryRequest;
 
@@ -371,6 +374,23 @@ class CrdServiceImplTest {
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
         assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
         assertEquals("y", result.get(0).getActiveFlag());
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void retrieveCategoriesCheckServiceIdsExist() {
+
+        Specification<ListOfValueDto> query = null;
+        CategoryRequest request = buildCategoryRequest("HearingChannel", "XXXXX", "telephone",
+                                                       null, null,"y");
+
+        doReturn(Collections.emptyList()).when(listOfValuesRepository).findAll(query);
+        List<ListOfValueDto> result = crdServiceImpl.checkServiceIdExists
+            (request,any(Specification.class),true);
+
+        assertNotNull(result);
+        assertEquals(0,result.size());
+
     }
 
 }

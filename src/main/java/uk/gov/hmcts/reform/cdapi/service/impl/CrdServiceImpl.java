@@ -36,28 +36,14 @@ public class CrdServiceImpl implements CrdService {
     public List<Category> retrieveListOfValuesByCategory(CategoryRequest request) {
         List<ListOfValueDto> list;
         boolean isChildRequired = isChildRequired(request);
-        Specification<ListOfValueDto> doesCategoryExistQuery = prepareCategoryExistsQuerySpecification(request);
-        list  = listOfValuesRepository.findAll(doesCategoryExistQuery);
-        if (request.getCategoryId() == null || request.getCategoryId().isEmpty() || list.isEmpty()) {
-            throw new ResourceNotFoundException("Data not found");
-        }
+        checkCategoryExists(request);
         Specification<ListOfValueDto> query = prepareBaseQuerySpecification(request);
         if (isChildRequired) {
             query = query.or(parentCategory(request.getCategoryId()).and(parentKey(request.getKey()))
                     .and(serviceId(request.getServiceId())));
         }
 
-        list  = listOfValuesRepository.findAll(query);
-
-        if (list.isEmpty()) {
-            request.setServiceId("");
-            query = prepareBaseQuerySpecification(request);
-            if (isChildRequired) {
-                query = query.or(parentCategory(request.getCategoryId()).and(parentKey(request.getKey()))
-                                         .and(serviceId(request.getServiceId())));
-            }
-            list = listOfValuesRepository.findAll(query);
-        }
+        list = checkServiceIdExists(request, query,isChildRequired);
 
         List<Category> channelList = convertCategoryList(list);
 
@@ -68,12 +54,37 @@ public class CrdServiceImpl implements CrdService {
         return channelList;
     }
 
-    private boolean isChildRequired(CategoryRequest request) {
+    public void checkCategoryExists(CategoryRequest request) {
+        Specification<ListOfValueDto> doesCategoryExistQuery = prepareCategoryExistsQuerySpecification(request);
+        List<ListOfValueDto> list  = listOfValuesRepository.findAll(doesCategoryExistQuery);
+        if (request.getCategoryId() == null || request.getCategoryId().isEmpty() || list.isEmpty()) {
+            throw new ResourceNotFoundException("Data not found");
+        }
+    }
+
+    public List<ListOfValueDto> checkServiceIdExists
+        (CategoryRequest request, Specification<ListOfValueDto> query,
+         boolean isChildRequired) {
+        List<ListOfValueDto> list  = listOfValuesRepository.findAll(query);
+
+        if (list.isEmpty()) {
+            request.setServiceId("");
+            query = prepareBaseQuerySpecification(request);
+            if (isChildRequired) {
+                query = query.or(parentCategory(request.getCategoryId()).and(parentKey(request.getKey()))
+                                     .and(serviceId(request.getServiceId())));
+            }
+            list = listOfValuesRepository.findAll(query);
+        }
+        return list;
+    }
+
+    public boolean isChildRequired(CategoryRequest request) {
         return "Y".equalsIgnoreCase(request.getIsChildRequired())
             && request.getParentCategory() == null && request.getParentKey() == null;
     }
 
-    private Specification<ListOfValueDto> prepareBaseQuerySpecification(CategoryRequest request) {
+    public Specification<ListOfValueDto> prepareBaseQuerySpecification(CategoryRequest request) {
         return where(categoryKey(request.getCategoryId()))
             .and(serviceId(request.getServiceId()))
             .and(parentCategory(request.getParentCategory()))
