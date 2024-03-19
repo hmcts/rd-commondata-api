@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.cdapi.controllers.request.CategoryRequest;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
 import uk.gov.hmcts.reform.cdapi.domain.ListOfValueDto;
+import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfValuesRepository;
 import uk.gov.hmcts.reform.cdapi.service.CrdService;
 
@@ -33,21 +34,27 @@ public class CrdServiceImpl implements CrdService {
 
     @Override
     public List<Category> retrieveListOfValuesByCategory(CategoryRequest request) {
+        List<ListOfValueDto> list;
         boolean isChildRequired = isChildRequired(request);
-
+        Specification<ListOfValueDto> doesCategoryExistQuery = prepareCategoryExistsQuerySpecification(request);
+        list  = listOfValuesRepository.findAll(doesCategoryExistQuery);
+        if (request.getCategoryId() == null || request.getCategoryId().isEmpty() || list.isEmpty()) {
+            throw new ResourceNotFoundException("Data not found");
+        }
         Specification<ListOfValueDto> query = prepareBaseQuerySpecification(request);
         if (isChildRequired) {
             query = query.or(parentCategory(request.getCategoryId()).and(parentKey(request.getKey()))
                     .and(serviceId(request.getServiceId())));
         }
 
-        List<ListOfValueDto> list = listOfValuesRepository.findAll(query);
+        list  = listOfValuesRepository.findAll(query);
+
         if (list.isEmpty()) {
             request.setServiceId("");
             query = prepareBaseQuerySpecification(request);
             if (isChildRequired) {
                 query = query.or(parentCategory(request.getCategoryId()).and(parentKey(request.getKey()))
-                                     .and(serviceId(request.getServiceId())));
+                                         .and(serviceId(request.getServiceId())));
             }
             list = listOfValuesRepository.findAll(query);
         }
@@ -72,6 +79,10 @@ public class CrdServiceImpl implements CrdService {
             .and(parentCategory(request.getParentCategory()))
             .and(parentKey(request.getParentKey()))
             .and(key(request.getKey()));
+    }
+
+    private Specification<ListOfValueDto> prepareCategoryExistsQuerySpecification(CategoryRequest request) {
+        return where(categoryKey(request.getCategoryId()));
     }
 
     private List<Category> mapToParentCategory(List<Category> channelList) {

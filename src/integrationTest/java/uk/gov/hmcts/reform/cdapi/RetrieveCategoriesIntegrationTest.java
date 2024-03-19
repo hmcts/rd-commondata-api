@@ -9,15 +9,21 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Categories;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
+import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
+import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
+
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
 @WithTags({@WithTag("testType:Integration")})
@@ -141,22 +147,20 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
     void shouldThrowStatusCode404ForInvalidCategoryId()
         throws JsonProcessingException {
 
-        final var response = (Categories) commonDataApiClient.retrieveCaseFlagsByServiceId(
-            "abc", Categories.class, path);
-        assertNotNull(response);
-        assertEquals(0, response.getListOfCategory().size());
-        assertTrue(response.getListOfCategory().isEmpty());
+        var errorResponseMap = commonDataApiClient.retrieveCaseFlagsByServiceId(
+            "abc", ErrorResponse.class, path);
+        assertNotNull(errorResponseMap);
+        assertThat((Map<String, Object>) errorResponseMap).containsEntry("http_status", HttpStatus.NOT_FOUND);
     }
 
     @Test
     @SuppressWarnings("unchecked")
     void shouldThrowStatusCode404ForNullCategoryId()
         throws JsonProcessingException {
-        final var response = (Categories) commonDataApiClient.retrieveCaseFlagsByServiceId(
-            null,Categories.class, path);
-        assertNotNull(response);
-        assertEquals(0, response.getListOfCategory().size());
-        assertTrue(response.getListOfCategory().isEmpty());
+        var errorResponseMap = commonDataApiClient.retrieveCaseFlagsByServiceId(
+            null,Map.class, path);
+        assertNotNull(errorResponseMap);
+        assertThat((Map<String, Object>) errorResponseMap).containsEntry("http_status", HttpStatus.NOT_FOUND);
     }
 
     private void responseVerification(Categories response) {
@@ -352,5 +356,34 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         assertEquals(0, response.getListOfCategory().size());
         assertTrue(response.getListOfCategory().isEmpty());
     }
+
+    @Test
+    @DisplayName("Retrieve data when category id provided is null or blank or whitespace")
+    @SuppressWarnings("unchecked")
+    void shouldThrowErrorWhenRetrievingDataForNotEsistingCategory()
+        throws JsonProcessingException {
+
+        var errorResponseMap = commonDataApiClient.retrieveCaseFlagsByServiceId(
+            "XXXXX?isChildRequired=Y&serviceId='XXX'", ErrorResponse.class, path);
+
+        assertNotNull(errorResponseMap);
+        assertThat((Map<String, Object>) errorResponseMap).containsEntry("http_status", HttpStatus.NOT_FOUND);
+    }
+
+
+    @Test
+    @DisplayName("Retrieve data when category id provided is null ")
+    @SuppressWarnings("unchecked")
+    void shouldThrowErrorWhenRetrievingDataForNullCategory()
+        throws JsonProcessingException {
+
+        var errorResponseMap = commonDataApiClient.retrieveCaseFlagsByServiceId(
+            null+"?isChildRequired=Y&serviceId='XXX'", ErrorResponse.class, path);
+
+        assertNotNull(errorResponseMap);
+        assertThat((Map<String, Object>) errorResponseMap).containsEntry("http_status", HttpStatus.NOT_FOUND);
+    }
+
+
 
 }
