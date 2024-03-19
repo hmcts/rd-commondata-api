@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.Specification;
 import uk.gov.hmcts.reform.cdapi.controllers.request.CategoryRequest;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
 import uk.gov.hmcts.reform.cdapi.domain.ListOfValueDto;
+import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
 import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
 import uk.gov.hmcts.reform.cdapi.helper.CrdTestSupport;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfValuesRepository;
@@ -352,15 +353,16 @@ class CrdServiceImplTest {
                                                       "Data not found"
         );
         assertNotNull(dataNotFoundException);
+        assertEquals("Data not found", dataNotFoundException.getMessage());
     }
 
     @Test
     @SuppressWarnings("unchecked")
     void retrieveCategoriesByServiceIdsNonExisting() {
         CategoryRequest request = buildCategoryRequest("HearingChannel", "XXXXX", "telephone",
-                                                       "HearingChannel", "telephone","y");
+                                                       null, null,"y");
         List<ListOfValueDto> listOfValueDtos = List.of(CrdTestSupport.createListOfCategoriesDtoMock(
-            "HearingChannel", "", "HearingChannel", "telephone", "telephone"));
+            "HearingChannel", "", null, null, "telephone"));
 
         when(listOfValuesRepository.findAll(any(Specification.class))).thenReturn(listOfValueDtos);
 
