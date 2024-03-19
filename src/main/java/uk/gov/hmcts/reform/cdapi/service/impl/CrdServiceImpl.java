@@ -81,7 +81,7 @@ public class CrdServiceImpl implements CrdService {
             .and(key(request.getKey()));
     }
 
-    private Specification<ListOfValueDto> prepareCategoryExistsQuerySpecification(CategoryRequest request) {
+    public Specification<ListOfValueDto> prepareCategoryExistsQuerySpecification(CategoryRequest request) {
         return where(categoryKey(request.getCategoryId()));
     }
 
@@ -98,7 +98,7 @@ public class CrdServiceImpl implements CrdService {
         return channelList;
     }
 
-    private List<Category> convertCategoryList(List<ListOfValueDto> listOfValueDtos) {
+    public List<Category> convertCategoryList(List<ListOfValueDto> listOfValueDtos) {
         return listOfValueDtos.stream()
             .map(dto -> Category.builder()
                 .categoryKey(dto.getCategoryKey().getCategoryKey())
