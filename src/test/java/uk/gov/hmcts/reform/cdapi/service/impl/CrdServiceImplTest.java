@@ -362,11 +362,7 @@ class CrdServiceImplTest {
         List<ListOfValueDto> listOfValueDtos = List.of(CrdTestSupport.createListOfCategoriesDtoMock(
             "HearingChannel", "", "HearingChannel", "telephone", "telephone"));
 
-        when(crdServiceImpl.prepareCategoryExistsQuerySpecification(request)).thenReturn(any(Specification.class));
-
         when(listOfValuesRepository.findAll(any(Specification.class))).thenReturn(listOfValueDtos);
-
-        when(crdServiceImpl.prepareCategoryExistsQuerySpecification(request)).thenReturn(any(Specification.class));
 
         List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
 
