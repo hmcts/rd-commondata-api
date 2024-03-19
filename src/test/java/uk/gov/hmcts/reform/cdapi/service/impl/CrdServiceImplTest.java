@@ -368,8 +368,6 @@ class CrdServiceImplTest {
 
         when(crdServiceImpl.prepareCategoryExistsQuerySpecification(request)).thenReturn(any(Specification.class));
 
-        when(crdServiceImpl.convertCategoryList(listOfValueDtos)).thenReturn(any(List.class));
-
         List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
 
         assertNotNull(result);
