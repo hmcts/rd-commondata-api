@@ -11,7 +11,6 @@ import org.springframework.data.jpa.domain.Specification;
 import uk.gov.hmcts.reform.cdapi.controllers.request.CategoryRequest;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
 import uk.gov.hmcts.reform.cdapi.domain.ListOfValueDto;
-import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
 import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
 import uk.gov.hmcts.reform.cdapi.helper.CrdTestSupport;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfValuesRepository;
