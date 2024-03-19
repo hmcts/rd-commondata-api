@@ -14,7 +14,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Categories;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
 import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
-import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
 
 import java.util.Map;
 
@@ -23,7 +22,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
 @WithTags({@WithTag("testType:Integration")})
@@ -378,7 +376,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         throws JsonProcessingException {
 
         var errorResponseMap = commonDataApiClient.retrieveCaseFlagsByServiceId(
-            null+"?isChildRequired=Y&serviceId='XXX'", ErrorResponse.class, path);
+            null + "?isChildRequired=Y&serviceId='XXX'", ErrorResponse.class, path);
 
         assertNotNull(errorResponseMap);
         assertThat((Map<String, Object>) errorResponseMap).containsEntry("http_status", HttpStatus.NOT_FOUND);
