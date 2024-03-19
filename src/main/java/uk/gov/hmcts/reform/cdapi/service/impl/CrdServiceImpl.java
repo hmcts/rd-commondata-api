@@ -62,9 +62,8 @@ public class CrdServiceImpl implements CrdService {
         }
     }
 
-    public List<ListOfValueDto> checkServiceIdExists
-        (CategoryRequest request, Specification<ListOfValueDto> query,
-         boolean isChildRequired) {
+    public List<ListOfValueDto> checkServiceIdExists(CategoryRequest request, Specification<ListOfValueDto> query,
+                                                      boolean isChildRequired) {
         List<ListOfValueDto> list  = listOfValuesRepository.findAll(query);
 
         if (list.isEmpty()) {

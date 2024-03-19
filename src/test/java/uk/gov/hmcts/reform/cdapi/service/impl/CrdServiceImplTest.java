@@ -27,8 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.powermock.api.mockito.PowerMockito.doNothing;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static uk.gov.hmcts.reform.cdapi.helper.CrdTestSupport.buildCategoryRequest;
 
@@ -385,8 +383,7 @@ class CrdServiceImplTest {
                                                        null, null,"y");
 
         doReturn(Collections.emptyList()).when(listOfValuesRepository).findAll(query);
-        List<ListOfValueDto> result = crdServiceImpl.checkServiceIdExists
-            (request,any(Specification.class),true);
+        List<ListOfValueDto> result = crdServiceImpl.checkServiceIdExists(request,any(Specification.class), true);
 
         assertNotNull(result);
         assertEquals(0,result.size());
