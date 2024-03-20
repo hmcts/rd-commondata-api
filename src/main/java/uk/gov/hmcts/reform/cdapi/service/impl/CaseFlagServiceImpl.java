@@ -88,9 +88,12 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     }
 
     private List<CaseFlagDto> filterCaseFlags(List<CaseFlagDto> caseFlagDtoList, boolean isAvailableExternalFlag) {
+        if (!isAvailableExternalFlag) {
+            return caseFlagDtoList;
+        }
         return caseFlagDtoList.stream().filter(caseFlagDto -> {
             Boolean externallyAvailable = caseFlagDto.getExternallyAvailable();
-            return externallyAvailable == null || externallyAvailable.booleanValue() == isAvailableExternalFlag;
+            return externallyAvailable == null || externallyAvailable.booleanValue();
         }).toList();
     }
 
