@@ -275,7 +275,7 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
     void shouldReturnChildCategoriesInParticularToServiceId() {
         Response response =
             commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, PARAM_HEARING_WITH_PARAM_SIGN
-                + "isChildRequired=n&serviceId=BBA3&key=VID");
+                + "isChildRequired=y&serviceId=BBA3&key=VID");
 
         if (OK.value() == response.getStatusCode()) {
             var categories = response.getBody().as(Categories.class);
