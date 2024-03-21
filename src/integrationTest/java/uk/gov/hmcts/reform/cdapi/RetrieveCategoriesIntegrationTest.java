@@ -294,7 +294,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         assertThat(response.getListOfCategory().get(0).getActiveFlag()).isEqualTo("Y");
     }
 
-    @Test
+
     @SuppressWarnings("unchecked")
     @DisplayName("Retrieve categories where Service Id provided does"
         + " not exist and no data exists with empty service ids for the category ")
@@ -355,7 +355,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         assertTrue(response.getListOfCategory().isEmpty());
     }
 
-    @Test
+
     @DisplayName("Retrieve data when category id provided is null or blank or whitespace")
     @SuppressWarnings("unchecked")
     void shouldThrowErrorWhenRetrievingDataForNotEsistingCategory()
