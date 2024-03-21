@@ -356,35 +356,5 @@ class CrdServiceImplTest {
     }
 
 
-    void retrieveCategoriesByServiceIdsNonExisting() {
-        CategoryRequest request = buildCategoryRequest("HearingChannel", "XXXXX", "telephone",
-                                                       null, null,"y");
-        List<ListOfValueDto> listOfValueDtos = List.of(CrdTestSupport.createListOfCategoriesDtoMock(
-            "HearingChannel", "", null, null, "telephone"));
-
-        when(listOfValuesRepository.findAll(any(Specification.class))).thenReturn(listOfValueDtos);
-
-        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
-
-        assertNotNull(result);
-        assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
-        assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
-        assertEquals("y", result.get(0).getActiveFlag());
-    }
-
-
-    void retrieveCategoriesCheckServiceIdsExist() {
-
-        Specification<ListOfValueDto> query = null;
-        CategoryRequest request = buildCategoryRequest("HearingChannel", "XXXXX", "telephone",
-                                                       null, null,"y");
-
-        doReturn(Collections.emptyList()).when(listOfValuesRepository).findAll(query);
-        List<ListOfValueDto> result = crdServiceImpl.checkServiceIdExists(request,any(Specification.class), true);
-
-        assertNotNull(result);
-        assertEquals(0,result.size());
-
-    }
 
 }
