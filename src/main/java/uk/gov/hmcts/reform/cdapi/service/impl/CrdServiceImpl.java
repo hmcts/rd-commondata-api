@@ -55,7 +55,7 @@ public class CrdServiceImpl implements CrdService {
         log.info("***************** channelList:: " + channelList.size());
         log.info("***************** channelList:: " + channelList.get(0).getKey());
         log.info("***************** channelList:: " + channelList.get(0).getCategoryKey());
-        log.info("***************** channelList:: " + channelList.get(0).getChildNodes().size());
+        //log.info("***************** channelList:: " + channelList.get(0).getChildNodes().size());
         return channelList;
     }
 
