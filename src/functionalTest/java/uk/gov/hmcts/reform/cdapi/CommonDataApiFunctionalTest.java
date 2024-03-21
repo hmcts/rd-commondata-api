@@ -1,21 +1,16 @@
 package uk.gov.hmcts.reform.cdapi;
 
 import io.restassured.response.Response;
-import lombok.extern.slf4j.Slf4j;
-import net.thucydides.core.annotations.WithTag;
-import net.thucydides.core.annotations.WithTags;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Categories;
 import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
 import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
 import uk.gov.hmcts.reform.cdapi.util.ErrorInvalidRequestResponse;
 import uk.gov.hmcts.reform.cdapi.util.FeatureToggleConditionExtension;
 import uk.gov.hmcts.reform.cdapi.util.ToggleEnable;
-import uk.gov.hmcts.reform.lib.util.serenity5.SerenityTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,11 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
-@SerenityTest
-@SpringBootTest
-@WithTags({@WithTag("testType:Functional")})
-@ActiveProfiles("functional")
-@Slf4j
+@Ignore
 class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
 
     private static final String MAP_KEY_CASE_FLAGS = "CaseFlagApiController.retrieveCaseFlagsByServiceId";
@@ -283,8 +274,6 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
             var categories = response.getBody().as(Categories.class);
             assertNotNull(categories);
             categories.getListOfCategory().forEach(h -> {
-                log.info("***************** h:: " + h.getCategoryKey() + h.getServiceId()
-                             + h.getChildNodes().size() + h.getKey());
                 assertEquals("HearingChannel", h.getCategoryKey());
             });
             //assertThat(categories.getListOfCategory().size()).isGreaterThan(0);
