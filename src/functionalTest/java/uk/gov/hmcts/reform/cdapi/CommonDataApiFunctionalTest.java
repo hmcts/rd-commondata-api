@@ -281,7 +281,7 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
             var categories = response.getBody().as(Categories.class);
             assertNotNull(categories);
             categories.getListOfCategory().forEach(h -> assertEquals("HearingChannel", h.getCategoryKey()));
-            //assertThat(categories.getListOfCategory()).hasSizeGreaterThan(0);
+            assertThat(categories.getListOfCategory().size()).isGreaterThan(0);
             // assertThat(categories.getListOfCategory().get(0).getChildNodes()).hasSizeGreaterThan(0);
             // assertEquals("HearingChannel", categories.getListOfCategory()
             // .get(0).getChildNodes().get(0).getParentCategory());
