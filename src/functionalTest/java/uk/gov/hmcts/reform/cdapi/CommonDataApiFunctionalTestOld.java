@@ -1,15 +1,21 @@
 package uk.gov.hmcts.reform.cdapi;
 
 import io.restassured.response.Response;
+import lombok.extern.slf4j.Slf4j;
+import net.thucydides.core.annotations.WithTag;
+import net.thucydides.core.annotations.WithTags;
 import org.junit.Ignore;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Categories;
 import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
 import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
 import uk.gov.hmcts.reform.cdapi.util.ErrorInvalidRequestResponse;
 import uk.gov.hmcts.reform.cdapi.util.FeatureToggleConditionExtension;
 import uk.gov.hmcts.reform.cdapi.util.ToggleEnable;
+import uk.gov.hmcts.reform.lib.util.serenity5.SerenityTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,7 +25,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
-@Ignore
+@SerenityTest
+@SpringBootTest
+@WithTags({@WithTag("testType:Functional")})
+@ActiveProfiles("functional")
+@Slf4j
 class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
 
     private static final String MAP_KEY_CASE_FLAGS = "CaseFlagApiController.retrieveCaseFlagsByServiceId";
@@ -267,7 +277,7 @@ class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
     void shouldReturnChildCategoriesInParticularToServiceId() {
         Response response =
             commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, "/HearingChannel?"
-                + "isChildRequired=y&serviceId=BBA3&key=VID");
+                + "isChildRequired=y&serviceId=BBA3&key=telephone");
 
         if (OK.value() == response.getStatusCode()) {
             var categories = response.getBody().as(Categories.class);
@@ -275,11 +285,11 @@ class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
             categories.getListOfCategory().forEach(h -> {
                 assertEquals("HearingChannel", h.getCategoryKey());
             });
-            //assertThat(categories.getListOfCategory().size()).isGreaterThan(0);
-            //assertNotNull(categories.getListOfCategory().get(0).getChildNodes());
-            //assertThat(categories.getListOfCategory().get(0).getChildNodes()).hasSizeGreaterThan(0);
-            //assertEquals("HearingChannel", categories.getListOfCategory().get(0).getChildNodes().get(0)
-            //.getParentCategory());
+            assertThat(categories.getListOfCategory().size()).isGreaterThan(0);
+            assertNotNull(categories.getListOfCategory().get(0).getChildNodes());
+            assertThat(categories.getListOfCategory().get(0).getChildNodes()).hasSizeGreaterThan(0);
+            assertEquals("HearingChannel", categories.getListOfCategory().get(0).getChildNodes().get(0)
+            .getParentCategory());
 
         } else {
             assertEquals(NOT_FOUND.value(), response.getStatusCode());
