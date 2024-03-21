@@ -108,7 +108,7 @@ public class CrdServiceImpl implements CrdService {
             Collectors.groupingBy(h -> StringUtils.isEmpty(h.getParentKey()) ? PARENT
                                       : h.getParentKey() + h.getParentCategory() + h.getServiceId(), HashMap::new,
                                   Collectors.toCollection(ArrayList::new)));
-        log.info("result.get(PARENT) {}", result.get(PARENT));
+        log.info("result.get(PARENT) {}", result.toString());
         if (result.get(PARENT) != null) {
             result.get(PARENT).forEach(channel -> channel.setChildNodes(result.get(channel.getKey() + channel
                 .getCategoryKey() + channel.getServiceId())));
