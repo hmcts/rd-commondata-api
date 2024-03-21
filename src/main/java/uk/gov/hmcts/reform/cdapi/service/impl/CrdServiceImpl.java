@@ -54,11 +54,12 @@ public class CrdServiceImpl implements CrdService {
         if (isChildRequired) {
             channelList = mapToParentCategory(channelList);
         }
-        log.info("***************** channelList:: " + channelList.size());
-        log.info("***************** channelList:: " + channelList.get(0).getKey());
-        log.info("***************** channelList:: " + channelList.get(0).getCategoryKey());
+
         if (channelList.get(0).getChildNodes() != null) {
             log.info("***************** channelList:: " + channelList.get(0).getChildNodes().size());
+            log.info("***************** channelList:: " + channelList.size());
+            log.info("***************** channelList:: " + channelList.get(0).getServiceId());
+            log.info("***************** channelList:: " + channelList.get(0).getCategoryKey());
         }
         return channelList;
     }

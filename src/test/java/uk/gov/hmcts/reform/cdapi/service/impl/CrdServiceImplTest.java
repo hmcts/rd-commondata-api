@@ -1,7 +1,38 @@
 package uk.gov.hmcts.reform.cdapi.service.impl;
 
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.jpa.domain.Specification;
+import uk.gov.hmcts.reform.cdapi.controllers.request.CategoryRequest;
+import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
+import uk.gov.hmcts.reform.cdapi.domain.ListOfValueDto;
+import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
+import uk.gov.hmcts.reform.cdapi.helper.CrdTestSupport;
+import uk.gov.hmcts.reform.cdapi.repository.ListOfValuesRepository;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
+import static org.powermock.api.mockito.PowerMockito.when;
+import static uk.gov.hmcts.reform.cdapi.helper.CrdTestSupport.buildCategoryRequest;
+
+@ExtendWith(MockitoExtension.class)
 class CrdServiceImplTest {
-/*
+
     @InjectMocks
     CrdServiceImpl crdServiceImpl;
 
@@ -352,12 +383,12 @@ class CrdServiceImplTest {
                                                        null, null,"y");
 
         doReturn(Collections.emptyList()).when(listOfValuesRepository).findAll(query);
-        List<ListOfValueDto> result = crdServiceImpl.checkServiceIdExists
-            (request,any(Specification.class),true);
+        List<ListOfValueDto> result = crdServiceImpl.checkServiceIdExists(
+            request,any(Specification.class),true);
 
         assertNotNull(result);
         assertEquals(0,result.size());
 
     }
-*/
+
 }
