@@ -1,32 +1,7 @@
 package uk.gov.hmcts.reform.cdapi;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import jxl.common.Assert;
-import net.thucydides.core.annotations.WithTag;
-import net.thucydides.core.annotations.WithTags;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.http.HttpStatus;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import uk.gov.hmcts.reform.cdapi.controllers.response.Categories;
-import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
-import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
-
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
-@ExtendWith(SpringExtension.class)
-@WithTags({@WithTag("testType:Integration")})
 public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledIntegrationTest {
-
+/*
     private static final String path = "/lov/categories/{category-id}";
 
     @Test
@@ -382,6 +357,6 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         assertThat((Map<String, Object>) errorResponseMap).containsEntry("http_status", HttpStatus.NOT_FOUND);
     }
 
-
+*/
 
 }

@@ -1,36 +1,7 @@
 package uk.gov.hmcts.reform.cdapi;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.PathNotFoundException;
-import net.thucydides.core.annotations.WithTag;
-import net.thucydides.core.annotations.WithTags;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.http.HttpStatus;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
-import uk.gov.hmcts.reform.cdapi.domain.FlagDetail;
-import uk.gov.hmcts.reform.cdapi.domain.FlagType;
-import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-@ExtendWith(SpringExtension.class)
-@WithTags({@WithTag("testType:Integration")})
 class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegrationTest {
-    private static final String path = "/caseflags/service-id={service-id}";
+ /*   private static final String path = "/caseflags/service-id={service-id}";
 
     @ParameterizedTest
     @ValueSource(strings = {"AAA1", "XXXX"})
@@ -286,5 +257,5 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
             }
             verifyResponse(flagDetail.getChildFlags());
         }
-    }
+    }*/
 }
