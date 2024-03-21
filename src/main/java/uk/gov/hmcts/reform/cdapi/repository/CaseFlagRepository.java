@@ -92,5 +92,5 @@ public interface CaseFlagRepository extends JpaRepository<CaseFlagDto, Long> {
         + "         ON r.id = q.id "
         + "      WHERE r.category_id = 0 "
         + "ORDER BY 1", nativeQuery = true)
-    List<CaseFlagDto> findAll(@Param("serviceId") String serviceId, @Param("externallyAvailable") String externallyAvailable);
+    List<CaseFlagDto> findAll(@Param("serviceId") String serviceId, @Param("externallyAvailable") Boolean externallyAvailable);
 }

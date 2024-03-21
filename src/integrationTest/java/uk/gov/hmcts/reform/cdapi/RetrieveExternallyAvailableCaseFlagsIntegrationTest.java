@@ -1,10 +1,8 @@
 package uk.gov.hmcts.reform.cdapi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import net.thucydides.core.annotations.WithTag;
 import net.thucydides.core.annotations.WithTags;
-import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +23,6 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
@@ -56,22 +53,21 @@ public class RetrieveExternallyAvailableCaseFlagsIntegrationTest extends CdAutho
             CaseFlag.class,
             path
         );
-        validateCaseFlags(response, "n");
+        validateCaseFlags(response, false);
     }
 
     @Test
-    void shouldReturnFailureForRetrieveCaseFlagsByServiceIdWithAvailableExternalFlagIsY() {
-        Exception exception = assertThrows(UnrecognizedPropertyException.class, () -> commonDataApiClient.retrieveCaseFlagsByServiceId(
-            "AAA1?flag-type=party&available-external-flag=Y",
+    void shouldReturnFailureForRetrieveCaseFlagsByServiceIdWithAvailableExternalFlagIsY()
+        throws JsonProcessingException {
+        final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
+            "AAA1" + "?flag-type=party&available-external-flag=y",
             CaseFlag.class,
             path
-        ));
-        assertNotNull(exception);
-        assertTrue(exception.getLocalizedMessage().contains("Data not found"));
+        );
+        validateCaseFlags(response, true);
     }
 
-    private void validateCaseFlags(CaseFlag caseFlags, String flag) {
-        boolean externallyAvailable = (StringUtils.isNotEmpty(flag) && (flag.trim().equalsIgnoreCase("y")));
+    private void validateCaseFlags(CaseFlag caseFlags, boolean externallyAvailable) {
         assertNotNull(caseFlags);
         assertNotNull(caseFlags.getFlags());
         caseFlags.getFlags().stream().forEach(caseFlag -> {
