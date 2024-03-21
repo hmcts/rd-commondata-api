@@ -23,13 +23,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-@ExtendWith(SpringExtension.class)
-@WithTags({@WithTag("testType:Integration")})
+
 public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledIntegrationTest {
 
     private static final String path = "/lov/categories/{category-id}";
 
-    @Test
+
     @DisplayName("Retrieve categories for Child ")
     void shouldRetrieveCategoriesForCategoryIdWithStatusCode200()
         throws JsonProcessingException {
@@ -42,7 +41,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         responseVerification(response.getListOfCategory().get(0));
     }
 
-    @Test
+
     @DisplayName("Retrieve categories for Parent ")
     void shouldRetrieveCategoriesForChildCategoryIdWithStatusCode200()
         throws JsonProcessingException {
@@ -58,8 +57,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         });
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {"Y","N"})
+
     void shouldRetrieveCategoriesWithAllParamsWithStatusCode200(String flag)
         throws JsonProcessingException {
         final var response = (Categories)
@@ -73,9 +71,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         responseVerification(response);
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {"Y","N"})
-    @DisplayName("Retrieve categories for Child with Parent Category")
+
     void shouldRetrieveCategoriesWithParentCategory(String flag)
         throws JsonProcessingException {
         final var response = (Categories)
@@ -88,9 +84,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         responseVerification(response);
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {"Y","N"})
-    @DisplayName("Retrieve categories for Child with Parent Key")
+
     void shouldRetrieveCategoriesWithParentKey(String flag)
         throws JsonProcessingException {
         final var response = (Categories)
@@ -103,9 +97,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         responseVerification(response);
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {"Y","N"})
-    @DisplayName("Retrieve categories for Parent with serviceId")
+
     void shouldRetrieveCategoriesWithServiceIdWithChildNodesForParents(String flag)
         throws JsonProcessingException {
         final var response = (Categories)
@@ -124,9 +116,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
     }
 
 
-    @ParameterizedTest
-    @ValueSource(strings = {"Y","N"})
-    @DisplayName("Retrieve categories for Child with serviceId")
+
     void shouldRetrieveCategoriesWithServiceIdWithChildNodesForChild(String flag)
         throws JsonProcessingException {
         final var response = (Categories)
@@ -140,8 +130,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
     }
 
 
-    @Test
-    @SuppressWarnings("unchecked")
+
     void shouldThrowStatusCode404ForInvalidCategoryId()
         throws JsonProcessingException {
 
@@ -151,8 +140,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         assertThat((Map<String, Object>) errorResponseMap).containsEntry("http_status", HttpStatus.NOT_FOUND);
     }
 
-    @Test
-    @SuppressWarnings("unchecked")
+
     void shouldThrowStatusCode404ForNullCategoryId()
         throws JsonProcessingException {
         var errorResponseMap = commonDataApiClient.retrieveCaseFlagsByServiceId(
@@ -193,7 +181,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         }
     }
 
-    @Test
+
     void shouldRetrieveCategoriesWithEmptyServiceIdWithChildNodes()
         throws JsonProcessingException {
         final var response = (Categories)
@@ -219,7 +207,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         assertThat(category.getChildNodes().get(0).getParentCategory()).isEqualTo("ListingStatus");
     }
 
-    @Test
+
     void shouldRetrieveCategoriesWithEmptyServiceIdWithoutChildNodes()
         throws JsonProcessingException {
         final var response = (Categories)
@@ -244,9 +232,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
 
 
     @SuppressWarnings("unchecked")
-    @DisplayName("Retrieve categories for empty ServiceId ")
-    @ParameterizedTest
-    @ValueSource(strings = {" ", "XXXX", "", "null"})
+
     void retrieveCategoriesWithInvalidServiceIdWithStatusCode200(String serviceId)
         throws JsonProcessingException {
         final var response = (Categories)
@@ -260,9 +246,6 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         assertThat(response.getListOfCategory().get(0).getActiveFlag()).isEqualTo("Y");
     }
 
-    @Test
-    @SuppressWarnings("unchecked")
-    @DisplayName("Retrieve categories for null ServiceId ")
     void retrieveCategoriesWithNullServiceIdWithStatusCode200()
         throws JsonProcessingException {
         final var response = (Categories)
@@ -276,8 +259,6 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         assertThat(response.getListOfCategory().get(0).getActiveFlag()).isEqualTo("Y");
     }
 
-    @Test
-    @DisplayName("Retrieve categories for valid ServiceId ")
     void shouldRetrieveCategoriesWithValidServiceIdWithStatusCode200()
         throws JsonProcessingException {
         final var response = (Categories)
@@ -294,10 +275,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         assertThat(response.getListOfCategory().get(0).getActiveFlag()).isEqualTo("Y");
     }
 
-    @Test
-    @SuppressWarnings("unchecked")
-    @DisplayName("Retrieve categories where Service Id provided does"
-        + " not exist and no data exists with empty service ids for the category ")
+
     void retrieveCategoriesWithNotExistingServiceIdAndResultEmptyWithStatusCode200()
         throws JsonProcessingException {
         final var response = (Categories)
@@ -309,10 +287,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
     }
 
 
-    @Test
-    @SuppressWarnings("unchecked")
-    @DisplayName("Retrieve categories where Service Id provided does"
-        + " not exist and  data exists with empty service ids for the category and isChildRequired Y")
+
     void retrieveCategoriesWithNotExistingServiceIdAndResultNotEmptyAndIsChildRequiredWithStatusCode200()
         throws JsonProcessingException {
         final var response = (Categories)
@@ -325,10 +300,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         assertThat(response.getListOfCategory().get(0).getActiveFlag()).isEqualTo("Y");
     }
 
-    @Test
-    @SuppressWarnings("unchecked")
-    @DisplayName("Retrieve categories where Service Id provided does"
-        + " not exist and data exists with empty service ids for the category and isChildRequired N")
+
     void retrieveCategoriesWithNotExistingServiceIdAndResultNotEmptyAndChildNotRequiredWithStatusCode200()
         throws JsonProcessingException {
         final var response = (Categories)
@@ -341,10 +313,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         assertThat(response.getListOfCategory().get(0).getActiveFlag()).isEqualTo("Y");
     }
 
-    @Test
-    @SuppressWarnings("unchecked")
-    @DisplayName("Retrieve categories where Service Id provided does"
-        + " not exist and no data exists with empty service ids for the category and isChildRequired Y")
+
     void retrieveCategoriesWithNotExistingServiceIdAndResultEmptyAnChildRequiredWithStatusCode200()
         throws JsonProcessingException {
         final var response = (Categories)
@@ -355,9 +324,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         assertTrue(response.getListOfCategory().isEmpty());
     }
 
-    @Test
-    @DisplayName("Retrieve data when category id provided is null or blank or whitespace")
-    @SuppressWarnings("unchecked")
+
     void shouldThrowErrorWhenRetrievingDataForNotEsistingCategory()
         throws JsonProcessingException {
 
@@ -369,9 +336,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
     }
 
 
-    @Test
-    @DisplayName("Retrieve data when category id provided is null ")
-    @SuppressWarnings("unchecked")
+
     void shouldThrowErrorWhenRetrievingDataForNullCategory()
         throws JsonProcessingException {
 

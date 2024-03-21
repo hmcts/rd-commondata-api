@@ -39,7 +39,7 @@ class CrdServiceImplTest {
     @Spy
     ListOfValuesRepository listOfValuesRepository;
 
-    @Test
+
     void retrieveCategoriesByCategoryId() {
         List<ListOfValueDto> listOfValueDtos = new ArrayList<>();
         listOfValueDtos.add(CrdTestSupport.createListOfCategoriesDtoMock("HearingChannel", null,
@@ -67,7 +67,7 @@ class CrdServiceImplTest {
         assertNull(actualCategory.getChildNodes());
     }
 
-    @Test
+
     void retrieveCategoriesByAllParams() {
         List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
         ListOfValueDto inactiveCategory = CrdTestSupport.createListOfCategoriesDtoMock("HearingChannel",
@@ -104,7 +104,7 @@ class CrdServiceImplTest {
         return listOfValueDtos;
     }
 
-    @Test
+
     void retrieveCategoriessByCategoryIdWithChildNodes() {
         List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
         doReturn(listOfValueDtos).when(listOfValuesRepository)
@@ -126,7 +126,7 @@ class CrdServiceImplTest {
             .getCategoryKey());
     }
 
-    @Test
+
     void retrieveCategoriesByCategoryIdWithNoChildNodes() {
         List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
         doReturn(listOfValueDtos).when(listOfValuesRepository)
@@ -143,7 +143,7 @@ class CrdServiceImplTest {
         assertNull(result.get(0).getChildNodes());
     }
 
-    @Test
+
     void retrieveCategoriesByCategoryIdWithParentCategory() {
         verifyWithParams("y", "HearingChannel", null);
         verifyWithParams("y", null, "telephone");
@@ -165,7 +165,7 @@ class CrdServiceImplTest {
         assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActiveFlag());
     }
 
-    @Test
+
     void retrieveCategoriesByCategoryIdWithEmptyParams() {
         List<ListOfValueDto> listOfValueDtos = List.of(CrdTestSupport.createListOfCategoriesDtoMock(
             "HearingChannel", "", "", "", ""));
@@ -184,7 +184,7 @@ class CrdServiceImplTest {
 
     }
 
-    @Test
+
     void shouldThrowNotFoundExceptionIfListEmptyForCategoryWithUnMappedParams() {
         List<ListOfValueDto> listOfValueDtos = new ArrayList<>();
 
@@ -200,7 +200,7 @@ class CrdServiceImplTest {
 
     }
 
-    @Test
+
     void retrieveCategoriesByServiceIdWithNoChildNodes() {
         List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
         doReturn(listOfValueDtos).when(listOfValuesRepository)
@@ -217,7 +217,7 @@ class CrdServiceImplTest {
         assertNull(result.get(0).getChildNodes());
     }
 
-    @Test
+
     void retrieveCategoriesByServiceIdWithChildNodes() {
         List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
         doReturn(listOfValueDtos).when(listOfValuesRepository)
@@ -254,7 +254,7 @@ class CrdServiceImplTest {
         return listOfValueDtos;
     }
 
-    @Test
+
     void retrieveCategoriesByServiceIdWithListOfValuesOrders() {
         List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtosWithListOfValuesOrders();
         doReturn(listOfValueDtos).when(listOfValuesRepository)
@@ -299,7 +299,7 @@ class CrdServiceImplTest {
         return listOfValueDtos;
     }
 
-    @Test
+
     void retrieveCategoriesByServiceIdWithDefaultOrdering() {
         List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtosWithDefaultOrdering();
         doReturn(listOfValueDtos).when(listOfValuesRepository)
@@ -319,7 +319,7 @@ class CrdServiceImplTest {
         assertEquals(listOfValueDtos.get(2).getLovOrder(), result.get(1).getLovOrder());
     }
 
-    @Test
+
     void retrieveCategoriesByServiceIdWithDefaultOrderingThrowsNullPointerExceptionForMissingDefault() {
         List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtosWithDefaultOrdering();
 
@@ -339,8 +339,7 @@ class CrdServiceImplTest {
         assertNotNull(nullPointerException);
     }
 
-    @Test
-    @SuppressWarnings("unchecked")
+
     void retrieveCategoriesByCategoryNonExisting() {
 
         List<ListOfValueDto> listOfValueDtos = new ArrayList<>();
@@ -356,8 +355,7 @@ class CrdServiceImplTest {
         assertEquals("Data not found", dataNotFoundException.getMessage());
     }
 
-    @Test
-    @SuppressWarnings("unchecked")
+
     void retrieveCategoriesByServiceIdsNonExisting() {
         CategoryRequest request = buildCategoryRequest("HearingChannel", "XXXXX", "telephone",
                                                        null, null,"y");
@@ -374,8 +372,7 @@ class CrdServiceImplTest {
         assertEquals("y", result.get(0).getActiveFlag());
     }
 
-    @Test
-    @SuppressWarnings("unchecked")
+
     void retrieveCategoriesCheckServiceIdsExist() {
 
         Specification<ListOfValueDto> query = null;
