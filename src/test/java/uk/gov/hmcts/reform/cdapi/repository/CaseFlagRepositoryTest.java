@@ -14,7 +14,7 @@ class CaseFlagRepositoryTest {
 
     @Test
     void testFindAll() {
-        doReturn(new ArrayList<>()).when(caseFlagRepository).findAll(anyString());
-        assertNotNull(caseFlagRepository.findAll(anyString()));
+        doReturn(new ArrayList<>()).when(caseFlagRepository).findAll(anyString(), anyString());
+        assertNotNull(caseFlagRepository.findAll(anyString(), anyString()));
     }
 }

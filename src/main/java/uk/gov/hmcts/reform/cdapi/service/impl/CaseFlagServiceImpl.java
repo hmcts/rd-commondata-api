@@ -53,8 +53,10 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     public CaseFlag retrieveCaseFlagByServiceId(String serviceId, String flagType,
                                                 String welshRequired, String availableExternalFlag) {
         var isAvailableExternalFlag = availableExternally(availableExternalFlag);
-        var caseFlagDtoList = filterCaseFlags(caseFlagRepository.findAll(serviceId.trim().toUpperCase()),
-                                              isAvailableExternalFlag);
+        String strAvailableExternally =  Boolean.toString(isAvailableExternalFlag).toUpperCase();
+        List<CaseFlagDto> dbCaseFlagDtoList = caseFlagRepository.findAll(serviceId.trim().toUpperCase(),
+                                                                         strAvailableExternally);
+        var caseFlagDtoList = filterCaseFlags(dbCaseFlagDtoList, isAvailableExternalFlag);
         var flagDetails = addTopLevelFlag(caseFlagDtoList, welshRequired);
         addChildLevelFlag(caseFlagDtoList, flagDetails, welshRequired, isAvailableExternalFlag);
         if (isAvailableExternalFlag) {
@@ -74,12 +76,12 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         return caseFlag;
     }
 
-    private boolean availableExternally(String availableExternalFlag) {
+    private Boolean availableExternally(String availableExternalFlag) {
         if (hasPrdRoles(idamRepository.getUserInfo(getUserToken()))) {
-            return false;
+            return true;
         }
         return StringUtils.isNotEmpty(availableExternalFlag)
-            && availableExternalFlag.trim().equalsIgnoreCase("y");
+            || availableExternalFlag.trim().equalsIgnoreCase("y");
     }
 
     private String getUserToken() {
