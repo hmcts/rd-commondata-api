@@ -46,7 +46,9 @@ public class CrdServiceImpl implements CrdService {
         }
 
         list = checkServiceIdExists(request, query,isChildRequired);
-        log.info("***************** List:: " + list.size());
+        if(list != null) {
+            log.info("***************** List:: " + list.size());
+        }
         List<Category> channelList = convertCategoryList(list);
 
         if (isChildRequired) {
@@ -55,7 +57,9 @@ public class CrdServiceImpl implements CrdService {
         log.info("***************** channelList:: " + channelList.size());
         log.info("***************** channelList:: " + channelList.get(0).getKey());
         log.info("***************** channelList:: " + channelList.get(0).getCategoryKey());
-        //log.info("***************** channelList:: " + channelList.get(0).getChildNodes().size());
+        if(channelList.get(0).getChildNodes() != null) {
+            log.info("***************** channelList:: " + channelList.get(0).getChildNodes().size());
+        }
         return channelList;
     }
 
