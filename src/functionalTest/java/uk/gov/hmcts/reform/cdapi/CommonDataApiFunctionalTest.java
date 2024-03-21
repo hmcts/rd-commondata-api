@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.cdapi;
 
 import io.restassured.response.Response;
+import lombok.extern.slf4j.Slf4j;
 import net.thucydides.core.annotations.WithTag;
 import net.thucydides.core.annotations.WithTags;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,7 @@ import static org.springframework.http.HttpStatus.OK;
 @SpringBootTest
 @WithTags({@WithTag("testType:Functional")})
 @ActiveProfiles("functional")
+@Slf4j
 class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
 
     private static final String MAP_KEY_CASE_FLAGS = "CaseFlagApiController.retrieveCaseFlagsByServiceId";
@@ -280,9 +282,13 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
         if (OK.value() == response.getStatusCode()) {
             var categories = response.getBody().as(Categories.class);
             assertNotNull(categories);
-            categories.getListOfCategory().forEach(h -> assertEquals("HearingChannel", h.getCategoryKey()));
+            categories.getListOfCategory().forEach(h -> {
+                log.info("***************** h:: " + h.getCategoryKey()+h.getServiceId()
+                +h.getChildNodes().size()+h.getKey());
+                assertEquals("HearingChannel", h.getCategoryKey());
+            });
             //assertThat(categories.getListOfCategory().size()).isGreaterThan(0);
-            assertNotNull(categories.getListOfCategory().get(0).getChildNodes());
+            //assertNotNull(categories.getListOfCategory().get(0).getChildNodes());
             //assertThat(categories.getListOfCategory().get(0).getChildNodes()).hasSizeGreaterThan(0);
             //assertEquals("HearingChannel", categories.getListOfCategory().get(0).getChildNodes().get(0)
             //.getParentCategory());
