@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.cdapi.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -24,6 +25,7 @@ import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.parentCategory
 import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.parentKey;
 import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.serviceId;
 
+@Slf4j
 @Service
 public class CrdServiceImpl implements CrdService {
 
@@ -55,18 +57,23 @@ public class CrdServiceImpl implements CrdService {
     }
 
     public void checkCategoryExists(CategoryRequest request) {
+        log.info("checkCategoryExists {}", request.getCategoryId());
         Specification<ListOfValueDto> doesCategoryExistQuery = prepareCategoryExistsQuerySpecification(request);
         List<ListOfValueDto> list  = listOfValuesRepository.findAll(doesCategoryExistQuery);
         if (request.getCategoryId() == null || request.getCategoryId().isEmpty() || list.isEmpty()) {
+            log.info("Before Data not found error");
             throw new ResourceNotFoundException("Data not found");
         }
     }
 
-    public List<ListOfValueDto> checkServiceIdExists(CategoryRequest request, Specification<ListOfValueDto> query,
-                                                      boolean isChildRequired) {
+    public List<ListOfValueDto> checkServiceIdExists(CategoryRequest request,
+                                                     Specification<ListOfValueDto> query,
+                                                     boolean isChildRequired) {
         List<ListOfValueDto> list  = listOfValuesRepository.findAll(query);
+        log.info("checkServiceIdExists list size {}", list.size());
 
         if (list.isEmpty()) {
+            log.info("checkServiceIdExists list empty");
             request.setServiceId("");
             query = prepareBaseQuerySpecification(request);
             if (isChildRequired) {
@@ -74,6 +81,7 @@ public class CrdServiceImpl implements CrdService {
                                      .and(serviceId(request.getServiceId())));
             }
             list = listOfValuesRepository.findAll(query);
+            log.info("checkServiceIdExists second query list size {}", list.size());
         }
         return list;
     }
@@ -100,11 +108,13 @@ public class CrdServiceImpl implements CrdService {
             Collectors.groupingBy(h -> StringUtils.isEmpty(h.getParentKey()) ? PARENT
                                       : h.getParentKey() + h.getParentCategory() + h.getServiceId(), HashMap::new,
                                   Collectors.toCollection(ArrayList::new)));
+        log.info("result.get(PARENT) {}", result.get(PARENT));
         if (result.get(PARENT) != null) {
             result.get(PARENT).forEach(channel -> channel.setChildNodes(result.get(channel.getKey() + channel
                 .getCategoryKey() + channel.getServiceId())));
             channelList = result.get(PARENT);
         }
+        log.info("channelList {}", channelList);
         return channelList;
     }
 
