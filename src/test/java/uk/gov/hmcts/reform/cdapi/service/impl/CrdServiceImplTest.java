@@ -30,7 +30,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static uk.gov.hmcts.reform.cdapi.helper.CrdTestSupport.buildCategoryRequest;
 
-@ExtendWith(MockitoExtension.class)
+
 class CrdServiceImplTest {
 
     @InjectMocks
