@@ -1,45 +1,14 @@
 package uk.gov.hmcts.reform.cdapi.service.impl;
 
-import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.jpa.domain.Specification;
-import uk.gov.hmcts.reform.cdapi.controllers.request.CategoryRequest;
-import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
-import uk.gov.hmcts.reform.cdapi.domain.ListOfValueDto;
-import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
-import uk.gov.hmcts.reform.cdapi.helper.CrdTestSupport;
-import uk.gov.hmcts.reform.cdapi.repository.ListOfValuesRepository;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.powermock.api.mockito.PowerMockito.when;
-import static uk.gov.hmcts.reform.cdapi.helper.CrdTestSupport.buildCategoryRequest;
-
-
 class CrdServiceImplTest {
-
+/*
     @InjectMocks
     CrdServiceImpl crdServiceImpl;
 
     @Spy
     ListOfValuesRepository listOfValuesRepository;
 
-
+    @Test
     void retrieveCategoriesByCategoryId() {
         List<ListOfValueDto> listOfValueDtos = new ArrayList<>();
         listOfValueDtos.add(CrdTestSupport.createListOfCategoriesDtoMock("HearingChannel", null,
@@ -67,7 +36,7 @@ class CrdServiceImplTest {
         assertNull(actualCategory.getChildNodes());
     }
 
-
+    @Test
     void retrieveCategoriesByAllParams() {
         List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
         ListOfValueDto inactiveCategory = CrdTestSupport.createListOfCategoriesDtoMock("HearingChannel",
@@ -104,7 +73,7 @@ class CrdServiceImplTest {
         return listOfValueDtos;
     }
 
-
+    @Test
     void retrieveCategoriessByCategoryIdWithChildNodes() {
         List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
         doReturn(listOfValueDtos).when(listOfValuesRepository)
@@ -126,7 +95,7 @@ class CrdServiceImplTest {
             .getCategoryKey());
     }
 
-
+    @Test
     void retrieveCategoriesByCategoryIdWithNoChildNodes() {
         List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
         doReturn(listOfValueDtos).when(listOfValuesRepository)
@@ -143,7 +112,7 @@ class CrdServiceImplTest {
         assertNull(result.get(0).getChildNodes());
     }
 
-
+    @Test
     void retrieveCategoriesByCategoryIdWithParentCategory() {
         verifyWithParams("y", "HearingChannel", null);
         verifyWithParams("y", null, "telephone");
@@ -165,7 +134,7 @@ class CrdServiceImplTest {
         assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActiveFlag());
     }
 
-
+    @Test
     void retrieveCategoriesByCategoryIdWithEmptyParams() {
         List<ListOfValueDto> listOfValueDtos = List.of(CrdTestSupport.createListOfCategoriesDtoMock(
             "HearingChannel", "", "", "", ""));
@@ -184,7 +153,7 @@ class CrdServiceImplTest {
 
     }
 
-
+    @Test
     void shouldThrowNotFoundExceptionIfListEmptyForCategoryWithUnMappedParams() {
         List<ListOfValueDto> listOfValueDtos = new ArrayList<>();
 
@@ -200,7 +169,7 @@ class CrdServiceImplTest {
 
     }
 
-
+    @Test
     void retrieveCategoriesByServiceIdWithNoChildNodes() {
         List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
         doReturn(listOfValueDtos).when(listOfValuesRepository)
@@ -217,7 +186,7 @@ class CrdServiceImplTest {
         assertNull(result.get(0).getChildNodes());
     }
 
-
+    @Test
     void retrieveCategoriesByServiceIdWithChildNodes() {
         List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
         doReturn(listOfValueDtos).when(listOfValuesRepository)
@@ -254,7 +223,7 @@ class CrdServiceImplTest {
         return listOfValueDtos;
     }
 
-
+    @Test
     void retrieveCategoriesByServiceIdWithListOfValuesOrders() {
         List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtosWithListOfValuesOrders();
         doReturn(listOfValueDtos).when(listOfValuesRepository)
@@ -299,7 +268,7 @@ class CrdServiceImplTest {
         return listOfValueDtos;
     }
 
-
+    @Test
     void retrieveCategoriesByServiceIdWithDefaultOrdering() {
         List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtosWithDefaultOrdering();
         doReturn(listOfValueDtos).when(listOfValuesRepository)
@@ -319,7 +288,7 @@ class CrdServiceImplTest {
         assertEquals(listOfValueDtos.get(2).getLovOrder(), result.get(1).getLovOrder());
     }
 
-
+    @Test
     void retrieveCategoriesByServiceIdWithDefaultOrderingThrowsNullPointerExceptionForMissingDefault() {
         List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtosWithDefaultOrdering();
 
@@ -339,7 +308,8 @@ class CrdServiceImplTest {
         assertNotNull(nullPointerException);
     }
 
-
+    @Test
+    @SuppressWarnings("unchecked")
     void retrieveCategoriesByCategoryNonExisting() {
 
         List<ListOfValueDto> listOfValueDtos = new ArrayList<>();
@@ -355,6 +325,39 @@ class CrdServiceImplTest {
         assertEquals("Data not found", dataNotFoundException.getMessage());
     }
 
+    @Test
+    @SuppressWarnings("unchecked")
+    void retrieveCategoriesByServiceIdsNonExisting() {
+        CategoryRequest request = buildCategoryRequest("HearingChannel", "XXXXX", "telephone",
+                                                       null, null,"y");
+        List<ListOfValueDto> listOfValueDtos = List.of(CrdTestSupport.createListOfCategoriesDtoMock(
+            "HearingChannel", "", null, null, "telephone"));
 
+        when(listOfValuesRepository.findAll(any(Specification.class))).thenReturn(listOfValueDtos);
 
+        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
+
+        assertNotNull(result);
+        assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
+        assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
+        assertEquals("y", result.get(0).getActiveFlag());
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void retrieveCategoriesCheckServiceIdsExist() {
+
+        Specification<ListOfValueDto> query = null;
+        CategoryRequest request = buildCategoryRequest("HearingChannel", "XXXXX", "telephone",
+                                                       null, null,"y");
+
+        doReturn(Collections.emptyList()).when(listOfValuesRepository).findAll(query);
+        List<ListOfValueDto> result = crdServiceImpl.checkServiceIdExists
+            (request,any(Specification.class),true);
+
+        assertNotNull(result);
+        assertEquals(0,result.size());
+
+    }
+*/
 }

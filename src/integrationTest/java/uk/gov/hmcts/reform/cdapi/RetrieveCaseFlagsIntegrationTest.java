@@ -27,10 +27,13 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
+@ExtendWith(SpringExtension.class)
+@WithTags({@WithTag("testType:Integration")})
 class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegrationTest {
     private static final String path = "/caseflags/service-id={service-id}";
 
+    @ParameterizedTest
+    @ValueSource(strings = {"AAA1", "XXXX"})
     void shouldRetrieveCaseFlagForServiceIdWithStatusCode_200(String serviceId)
         throws JsonProcessingException {
 
@@ -46,7 +49,8 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
 
     }
 
-
+    @ParameterizedTest
+    @ValueSource(strings = {"party", "case"})
     void shouldRetrieveCaseFlagForServiceIdFlagTypeAsParty(String serviceId)
         throws JsonProcessingException {
 
@@ -61,7 +65,9 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
 
     }
 
-
+    @ParameterizedTest
+    @ValueSource(strings = {"hello", "case"})
+    @SuppressWarnings("unchecked")
     void shouldRetrieveCaseFlagForServiceIdWithStatusCode_400(String serviceId)
         throws JsonProcessingException {
 
@@ -79,6 +85,8 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
 
     }
 
+    @Test
+    @SuppressWarnings("unchecked")
     void shouldRetrieveCaseFlagForWelshRequiredasWithStatusCode_404()
         throws JsonProcessingException {
 
@@ -91,7 +99,8 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
         assertThat((Map<String, Object>) errorResponseMap).containsEntry("http_status", HttpStatus.NOT_FOUND);
     }
 
-
+    @Test
+    @SuppressWarnings("unchecked")
     void shouldRetrieveCaseFlagForWelshRequiredFlagWithNStatusCode_200()
         throws JsonProcessingException {
         final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
@@ -118,7 +127,8 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
         }
     }
 
-
+    @Test
+    @SuppressWarnings("unchecked")
     void shouldRetrieveCaseFlag_WelshRequiredWithNStatusCode_200()
         throws Exception {
         final var responseBody = commonDataApiClient.retrieveCaseFlagsByServiceIdJsonFormat(
@@ -159,7 +169,7 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
         assertTrue(actualMessage.contains(expectedMessage));
     }
 
-
+    @Test
     void shouldRetrieveCaseFlagForWelshRequiredFlagWithYStatusCode_200()
         throws JsonProcessingException {
         final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
@@ -171,7 +181,7 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
     }
 
 
-
+    @Test
     void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithWelshFlagIsY() throws JsonProcessingException {
         final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
             "AAA1?welsh-required=Y",
@@ -181,7 +191,7 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
         assertResponseContent(response);
     }
 
-
+    @Test
     void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithAvailableExternalFlagIsY_200()
         throws JsonProcessingException {
         final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
