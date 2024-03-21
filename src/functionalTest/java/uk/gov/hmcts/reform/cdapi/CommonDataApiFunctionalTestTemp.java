@@ -1,10 +1,5 @@
 package uk.gov.hmcts.reform.cdapi;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.OK;
-
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import net.thucydides.core.annotations.WithTag;
@@ -17,6 +12,11 @@ import uk.gov.hmcts.reform.cdapi.controllers.response.Categories;
 import uk.gov.hmcts.reform.cdapi.util.FeatureToggleConditionExtension;
 import uk.gov.hmcts.reform.cdapi.util.ToggleEnable;
 import uk.gov.hmcts.reform.lib.util.serenity5.SerenityTest;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.OK;
 
 @SerenityTest
 @SpringBootTest
