@@ -4,7 +4,6 @@ import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import net.thucydides.core.annotations.WithTag;
 import net.thucydides.core.annotations.WithTags;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -290,7 +289,7 @@ class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
             assertNotNull(categories.getListOfCategory().get(0).getChildNodes());
             assertThat(categories.getListOfCategory().get(0).getChildNodes()).hasSizeGreaterThan(0);
             assertEquals("HearingChannel", categories.getListOfCategory().get(0).getChildNodes().get(0)
-            .getParentCategory());
+                .getParentCategory());
 
         } else {
             assertEquals(NOT_FOUND.value(), response.getStatusCode());
