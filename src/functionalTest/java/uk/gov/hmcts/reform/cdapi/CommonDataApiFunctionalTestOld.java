@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.thucydides.core.annotations.WithTag;
 import net.thucydides.core.annotations.WithTags;
 import org.junit.Ignore;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -48,7 +49,7 @@ class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
         .concat(PARAM_SIGN).concat(SERVICE_ID);
     private static final String DATA_NOT_FOUND = "Data not found";
 
-
+    @Test
     @ExtendWith(FeatureToggleConditionExtension.class)
     @ToggleEnable(mapKey = MAP_KEY_CASE_FLAGS, withFeature = true)
     void shouldThrowErrorWhenFlagTypeIsInvalid() {
@@ -61,7 +62,7 @@ class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
         assertEquals("Allowed values are PARTY or CASE", response.getErrorDescription());
     }
 
-
+    @Test
     @ExtendWith(FeatureToggleConditionExtension.class)
     @ToggleEnable(mapKey = MAP_KEY_CASE_FLAGS, withFeature = false)
     void shouldNotRetrieveCaseFlagWhenToggleOffWithStatusCode403() {
@@ -74,7 +75,7 @@ class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
         assertNotNull(response);
     }
 
-
+    @Test
     @ToggleEnable(mapKey = MAP_KEY_CASE_FLAGS, withFeature = true)
     void retrieveCaseFlagsUnauthorizedDueToNoBearerTokenShouldReturnStatusCode401() {
         Response response =
@@ -85,7 +86,7 @@ class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
         assertEquals(HttpStatus.UNAUTHORIZED.value(), response.getStatusCode());
     }
 
-
+    @Test
     @ToggleEnable(mapKey = MAP_KEY_CASE_FLAGS, withFeature = true)
     void retrieveBuildingLocationsUnauthorizedDueToNoS2STokenShouldReturnStatusCode401() {
         Response response =
@@ -95,7 +96,7 @@ class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
         assertEquals(HttpStatus.UNAUTHORIZED.value(), response.getStatusCode());
     }
 
-
+    @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnEmptyListWhenNoDataFound() {
@@ -108,7 +109,7 @@ class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
         assertEquals(DATA_NOT_FOUND, response.getErrorDescription());
     }
 
-
+    @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnSuccess() {
@@ -127,7 +128,7 @@ class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
 
     }
 
-
+    @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnSuccessWithChildren() {
@@ -146,7 +147,7 @@ class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
         }
     }
 
-
+    @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnSuccessForChildCategories() {
@@ -164,7 +165,7 @@ class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
         }
     }
 
-
+    @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnSuccessWithNoChilds() {
@@ -182,7 +183,7 @@ class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
         }
     }
 
-
+    @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnResourceNotFoundWithChildsAndInvalidParentKey() {
@@ -196,7 +197,7 @@ class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
         assertEquals(DATA_NOT_FOUND, response.getErrorDescription());
     }
 
-
+    @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnResourceNotFoundWithChildsAndInvalidParentCategory() {
@@ -210,7 +211,7 @@ class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
         assertEquals(DATA_NOT_FOUND, response.getErrorDescription());
     }
 
-
+    @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnResourceNotFoundInvalidServiceId() {
@@ -224,7 +225,7 @@ class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
         assertEquals(DATA_NOT_FOUND, response.getErrorDescription());
     }
 
-
+    @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnResourceNotFoundWithChildrenAndInvalidKey() {
@@ -238,7 +239,7 @@ class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
         assertEquals(DATA_NOT_FOUND, response.getErrorDescription());
     }
 
-
+    @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     void retrieveCategoriesUnauthorizedDueToNoBearerTokenShouldReturnStatusCode401() {
         Response response =
@@ -248,7 +249,7 @@ class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
         assertEquals(HttpStatus.UNAUTHORIZED.value(), response.getStatusCode());
     }
 
-
+    @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     void retrieveCategoriesUnauthorizedDueToNoS2STokenShouldReturnStatusCode401() {
         Response response =
@@ -258,7 +259,7 @@ class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
         assertEquals(HttpStatus.UNAUTHORIZED.value(), response.getStatusCode());
     }
 
-
+    @Test
     @ExtendWith(FeatureToggleConditionExtension.class)
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     void shouldThrowErrorWhenCategoryIdIsEmpty() {
@@ -271,7 +272,7 @@ class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
         assertEquals("Not Found", response.getError());
     }
 
-
+    @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnChildCategoriesInParticularToServiceId() {
@@ -296,7 +297,7 @@ class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
         }
     }
 
-
+    @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnSuccessWithServiceIdNoChilds() {
@@ -315,7 +316,7 @@ class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
         }
     }
 
-
+    @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnSuccess_Valid_ServiceID() {
@@ -331,7 +332,7 @@ class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
         }
     }
 
-
+    @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnSuccess_Empty_ServiceID() {
@@ -350,7 +351,7 @@ class CommonDataApiFunctionalTestOld extends AuthorizationFunctionalTest {
         }
     }
 
-
+    @Test
     @ToggleEnable(mapKey = MAP_KEY_CASE_FLAGS, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnBadRequestForRetrieveCaseFlagsByServiceIdWithAvailableExternalFlagIsEmpty() {
