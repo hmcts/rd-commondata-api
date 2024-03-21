@@ -36,7 +36,7 @@ public class CrdServiceImpl implements CrdService {
     public List<Category> retrieveListOfValuesByCategory(CategoryRequest request) {
         List<ListOfValueDto> list;
         boolean isChildRequired = isChildRequired(request);
-        checkCategoryExists(request);
+       // checkCategoryExists(request);
         Specification<ListOfValueDto> query = prepareBaseQuerySpecification(request);
         if (isChildRequired) {
             query = query.or(parentCategory(request.getCategoryId()).and(parentKey(request.getKey()))
