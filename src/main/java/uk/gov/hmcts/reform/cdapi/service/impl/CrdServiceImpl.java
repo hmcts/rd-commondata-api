@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.cdapi.controllers.request.CategoryRequest;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
 import uk.gov.hmcts.reform.cdapi.domain.ListOfValueDto;
+import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfValuesRepository;
 import uk.gov.hmcts.reform.cdapi.service.CrdService;
 
@@ -36,6 +37,7 @@ public class CrdServiceImpl implements CrdService {
         List<ListOfValueDto> list;
         boolean isChildRequired = isChildRequired(request);
 
+        checkCategoryExists(request);
         Specification<ListOfValueDto> query = prepareBaseQuerySpecification(request);
         if (isChildRequired) {
             query = query.or(parentCategory(request.getCategoryId()).and(parentKey(request.getKey()))
@@ -51,12 +53,20 @@ public class CrdServiceImpl implements CrdService {
         return channelList;
     }
 
+    public void checkCategoryExists(CategoryRequest request) {
+        Specification<ListOfValueDto> doesCategoryExistQuery = prepareCategoryExistsQuerySpecification(request);
+        List<ListOfValueDto> list  = listOfValuesRepository.findAll(doesCategoryExistQuery);
+        if (request.getCategoryId() == null || request.getCategoryId().isEmpty() || list.isEmpty()) {
+            throw new ResourceNotFoundException("Data not found");
+        }
+    }
+
     public List<ListOfValueDto> checkServiceIdExists(CategoryRequest request,
                                                      Specification<ListOfValueDto> query,
                                                      boolean isChildRequired) {
         List<ListOfValueDto> list  = listOfValuesRepository.findAll(query);
 
-        if (list.isEmpty()) {
+        /*if (list.isEmpty()) {
             request.setServiceId("");
             query = prepareBaseQuerySpecification(request);
             if (isChildRequired) {
@@ -64,7 +74,7 @@ public class CrdServiceImpl implements CrdService {
                                      .and(serviceId(request.getServiceId())));
             }
             list = listOfValuesRepository.findAll(query);
-        }
+        }*/
         return list;
     }
 
