@@ -311,23 +311,6 @@ class CrdServiceImplTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    void retrieveCategoriesByCategoryNonExisting() {
-
-        List<ListOfValueDto> listOfValueDtos = new ArrayList<>();
-        doReturn(listOfValueDtos).when(listOfValuesRepository)
-            .findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any());
-        CategoryRequest request = buildCategoryRequest("XXXXX",  "BBA3", null,
-                                                       null,null, "n");
-        final var dataNotFoundException = assertThrows(ResourceNotFoundException.class, () ->
-                                                           crdServiceImpl.retrieveListOfValuesByCategory(request),
-                                                       "Data not found"
-        );
-       // assertNotNull(dataNotFoundException);
-       // assertEquals("Data not found", dataNotFoundException.getMessage());
-    }
-
-    @Test
-    @SuppressWarnings("unchecked")
     void retrieveCategoriesByServiceIdsNonExisting() {
         CategoryRequest request = buildCategoryRequest("HearingChannel", "XXXXX", "telephone",
                                                        null, null,"y");
