@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.cdapi;
 
 import io.restassured.response.Response;
-import lombok.extern.slf4j.Slf4j;
 import net.thucydides.core.annotations.WithTag;
 import net.thucydides.core.annotations.WithTags;
 import org.junit.jupiter.api.Test;
@@ -29,7 +28,6 @@ import static org.springframework.http.HttpStatus.OK;
 @SpringBootTest
 @WithTags({@WithTag("testType:Functional")})
 @ActiveProfiles("functional")
-@Slf4j
 class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
 
     private static final String MAP_KEY_CASE_FLAGS = "CaseFlagApiController.retrieveCaseFlagsByServiceId";
@@ -282,11 +280,8 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
         if (OK.value() == response.getStatusCode()) {
             var categories = response.getBody().as(Categories.class);
             assertNotNull(categories);
-            categories.getListOfCategory().forEach(h -> {
-                assertEquals("EntityRoleCode", h.getCategoryKey());
-            });
-            assertThat(categories.getListOfCategory().size()).isGreaterThan(0);
-            assertNotNull(categories.getListOfCategory().get(0).getChildNodes());
+            categories.getListOfCategory().forEach(h -> assertEquals("EntityRoleCode", h.getCategoryKey()));
+            assertThat(categories.getListOfCategory()).hasSizeGreaterThan(0);
             assertThat(categories.getListOfCategory().get(0).getChildNodes()).hasSizeGreaterThan(0);
             assertEquals("EntityRoleCode", categories.getListOfCategory().get(0).getChildNodes().get(0)
                 .getParentCategory());
