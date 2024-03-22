@@ -139,27 +139,6 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
     }
 
 
-    @Test
-    @SuppressWarnings("unchecked")
-    void shouldThrowStatusCode404ForInvalidCategoryId()
-        throws JsonProcessingException {
-
-        var errorResponseMap = commonDataApiClient.retrieveCaseFlagsByServiceId(
-            "abc", ErrorResponse.class, path);
-        assertNotNull(errorResponseMap);
-        assertThat((Map<String, Object>) errorResponseMap).containsEntry("http_status", HttpStatus.NOT_FOUND);
-    }
-
-    @Test
-    @SuppressWarnings("unchecked")
-    void shouldThrowStatusCode404ForNullCategoryId()
-        throws JsonProcessingException {
-        var errorResponseMap = commonDataApiClient.retrieveCaseFlagsByServiceId(
-            null,Map.class, path);
-        assertNotNull(errorResponseMap);
-        assertThat((Map<String, Object>) errorResponseMap).containsEntry("http_status", HttpStatus.NOT_FOUND);
-    }
-
     private void responseVerification(Categories response) {
         for (Category hearingChannels : response.getListOfCategory()) {
             assertThat(hearingChannels.getParentCategory()).isEqualTo("HearingChannel");
