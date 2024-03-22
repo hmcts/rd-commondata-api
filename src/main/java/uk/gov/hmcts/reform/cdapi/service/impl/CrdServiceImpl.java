@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.cdapi.controllers.request.CategoryRequest;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
 import uk.gov.hmcts.reform.cdapi.domain.ListOfValueDto;
-import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfValuesRepository;
 import uk.gov.hmcts.reform.cdapi.service.CrdService;
 
