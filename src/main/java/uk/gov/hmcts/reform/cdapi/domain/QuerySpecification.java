@@ -19,15 +19,17 @@ public class QuerySpecification {
      * if serviceId == null then specification is ignored.
      */
     public static Specification<ListOfValueDto> serviceId(String serviceId) {
-        return (root, query, builder) ->
-            serviceId == null ? builder.conjunction() :
-                builder.or(
-                    builder.equal(
-                        builder.lower(root.get("categoryKey").get("serviceId")),
-                        serviceId.toLowerCase().trim()
-                    ),
-                    builder.equal(root.get("categoryKey").get("serviceId"), "")
-                );
+        return (root, query, builder) -> {
+            if (serviceId == null) {
+                return builder.conjunction();
+            } else if (serviceId.equalsIgnoreCase("null")
+                || serviceId.isBlank()) {
+                return builder.equal(root.get("categoryKey").get("serviceId"), "");
+            } else {
+                return  builder.equal(builder.lower(root.get("categoryKey").get("serviceId")),
+                                      serviceId.toLowerCase().trim());
+            }
+        };
     }
 
     /**
