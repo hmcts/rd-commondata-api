@@ -171,7 +171,8 @@ class CaseFlagServiceImplTest {
 
     @Test
     void testGetCaseFlag_ByServiceIWithFlagDetailsNull_Returns200() {
-        when(caseFlagRepository.findAll(anyString(), anyBoolean())).thenReturn(getEmptyCaseFlagDtoList(getCaseFlagDtoList()));
+        when(caseFlagRepository.findAll(anyString(), anyBoolean()))
+            .thenReturn(getEmptyCaseFlagDtoList(getCaseFlagDtoList()));
         when(listOfVenueRepository.findListOfValues(anyString()))
             .thenReturn(getListOfValuesForLanguageInterPreter(false));
 
