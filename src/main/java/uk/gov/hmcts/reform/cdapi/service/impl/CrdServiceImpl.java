@@ -37,7 +37,6 @@ public class CrdServiceImpl implements CrdService {
         List<ListOfValueDto> list;
         boolean isChildRequired = isChildRequired(request);
 
-        checkCategoryExists(request);
         Specification<ListOfValueDto> query = prepareBaseQuerySpecification(request);
         if (isChildRequired) {
             query = query.or(parentCategory(request.getCategoryId()).and(parentKey(request.getKey()))
@@ -51,14 +50,6 @@ public class CrdServiceImpl implements CrdService {
         }
 
         return channelList;
-    }
-
-    public void checkCategoryExists(CategoryRequest request) {
-        Specification<ListOfValueDto> doesCategoryExistQuery = prepareCategoryExistsQuerySpecification(request);
-        List<ListOfValueDto> list  = listOfValuesRepository.findAll(doesCategoryExistQuery);
-        if (request.getCategoryId() == null || request.getCategoryId().isEmpty() || list.isEmpty()) {
-            throw new ResourceNotFoundException("Data not found");
-        }
     }
 
     public List<ListOfValueDto> checkServiceIdExists(CategoryRequest request,

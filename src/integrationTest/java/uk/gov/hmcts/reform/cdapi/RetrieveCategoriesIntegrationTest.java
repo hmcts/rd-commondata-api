@@ -9,13 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Categories;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
-import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
-
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -138,27 +134,6 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         responseVerification(response.getListOfCategory().get(0));
     }
 
-
-    @Test
-    @SuppressWarnings("unchecked")
-    void shouldThrowStatusCode404ForInvalidCategoryId()
-        throws JsonProcessingException {
-
-        var errorResponseMap = commonDataApiClient.retrieveCaseFlagsByServiceId(
-            "abc", ErrorResponse.class, path);
-        assertNotNull(errorResponseMap);
-        assertThat((Map<String, Object>) errorResponseMap).containsEntry("http_status", HttpStatus.NOT_FOUND);
-    }
-
-    @Test
-    @SuppressWarnings("unchecked")
-    void shouldThrowStatusCode404ForNullCategoryId()
-        throws JsonProcessingException {
-        var errorResponseMap = commonDataApiClient.retrieveCaseFlagsByServiceId(
-            null,Map.class, path);
-        assertNotNull(errorResponseMap);
-        assertThat((Map<String, Object>) errorResponseMap).containsEntry("http_status", HttpStatus.NOT_FOUND);
-    }
 
     private void responseVerification(Categories response) {
         for (Category hearingChannels : response.getListOfCategory()) {
