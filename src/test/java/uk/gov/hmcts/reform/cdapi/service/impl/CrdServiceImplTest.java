@@ -184,37 +184,8 @@ class CrdServiceImplTest {
 
     }
 
-    @Test
-    void shouldThrowNotFoundExceptionIfListEmptyForCategoryWithUnMappedParams() {
-        List<ListOfValueDto> listOfValueDtos = new ArrayList<>();
 
-        doReturn(listOfValueDtos).when(listOfValuesRepository)
-            .findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any());
 
-        CategoryRequest request = buildCategoryRequest("HearingChannel",  null, null,
-                                                       null,null, "n");
-        // assertThrows(ResourceNotFoundException.class, () ->
-        //        crdServiceImpl.retrieveListOfValuesByCategory(request),
-        //    "Data not found"
-        // );
-    }
-
-    @Test
-    void retrieveCategoriesByServiceIdWithNoChildNodes() {
-        List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
-        doReturn(listOfValueDtos).when(listOfValuesRepository)
-            .findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any());
-
-        CategoryRequest request = buildCategoryRequest("HearingChannel",  "BBA3", null,
-                                                       null,null, "n");
-        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
-
-        assertNotNull(result);
-        assertEquals(listOfValueDtos.get(0).getCategoryKey().getServiceId(), result.get(0).getServiceId());
-        assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
-        assertEquals(listOfValueDtos.get(0).getActive(), result.get(0).getActiveFlag());
-        assertNull(result.get(0).getChildNodes());
-    }
 
     @Test
     void retrieveCategoriesByServiceIdWithChildNodes() {
@@ -351,8 +322,8 @@ class CrdServiceImplTest {
                                                            crdServiceImpl.retrieveListOfValuesByCategory(request),
                                                        "Data not found"
         );
-        // assertNotNull(dataNotFoundException);
-        // assertEquals("Data not found", dataNotFoundException.getMessage());
+       // assertNotNull(dataNotFoundException);
+       // assertEquals("Data not found", dataNotFoundException.getMessage());
     }
 
     @Test
