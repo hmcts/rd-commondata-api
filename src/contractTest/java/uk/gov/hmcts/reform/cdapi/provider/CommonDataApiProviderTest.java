@@ -27,6 +27,7 @@ import uk.gov.hmcts.reform.cdapi.domain.ListOfValue;
 import uk.gov.hmcts.reform.cdapi.domain.ListOfValueDto;
 import uk.gov.hmcts.reform.cdapi.oidc.JwtGrantedAuthoritiesConverter;
 import uk.gov.hmcts.reform.cdapi.repository.CaseFlagRepository;
+import uk.gov.hmcts.reform.cdapi.repository.IdamRepository;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfValuesRepository;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfVenueRepository;
 import uk.gov.hmcts.reform.cdapi.service.impl.CaseFlagServiceImpl;
@@ -73,6 +74,9 @@ public class CommonDataApiProviderTest {
     @MockBean
     JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter;
 
+    @MockBean
+    IdamRepository idamRepository;
+
     @TestTemplate
     @ExtendWith(PactVerificationInvocationContextProvider.class)
     void pactVerificationTestTemplate(PactVerificationContext context) {
@@ -93,6 +97,7 @@ public class CommonDataApiProviderTest {
         UserInfo userInfo = mock(UserInfo.class);
         when(userInfo.getRoles()).thenReturn(Collections.emptyList());
         when(jwtGrantedAuthoritiesConverter.getUserInfo()).thenReturn(userInfo);
+        when(idamRepository.getUserInfo(anyString())).thenReturn(userInfo);
     }
 
     @State({"Case Flag Details Exist"})
