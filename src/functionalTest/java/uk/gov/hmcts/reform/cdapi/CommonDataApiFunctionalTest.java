@@ -127,7 +127,8 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
     }
 
     //Category and key provided exist ,
-    //but serviceid not provided will fetch the record for the key which has empty service id else will return an empty list
+    //but serviceid not provided will fetch the record for the key which has empty
+    // service id else will return an empty list
     @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
