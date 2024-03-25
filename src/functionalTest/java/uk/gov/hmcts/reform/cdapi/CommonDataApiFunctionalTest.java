@@ -127,7 +127,7 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
     }
 
     //Category and key provided exist ,
-    // fetches the filtered record along with childern if they exist
+    //but serviceid not provided will fetch the record for the key which has empty service id else will return an empty list
     @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
@@ -149,7 +149,8 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
 
 
     //Category and parentkey provided exist ,
-    // fetches the filtered record else empty list like below
+    //but serviceid not provided will fetch the record for a record which has empty service id and given parentkey
+    //else will return an empty list
     @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
@@ -282,17 +283,17 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnChildCategoriesInParticularToServiceId() {
         Response response =
-            commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, "/HearingChannel?"
-                + "isChildRequired=y&serviceId=BBA3&key=VID");
+            commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, "/EntityRoleCode?"
+                + "isChildRequired=y&serviceId=BBA3&key=RESP");
 
         if (OK.value() == response.getStatusCode()) {
             var categories = response.getBody().as(Categories.class);
             assertNotNull(categories);
-            categories.getListOfCategory().forEach(h -> assertEquals("HearingChannel", h.getCategoryKey()));
-            assertEquals("HearingChannel", categories.getListOfCategory().get(0).getChildNodes().get(0)
-                .getParentCategory());
-            assertThat(categories.getListOfCategory().get(0).getChildNodes()).hasSizeGreaterThan(0);
+            categories.getListOfCategory().forEach(h -> assertEquals("EntityRoleCode", h.getCategoryKey()));
             assertThat(categories.getListOfCategory()).hasSizeGreaterThan(0);
+            assertThat(categories.getListOfCategory().get(0).getChildNodes()).hasSizeGreaterThan(0);
+            assertEquals("EntityRoleCode", categories.getListOfCategory().get(0).getChildNodes().get(0)
+                .getParentCategory());
 
         } else {
             assertEquals(NOT_FOUND.value(), response.getStatusCode());
