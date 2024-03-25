@@ -24,10 +24,8 @@ public class QuerySpecification {
     public static Specification<ListOfValueDto> serviceId(String serviceId) {
 
         return (root, query, builder) -> {
-            if (serviceId == null) {
-                return builder.conjunction();
-            } else if (serviceId.equalsIgnoreCase("null")
-                || serviceId.isBlank()) {
+            if (serviceId == null || serviceId.equalsIgnoreCase("null")
+                 || serviceId.isBlank()) {
                 return builder.equal(root.get("categoryKey").get("serviceId"), "");
             } else {
                 return  builder.equal(builder.lower(root.get("categoryKey").get("serviceId")),

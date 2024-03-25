@@ -18,6 +18,7 @@ import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -254,7 +255,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
                                                              Categories.class, path
             );
         assertNotNull(response);
-        assertEquals(1, response.getListOfCategory().size());
+        assertEquals(3, response.getListOfCategory().size());
         assertThat(response.getListOfCategory().get(0).getKey()).isEqualTo("CLRC006");
         assertThat(response.getListOfCategory().get(0).getValueEn()).isEqualTo("Guardian");
         assertThat(response.getListOfCategory().get(0).getActiveFlag()).isEqualTo("Y");
@@ -270,7 +271,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
                                                              Categories.class, path
             );
         assertNotNull(response);
-        assertEquals(1, response.getListOfCategory().size());
+        assertEquals(3, response.getListOfCategory().size());
         assertThat(response.getListOfCategory().get(0).getKey()).isEqualTo("CLRC006");
         assertThat(response.getListOfCategory().get(0).getValueEn()).isEqualTo("Guardian");
         assertThat(response.getListOfCategory().get(0).getActiveFlag()).isEqualTo("Y");
@@ -304,8 +305,8 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
             commonDataApiClient.retrieveCaseFlagsByServiceId("HearingChannel?serviceId='XXX'",
                                                              Categories.class, path);
         assertNotNull(response);
-        assertEquals(0, response.getListOfCategory().size());
-        assertTrue(response.getListOfCategory().isEmpty());
+        assertEquals(2, response.getListOfCategory().size());
+        assertFalse(response.getListOfCategory().isEmpty());
     }
 
 
@@ -335,7 +336,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
             commonDataApiClient.retrieveCaseFlagsByServiceId("CaseLinkingReasonCode?isChildRequired=N&serviceId='XXX'",
                                                              Categories.class, path);
         assertNotNull(response);
-        assertEquals(1, response.getListOfCategory().size());
+        assertEquals(3, response.getListOfCategory().size());
         assertThat(response.getListOfCategory().get(0).getKey()).isEqualTo("CLRC006");
         assertThat(response.getListOfCategory().get(0).getValueEn()).isEqualTo("Guardian");
         assertThat(response.getListOfCategory().get(0).getActiveFlag()).isEqualTo("Y");
@@ -351,8 +352,8 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
             commonDataApiClient.retrieveCaseFlagsByServiceId("HearingChannel?isChildRequired=Y&serviceId='XXX'",
                                                              Categories.class, path);
         assertNotNull(response);
-        assertEquals(0, response.getListOfCategory().size());
-        assertTrue(response.getListOfCategory().isEmpty());
+        assertEquals(2, response.getListOfCategory().size());
+        assertTrue(!response.getListOfCategory().isEmpty());
     }
 
     @Test

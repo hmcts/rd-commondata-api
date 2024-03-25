@@ -106,18 +106,19 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
         assertEquals(DATA_NOT_FOUND, response.getErrorDescription());
     }
 
+    //When no service id specified and category exists then a list of categories where serviceids are empty is returned
     @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnSuccess() {
         Response response =
-            commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, PARAM_HEARING);
+            commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, "CaseLinkingReasonCode");
 
         if (OK.value() == response.getStatusCode()) {
             var categories = response.getBody().as(Categories.class);
             assertNotNull(categories);
             assertThat(categories.getListOfCategory()).hasSizeGreaterThan(1);
-            categories.getListOfCategory().forEach(h -> assertEquals("HearingChannel", h.getCategoryKey()));
+            categories.getListOfCategory().forEach(h -> assertEquals("CaseLinkingReasonCode", h.getCategoryKey()));
             categories.getListOfCategory().forEach(h -> assertNull(h.getChildNodes()));
         } else {
             assertEquals(NOT_FOUND.value(), response.getStatusCode());
@@ -125,13 +126,15 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
 
     }
 
+    //Category and key provided exist ,
+    // fetches the filtered record along with childern if they exist
     @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnSuccessWithChildren() {
         Response response =
-            commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, PARAM_HEARING_WITH_PARAM_SIGN
-                + "isChildRequired=y&key=telephone");
+            commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, "CaseLinkingReasonCode?"
+                + "isChildRequired=y&key=CLRC004");
 
         if (OK.value() == response.getStatusCode()) {
             var categories = response.getBody().as(Categories.class);
@@ -144,36 +147,41 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
         }
     }
 
+
+    //Category and parentkey provided exist ,
+    // fetches the filtered record else empty list like below
     @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnSuccessForChildCategories() {
         Response response =
-            commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, "/HearingSubChannel?"
-                + "isChildRequired=y&parentKey=telephone");
+            commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, "/CaseLinkingReasonCode?"
+                + "isChildRequired=y&parentKey=CLRC013");
 
         if (OK.value() == response.getStatusCode()) {
             var categories = response.getBody().as(Categories.class);
             assertNotNull(categories);
-            categories.getListOfCategory().forEach(h -> assertEquals("HearingSubChannel", h.getCategoryKey()));
-            assertThat(categories.getListOfCategory()).hasSizeGreaterThan(0);
+            categories.getListOfCategory().forEach(h -> assertEquals("CaseLinkingReasonCode", h.getCategoryKey()));
+            assertThat(categories.getListOfCategory()).hasSize(0);
         } else {
             assertEquals(NOT_FOUND.value(), response.getStatusCode());
         }
     }
 
+    //Category and key provided exist ,
+    // fetches the filtered record along with no childern
     @Test
     @ToggleEnable(mapKey = MAP_KEY_LOV, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnSuccessWithNoChilds() {
         Response response =
-            commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, PARAM_HEARING_WITH_PARAM_SIGN
-                + "isChildRequired=n&key=telephone");
+            commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, "CaseLinkingReasonCode?"
+                + "isChildRequired=n&key=CLRC013");
 
         if (OK.value() == response.getStatusCode()) {
             var categories = response.getBody().as(Categories.class);
             assertNotNull(categories);
-            categories.getListOfCategory().forEach(h -> assertEquals("HearingChannel", h.getCategoryKey()));
+            categories.getListOfCategory().forEach(h -> assertEquals("CaseLinkingReasonCode", h.getCategoryKey()));
             assertThat(categories.getListOfCategory()).hasSizeGreaterThan(0);
         } else {
             assertEquals(NOT_FOUND.value(), response.getStatusCode());
@@ -274,16 +282,16 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnChildCategoriesInParticularToServiceId() {
         Response response =
-            commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, "/EntityRoleCode?"
-                + "isChildRequired=y&serviceId=BBA3&key=RESP");
+            commonDataApiClient.retrieveCategoriesByCategoryIdSuccess(PATH_LOV, "/HearingChannel?"
+                + "isChildRequired=y&serviceId=BBA3&key=VID");
 
         if (OK.value() == response.getStatusCode()) {
             var categories = response.getBody().as(Categories.class);
             assertNotNull(categories);
-            categories.getListOfCategory().forEach(h -> assertEquals("EntityRoleCode", h.getCategoryKey()));
+            categories.getListOfCategory().forEach(h -> assertEquals("HearingChannel", h.getCategoryKey()));
             assertThat(categories.getListOfCategory()).hasSizeGreaterThan(0);
             assertThat(categories.getListOfCategory().get(0).getChildNodes()).hasSizeGreaterThan(0);
-            assertEquals("EntityRoleCode", categories.getListOfCategory().get(0).getChildNodes().get(0)
+            assertEquals("HearingChannel", categories.getListOfCategory().get(0).getChildNodes().get(0)
                 .getParentCategory());
 
         } else {
