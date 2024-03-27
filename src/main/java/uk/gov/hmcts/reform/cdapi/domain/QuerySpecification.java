@@ -16,18 +16,23 @@ public class QuerySpecification {
     }
 
     /**
-     * if serviceId == null then specification is ignored.
+     * if serviceId ==  no service id or blank or null or incorrect then all
+     * records for the category with no service id are fetched.
+     * if service is provided : filter records to fetch only those with service ids
+     * if service id does not exist and list was empty fetch again for the category with no service ids
      */
     public static Specification<ListOfValueDto> serviceId(String serviceId) {
-        return (root, query, builder) ->
-            serviceId == null ? builder.conjunction() :
-                builder.or(
-                    builder.equal(
-                        builder.lower(root.get("categoryKey").get("serviceId")),
-                        serviceId.toLowerCase().trim()
-                    ),
-                    builder.equal(root.get("categoryKey").get("serviceId"), "")
-                );
+
+        return (root, query, builder) -> {
+            if (serviceId == null || serviceId.equalsIgnoreCase("null")
+                 || serviceId.isBlank()) {
+                return builder.equal(root.get("categoryKey").get("serviceId"), "");
+            } else {
+                return  builder.equal(builder.lower(root.get("categoryKey").get("serviceId")),
+                    serviceId.toLowerCase().trim());
+            }
+        };
+
     }
 
     /**
