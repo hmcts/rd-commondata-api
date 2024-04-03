@@ -16,6 +16,9 @@ import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -25,17 +28,24 @@ import uk.gov.hmcts.reform.cdapi.domain.CaseFlagDto;
 import uk.gov.hmcts.reform.cdapi.domain.CategoryKey;
 import uk.gov.hmcts.reform.cdapi.domain.ListOfValue;
 import uk.gov.hmcts.reform.cdapi.domain.ListOfValueDto;
+import uk.gov.hmcts.reform.cdapi.oidc.JwtGrantedAuthoritiesConverter;
 import uk.gov.hmcts.reform.cdapi.repository.CaseFlagRepository;
+import uk.gov.hmcts.reform.cdapi.repository.IdamRepository;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfValuesRepository;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfVenueRepository;
 import uk.gov.hmcts.reform.cdapi.service.impl.CaseFlagServiceImpl;
 import uk.gov.hmcts.reform.cdapi.service.impl.CrdServiceImpl;
+import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static java.util.Objects.nonNull;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -65,6 +75,12 @@ public class CommonDataApiProviderTest {
     @MockBean
     ListOfValuesRepository listOfValuesRepository;
 
+    @MockBean
+    JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter;
+
+    @MockBean
+    IdamRepository idamRepository;
+
     @TestTemplate
     @ExtendWith(PactVerificationInvocationContextProvider.class)
     void pactVerificationTestTemplate(PactVerificationContext context) {
@@ -81,6 +97,18 @@ public class CommonDataApiProviderTest {
         if (nonNull(context)) {
             context.setTarget(testTarget);
         }
+
+        UserInfo userInfo = mock(UserInfo.class);
+        when(userInfo.getRoles()).thenReturn(Collections.emptyList());
+        when(jwtGrantedAuthoritiesConverter.getUserInfo()).thenReturn(userInfo);
+
+        Jwt jwt = Jwt.withTokenValue("test")
+            .header("alg", "RS256")
+            .claim("sub", UUID.randomUUID().toString())
+            .claim("emails", List.of("test.user@example.com", "test.user2@example.com"))
+            .build();
+        SecurityContextHolder.getContext().setAuthentication(new JwtAuthenticationToken(jwt));
+        when(idamRepository.getUserInfo(anyString())).thenReturn(userInfo);
     }
 
     @State({"Case Flag Details Exist"})
@@ -121,7 +149,7 @@ public class CommonDataApiProviderTest {
         List<CaseFlagDto> caseFlagDtos = new ArrayList<>();
         caseFlagDtos.add(caseFlagDto1);
         caseFlagDtos.add(caseFlagDto2);
-        when(caseFlagRepository.findAll(anyString())).thenReturn(caseFlagDtos);
+        when(caseFlagRepository.findAll(anyString(), anyBoolean())).thenReturn(caseFlagDtos);
     }
 
     @State({"ListOfCategories Details Exist"})

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
@@ -14,7 +15,7 @@ class CaseFlagRepositoryTest {
 
     @Test
     void testFindAll() {
-        doReturn(new ArrayList<>()).when(caseFlagRepository).findAll(anyString());
-        assertNotNull(caseFlagRepository.findAll(anyString()));
+        doReturn(new ArrayList<>()).when(caseFlagRepository).findAll(anyString(), anyBoolean());
+        assertNotNull(caseFlagRepository.findAll(anyString(), anyBoolean()));
     }
 }
