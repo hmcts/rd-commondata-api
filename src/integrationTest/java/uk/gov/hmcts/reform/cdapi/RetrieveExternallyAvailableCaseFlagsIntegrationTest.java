@@ -20,6 +20,7 @@ import java.util.UUID;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -76,7 +77,7 @@ public class RetrieveExternallyAvailableCaseFlagsIntegrationTest extends CdAutho
             flagDetailsList.stream().forEach(flagDetail -> {
                 boolean flagExternallyAvailable = flagDetail.getExternallyAvailable();
                 if (externallyAvailable) {
-                    MatcherAssert.assertThat(flagExternallyAvailable, anyOf(is(true)));
+                    MatcherAssert.assertThat(flagExternallyAvailable, allOf(is(true)));
                 } else {
                     MatcherAssert.assertThat(flagExternallyAvailable, anyOf(is(false), is(true)));
                 }
@@ -92,7 +93,7 @@ public class RetrieveExternallyAvailableCaseFlagsIntegrationTest extends CdAutho
             flagDetails.stream()
                 .forEach(flagDetail -> {
                     if (externallyAvailable) {
-                        MatcherAssert.assertThat(flagDetail.getExternallyAvailable(), anyOf(is(true)));
+                        MatcherAssert.assertThat(flagDetail.getExternallyAvailable(), allOf(is(true)));
                     } else {
                         MatcherAssert.assertThat(flagDetail.getExternallyAvailable(), anyOf(is(false), is(true)));
                     }
