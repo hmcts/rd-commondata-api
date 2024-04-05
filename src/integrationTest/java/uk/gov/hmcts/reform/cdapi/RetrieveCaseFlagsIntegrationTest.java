@@ -42,7 +42,7 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
         assertNotNull(response);
         if (("AAA1").equals(serviceId)) {
             assertEquals(2, response.getFlags().get(0).getFlagDetails().size());
-            verifyResponse(response.getFlags().get(0).getFlagDetails(), 2, 4);
+            verifyResponse(response.getFlags().get(0).getFlagDetails());
         } else {
             assertEquals(1, response.getFlags().get(0).getFlagDetails().size());
         }
@@ -156,7 +156,7 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
         assertThat(this.jsonPathResult(
             responseBody,
             "$.flags[0].FlagDetails[1].childFlags[0].childFlags[0].externallyAvailable"
-        )).isNotNull().isEqualTo(true);
+        )).isNotNull().isEqualTo(false);
 
 
         exception = assertThrows(PathNotFoundException.class, () -> {
@@ -190,6 +190,31 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
         );
         assertResponseContent(response);
     }
+
+    @Test
+    void shouldReturnSuccessForRetrieveCaseFlagsByServiceIdWithAvailableExternalFlagIsY_200()
+        throws JsonProcessingException {
+        final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
+            "AAA1?flag-type=party&available-external-flag=Y",
+            CaseFlag.class,
+            path
+        );
+        assertEquals(1, response.getFlags().get(0).getFlagDetails().size());
+        List<FlagDetail> parentFlags = response.getFlags().get(0).getFlagDetails();
+        List<String> sampleDefaultStatus = Arrays.asList("Active", "Requested");
+        for (FlagDetail parentFlag : parentFlags) {
+            if (parentFlag.getParent()) {
+                assertNotNull(parentFlag);
+                parentFlag.getChildFlags().forEach(childFlag -> {
+                    if (!childFlag.getName().equalsIgnoreCase("Other") && !childFlag.getParent()) {
+                        assertEquals(true, childFlag.getExternallyAvailable());
+                        assertTrue(sampleDefaultStatus.contains(childFlag.getDefaultStatus()));
+                    }
+                });
+            }
+        }
+    }
+
 
     private static void assertResponseContent(CaseFlag response) {
         assertEquals(2, response.getFlags().get(0).getFlagDetails().size());
@@ -229,18 +254,12 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
     }
 
     private void verifyResponse(List<FlagDetail> flagDetails) {
-        verifyResponse(flagDetails, 2, 8);
-    }
-
-    private void verifyResponse(List<FlagDetail> flagDetails,
-                                int caseExpectedCount,
-                                int partyExpectedCount) {
         for (FlagDetail flagDetail : flagDetails) {
             if (flagDetail.getName().equalsIgnoreCase(FlagType.CASE.name())) {
-                assertEquals(caseExpectedCount, flagDetail.getChildFlags().size());
+                assertEquals(2, flagDetail.getChildFlags().size());
             }
             if (flagDetail.getName().equalsIgnoreCase(FlagType.PARTY.name())) {
-                assertEquals(partyExpectedCount, flagDetail.getChildFlags().size());
+                assertEquals(8, flagDetail.getChildFlags().size());
             }
             switch (flagDetail.getFlagCode()) {
                 case "RA0004":
