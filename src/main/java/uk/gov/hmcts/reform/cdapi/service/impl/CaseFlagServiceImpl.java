@@ -6,8 +6,6 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
 import uk.gov.hmcts.reform.cdapi.domain.CaseFlagDto;
@@ -17,7 +15,6 @@ import uk.gov.hmcts.reform.cdapi.domain.ListOfValue;
 import uk.gov.hmcts.reform.cdapi.exception.InvalidRequestException;
 import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
 import uk.gov.hmcts.reform.cdapi.repository.CaseFlagRepository;
-import uk.gov.hmcts.reform.cdapi.repository.IdamRepository;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfVenueRepository;
 import uk.gov.hmcts.reform.cdapi.service.CaseFlagService;
 
@@ -29,7 +26,6 @@ import static uk.gov.hmcts.reform.cdapi.controllers.constant.Constant.CATEGORY_K
 import static uk.gov.hmcts.reform.cdapi.controllers.constant.Constant.CATEGORY_KEY_SIGN_LANGUAGE;
 import static uk.gov.hmcts.reform.cdapi.controllers.constant.Constant.FLAG_PF0015;
 import static uk.gov.hmcts.reform.cdapi.controllers.constant.Constant.FLAG_RA0042;
-import static uk.gov.hmcts.reform.cdapi.util.UserInfoUtil.hasPrdRoles;
 
 @Service
 @Slf4j
@@ -41,9 +37,6 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     @Autowired
     ListOfVenueRepository listOfVenueRepository;
 
-    @Autowired
-    private IdamRepository idamRepository;
-
     @Value("${flaglist}")
     List<String> flaglistLov;
 
@@ -52,10 +45,8 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     @Override
     public CaseFlag retrieveCaseFlagByServiceId(String serviceId, String flagType,
                                                 String welshRequired, String availableExternalFlag) {
-        var isAvailableExternalFlag = availableExternally(availableExternalFlag);
-        List<CaseFlagDto> dbCaseFlagDtoList = caseFlagRepository.findAll(serviceId.trim().toUpperCase(),
-                                                                         isAvailableExternalFlag);
-        var caseFlagDtoList = filterCaseFlags(dbCaseFlagDtoList, isAvailableExternalFlag);
+        var caseFlagDtoList = caseFlagRepository.findAll(serviceId.trim().toUpperCase());
+        var isAvailableExternalFlag = this.getFlagYorN(availableExternalFlag);
         var flagDetails = addTopLevelFlag(caseFlagDtoList, welshRequired);
         addChildLevelFlag(caseFlagDtoList, flagDetails, welshRequired, isAvailableExternalFlag);
         if (isAvailableExternalFlag) {
@@ -73,29 +64,6 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         var caseFlag = new CaseFlag();
         caseFlag.setFlags(flags);
         return caseFlag;
-    }
-
-    private Boolean availableExternally(String availableExternalFlag) {
-        if (hasPrdRoles(idamRepository.getUserInfo(getUserToken()))) {
-            return true;
-        }
-        return StringUtils.isEmpty(availableExternalFlag)
-            || availableExternalFlag.trim().equalsIgnoreCase("y");
-    }
-
-    private String getUserToken() {
-        var jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return jwt.getTokenValue();
-    }
-
-    private List<CaseFlagDto> filterCaseFlags(List<CaseFlagDto> caseFlagDtoList, boolean isAvailableExternalFlag) {
-        if (!isAvailableExternalFlag) {
-            return caseFlagDtoList;
-        }
-        return caseFlagDtoList.stream().filter(caseFlagDto -> {
-            Boolean externallyAvailable = caseFlagDto.getExternallyAvailable();
-            return externallyAvailable == null || externallyAvailable.booleanValue();
-        }).toList();
     }
 
     private void removeFlags(List<FlagDetail> flagDetails) {
@@ -285,8 +253,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
      * @param flagDetails   list of all flags
      * @param welshRequired it is flag decide to display the name_cy values
      */
-    private void addOtherFlag(List<FlagDetail> flagDetails,
-                              String welshRequired) {
+    private void addOtherFlag(List<FlagDetail> flagDetails, String welshRequired) {
         if (null == flagDetails) {
             return;
         }
