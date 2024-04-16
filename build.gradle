@@ -410,7 +410,7 @@ dependencies {
     exclude group: 'com.github.jknack'
   }
   testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0'
-  testImplementation group: 'io.rest-assured', name: 'rest-assured-common', version: '4.2.0'
+  testImplementation group: 'io.rest-assured', name: 'rest-assured-common', version: '4.5.1'
 
   testImplementation ("org.mockito:mockito-core:4.3.1") {
     exclude group: "net.bytebuddy", module: "byte-buddy"
