@@ -240,4 +240,6 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
         assertThat(category.getActiveFlag()).isEqualTo("Y");
         assertNull(category.getChildNodes());
     }
+
+
 }
