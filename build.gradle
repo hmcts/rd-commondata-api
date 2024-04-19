@@ -422,7 +422,7 @@ dependencies {
   }
   testImplementation group: 'net.bytebuddy', name: 'byte-buddy', version: versions.bytebuddy
   testImplementation group: 'net.bytebuddy', name: 'byte-buddy-agent', version: versions.bytebuddy
-  testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.23.1'
+  testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.25.3'
 
 
   testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '4.3.1'
