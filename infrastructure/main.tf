@@ -36,7 +36,7 @@ module "db-common-data-v16" {
   admin_user_object_id = var.jenkins_AAD_objectId
   business_area        = "cft"
   common_tags          = var.common_tags
-  component            = var.component
+  component            = var.component-v16
   env                  = var.env
   pgsql_databases = [
     {
