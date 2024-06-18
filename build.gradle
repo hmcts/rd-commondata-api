@@ -360,7 +360,7 @@ dependencies {
     exclude group: "org.apache.sling"
   }
   implementation 'commons-io:commons-io:2.16.1'
-  implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.3'
+  implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.9'
   implementation group: 'ch.qos.logback', name: 'logback-core', version: versions.logback
   implementation group: 'ch.qos.logback', name: 'logback-classic', version: versions.logback
   implementation group: 'org.springframework', name: 'spring-core', version: versions.springVersion
