@@ -36,7 +36,7 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
     private static final String MAP_KEY_LOV = "CrdApiController.retrieveListOfValuesByCategoryId";
     private static final String PATH_LOV = SLASH.concat("lov").concat(SLASH).concat("categories");
     private static final String PARAM_SIGN = "?";
-    private static final String PARAM_HEARING = SLASH.concat("HearingChannel");
+    private static final String PARAM_HEARING = SLASH.concat("HearingSubChannel");
     private static final String PARAM_HEARING_WITH_PARAM_SIGN = PARAM_HEARING.concat(PARAM_SIGN);
     private static final String SERVICE_ID = "ServiceId=";
     private static final String SERVICE_ID_BBA3 = "BBA3";
@@ -141,7 +141,7 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
             var categories = response.getBody().as(Categories.class);
             assertNotNull(categories);
             assertThat(categories.getListOfCategory()).hasSizeGreaterThan(0);
-            categories.getListOfCategory().forEach(h -> assertEquals("HearingChannel", h.getCategoryKey()));
+            categories.getListOfCategory().forEach(h -> assertEquals("HearingSubChannel", h.getCategoryKey()));
             categories.getListOfCategory().forEach(h -> assertFalse(h.getChildNodes().isEmpty()));
         } else {
             assertEquals(NOT_FOUND.value(), response.getStatusCode());
@@ -212,7 +212,7 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
             commonDataApiClient.retrieveListOfValuesByCategoryId(
                 NOT_FOUND,
                 PARAM_HEARING_WITH_PARAM_SIGN
-                    + "isChildRequired=y&parentCategory=HearingChannel"
+                    + "isChildRequired=y&parentCategory=HearingSubChannel"
             );
         assertNotNull(response);
         assertEquals(DATA_NOT_FOUND, response.getErrorDescription());
@@ -312,7 +312,7 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
         if (OK.value() == response.getStatusCode()) {
             var categories = response.getBody().as(Categories.class);
             assertNotNull(categories);
-            categories.getListOfCategory().forEach(h -> assertEquals("HearingChannel", h.getCategoryKey()));
+            categories.getListOfCategory().forEach(h -> assertEquals("HearingSubChannel", h.getCategoryKey()));
             assertThat(categories.getListOfCategory()).hasSizeGreaterThan(0);
             categories.getListOfCategory().forEach(h -> assertNull(h.getChildNodes()));
         } else {
