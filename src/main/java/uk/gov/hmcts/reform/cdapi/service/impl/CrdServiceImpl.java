@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.cdapi.controllers.request.CategoryRequest;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
 import uk.gov.hmcts.reform.cdapi.domain.ListOfValueDto;
-import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
 import uk.gov.hmcts.reform.cdapi.repository.ListOfValuesRepository;
 import uk.gov.hmcts.reform.cdapi.service.CrdService;
 
@@ -34,6 +33,7 @@ public class CrdServiceImpl implements CrdService {
 
     @Override
     public List<Category> retrieveListOfValuesByCategory(CategoryRequest request) {
+        List<ListOfValueDto> list;
         boolean isChildRequired = isChildRequired(request);
 
         Specification<ListOfValueDto> query = prepareBaseQuerySpecification(request);
@@ -41,12 +41,7 @@ public class CrdServiceImpl implements CrdService {
             query = query.or(parentCategory(request.getCategoryId()).and(parentKey(request.getKey()))
                     .and(serviceId(request.getServiceId())));
         }
-
-        List<ListOfValueDto> list = listOfValuesRepository.findAll(query);
-        if (list.isEmpty()) {
-            throw new ResourceNotFoundException("Data not found");
-        }
-
+        list = checkServiceIdExists(request, query,isChildRequired);
         List<Category> channelList = convertCategoryList(list);
 
         if (isChildRequired) {
@@ -56,7 +51,28 @@ public class CrdServiceImpl implements CrdService {
         return channelList;
     }
 
-    private boolean isChildRequired(CategoryRequest request) {
+    public List<ListOfValueDto> checkServiceIdExists(CategoryRequest request,
+                                                     Specification<ListOfValueDto> query,
+                                                     boolean isChildRequired) {
+        List<ListOfValueDto> list  = listOfValuesRepository.findAll(query);
+
+        /*if (list.isEmpty()) {
+            request.setServiceId("");
+            query = prepareBaseQuerySpecification(request);
+            if (isChildRequired) {
+                query = query.or(parentCategory(request.getCategoryId()).and(parentKey(request.getKey()))
+                                     .and(serviceId(request.getServiceId())));
+            }
+            list = listOfValuesRepository.findAll(query);
+        }*/
+        return list;
+    }
+
+    public Specification<ListOfValueDto> prepareCategoryExistsQuerySpecification(CategoryRequest request) {
+        return where(categoryKey(request.getCategoryId()));
+    }
+
+    public boolean isChildRequired(CategoryRequest request) {
         return "Y".equalsIgnoreCase(request.getIsChildRequired())
             && request.getParentCategory() == null && request.getParentKey() == null;
     }
@@ -82,7 +98,7 @@ public class CrdServiceImpl implements CrdService {
         return channelList;
     }
 
-    private List<Category> convertCategoryList(List<ListOfValueDto> listOfValueDtos) {
+    public List<Category> convertCategoryList(List<ListOfValueDto> listOfValueDtos) {
         return listOfValueDtos.stream()
             .map(dto -> Category.builder()
                 .categoryKey(dto.getCategoryKey().getCategoryKey())
