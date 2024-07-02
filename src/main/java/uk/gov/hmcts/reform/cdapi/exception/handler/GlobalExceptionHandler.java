@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MissingPathVariableException;
@@ -60,8 +61,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpStatusCodeException.class)
     public ResponseEntity<Object> handleHttpStatusException(HttpStatusCodeException ex) {
-        HttpStatus httpStatus = ex.getStatusCode();
-        return errorDetailsResponseEntity(ex, httpStatus, httpStatus.getReasonPhrase());
+        return errorDetailsResponseEntity(ex);
     }
 
     @ExceptionHandler(InvalidRequestException.class)
@@ -130,6 +130,21 @@ public class GlobalExceptionHandler {
             rootException = rootException.getCause();
         }
         return rootException;
+    }
+
+    private ResponseEntity<Object> errorDetailsResponseEntity(HttpStatusCodeException ex) {
+
+        log.info(HANDLING_EXCEPTION_TEMPLATE, loggingComponentName, ex.getMessage(), ex);
+        HttpStatusCode statusCode = ex.getStatusCode();
+        ErrorResponse errorDetails = new ErrorResponse(
+            statusCode.value(),
+            ex.getStatusText(),
+            ex.getMessage(),
+            getRootException(ex).getLocalizedMessage(),
+            getTimeStamp()
+        );
+
+        return new ResponseEntity<>(errorDetails, statusCode);
     }
 
     private ResponseEntity<Object> errorDetailsResponseEntity(Exception ex, HttpStatus httpStatus, String errorMsg) {

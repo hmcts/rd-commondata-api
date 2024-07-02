@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.cdapi.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CaseFlag {
     private List<Flag> flags;
 }
