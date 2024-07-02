@@ -239,7 +239,7 @@ jacocoTestReport {
 }
 
 pitest {
-  junit5PluginVersion = '0.15'
+  junit5PluginVersion = '1.0.0'
   targetClasses = ['uk.gov.hmcts.reform.cdapi.*']
   excludedClasses = [
     'uk.gov.hmcts.reform.cdapi.config.*',
