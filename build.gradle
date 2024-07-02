@@ -418,7 +418,7 @@ dependencies {
     exclude group: 'junit', module: 'junit'
     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
   }
-  testImplementation("com.github.tomakehurst:wiremock-jre8:2.35.2") {
+  testImplementation("com.github.tomakehurst:wiremock-jre8-standalone:3.0.1") {
     exclude group: 'com.github.jknack'
   }
 
