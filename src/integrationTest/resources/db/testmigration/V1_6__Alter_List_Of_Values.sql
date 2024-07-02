@@ -16,4 +16,3 @@ VALUES ('HearingChannel','BBA3','telephone','Telephone',null,null,null,2,null,nu
 ('ListingStatusSubChannel','','test','test',null,null,null,null,'ListingStatus','test','Y'),
 ('InterpreterLanguage','BBA1','test2','test2','test2',null,null,null,'HearingChannel','test','Y'),
 ('SignLanguage','BBA1','test4','test4','test4',null,null,null,'HearingChannel','test','Y');
-
