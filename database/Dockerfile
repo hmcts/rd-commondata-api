@@ -1,4 +1,4 @@
-FROM  hmctspublic.azurecr.io/imported/postgres:11
+FROM postgres:11
 
 COPY init-db.sh /docker-entrypoint-initdb.d/
 
