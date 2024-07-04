@@ -2,15 +2,14 @@ package uk.gov.hmcts.reform.cdapi.util;
 
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.utility.DockerImageName;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
+@Testcontainers
 public class CommonDataApiPostgresqlContainer extends PostgreSQLContainer<CommonDataApiPostgresqlContainer> {
-    private static final DockerImageName dockerImageName = DockerImageName
-        .parse("hmctspublic.azurecr.io/imported/postgres:11.1")
-        .asCompatibleSubstituteFor("postgres");
+    private static final String IMAGE_VERSION = "postgres:11.1";
 
     private CommonDataApiPostgresqlContainer() {
-        super(dockerImageName);
+        super(IMAGE_VERSION);
     }
 
     @Container
