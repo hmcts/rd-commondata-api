@@ -1,7 +1,7 @@
 locals {
-  key_vault_name          = join("-", [var.product, var.env])
-  s2s_key_vault_name        = join("-", ["s2s", var.env])
-  s2s_vault_resource_group  = join("-", ["rpe-service-auth-provider", var.env])
+  key_vault_name           = join("-", [var.product, var.env])
+  s2s_key_vault_name       = join("-", ["s2s", var.env])
+  s2s_vault_resource_group = join("-", ["rpe-service-auth-provider", var.env])
 }
 
 data "azurerm_key_vault" "rd_key_vault" {
@@ -15,14 +15,14 @@ data "azurerm_key_vault" "s2s_key_vault" {
 }
 
 data "azurerm_key_vault_secret" "s2s_secret" {
-  name          = "microservicekey-rd-commondata-api"
-  key_vault_id  = data.azurerm_key_vault.s2s_key_vault.id
+  name         = "microservicekey-rd-commondata-api"
+  key_vault_id = data.azurerm_key_vault.s2s_key_vault.id
 }
 
 resource "azurerm_key_vault_secret" "common_data_s2s_secret" {
-  name          = "common-data-api-s2s-secret"
-  value         = data.azurerm_key_vault_secret.s2s_secret.value
-  key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
+  name         = "common-data-api-s2s-secret"
+  value        = data.azurerm_key_vault_secret.s2s_secret.value
+  key_vault_id = data.azurerm_key_vault.rd_key_vault.id
 }
 
 # Create the database server v16
@@ -47,49 +47,49 @@ module "db-common-data-v16" {
   force_user_permissions_trigger = "3"
 
   # Sets correct DB owner after migration to fix permissions
-  enable_schema_ownership = var.enable_schema_ownership
+  enable_schema_ownership        = var.enable_schema_ownership
   force_schema_ownership_trigger = "3"
-  kv_subscription = var.kv_subscription
-  kv_name = data.azurerm_key_vault.rd_key_vault.name
-  user_secret_name = azurerm_key_vault_secret.POSTGRES-USER.name
-  pass_secret_name = azurerm_key_vault_secret.POSTGRES-PASS.name
+  kv_subscription                = var.kv_subscription
+  kv_name                        = data.azurerm_key_vault.rd_key_vault.name
+  user_secret_name               = azurerm_key_vault_secret.POSTGRES-USER.name
+  pass_secret_name               = azurerm_key_vault_secret.POSTGRES-PASS.name
 
-  subnet_suffix        = "expanded"
-  pgsql_version        = "16"
-  pgsql_sku            = var.pgsql_sku
-  product              = "rd"
-  name               = join("-", [var.product-v16, var.component-v16])
+  subnet_suffix = "expanded"
+  pgsql_version = "16"
+  pgsql_sku     = var.pgsql_sku
+  product       = "rd"
+  name          = join("-", [var.product-v16, var.component-v16])
 
   pgsql_server_configuration = var.pgsql_server_configuration
 
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
-  name          = join("-", [var.component, "POSTGRES-USER"])
-  value         = module.db-common-data-v16.username
-  key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
+  name         = join("-", [var.component, "POSTGRES-USER"])
+  value        = module.db-common-data-v16.username
+  key_vault_id = data.azurerm_key_vault.rd_key_vault.id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
-  name          = join("-", [var.component, "POSTGRES-HOST"])
-  value         = module.db-common-data-v16.fqdn
-  key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
+  name         = join("-", [var.component, "POSTGRES-HOST"])
+  value        = module.db-common-data-v16.fqdn
+  key_vault_id = data.azurerm_key_vault.rd_key_vault.id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
-  name          = join("-", [var.component, "POSTGRES-PASS"])
-  value         = module.db-common-data-v16.password
-  key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
+  name         = join("-", [var.component, "POSTGRES-PASS"])
+  value        = module.db-common-data-v16.password
+  key_vault_id = data.azurerm_key_vault.rd_key_vault.id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
-  name          = join("-", [var.component, "POSTGRES-DATABASE"])
-  value         = "dbcommondata"
-  key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
+  name         = join("-", [var.component, "POSTGRES-DATABASE"])
+  value        = "dbcommondata"
+  key_vault_id = data.azurerm_key_vault.rd_key_vault.id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
-  name          = join("-", [var.component, "POSTGRES-PORT"])
-  value         = "5432"
-  key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
+  name         = join("-", [var.component, "POSTGRES-PORT"])
+  value        = "5432"
+  key_vault_id = data.azurerm_key_vault.rd_key_vault.id
 }
