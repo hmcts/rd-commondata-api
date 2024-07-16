@@ -3,22 +3,22 @@ variable "product" {
 }
 
 variable "component" {
-  type = string
-  default="postgres-db-v11"
+  type    = string
+  default = "postgres-db-v11"
 }
 
 variable "component-v16" {
-  type = string
-  default="postgres-db-v16"
+  type    = string
+  default = "postgres-db-v16"
 }
 
 variable "product-v16" {
-  type = string
-  default="rd-commondata-api"
+  type    = string
+  default = "rd-commondata-api"
 }
 
 variable "location" {
-  type = string
+  type    = string
   default = "UK South"
 }
 
@@ -107,5 +107,5 @@ variable "pgsql_server_configuration" {
 
 variable "pgsql_sku" {
   description = "The PGSql flexible server instance sku"
-  default     =  "GP_Standard_D4s_v3"
+  default     = "GP_Standard_D4s_v3"
 }
