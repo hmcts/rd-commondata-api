@@ -51,7 +51,7 @@ def versions = [
   feign           : '3.8.0',
   bytebuddy       : '1.14.17',
   testContainer_postgresql: '1.19.8',
-  bouncycastle    : '1.78.1'
+  bouncycastle    : '1.78'
 ]
 
 sourceSets {
@@ -286,7 +286,7 @@ dependencyManagement {
 
   dependencies {
     // CVE-2021-42340
-    dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.14') {
+    dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.16') {
       entry 'tomcat-embed-core'
       entry 'tomcat-embed-el'
       entry 'tomcat-embed-websocket'
@@ -518,6 +518,23 @@ bootJar {
 
   manifest {
     attributes('Implementation-Version': project.version.toString())
+  }
+}
+
+configurations.all {
+  resolutionStrategy.eachDependency { details ->
+    if (details.requested.group == 'org.bouncycastle'
+      && details.requested.name == 'bcpkix-jdk18on' ){
+      details.useVersion versions.bouncycastle
+    }
+  }
+}
+
+dependencies {
+  modules {
+    module("org.bouncycastle:bcpkix-jdk15on") {
+      replacedBy("org.bouncycastle:bcpkix-jdk18on")
+    }
   }
 }
 
