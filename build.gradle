@@ -37,23 +37,23 @@ ext {
 }
 
 def versions = [
-  lombok          : '1.18.32',
-  gradlePitest    : '1.5.1',
-  pitest          : '1.16.1',
-  sonarPitest     : '0.5',
-  reformLogging   : '6.1.4',
-  pact_version    : '4.1.7',
-  log4j           : '2.23.1',
-  launchDarklySdk : "5.10.9",
-  reformS2sClient : '5.1.0',
-  springHystrix   : '2.0.76',
-  restAssured     : '4.3.3',
-  feign           : '3.8.0',
-  bytebuddy       : '1.14.18',
-  testContainer_postgresql: '1.19.8',
-  junit           : '5.9.2',
-  junitPlatform   : '1.10.3',
-  bouncycastle    : '1.78.1'
+        lombok          : '1.18.32',
+        gradlePitest    : '1.5.1',
+        pitest          : '1.16.1',
+        sonarPitest     : '0.5',
+        reformLogging   : '6.1.4',
+        pact_version    : '4.1.7',
+        log4j           : '2.23.1',
+        launchDarklySdk : "5.10.9",
+        reformS2sClient : '5.1.0',
+        springHystrix   : '2.0.76',
+        restAssured     : '4.3.3',
+        feign           : '3.8.0',
+        bytebuddy       : '1.14.18',
+        testContainer_postgresql: '1.19.8',
+        junit           : '5.9.2',
+        junitPlatform   : '1.10.3',
+        bouncycastle    : '1.78.1'
 ]
 
 sourceSets {
@@ -211,8 +211,8 @@ pmd {
   reportsDir = file("$project.buildDir/reports/pmd")
   // https://github.com/pmd/pmd/issues/876
   ruleSets = [
-    'category/java/errorprone.xml',
-    'category/java/bestpractices.xml'
+          'category/java/errorprone.xml',
+          'category/java/bestpractices.xml'
   ]
 }
 
@@ -244,8 +244,8 @@ pitest {
   junit5PluginVersion = '1.2.1'
   targetClasses = ['uk.gov.hmcts.reform.cdapi.*']
   excludedClasses = [
-    'uk.gov.hmcts.reform.cdapi.config.*',
-    'uk.gov.hmcts.reform.cdapi.domain.*'
+          'uk.gov.hmcts.reform.cdapi.config.*',
+          'uk.gov.hmcts.reform.cdapi.domain.*'
   ]
   threads = 10
   enableDefaultIncrementalAnalysis = true
@@ -267,8 +267,8 @@ sonarqube {
     property "sonar.pitest.mode", "reuseReport"
     property "sonar.pitest.reportsDirectory", "build/reports/pitest"
     property "sonar.exclusions", "src/main/java/uk/gov/hmcts/reform/cdapi/config/**," +
-      "src/main/java/uk/gov/hmcts/reform/cdapi/CommonDataApplication.java," +
-      "src/main/java/uk/gov/hmcts/reform/cdapi/domain/**"
+            "src/main/java/uk/gov/hmcts/reform/cdapi/CommonDataApplication.java," +
+            "src/main/java/uk/gov/hmcts/reform/cdapi/domain/**"
   }
 }
 
@@ -524,7 +524,7 @@ bootJar {
 configurations.all {
   resolutionStrategy.eachDependency { details ->
     if (details.requested.group == 'org.bouncycastle'
-      && details.requested.name == 'bcpkix-jdk18on' ){
+            && details.requested.name == 'bcpkix-jdk18on' ){
       details.useVersion versions.bouncycastle
     }
   }
@@ -547,3 +547,4 @@ dependencyManagement {
     mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
   }
 }
+
