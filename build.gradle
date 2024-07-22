@@ -408,7 +408,6 @@ dependencies {
   testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: versions.testContainer_postgresql
   testImplementation group: 'org.testcontainers', name: 'testcontainers', version: versions.testContainer_postgresql
 
-
   testImplementation(platform('org.junit:junit-bom:5.10.2'))
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
     exclude group: 'junit', module: 'junit'
@@ -451,13 +450,11 @@ dependencies {
   functionalTestImplementation group: 'org.junit.platform', name: 'junit-platform-commons', version: versions.junitPlatform
   functionalTestRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-engine', version: versions.junitPlatform
 
-
   smokeTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
   smokeTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
   smokeTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit
   smokeTestImplementation group: 'org.junit.platform', name: 'junit-platform-commons', version: versions.junitPlatform
   smokeTestRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-engine', version: versions.junitPlatform
-
 
   integrationTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
   integrationTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
@@ -465,12 +462,10 @@ dependencies {
   integrationTestImplementation group: 'org.junit.platform', name: 'junit-platform-commons', version: versions.junitPlatform
   integrationTestRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-engine', version: versions.junitPlatform
 
-
   contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
   contractTestRuntimeOnly group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
   contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'java8', version: versions.pact_version
   contractTestRuntimeOnly group: 'au.com.dius.pact.consumer', name: 'java8', version: versions.pact_version
-
 
   contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.10.3")
   contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.3")
