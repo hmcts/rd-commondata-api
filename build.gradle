@@ -211,8 +211,8 @@ pmd {
   reportsDir = file("$project.buildDir/reports/pmd")
   // https://github.com/pmd/pmd/issues/876
   ruleSets = [
-          'category/java/errorprone.xml',
-          'category/java/bestpractices.xml'
+       'category/java/errorprone.xml',
+       'category/java/bestpractices.xml'
   ]
 }
 
