@@ -1,44 +1,43 @@
 package uk.gov.hmcts.reform.cdapi.domain;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Path;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.jpa.domain.Specification;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
 class QuerySpecificationTest {
 
-    @Mock
+    @Spy
     Specification<ListOfValueDto> specMock;
-    @Mock
+    @Spy
     Root<ListOfValueDto> root;
-    @Mock
+    @Spy
     CriteriaQuery<ListOfValueDto> query;
-    @Mock
+    @Spy
     CriteriaBuilder builder;
-    @Mock
+    @Spy
     Predicate predicate;
-    @Mock
+    @Spy
     Path<Object> pathObj;
 
     @Test
     void retrieveCategoryKey() {
-        when(root.get(anyString())).thenReturn(pathObj);
-        when(specMock.toPredicate(root, query, builder)).thenReturn(predicate);
+        doReturn(pathObj).when(root).get(anyString());
+        doReturn(predicate).when(specMock).toPredicate(root, query, builder);
 
         Specification<ListOfValueDto> result = QuerySpecification.categoryKey("HearingChannel");
         result = result.and(specMock);
@@ -59,7 +58,7 @@ class QuerySpecificationTest {
 
     @Test
     void retrieveParentCategory() {
-        when(specMock.toPredicate(root, query, builder)).thenReturn(predicate);
+        doReturn(predicate).when(specMock).toPredicate(root, query, builder);
 
         Specification<ListOfValueDto> result = QuerySpecification.parentCategory("HearingChannel");
 
@@ -80,11 +79,21 @@ class QuerySpecificationTest {
 
     @Test
     void retrieveServiceId() {
-        when(root.get(anyString())).thenReturn(pathObj);
-        when(specMock.toPredicate(root, query, builder)).thenReturn(predicate);
+        doReturn(pathObj).when(root).get(anyString());
+        doReturn(predicate).when(specMock).toPredicate(root, query, builder);
 
         Specification<ListOfValueDto> result = QuerySpecification.serviceId("BBA3");
 
+        result = result.and(specMock);
+        Assertions.assertThat(result).isNotNull();
+        MatcherAssert.assertThat(result.toPredicate(root, query, builder), is(predicate));
+    }
+
+    @Test
+    void retrieveServiceId_withEmpty() {
+        doReturn(pathObj).when(root).get(anyString());
+        doReturn(predicate).when(specMock).toPredicate(root, query, builder);
+        Specification<ListOfValueDto> result = QuerySpecification.serviceId("");
         result = result.and(specMock);
         Assertions.assertThat(result).isNotNull();
         MatcherAssert.assertThat(result.toPredicate(root, query, builder), is(predicate));
@@ -102,8 +111,7 @@ class QuerySpecificationTest {
 
     @Test
     void retrieveParentKey() {
-        when(specMock.toPredicate(root, query, builder)).thenReturn(predicate);
-
+        doReturn(predicate).when(specMock).toPredicate(root, query, builder);
         Specification<ListOfValueDto> result = QuerySpecification.parentKey("telephone");
 
         result = result.and(specMock);

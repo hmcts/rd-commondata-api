@@ -38,7 +38,8 @@ public class CrdServiceImpl implements CrdService {
 
         Specification<ListOfValueDto> query = prepareBaseQuerySpecification(request);
         if (isChildRequired) {
-            query = query.or(parentCategory(request.getCategoryId()).and(parentKey(request.getKey())));
+            query = query.or(parentCategory(request.getCategoryId()).and(parentKey(request.getKey()))
+                    .and(serviceId(request.getServiceId())));
         }
 
         List<ListOfValueDto> list = listOfValuesRepository.findAll(query);
@@ -51,6 +52,7 @@ public class CrdServiceImpl implements CrdService {
         if (isChildRequired) {
             channelList = mapToParentCategory(channelList);
         }
+
         return channelList;
     }
 
@@ -69,11 +71,12 @@ public class CrdServiceImpl implements CrdService {
 
     private List<Category> mapToParentCategory(List<Category> channelList) {
         Map<String, List<Category>> result = channelList.stream().collect(
-            Collectors.groupingBy(h -> StringUtils.isEmpty(h.getParentKey())
-                                      ? PARENT : h.getParentKey(), HashMap::new,
+            Collectors.groupingBy(h -> StringUtils.isEmpty(h.getParentKey()) ? PARENT
+                                      : h.getParentKey() + h.getParentCategory() + h.getServiceId(), HashMap::new,
                                   Collectors.toCollection(ArrayList::new)));
         if (result.get(PARENT) != null) {
-            result.get(PARENT).forEach(channel -> channel.setChildNodes(result.get(channel.getKey())));
+            result.get(PARENT).forEach(channel -> channel.setChildNodes(result.get(channel.getKey() + channel
+                .getCategoryKey() + channel.getServiceId())));
             channelList = result.get(PARENT);
         }
         return channelList;
@@ -83,7 +86,7 @@ public class CrdServiceImpl implements CrdService {
         return listOfValueDtos.stream()
             .map(dto -> Category.builder()
                 .categoryKey(dto.getCategoryKey().getCategoryKey())
-                .serviceId(dto.getServiceId())
+                .serviceId(dto.getCategoryKey().getServiceId())
                 .activeFlag(dto.getActive())
                 .hintTextCy(dto.getHintTextCy())
                 .hintTextEn(dto.getHintTextEn())
@@ -93,6 +96,13 @@ public class CrdServiceImpl implements CrdService {
                 .valueEn(dto.getValueEn())
                 .parentCategory(dto.getParentCategory())
                 .parentKey(dto.getParentKey())
-                .build()).collect(Collectors.toUnmodifiableList());
+                .build())
+            .sorted((c1, c2) -> {
+                if (c1.getLovOrder() != null && c2.getLovOrder() != null) {
+                    return Long.compare(c1.getLovOrder(), c2.getLovOrder());
+                }
+                return CharSequence.compare(c1.getValueEn(), c2.getValueEn());
+            })
+            .collect(Collectors.toUnmodifiableList());
     }
 }

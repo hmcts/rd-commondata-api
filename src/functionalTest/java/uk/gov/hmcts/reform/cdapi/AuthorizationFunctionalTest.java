@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.cdapi;
 
 import io.restassured.parsing.Parser;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.rest.SerenityRest;
 import org.junit.jupiter.api.AfterAll;
@@ -9,15 +10,14 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import uk.gov.hmcts.reform.cdapi.client.CommonDataApiClient;
-import uk.gov.hmcts.reform.cdapi.client.S2sClient;
 import uk.gov.hmcts.reform.cdapi.config.Oauth2;
 import uk.gov.hmcts.reform.cdapi.config.TestConfigProperties;
 import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
 import uk.gov.hmcts.reform.cdapi.idam.IdamOpenIdClient;
+import uk.gov.hmcts.reform.lib.client.response.S2sClient;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.PostConstruct;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.junit.jupiter.api.Assertions.assertEquals;

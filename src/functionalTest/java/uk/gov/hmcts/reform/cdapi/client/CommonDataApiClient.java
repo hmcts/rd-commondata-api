@@ -8,9 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.rest.SerenityRest;
 import org.springframework.http.HttpStatus;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Categories;
-import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
 import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
 import uk.gov.hmcts.reform.cdapi.idam.IdamOpenIdClient;
+import uk.gov.hmcts.reform.cdapi.util.ErrorInvalidRequestResponse;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -67,15 +67,15 @@ public class CommonDataApiClient {
     }
 
     public Object retrieveCaseFlagsByServiceId(HttpStatus expectedStatus, String param) {
+        log.info(" In retrieveCaseFlagsByServiceId");
         Response response = getMultipleAuthHeaders()
-            .get(BASE_URL_CASE_FLAGS + "/caseflags/service-id=XXXX?flag-type=" + param)
+            .get(BASE_URL_CASE_FLAGS + "/caseflags/" + param)
             .andReturn();
-
         response.then()
             .assertThat()
             .statusCode(expectedStatus.value());
         if (expectedStatus.is2xxSuccessful()) {
-            return Arrays.asList(response.getBody().as(CaseFlag[].class));
+            return response.getBody();
         } else {
             return response.getBody().as(ErrorResponse.class);
         }
@@ -92,7 +92,7 @@ public class CommonDataApiClient {
         if (expectedStatus.is2xxSuccessful()) {
             return Arrays.asList(response.getBody().as(Categories[].class));
         } else {
-            return response.getBody().as(ErrorResponse.class);
+            return response.getBody().as(ErrorInvalidRequestResponse.class);
         }
     }
 
@@ -172,7 +172,7 @@ public class CommonDataApiClient {
             .baseUri(commonDataApiUrl)
             .header("Content-Type", APPLICATION_JSON_VALUE)
             .header("Accepts", APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION_HEADER, "Bearer " + idamOpenIdClient.getOpenIdToken());
+            .header(AUTHORIZATION_HEADER, "Bearer " + idamOpenIdClient.getcwdAdminOpenIdToken("crd-admin"));
     }
 
     public RequestSpecification getMultipleAuthHeaders() {
@@ -182,7 +182,7 @@ public class CommonDataApiClient {
             .header("Content-Type", APPLICATION_JSON_VALUE)
             .header("Accepts", APPLICATION_JSON_VALUE)
             .header(SERVICE_HEADER, "Bearer " + s2sToken)
-            .header(AUTHORIZATION_HEADER, "Bearer " + idamOpenIdClient.getOpenIdToken());
+            .header(AUTHORIZATION_HEADER, "Bearer " + idamOpenIdClient.getcwdAdminOpenIdToken("crd-admin"));
     }
 
     @SuppressWarnings("unused")

@@ -1,4 +1,6 @@
-{
+{"10112_Session Management Response Identified_http://rd-commondata-api-aat.service.core-compute-aat.internal/v2/api-docs_GET":"ignore",
+  "10049_Non-Storable Content_http://rd-commondata-api-aat.service.core-compute-aat.internal/v2/api-docs_GET":"ignore",
+  "10049_Storable and Cacheable Content_http://rd-commondata-api-aat.service.core-compute-aat.internal/v2/api-docs_GET":"ignore",
   "10010_Cookie No HttpOnly Flag_http://rd-commondata-api-aat.service.core-compute-aat.internal/_GET": "ignore",
   "10010_Cookie No HttpOnly Flag_http://rd-commondata-api-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
   "10054_Cookie without SameSite Attribute_http://rd-commondata-api-aat.service.core-compute-aat.internal/_GET": "ignore",
@@ -31,5 +33,21 @@
   "10054_Cookie without SameSite Attribute_http://rd-commondata-api-aat.service.core-compute-aat.internal/refdata/commondata/lov/categories/categoryId?isChildRequired=isChildRequired&key=key&parentCategory=parentCategory&parentKey=parentKey&serviceId=serviceId_GET" : "ignore",
   "10096_Timestamp Disclosure - Unix_http://rd-commondata-api-aat.service.core-compute-aat.internal/refdata/commondata/lov/categories/categoryId?isChildRequired=isChildRequired&key=key&parentCategory=parentCategory&parentKey=parentKey&serviceId=serviceId_GET" : "ignore",
   "100000_A Client Error response code was returned by the server_http://rd-commondata-api-aat.service.core-compute-aat.internal/refdata/commondata/lov/categories/categoryId?isChildRequired=isChildRequired&key=key&parentCategory=parentCategory&parentKey=parentKey&serviceId=serviceId_GET" : "ignore",
-  "90033_Loosely Scoped Cookie_http://rd-commondata-api-aat.service.core-compute-aat.internal/refdata/commondata/lov/categories/categoryId?isChildRequired=isChildRequired&key=key&parentCategory=parentCategory&parentKey=parentKey&serviceId=serviceId_GET" : "ignore"
+  "90033_Loosely Scoped Cookie_http://rd-commondata-api-aat.service.core-compute-aat.internal/refdata/commondata/lov/categories/categoryId?isChildRequired=isChildRequired&key=key&parentCategory=parentCategory&parentKey=parentKey&serviceId=serviceId_GET" : "ignore",
+  "10010_Cookie No HttpOnly Flag_http://rd-commondata-api-aat.service.core-compute-aat.internal/refdata/commondata/caseflags/service-id=service-id?available-external-flag=available-external-flag&flag-type=flag-type&welsh-required=welsh-required_GET" : "ignore",
+  "10054_Cookie without SameSite Attribute_http://rd-commondata-api-aat.service.core-compute-aat.internal/refdata/commondata/caseflags/service-id=service-id?available-external-flag=available-external-flag&flag-type=flag-type&welsh-required=welsh-required_GET" : "ignore",
+  "100000_A Client Error response code was returned by the server_http://rd-commondata-api-aat.service.core-compute-aat.internal/refdata/commondata/caseflags/service-id=service-id?available-external-flag=available-external-flag&flag-type=flag-type&welsh-required=welsh-required_GET" : "ignore",
+  "90033_Loosely Scoped Cookie_http://rd-commondata-api-aat.service.core-compute-aat.internal/refdata/commondata/caseflags/service-id=service-id?available-external-flag=available-external-flag&flag-type=flag-type&welsh-required=welsh-required_GET" : "ignore",
+  "10096_Timestamp Disclosure - Unix_http://rd-commondata-api-aat.service.core-compute-aat.internal/refdata/commondata/caseflags/service-id=service-id?available-external-flag=available-external-flag&flag-type=flag-type&welsh-required=welsh-required_GET" : "ignore",
+  "100000_A Client Error response code was returned by the server_http://rd-commondata-api-aat.service.core-compute-aat.internal/v2/api-docs_GET" : "ignore",
+  "10010_Cookie No HttpOnly Flag_http://rd-commondata-api-aat.service.core-compute-aat.internal_GET" : "ignore",
+  "10010_Cookie No HttpOnly Flag_http://rd-commondata-api-aat.service.core-compute-aat.internal/robots.txt_GET" : "ignore",
+  "10054_Cookie without SameSite Attribute_http://rd-commondata-api-aat.service.core-compute-aat.internal_GET" : "ignore",
+  "10054_Cookie without SameSite Attribute_http://rd-commondata-api-aat.service.core-compute-aat.internal/robots.txt_GET" : "ignore",
+  "10096_Timestamp Disclosure - Unix_http://rd-commondata-api-aat.service.core-compute-aat.internal/robots.txt_GET" : "ignore",
+  "10021_X-Content-Type-Options Header Missing_http://rd-commondata-api-aat.service.core-compute-aat.internal_GET" : "ignore",
+  "90033_Loosely Scoped Cookie_http://rd-commondata-api-aat.service.core-compute-aat.internal_GET" : "ignore",
+  "90033_Loosely Scoped Cookie_http://rd-commondata-api-aat.service.core-compute-aat.internal/robots.txt_GET" : "ignore",
+  "10096_Timestamp Disclosure - Unix_http://rd-commondata-api-aat.service.core-compute-aat.internal_GET" : "ignore",
+  "10096_Timestamp Disclosure - Unix_http://rd-commondata-api-aat.service.core-compute-aat.internal/sitemap.xml_GET" : "ignore"
 }

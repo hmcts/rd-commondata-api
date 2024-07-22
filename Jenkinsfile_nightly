@@ -1,7 +1,7 @@
 #!groovy
 
 properties([
-        pipelineTriggers([cron('21 01 * * *')]), // scheduling to trigger jenkins job
+        pipelineTriggers([cron('H 07 * * 1-5')]), // scheduling to trigger jenkins job
         parameters([
                 string(name: 'ENVIRONMENT', defaultValue: 'aat', description: 'Environment to test'),
                 string(name: 'URL_TO_TEST', defaultValue: 'http://rd-commondata-api-aat.service.core-compute-aat.internal', description: 'The URL you want to run these tests against'),
@@ -56,14 +56,18 @@ withNightlyPipeline(type, product, component) {
   env.Rules = params.SecurityRules
   env.execution_environment = "aat"
 
+  // Var for testcontainers.org
+  env.TESTCONTAINERS_HUB_IMAGE_NAME_PREFIX = "hmctspublic.azurecr.io/imported/"
+
   overrideVaultEnvironments(vaultOverrides)
   loadVaultSecrets(secrets)
 
   enableMutationTest()
   enableFullFunctionalTest()
   enableSecurityScan()
+  enableFortifyScan()
 
-  after('mutationTest') {
+  afterSuccess('mutationTest') {
     publishHTML target: [
       allowMissing         : true,
       alwaysLinkToLastBuild: true,
@@ -73,7 +77,7 @@ withNightlyPipeline(type, product, component) {
       reportName           : "Mutation Test Report"
     ]
   }
-  after('fullFunctionalTest') {
+  afterSuccess('fullFunctionalTest') {
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
     publishHTML target: [
@@ -84,5 +88,9 @@ withNightlyPipeline(type, product, component) {
       reportFiles          : "index.html",
       reportName           : "Functional Tests Report"
     ]
+  }
+
+  afterSuccess('fortify-scan') {
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
   }
 }

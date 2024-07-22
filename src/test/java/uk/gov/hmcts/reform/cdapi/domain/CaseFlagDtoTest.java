@@ -10,6 +10,7 @@ class CaseFlagDtoTest {
     void testCaseFlagDto() {
         var caseFlagDto = new CaseFlagDto();
         caseFlagDto.setFlagCode("RA0001");
+        caseFlagDto.setNativeFlagCode("RA0001");
         caseFlagDto.setCategoryId(1);
         caseFlagDto.setCategoryPath("PARTY");
         caseFlagDto.setId(2);
@@ -19,6 +20,7 @@ class CaseFlagDtoTest {
         caseFlagDto.setIsParent(false);
 
         assertEquals("RA0001", caseFlagDto.getFlagCode());
+        assertEquals("RA0001", caseFlagDto.getNativeFlagCode());
         assertEquals(1, caseFlagDto.getCategoryId());
         assertEquals("PARTY", caseFlagDto.getCategoryPath());
         assertEquals(2, caseFlagDto.getId());

@@ -43,7 +43,7 @@ import static org.mockito.Mockito.when;
 @PactBroker(scheme = "${PACT_BROKER_SCHEME:http}",
     host = "${PACT_BROKER_URL:localhost}",
     port = "${PACT_BROKER_PORT:80}", consumerVersionSelectors = {
-    @VersionSelector(tag = "master")})
+        @VersionSelector(tag = "master")})
 @ContextConfiguration(classes = {CaseFlagApiController.class, CrdApiController.class, CrdServiceImpl.class,
     CaseFlagServiceImpl.class})
 @TestPropertySource(properties = {"loggingComponentName=CommonDataApiProviderTest"})
@@ -77,7 +77,7 @@ public class CommonDataApiProviderTest {
     void before(PactVerificationContext context) {
         MockMvcTestTarget testTarget = new MockMvcTestTarget();
         testTarget.setControllers(
-            caseFlagApiController,crdApiController);
+            caseFlagApiController, crdApiController);
         if (nonNull(context)) {
             context.setTarget(testTarget);
         }
@@ -89,6 +89,7 @@ public class CommonDataApiProviderTest {
         listOfValue.setValue("1");
         listOfValue.setKey("EN");
         listOfValue.setValue("English");
+        listOfValue.setValueCy("English");
         List<ListOfValue> listOfValues = new ArrayList<>();
         listOfValues.add(listOfValue);
         when(listOfVenueRepository.findListOfValues(anyString())).thenReturn(listOfValues);
@@ -101,6 +102,9 @@ public class CommonDataApiProviderTest {
         caseFlagDto1.setRequestReason(false);
         caseFlagDto1.setValueEn("E");
         caseFlagDto1.setIsParent(false);
+        caseFlagDto1.setExternallyAvailable(true);
+        caseFlagDto1.setDefaultStatus("Active");
+
 
         CaseFlagDto caseFlagDto2 = new CaseFlagDto();
         caseFlagDto2.setFlagCode("CF0001");
@@ -111,6 +115,8 @@ public class CommonDataApiProviderTest {
         caseFlagDto2.setRequestReason(false);
         caseFlagDto2.setValueEn("E");
         caseFlagDto2.setIsParent(false);
+        caseFlagDto1.setExternallyAvailable(false);
+        caseFlagDto1.setDefaultStatus("Active");
 
         List<CaseFlagDto> caseFlagDtos = new ArrayList<>();
         caseFlagDtos.add(caseFlagDto1);
@@ -122,10 +128,12 @@ public class CommonDataApiProviderTest {
     public void toReturnListOfCategoriesWithChildNodesByCategoryId() {
         List<ListOfValueDto> listOfValueDtos = List.of(
             buildListOfValueDto("HearingChannel", "video", "Video",
-                                null, null),
+                                null, null
+            ),
             buildListOfValueDto("HearingSubChannel", "video-cvp", "Video - CVP",
-                                "HearingChannel", "video")
-            );
+                                "HearingChannel", "video"
+            )
+        );
 
         when(listOfValuesRepository.findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any()))
             .thenReturn(listOfValueDtos);
@@ -143,10 +151,10 @@ public class CommonDataApiProviderTest {
         listOfValueDto1.setHintTextEn(null);
         listOfValueDto1.setValueCy(null);
         listOfValueDto1.setValueEn(value);
-        listOfValueDto1.setServiceId("BBA3");
         CategoryKey categoryKey = new CategoryKey();
         categoryKey.setKey(key);
         categoryKey.setCategoryKey(categoryId);
+        categoryKey.setServiceId("BBA3");
         listOfValueDto1.setCategoryKey(categoryKey);
         return listOfValueDto1;
     }

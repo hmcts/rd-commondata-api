@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import uk.gov.hmcts.reform.cdapi.domain.jsonfilter.IgnoreJsonFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,13 @@ public class FlagDetail {
     private String name;
     private Boolean hearingRelevant;
     private Boolean flagComment;
+    private String defaultStatus;
+    private Boolean externallyAvailable;
+    @JsonProperty("name_cy")
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = IgnoreJsonFilter.class)
+    private String nameCy;
     private String flagCode;
+    private String nativeFlagCode;
     @JsonIgnore
     private Integer cateGoryId;
     @JsonProperty("isParent")

@@ -1,12 +1,11 @@
 package uk.gov.hmcts.reform.cdapi.domain;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
 
 
 @Data
@@ -16,9 +15,6 @@ import javax.persistence.Entity;
 public class ListOfValueDto {
     @EmbeddedId
     private CategoryKey categoryKey;
-
-    @Column(name = "serviceid")
-    private String serviceId;
 
     @Column(name = "value_en")
     private String valueEn;

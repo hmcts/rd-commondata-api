@@ -21,7 +21,13 @@ public class QuerySpecification {
     public static Specification<ListOfValueDto> serviceId(String serviceId) {
         return (root, query, builder) ->
             serviceId == null ? builder.conjunction() :
-                builder.equal(builder.lower(root.get("serviceId")), serviceId.toLowerCase().trim());
+                builder.or(
+                    builder.equal(
+                        builder.lower(root.get("categoryKey").get("serviceId")),
+                        serviceId.toLowerCase().trim()
+                    ),
+                    builder.equal(root.get("categoryKey").get("serviceId"), "")
+                );
     }
 
     /**

@@ -1,10 +1,9 @@
 package uk.gov.hmcts.reform.cdapi.domain;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.Data;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
 
 @Data
 @Entity
@@ -14,6 +13,8 @@ public class CaseFlagDto {
     Integer id;
     @Column(name = "flag_code")
     String flagCode;
+    @Column(name = "native_flag_code")
+    String nativeFlagCode;
     @Column(name = "value_cy")
     String valueCy;
     @Column(name = "value_en")
@@ -28,4 +29,9 @@ public class CaseFlagDto {
     Boolean requestReason;
     @Column(name = "isparent")
     Boolean isParent;
+    @Column(name = "default_status")
+    String defaultStatus;
+    @Column(name = "available_externally")
+    Boolean externallyAvailable;
+
 }

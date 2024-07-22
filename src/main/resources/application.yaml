@@ -19,11 +19,11 @@ spring:
     show-sql: false
     properties:
       hibernate:
-#        default_schema: dbcommondata
         jdbc:
           lob:
             non_contextual_creation: true
           time_zone: UTC
+    #    default_schema: dbcommondata
     cache:
       cache-names: token
       caffeine:
@@ -35,6 +35,7 @@ spring:
     import: "optional:configtree:/mnt/secrets/rd/"
   main:
     allow-bean-definition-overriding: true
+    allow-circular-references: true
   application:
     name: RD Commond Data API
   security:
@@ -55,6 +56,8 @@ spring:
     min-idle: 1
     properties:
       charSet: UTF-8
+    hikari:
+      maximumPoolSize: ${HIKARI_MAX_POOL_SIZE:14}
     tomcat:
       max-active: 10
       max-idle: 10
@@ -84,8 +87,9 @@ security:
     - "/actuator/**"
     - "/loggers/**"
     - "/swagger-ui.html"
+    - "/swagger-ui/**"
     - "/swagger-resources/**"
-    - "/v2/api-docs"
+    - "/v3/**"
     - "/webjars/springfox-swagger-ui/**"
     - "/csrf"
     - "/error"

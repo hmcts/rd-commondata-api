@@ -12,15 +12,23 @@ public class CrdTestSupport {
 
     public static ListOfValueDto createListOfCategoriesDtoMock(String categoryId, String serviceId,
                                                                String parentCategory, String parentKey, String key) {
+        return createListOfCategoriesDtoMock(categoryId, serviceId, parentCategory, parentKey, key, null);
+    }
+
+    public static ListOfValueDto createListOfCategoriesDtoMock(String categoryId, String serviceId,
+                                                               String parentCategory, String parentKey, String key,
+                                                               Long lovOrder) {
         CategoryKey categoryKey = new CategoryKey();
         categoryKey.setCategoryKey(categoryId);
         categoryKey.setKey(key);
+        categoryKey.setServiceId(serviceId);
         ListOfValueDto listOfValueDtoMock = new ListOfValueDto();
-        listOfValueDtoMock.setServiceId(serviceId);
         listOfValueDtoMock.setActive("y");
         listOfValueDtoMock.setCategoryKey(categoryKey);
         listOfValueDtoMock.setParentCategory(parentCategory);
         listOfValueDtoMock.setParentKey(parentKey);
+        listOfValueDtoMock.setValueEn(String.join("-","test", categoryId, serviceId));
+        listOfValueDtoMock.setLovOrder(lovOrder);
         return listOfValueDtoMock;
     }
 

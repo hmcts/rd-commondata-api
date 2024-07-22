@@ -1,14 +1,14 @@
 package uk.gov.hmcts.reform.cdapi.config;
 
+import net.thucydides.core.annotations.WithTag;
+import net.thucydides.core.annotations.WithTags;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
+import uk.gov.hmcts.reform.cdapi.CdAuthorizationEnabledIntegrationTest;
 
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -20,12 +20,10 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 
 /**
  * Built-in feature which saves service's swagger specs in temporary directory.
- * Each CI run on master should automatically save and upload (if updated) documentation.
+ * Each travis run on master should automatically save and upload (if updated) documentation.
  */
-@WebMvcTest
-@ContextConfiguration(classes = SwaggerConfiguration.class)
-@AutoConfigureMockMvc
-class SwaggerPublisherTest {
+@WithTags({@WithTag("testType:Integration")})
+class SwaggerPublisherTest extends CdAuthorizationEnabledIntegrationTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -34,7 +32,8 @@ class SwaggerPublisherTest {
 
     @BeforeEach
     public void setUp() {
-        this.mvc = webAppContextSetup(webApplicationContext).build();
+        this.mvc = webAppContextSetup(webApplicationContext)
+            .build();
     }
 
 
@@ -42,7 +41,7 @@ class SwaggerPublisherTest {
     @Test
     @SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
     void generateDocs() throws Exception {
-        byte[] specs = mvc.perform(get("/v2/api-docs"))
+        byte[] specs = mvc.perform(get("/v3/api-docs"))
             .andExpect(status().isOk())
             .andReturn()
             .getResponse()
