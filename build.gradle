@@ -51,7 +51,7 @@ def versions = [
   feign           : '3.8.0',
   bytebuddy       : '1.14.18',
   testContainer_postgresql: '1.19.8',
-  bouncycastle    : '1.78'
+  bouncycastle    : '1.78.1'
 ]
 
 sourceSets {
