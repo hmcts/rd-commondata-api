@@ -101,12 +101,13 @@ class QuerySpecificationTest {
 
     @Test
     void retrieveServiceId_withNull() {
-
+        doReturn(pathObj).when(root).get(anyString());
+        doReturn(predicate).when(specMock).toPredicate(root, query, builder);
         Specification<ListOfValueDto> result = QuerySpecification.serviceId(null);
         result = result.and(specMock);
 
         Assertions.assertThat(result).isNotNull();
-        MatcherAssert.assertThat(result.toPredicate(root, query, builder), is(nullValue()));
+        MatcherAssert.assertThat(result.toPredicate(root, query, builder), is(predicate));
     }
 
     @Test
