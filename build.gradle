@@ -402,7 +402,7 @@ dependencies {
 
   implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap'
   implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign'
-  implementation group: 'jakarta.servlet', name: 'jakarta.servlet-api', version: '6.0.0'
+  implementation group: 'jakarta.servlet', name: 'jakarta.servlet-api', version: '6.1.0'
 
   testImplementation group: 'org.testcontainers', name: 'postgresql', version: versions.testContainer_postgresql
   testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: versions.testContainer_postgresql
