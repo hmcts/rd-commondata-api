@@ -375,7 +375,7 @@ dependencies {
   implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.1.8'
   implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
   implementation 'commons-io:commons-io:2.16.1'
-  implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.3'
+  implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '4.0.5'
   implementation group: 'org.springframework', name: 'spring-core'
   implementation group: 'org.springframework', name: 'spring-beans'
   implementation group: 'org.springframework', name: 'spring-aop'
