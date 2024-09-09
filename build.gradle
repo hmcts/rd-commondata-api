@@ -39,7 +39,7 @@ ext {
 def versions = [
   lombok          : '1.18.32',
   gradlePitest    : '1.5.1',
-  pitest          : '1.16.1',
+  pitest          : '1.16.3',
   sonarPitest     : '0.5',
   reformLogging   : '6.1.4',
   pact_version    : '4.1.7',
