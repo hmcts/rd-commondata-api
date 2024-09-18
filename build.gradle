@@ -43,7 +43,7 @@ def versions = [
   sonarPitest     : '0.5',
   reformLogging   : '6.1.4',
   pact_version    : '4.1.7',
-  log4j           : '2.24.0',
+  log4j           : '2.23.1',
   launchDarklySdk : "5.10.9",
   reformS2sClient : '5.2.0',
   springHystrix   : '2.2.10.RELEASE',
@@ -211,8 +211,8 @@ pmd {
   reportsDir = file("$project.buildDir/reports/pmd")
   // https://github.com/pmd/pmd/issues/876
   ruleSets = [
-       'category/java/errorprone.xml',
-       'category/java/bestpractices.xml'
+    'category/java/errorprone.xml',
+    'category/java/bestpractices.xml'
   ]
 }
 
@@ -362,7 +362,7 @@ dependencies {
   implementation group: 'org.yaml', name: 'snakeyaml', version: '2.3'
   implementation group: 'org.springframework.security', name: 'spring-security-core'
 
-  implementation group: 'jakarta.persistence', name: 'jakarta.persistence-api', version: '3.2.0'
+  implementation group: 'jakarta.persistence', name: 'jakarta.persistence-api', version: '3.1.0'
   implementation group: 'jakarta.annotation', name: 'jakarta.annotation-api', version: '3.0.0'
 
   implementation group: 'org.bouncycastle', name: 'bcpkix-jdk18on', version: versions.bouncycastle
@@ -442,7 +442,7 @@ dependencies {
 
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.10.3'
   testImplementation 'net.serenity-bdd:serenity-rest-assured:3.8.1'
-  testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: '3.9.8'
+  testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: '3.8.1'
 
   functionalTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
   functionalTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
