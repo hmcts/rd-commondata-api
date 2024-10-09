@@ -15,4 +15,8 @@ file name: launchdarkly-java-server-sdk-5.10.2.jar (shaded: org.yaml:snakeyaml:1
     <notes>Suppressing false positive, CVE relevant for json-smart up to 2.4.9, but newer version is used</notes>
     <cve>CVE-2023-1370</cve>
   </suppress>
+  <suppress>
+    <notes>https://tools.hmcts.net/jira/browse/DTSRD-3524 glassfish</notes>
+    <cve>CVE-2024-9329</cve>
+  </suppress>
 </suppressions>
