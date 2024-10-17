@@ -113,3 +113,9 @@ launchdarkly:
     key: ${LD_SDK_KEY:}
     environment: ${LAUNCH_DARKLY_ENV:local}
     user: rd
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    operationsSorter: method
+  writer-with-order-by-keys: true
