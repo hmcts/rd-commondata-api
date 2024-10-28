@@ -38,9 +38,10 @@ ext {
 
 def versions = [
   lombok          : '1.18.32',
-  gradlePitest    : '1.5.1',
+  gradlePitest    : '1.15.0',
   pitest          : '1.16.3',
   sonarPitest     : '0.5',
+  junitPitest     : '1.2.1',
   reformLogging   : '6.1.4',
   pact_version    : '4.1.7',
   log4j           : '2.23.1',
@@ -241,7 +242,8 @@ jacocoTestReport {
 }
 
 pitest {
-  junit5PluginVersion = '1.2.1'
+  pitestVersion = versions.pitest
+  junit5PluginVersion = versions.junitPitest
   targetClasses = ['uk.gov.hmcts.reform.cdapi.*']
   excludedClasses = [
     'uk.gov.hmcts.reform.cdapi.config.*',
@@ -433,12 +435,12 @@ dependencies {
   testImplementation group: 'com.github.mifmif', name: 'generex', version: '1.0.2'
   testImplementation 'io.github.openfeign:feign-jackson:13.3'
   testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
-  testImplementation 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.15.0'
-  testImplementation group: 'org.pitest', name: 'pitest-junit5-plugin', version: '1.2.1'
-  testImplementation 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5', {
+  testImplementation group: 'info.solidsoft.gradle.pitest', name: 'gradle-pitest-plugin', version: versions.gradlePitest
+  testImplementation group: 'org.pitest', name: 'pitest-junit5-plugin', version: versions.junitPitest
+  testImplementation group: 'org.codehaus.sonar-plugins', name: 'sonar-pitest-plugin', {
     exclude group: 'junit', module: 'junit'
     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-  }
+  }, version: versions.sonarPitest
 
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.10.3'
   testImplementation 'net.serenity-bdd:serenity-rest-assured:3.8.1'
