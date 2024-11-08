@@ -40,6 +40,10 @@ public class Category {
 
     private String activeFlag;
 
+    private String externalReferenceType;
+
+    private String externalReference;
+
     @Setter
     private List<Category> childNodes;
 
