@@ -23,4 +23,13 @@ public class ListOfValue {
     @JsonProperty("value_cy")
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = IgnoreJsonFilter.class)
     private String valueCy;
+
+    @JsonProperty("external_reference_type")
+    @JsonInclude(value = JsonInclude.Include.NON_NULL)
+    private String externalReferenceType;
+
+    @JsonProperty("external_reference")
+    @JsonInclude(value = JsonInclude.Include.NON_NULL)
+    private String externalReference;
+
 }
