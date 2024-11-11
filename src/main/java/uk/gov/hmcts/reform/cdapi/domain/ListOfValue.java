@@ -25,11 +25,11 @@ public class ListOfValue {
     private String valueCy;
 
     @JsonProperty("external_reference_type")
-    @JsonInclude(value = JsonInclude.Include.NON_NULL)
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     private String externalReferenceType;
 
     @JsonProperty("external_reference")
-    @JsonInclude(value = JsonInclude.Include.NON_NULL)
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     private String externalReference;
 
 }
