@@ -62,8 +62,8 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
 
     @Test
     @DisplayName("Retrieve categories without externalRefarence ")
-    @Description("test to show that Json igone did not pick up fields external_reference " +
-        "and external_reference_type when they were empty")
+    @Description("test to show that Json igone did not pick up fields external_reference "
+        + "and external_reference_type when they were empty")
     void shouldRetrieveCategoriesWithOutExternalReferenceStatusCode200()
         throws JsonProcessingException {
         final String response = (String)
