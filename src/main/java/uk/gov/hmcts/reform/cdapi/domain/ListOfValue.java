@@ -23,5 +23,4 @@ public class ListOfValue {
     @JsonProperty("value_cy")
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = IgnoreJsonFilter.class)
     private String valueCy;
-
 }
