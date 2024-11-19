@@ -7,4 +7,4 @@ ALTER TABLE list_of_values
  ADD constraint unique_external_reference check
  ((external_reference_type is null and external_reference is null)
  or (external_reference_type is not null and external_reference is not null))
-
+COMMIT;
