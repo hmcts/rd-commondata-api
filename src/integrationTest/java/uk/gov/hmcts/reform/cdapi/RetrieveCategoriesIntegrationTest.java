@@ -34,7 +34,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
     private static final String path = "/lov/categories/{category-id}";
 
     @Test
-    @DisplayName("Retrieve categories with externalRefarence ")
+    @DisplayName("Retrieve categories with externalReference ")
     void shouldRetrieveCategoriesWithExternalReferenceStatusCode200()
         throws JsonProcessingException {
 
@@ -61,7 +61,7 @@ public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledInt
     }
 
     @Test
-    @DisplayName("Retrieve categories without externalRefarence ")
+    @DisplayName("Retrieve categories without externalReference ")
     @Description("test to show that Json ignore did not pick up fields external_reference "
         + "and external_reference_type when they were empty")
     void shouldRetrieveCategoriesWithOutExternalReferenceStatusCode200()
