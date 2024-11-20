@@ -92,7 +92,7 @@ public class CommonDataApiClient {
 
     }
 
-    //to Test Json include only not empty vlues property
+    //to Test Json include only not empty values property
     private Object mapCaseFlagsByServiceId(ResponseEntity<Object> responseEntity,
                                                    Class<?> clazz) throws JsonProcessingException {
         HttpStatusCode status = responseEntity.getStatusCode();
