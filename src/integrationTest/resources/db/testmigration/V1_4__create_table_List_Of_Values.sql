@@ -9,5 +9,7 @@ CREATE TABLE List_Of_Values (
  lov_order bigint,
  parentcategory varchar(64),
  parentkey varchar(64),
- active varchar(1)
+ active varchar(1),
+ external_reference varchar(200),
+ external_reference_type varchar(200)
 );

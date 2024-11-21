@@ -122,6 +122,8 @@ public class CrdServiceImpl implements CrdService {
                 .valueEn(dto.getValueEn())
                 .parentCategory(dto.getParentCategory())
                 .parentKey(dto.getParentKey())
+                .externalReference(dto.getExternalReference())
+                .externalReferenceType(dto.getExternalReferenceType())
                 .build())
             .sorted((c1, c2) -> {
                 if (c1.getLovOrder() != null && c2.getLovOrder() != null) {
