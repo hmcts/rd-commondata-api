@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.cdapi.controllers.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
@@ -40,12 +39,6 @@ public class Category {
     private String parentKey;
 
     private String activeFlag;
-
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private String externalReferenceType;
-
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private String externalReference;
 
     @Setter
     private List<Category> childNodes;
