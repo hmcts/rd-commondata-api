@@ -36,10 +36,8 @@ public class ListOfValueDto {
     private String parentKey;
 
     private String active;
-    @Column(name = "external_reference_type")
-    private String externalReferenceType;
-    @Column(name = "external_reference")
-    private String externalReference;
+
+
 }
 
 
