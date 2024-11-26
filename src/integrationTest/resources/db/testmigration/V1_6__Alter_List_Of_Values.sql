@@ -27,6 +27,7 @@ VALUES ('HearingChannel','BBA3','telephone','Telephone',null,null,null,2,null,nu
 ('InterpreterLanguage','BBA1','test2','test2','test2',null,null,null,'HearingChannel','test','Y','',''),
 ('SignLanguage','BBA1','test4','test4','test4',null,null,null,'HearingChannel','test','Y','',''),
 ('caseSubType','BBA3','BBA3-088OC','OVERPAYMENT',null,null,null,null,'caseType','BBA3-088','Y','',''),
-('panelCategoryMember','BBA3','PC1-01-94','Financial office holder',null,null,null,null,'caseSubType','PC3','Y','94','FinancialRole'),
-('panelCategoryMember','BBA3','PC1-01-84','Judicial office holder',null,null,null,null,'caseSubType','PC1','Y','84','JudicialRole'),
-('panelCategoryMember','BBA3','PC1-01-74','Medical office holder',null,null,null,null,'caseSubType','PC2','Y','74','MedicalRole');
+('panelCategory','BBA3','BBA3-panelCategory-001','Panel Category description',null,null,null,null,null,null,'Y','',''),
+('panelCategoryMember','BBA3','PC1-01-94','Financial office holder',null,null,null,null,'panelCategory','BBA3-panelCategory-001','Y','94','FinancialRole'),
+('panelCategoryMember','BBA3','PC1-01-84','Judicial office holder',null,null,null,null,'panelCategory','BBA3-panelCategory-001','Y','84','JudicialRole'),
+('panelCategoryMember','BBA3','PC1-01-74','Medical office holder',null,null,null,null,'panelCategory','BBA3-panelCategory-001','Y','74','MedicalRole');
