@@ -8,3 +8,4 @@ ALTER TABLE List_Of_Values
  ((external_reference_type is null and external_reference is null)
  or (external_reference_type is not null and external_reference is not null))
 
+

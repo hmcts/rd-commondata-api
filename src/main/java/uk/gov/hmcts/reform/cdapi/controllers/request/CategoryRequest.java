@@ -29,4 +29,11 @@ public class CategoryRequest {
 
     @Parameter(name = "isChildRequired", description = "Any Valid String is allowed")
     String isChildRequired;
+
+    @Parameter(name = "externalReferenceType", description = "Any Valid String is allowed")
+    String externalReferenceType;
+
+    @Parameter(name = "externalReference", description = "Any Valid String is allowed")
+    String externalReference;
+
 }

@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.cdapi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jxl.common.Assert;
+import net.thucydides.core.annotations.Description;
 import net.thucydides.core.annotations.WithTag;
 import net.thucydides.core.annotations.WithTags;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +16,8 @@ import uk.gov.hmcts.reform.cdapi.controllers.response.Categories;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
 import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,6 +32,115 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 public class RetrieveCategoriesIntegrationTest extends CdAuthorizationEnabledIntegrationTest {
 
     private static final String path = "/lov/categories/{category-id}";
+
+
+    @Test
+    @DisplayName("Retrieve categories with Parent and child nodes externalReference ")
+    void shouldRetrieveParentAndChildNodesWithExternalReferenceStatusCode200()
+        throws JsonProcessingException {
+
+        final var response = (Categories)
+            commonDataApiClient.retrieveCaseFlagsByServiceId("panelCategory?isChildRequired=Y&serviceId=BBA3",
+                                                             Categories.class, path
+            );
+        assertNotNull(response);
+        assertEquals(1, response.getListOfCategory().size());
+        assertEquals(3, response.getListOfCategory().get(0).getChildNodes().size());
+
+        /// Parent
+        assertThat(response.getListOfCategory().get(0).getKey()).isEqualTo("BBA3-panelCategory-001");
+        assertThat(response.getListOfCategory().get(0).getCategoryKey()).isEqualTo("panelCategory");
+        assertThat(response.getListOfCategory().get(0).getExternalReference()).isNull();
+        assertThat(response.getListOfCategory().get(0).getExternalReferenceType()).isNull();
+
+        //child nodes
+        assertThat(response.getListOfCategory().get(0).getChildNodes().get(0).getKey()).isEqualTo("PC1-01-94");
+        assertThat(response.getListOfCategory().get(0).getChildNodes().get(0).getValueEn())
+            .isEqualTo("Financial office holder");
+        assertThat(response.getListOfCategory().get(0).getChildNodes().get(0).getParentCategory())
+            .isEqualTo("panelCategory");
+        assertThat(response.getListOfCategory().get(0).getChildNodes().get(0).getParentKey())
+            .isEqualTo("BBA3-panelCategory-001");
+        assertThat(response.getListOfCategory().get(0).getChildNodes().get(0).getExternalReference())
+            .isEqualTo("94");
+        assertThat(response.getListOfCategory().get(0).getChildNodes().get(0).getExternalReferenceType())
+            .isEqualTo("FinancialRole");
+
+        assertThat(response.getListOfCategory().get(0).getChildNodes().get(1).getKey()).isEqualTo("PC1-01-84");
+        assertThat(response.getListOfCategory().get(0).getChildNodes().get(1).getValueEn())
+            .isEqualTo("Judicial office holder");
+        assertThat(response.getListOfCategory().get(0).getChildNodes().get(1).getParentCategory())
+            .isEqualTo("panelCategory");
+        assertThat(response.getListOfCategory().get(0).getChildNodes().get(1).getParentKey())
+            .isEqualTo("BBA3-panelCategory-001");
+        assertThat(response.getListOfCategory().get(0).getChildNodes().get(1).getExternalReference())
+            .isEqualTo("84");
+        assertThat(response.getListOfCategory().get(0).getChildNodes().get(1).getExternalReferenceType())
+            .isEqualTo("JudicialRole");
+
+        assertThat(response.getListOfCategory().get(0).getChildNodes().get(2).getKey()).isEqualTo("PC1-01-74");
+        assertThat(response.getListOfCategory().get(0).getChildNodes().get(2).getValueEn())
+            .isEqualTo("Medical office holder");
+        assertThat(response.getListOfCategory().get(0).getChildNodes().get(2).getParentCategory())
+            .isEqualTo("panelCategory");
+        assertThat(response.getListOfCategory().get(0).getChildNodes().get(2).getParentKey())
+            .isEqualTo("BBA3-panelCategory-001");
+        assertThat(response.getListOfCategory().get(0).getChildNodes().get(2).getExternalReference())
+            .isEqualTo("74");
+        assertThat(response.getListOfCategory().get(0).getChildNodes().get(2).getExternalReferenceType())
+            .isEqualTo("MedicalRole");
+    }
+
+
+    @Test
+    @DisplayName("Retrieve categories with externalReference ")
+    void shouldRetrieveCategoriesWithExternalReferenceStatusCode200()
+        throws JsonProcessingException {
+
+        final var response = (Categories)
+            commonDataApiClient.retrieveCaseFlagsByServiceId("panelCategoryMember?serviceId=BBA3",
+                                                             Categories.class, path
+            );
+        assertNotNull(response);
+        assertEquals(3, response.getListOfCategory().size());
+        assertThat(response.getListOfCategory().get(0).getKey()).isEqualTo("PC1-01-94");
+        assertThat(response.getListOfCategory().get(0).getValueEn()).isEqualTo("Financial office holder");
+        assertThat(response.getListOfCategory().get(0).getExternalReference()).isEqualTo("94");
+        assertThat(response.getListOfCategory().get(0).getExternalReferenceType()).isEqualTo("FinancialRole");
+
+        assertThat(response.getListOfCategory().get(1).getKey()).isEqualTo("PC1-01-84");
+        assertThat(response.getListOfCategory().get(1).getValueEn()).isEqualTo("Judicial office holder");
+        assertThat(response.getListOfCategory().get(1).getExternalReference()).isEqualTo("84");
+        assertThat(response.getListOfCategory().get(1).getExternalReferenceType()).isEqualTo("JudicialRole");
+
+        assertThat(response.getListOfCategory().get(2).getKey()).isEqualTo("PC1-01-74");
+        assertThat(response.getListOfCategory().get(2).getValueEn()).isEqualTo("Medical office holder");
+        assertThat(response.getListOfCategory().get(2).getExternalReference()).isEqualTo("74");
+        assertThat(response.getListOfCategory().get(2).getExternalReferenceType()).isEqualTo("MedicalRole");
+    }
+
+    @Test
+    @DisplayName("Retrieve categories without externalReference ")
+    @Description("test to show that Json ignore did not pick up fields external_reference "
+        + "and external_reference_type when they were empty")
+    void shouldRetrieveCategoriesWithOutExternalReferenceStatusCode200()
+        throws JsonProcessingException {
+        final String response = (String)
+            commonDataApiClient.retrieveCategoriesWithOutExternalReference("HearingChannel?serviceId=BBA3",
+                                                             Categories.class, path);
+        List<String> listofValues = Arrays.asList(response.split("},"));
+        assertNotNull(listofValues);
+        assertEquals(4, listofValues.size());
+        assertThat(listofValues.get(0)).doesNotContain("external_reference");
+        assertThat(listofValues.get(0)).doesNotContain("external_reference_type");
+        assertThat(listofValues.get(1)).doesNotContain("external_reference");
+        assertThat(listofValues.get(1)).doesNotContain("external_reference_type");
+        assertThat(listofValues.get(2)).doesNotContain("external_reference");
+        assertThat(listofValues.get(2)).doesNotContain("external_reference_type");
+        assertThat(listofValues.get(3)).doesNotContain("external_reference");
+        assertThat(listofValues.get(3)).doesNotContain("external_reference_type");
+
+    }
 
     @Test
     @DisplayName("Retrieve categories for Child ")

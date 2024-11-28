@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.cdapi.util;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
@@ -13,10 +14,12 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,6 +61,13 @@ public class CommonDataApiClient {
         return mapCaseFlagsByServiceIdResponse(responseEntity, clazz);
     }
 
+    public Object retrieveCategoriesWithOutExternalReference(String queryParam,
+                                               Class<?> clazz,
+                                               String path) throws JsonProcessingException {
+        ResponseEntity<Object> responseEntity = getRequest(APP_BASE_PATH + path + queryParam, clazz, "");
+        return mapCaseFlagsByServiceId(responseEntity, clazz);
+    }
+
     public Object retrieveCaseFlagsByServiceIdJsonFormat(String queryParam, Class<?> clazz,
                                                          String path) {
         ResponseEntity<Object> responseEntity = getRequest(APP_BASE_PATH + path + queryParam, String.class, "");
@@ -70,6 +80,27 @@ public class CommonDataApiClient {
 
         if (status.is2xxSuccessful()) {
             return objectMapper.convertValue(responseEntity.getBody(), clazz);
+        } else {
+            Map<String, Object> errorResponseMap = new HashMap<>();
+            errorResponseMap.put(
+                "response_body",
+                objectMapper.readValue(responseEntity.getBody().toString(), clazz)
+            );
+            errorResponseMap.put("http_status", status);
+            return errorResponseMap;
+        }
+
+    }
+
+    //to Test Json include only not empty values property
+    private Object mapCaseFlagsByServiceId(ResponseEntity<Object> responseEntity,
+                                                   Class<?> clazz) throws JsonProcessingException {
+        HttpStatusCode status = responseEntity.getStatusCode();
+
+        if (status.is2xxSuccessful()) {
+            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+            return objectMapper.writerWithDefaultPrettyPrinter()
+                .writeValueAsString(responseEntity.getBody());
         } else {
             Map<String, Object> errorResponseMap = new HashMap<>();
             errorResponseMap.put(
@@ -105,6 +136,7 @@ public class CommonDataApiClient {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.ALL));
         if (StringUtils.isBlank(JWT_TOKEN)) {
 
             JWT_TOKEN = generateDummyS2SToken(serviceName);
