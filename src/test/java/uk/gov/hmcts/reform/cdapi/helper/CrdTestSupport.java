@@ -32,6 +32,26 @@ public class CrdTestSupport {
         return listOfValueDtoMock;
     }
 
+    public static ListOfValueDto createListOfCategoriesDtoWithExternalReferenceMock(String categoryId, String serviceId,
+                                                               String parentCategory, String parentKey, String key,
+                                                               Long lovOrder) {
+        CategoryKey categoryKey = new CategoryKey();
+        categoryKey.setCategoryKey(categoryId);
+        categoryKey.setKey(key);
+        categoryKey.setServiceId(serviceId);
+        ListOfValueDto listOfValueDtoMock = new ListOfValueDto();
+        listOfValueDtoMock.setActive("y");
+        listOfValueDtoMock.setCategoryKey(categoryKey);
+        listOfValueDtoMock.setParentCategory(parentCategory);
+        listOfValueDtoMock.setParentKey(parentKey);
+        listOfValueDtoMock.setValueEn("Judicial office holder");
+        listOfValueDtoMock.setLovOrder(lovOrder);
+        listOfValueDtoMock.setExternalReferenceType("74");
+        listOfValueDtoMock.setExternalReference("JudicialRole");
+        return listOfValueDtoMock;
+    }
+
+
     public static CategoryRequest buildCategoryRequest(String categoryId, String serviceId, String key,
                                                  String parentCategory, String parentKey, String isChileRequired) {
         return CategoryRequest.builder()
@@ -43,4 +63,6 @@ public class CrdTestSupport {
             .isChildRequired(isChileRequired)
             .build();
     }
+
+
 }
