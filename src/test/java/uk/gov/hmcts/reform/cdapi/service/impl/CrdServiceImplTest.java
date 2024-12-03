@@ -68,6 +68,38 @@ class CrdServiceImplTest {
     }
 
     @Test
+    void retrieveCategoriesWithExternalReferenceByCategoryId() {
+        List<ListOfValueDto> listOfValueDtos = new ArrayList<>();
+        listOfValueDtos.add(CrdTestSupport.createListOfCategoriesDtoMock("panelCategoryMember",
+                                                                         "BBA3","panelCategory",
+                                                                         "BBA3-panelCategory-001",
+                                                                         "BBA3-panelCategory-001-74"));
+        doReturn(listOfValueDtos).when(listOfValuesRepository)
+            .findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any());
+
+        CategoryRequest request = buildCategoryRequest("panelCategoryMember",  null, null,
+                                                       null,null, null);
+        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
+
+        assertNotNull(result);
+        Category actualCategory = result.get(0);
+        assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), actualCategory.getKey());
+        assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), actualCategory.getCategoryKey());
+        assertEquals(listOfValueDtos.get(0).getCategoryKey().getServiceId(), actualCategory.getServiceId());
+        assertEquals(listOfValueDtos.get(0).getActive(), actualCategory.getActiveFlag());
+        assertEquals(listOfValueDtos.get(0).getParentCategory(), actualCategory.getParentCategory());
+        assertEquals(listOfValueDtos.get(0).getParentKey(), actualCategory.getParentKey());
+        assertEquals(listOfValueDtos.get(0).getValueCy(), actualCategory.getValueCy());
+        assertEquals(listOfValueDtos.get(0).getValueEn(), actualCategory.getValueEn());
+        assertEquals(listOfValueDtos.get(0).getHintTextCy(), actualCategory.getHintTextCy());
+        assertEquals(listOfValueDtos.get(0).getHintTextEn(), actualCategory.getHintTextEn());
+        assertEquals(listOfValueDtos.get(0).getLovOrder(), actualCategory.getLovOrder());
+        assertEquals(listOfValueDtos.get(0).getExternalReference(), actualCategory.getExternalReference());
+        assertEquals(listOfValueDtos.get(0).getExternalReferenceType(), actualCategory.getExternalReferenceType());
+        assertNull(actualCategory.getChildNodes());
+    }
+
+    @Test
     void retrieveCategoriesByAllParams() {
         List<ListOfValueDto> listOfValueDtos = buildListOfValuesDtos();
         ListOfValueDto inactiveCategory = CrdTestSupport.createListOfCategoriesDtoMock("HearingChannel",
