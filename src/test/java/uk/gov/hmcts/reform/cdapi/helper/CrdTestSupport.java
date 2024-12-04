@@ -33,8 +33,7 @@ public class CrdTestSupport {
     }
 
     public static ListOfValueDto createListOfCategoriesDtoWithExternalReferenceMock(String categoryId, String serviceId,
-                                                               String parentCategory, String parentKey, String key,
-                                                               Long lovOrder) {
+                                                               String parentCategory, String parentKey, String key) {
         CategoryKey categoryKey = new CategoryKey();
         categoryKey.setCategoryKey(categoryId);
         categoryKey.setKey(key);
@@ -45,7 +44,7 @@ public class CrdTestSupport {
         listOfValueDtoMock.setParentCategory(parentCategory);
         listOfValueDtoMock.setParentKey(parentKey);
         listOfValueDtoMock.setValueEn("Judicial office holder");
-        listOfValueDtoMock.setLovOrder(lovOrder);
+        listOfValueDtoMock.setLovOrder(null);
         listOfValueDtoMock.setExternalReferenceType("74");
         listOfValueDtoMock.setExternalReference("JudicialRole");
         return listOfValueDtoMock;
