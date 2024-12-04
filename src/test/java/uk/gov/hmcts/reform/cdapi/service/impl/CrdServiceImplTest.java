@@ -68,9 +68,34 @@ class CrdServiceImplTest {
     }
 
     @Test
+    void retrieveCategoriesByAllExternalReference() {
+        List<ListOfValueDto> listOfValueDtos = new ArrayList<>();
+        listOfValueDtos.add(CrdTestSupport.createListOfCategoriesDtoWithExternalReferenceMock("panelCategoryMember",
+                                                                         "BBA3","panelCategory",
+                                                                         "BBA3-panelCategory-001",
+                                                                         "BBA3-panelCategory-001-74"));
+        doReturn(listOfValueDtos).when(listOfValuesRepository)
+            .findAll(ArgumentMatchers.<Specification<ListOfValueDto>>any());
+
+        CategoryRequest request = CategoryRequest.builder()
+            .categoryId("panelCategoryMember")
+            .externalReference("JudicialRole")
+            .externalReferenceType("74")
+            .build();
+
+        List<Category> result = crdServiceImpl.retrieveListOfValuesByCategory(request);
+
+        assertNotNull(result);
+        assertEquals(listOfValueDtos.get(0).getCategoryKey().getKey(), result.get(0).getKey());
+        assertEquals(listOfValueDtos.get(0).getCategoryKey().getCategoryKey(), result.get(0).getCategoryKey());
+        assertEquals(listOfValueDtos.get(0).getExternalReference(), result.get(0).getExternalReference());
+        assertEquals(listOfValueDtos.get(0).getExternalReferenceType(), result.get(0).getExternalReferenceType());
+    }
+
+    @Test
     void retrieveCategoriesWithExternalReferenceByCategoryId() {
         List<ListOfValueDto> listOfValueDtos = new ArrayList<>();
-        listOfValueDtos.add(CrdTestSupport.createListOfCategoriesDtoMock("panelCategoryMember",
+        listOfValueDtos.add(CrdTestSupport.createListOfCategoriesDtoWithExternalReferenceMock("panelCategoryMember",
                                                                          "BBA3","panelCategory",
                                                                          "BBA3-panelCategory-001",
                                                                          "BBA3-panelCategory-001-74"));
@@ -121,6 +146,7 @@ class CrdServiceImplTest {
         assertEquals("n", result.get(1).getActiveFlag());
         assertEquals("y", result.get(2).getActiveFlag());
     }
+
 
 
 
