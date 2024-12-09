@@ -6,7 +6,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
 public class CommonDataApiPostgresqlContainer extends PostgreSQLContainer<CommonDataApiPostgresqlContainer> {
-    private static final String IMAGE_VERSION = "postgres:11.1";
+    private static final String IMAGE_VERSION = "postgres:16";
 
     private CommonDataApiPostgresqlContainer() {
         super(IMAGE_VERSION);
