@@ -117,7 +117,7 @@ public abstract class CdAuthorizationEnabledIntegrationTest extends SpringBootIn
         return Jwts.builder()
             .setSubject(serviceName)
             .setIssuedAt(new Date())
-            .signWith(SignatureAlgorithm.HS256, TextCodec.BASE64.encode("AA"))
+            .signWith(SignatureAlgorithm.HS256, TextCodec.BASE64.encode("00112233445566778899aabbccddeeff"))
             .compact();
     }
 
