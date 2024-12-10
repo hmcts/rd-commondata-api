@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.cdapi.controllers;
 
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,11 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.cdapi.controllers.request.CategoryRequest;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Categories;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Category;
-import uk.gov.hmcts.reform.cdapi.exception.InvalidRequestException;
 import uk.gov.hmcts.reform.cdapi.service.CrdService;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -69,17 +66,10 @@ public class CrdApiController {
         path = {"/lov/categories/{categoryId}"}
     )
     public ResponseEntity<Categories> retrieveListOfValuesByCategoryId(
-        @Parameter(name = "categoryId", description = "Any Valid String is allowed", required = true)
-        @PathVariable(value = "categoryId") Optional<String> categoryId,
+        @PathVariable String categoryId,
         @ParameterObject CategoryRequest categoryRequest) {
 
-        if (!categoryId.isPresent()) {
-            throw new InvalidRequestException("Syntax error or Bad request");
-        }
-
-        categoryRequest.setCategoryId(categoryId.get());
         List<Category> listOfValues = crdService.retrieveListOfValuesByCategory(categoryRequest);
         return ResponseEntity.ok().body(new Categories(listOfValues));
     }
-
 }
