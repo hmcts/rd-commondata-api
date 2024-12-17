@@ -433,7 +433,7 @@ dependencies {
   testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '5.12.0'
   testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
   testImplementation group: 'com.github.mifmif', name: 'generex', version: '1.0.2'
-  testImplementation 'io.github.openfeign:feign-jackson:13.3'
+  testImplementation 'io.github.openfeign:feign-jackson:13.5'
   testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
   testImplementation group: 'info.solidsoft.gradle.pitest', name: 'gradle-pitest-plugin', version: versions.gradlePitest
   testImplementation group: 'org.pitest', name: 'pitest-junit5-plugin', version: versions.junitPitest
