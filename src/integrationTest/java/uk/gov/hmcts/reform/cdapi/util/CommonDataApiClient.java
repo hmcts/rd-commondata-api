@@ -157,7 +157,7 @@ public class CommonDataApiClient {
     public static String generateDummyS2SToken(String serviceName) {
         return Jwts.builder().setSubject(serviceName).setIssuedAt(new Date()).signWith(
             SignatureAlgorithm.HS256,
-            TextCodec.BASE64.encode("AA")
+            TextCodec.BASE64.encode("00112233445566778899aabbccddeeff")
         ).compact();
     }
 

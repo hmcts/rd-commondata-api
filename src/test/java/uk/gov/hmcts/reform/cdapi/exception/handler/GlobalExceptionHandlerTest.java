@@ -18,9 +18,14 @@ import uk.gov.hmcts.reform.cdapi.exception.InvalidRequestException;
 import uk.gov.hmcts.reform.cdapi.exception.ResourceNotFoundException;
 
 import java.nio.file.AccessDeniedException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.LinkedList;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
@@ -88,13 +93,17 @@ class GlobalExceptionHandlerTest {
         JsonMappingException.Reference rf = mock(JsonMappingException.Reference.class);
         when(httpMessageNotReadableException.getCause()).thenReturn(jm);
         when(jm.getPath()).thenReturn(Collections.unmodifiableList(path));
-        when(jm.getPath().get(0)).thenReturn(rf);
-        when(jm.getPath().get(0).getFieldName()).thenReturn("field");
+        when(jm.getPath().getFirst()).thenReturn(rf);
+        when(jm.getPath().getFirst().getFieldName()).thenReturn("field");
         ResponseEntity<Object> responseEntity = globalExceptionHandler
             .customSerializationError(httpMessageNotReadableException);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        ErrorResponse response = (ErrorResponse) responseEntity.getBody();
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSS");
+        LocalDateTime timeStamp = LocalDateTime.parse(response.getTimeStamp(), formatter);
+        assertThat(timeStamp).isCloseToUtcNow(within(5, ChronoUnit.SECONDS));
     }
 
     @Test

@@ -1,8 +1,7 @@
 package uk.gov.hmcts.reform.cdapi.config;
 
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.impl.TextCodec;
+import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,9 +17,11 @@ import uk.gov.hmcts.reform.cdapi.exception.ForbiddenException;
 import uk.gov.hmcts.reform.cdapi.service.impl.FeatureToggleServiceImpl;
 
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import javax.crypto.SecretKey;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -113,10 +114,11 @@ class FeatureConditionEvaluationTest {
     }
 
     public static String generateDummyS2SToken(String serviceName) {
+        SecretKey signKey = Keys.hmacShaKeyFor("00112233445566778899aabbccddeeff".getBytes(StandardCharsets.UTF_8));
         return Jwts.builder()
-            .setSubject(serviceName)
-            .setIssuedAt(new Date())
-            .signWith(SignatureAlgorithm.HS256, TextCodec.BASE64.encode("AA"))
+            .subject(serviceName)
+            .issuedAt(new Date())
+            .signWith(signKey, Jwts.SIG.HS256)
             .compact();
     }
 }

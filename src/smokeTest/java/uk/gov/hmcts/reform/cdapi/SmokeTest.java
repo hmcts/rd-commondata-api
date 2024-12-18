@@ -2,9 +2,9 @@ package uk.gov.hmcts.reform.cdapi;
 
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
+import net.serenitybdd.annotations.WithTag;
+import net.serenitybdd.annotations.WithTags;
 import net.serenitybdd.rest.SerenityRest;
-import net.thucydides.core.annotations.WithTag;
-import net.thucydides.core.annotations.WithTags;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
