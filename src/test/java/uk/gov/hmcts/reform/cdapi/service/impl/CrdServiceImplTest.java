@@ -24,6 +24,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
@@ -439,14 +440,30 @@ class CrdServiceImplTest {
         Specification<ListOfValueDto> query = null;
         CategoryRequest request = buildCategoryRequest("HearingChannel", "XXXXX", "telephone",
                                                        null, null,"y");
-
-        doReturn(Collections.emptyList()).when(listOfValuesRepository).findAll(query);
+        List<ListOfValueDto> emptyList = Collections.emptyList();
+        doReturn(emptyList).when(listOfValuesRepository).findAll(query);
         List<ListOfValueDto> result = crdServiceImpl.checkServiceIdExists(
             request,any(Specification.class),true);
 
         assertNotNull(result);
         assertEquals(0,result.size());
-
     }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void retrieveCategoriesCheckServiceIdsExistReturnTheSameListIfNotEmpty() {
+        Specification<ListOfValueDto> query = null;
+        CategoryRequest request = buildCategoryRequest("HearingChannel", "XXXXX", "telephone",
+                                                       null, null,"y");
+
+        List<ListOfValueDto> dataList = List.of(new ListOfValueDto());
+        doReturn(dataList).when(listOfValuesRepository).findAll(query);
+
+        List<ListOfValueDto> result = crdServiceImpl.checkServiceIdExists(
+            request, any(Specification.class),true);
+
+        assertSame(dataList, result);
+    }
+
 
 }

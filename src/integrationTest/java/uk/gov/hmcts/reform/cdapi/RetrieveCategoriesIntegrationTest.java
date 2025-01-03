@@ -2,9 +2,9 @@ package uk.gov.hmcts.reform.cdapi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jxl.common.Assert;
-import net.thucydides.core.annotations.Description;
-import net.thucydides.core.annotations.WithTag;
-import net.thucydides.core.annotations.WithTags;
+import net.serenitybdd.annotations.Description;
+import net.serenitybdd.annotations.WithTag;
+import net.serenitybdd.annotations.WithTags;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
