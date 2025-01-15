@@ -45,7 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest
 @WithMockUser
-@ContextConfiguration(classes = CaseFlagApiController.class)
+@ContextConfiguration(classes = { CaseFlagApiController.class, GlobalExceptionHandler.class })
 class CaseFlagApiControllerTest {
 
     @Autowired
