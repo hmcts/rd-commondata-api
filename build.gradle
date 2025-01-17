@@ -364,7 +364,7 @@ dependencies {
   implementation group: 'org.yaml', name: 'snakeyaml', version: '2.3'
   implementation group: 'org.springframework.security', name: 'spring-security-core'
 
-  implementation group: 'jakarta.persistence', name: 'jakarta.persistence-api', version: '3.1.0'
+  implementation group: 'jakarta.persistence', name: 'jakarta.persistence-api', version: '3.2.0'
   implementation group: 'jakarta.annotation', name: 'jakarta.annotation-api', version: '3.0.0'
 
   implementation group: 'org.bouncycastle', name: 'bcpkix-jdk18on', version: versions.bouncycastle
