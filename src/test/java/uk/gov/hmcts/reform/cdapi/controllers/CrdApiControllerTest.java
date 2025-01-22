@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest
 @WithMockUser
-@ContextConfiguration(classes = {CrdApiController.class, GlobalExceptionHandler.class})
+@ContextConfiguration(classes = { CrdApiController.class, GlobalExceptionHandler.class})
 class CrdApiControllerTest {
 
     @MockitoBean
