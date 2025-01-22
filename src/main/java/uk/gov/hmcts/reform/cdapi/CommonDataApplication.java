@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.cdapi;
 
-import com.microsoft.applicationinsights.attach.ApplicationInsights;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,7 +23,6 @@ import uk.gov.hmcts.reform.idam.client.IdamApi;
 public class CommonDataApplication {
 
     public static void main(final String[] args) {
-        ApplicationInsights.attach();
         SpringApplication.run(CommonDataApplication.class, args);
     }
 }
