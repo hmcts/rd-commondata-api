@@ -315,7 +315,7 @@ dependencies {
   testImplementation 'com.github.hmcts:rd-commons-lib:0.1.0'
   testImplementation group: 'org.springframework', name: 'spring-test'
 
-  implementation group: 'jakarta.validation', name: 'jakarta.validation-api', version: '3.1.0'
+  implementation group: 'jakarta.validation', name: 'jakarta.validation-api', version: '3.1.1'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
