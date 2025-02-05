@@ -10,7 +10,6 @@ import io.jsonwebtoken.impl.TextCodec;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -18,6 +17,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import uk.gov.hmcts.reform.cdapi.service.impl.FeatureToggleServiceImpl;
 import uk.gov.hmcts.reform.cdapi.util.CommonDataApiClient;
 import uk.gov.hmcts.reform.cdapi.util.KeyGenUtil;
@@ -57,7 +57,7 @@ public abstract class CdAuthorizationEnabledIntegrationTest extends SpringBootIn
 
     protected CommonDataApiClient commonDataApiClient;
 
-    @MockBean
+    @MockitoBean
     protected FeatureToggleServiceImpl featureToggleService;
 
     @Value("${oidc.issuer}")
@@ -69,7 +69,7 @@ public abstract class CdAuthorizationEnabledIntegrationTest extends SpringBootIn
     @Value("${idam.s2s-auth.microservice}")
     static String authorisedService;
 
-    @MockBean
+    @MockitoBean
     protected JwtDecoder jwtDecoder;
 
     @BeforeEach
@@ -117,7 +117,7 @@ public abstract class CdAuthorizationEnabledIntegrationTest extends SpringBootIn
         return Jwts.builder()
             .setSubject(serviceName)
             .setIssuedAt(new Date())
-            .signWith(SignatureAlgorithm.HS256, TextCodec.BASE64.encode("AA"))
+            .signWith(SignatureAlgorithm.HS256, TextCodec.BASE64.encode("00112233445566778899aabbccddeeff"))
             .compact();
     }
 

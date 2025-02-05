@@ -14,10 +14,10 @@ import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.cdapi.controllers.CaseFlagApiController;
 import uk.gov.hmcts.reform.cdapi.controllers.CrdApiController;
@@ -50,10 +50,10 @@ import static org.mockito.Mockito.when;
 @IgnoreNoPactsToVerify
 public class CommonDataApiProviderTest {
 
-    @MockBean
+    @MockitoBean
     CaseFlagRepository caseFlagRepository;
 
-    @MockBean
+    @MockitoBean
     ListOfVenueRepository listOfVenueRepository;
 
     @Autowired
@@ -62,7 +62,7 @@ public class CommonDataApiProviderTest {
     @Autowired
     CrdApiController crdApiController;
 
-    @MockBean
+    @MockitoBean
     ListOfValuesRepository listOfValuesRepository;
 
     @TestTemplate
