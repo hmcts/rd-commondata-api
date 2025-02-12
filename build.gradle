@@ -380,7 +380,7 @@ dependencies {
 
   testImplementation("com.github.tomakehurst:wiremock-jre8-standalone:3.0.1")
 
-  testImplementation ("org.mockito:mockito-core:5.14.2") {
+  testImplementation ("org.mockito:mockito-core:5.15.2") {
     exclude group: "net.bytebuddy", module: "byte-buddy"
     exclude group: "net.bytebuddy", module: "byte-buddy-agent"
   }
@@ -391,7 +391,7 @@ dependencies {
   testImplementation group: 'net.bytebuddy', name: 'byte-buddy', version: versions.bytebuddy
   testImplementation group: 'net.bytebuddy', name: 'byte-buddy-agent', version: versions.bytebuddy
   testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.27.3'
-  testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '5.14.2'
+  testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '5.15.2'
   testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
   testImplementation group: 'com.github.mifmif', name: 'generex', version: '1.0.2'
   testImplementation 'io.github.openfeign:feign-jackson:13.5'
