@@ -32,7 +32,7 @@ java {
 }
 
 ext {
-  springCloudVersion = '2024.0.0'
+  springCloudVersion = '2024.0.1'
 }
 
 def versions = [
