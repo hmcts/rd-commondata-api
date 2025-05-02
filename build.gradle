@@ -49,7 +49,7 @@ def versions = [
   restAssured     : '5.3.1',
   feign           : '3.8.0',
   bytebuddy       : '1.17.5',
-  testContainer_postgresql: '1.20.6',
+  testContainer_postgresql: '1.21.0',
   junit           : '5.11.3',
   junitPlatform   : '1.11.3',
   bouncycastle    : '1.80',
