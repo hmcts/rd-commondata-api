@@ -181,10 +181,10 @@ task runProviderPactVerification(type: Test) {
 }
 
 task fortifyScan(type: JavaExec)  {
-  mainClass.set('uk.gov.hmcts.fortifyclient.FortifyClientMainApp')
+  main('uk.gov.hmcts.fortifyclient.FortifyClientMainApp')
   classpath += sourceSets.test.runtimeClasspath
   jvmArgs = ['--add-opens=java.base/java.lang.reflect=ALL-UNNAMED']
-  ignoreExitValue = true
+  ignoreExitValue = true as JavaExecSpec
 }
 
 runProviderPactVerification.dependsOn contract
