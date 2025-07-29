@@ -50,8 +50,8 @@ def versions = [
   feign           : '3.8.0',
   bytebuddy       : '1.17.6',
   testContainer_postgresql: '1.21.3',
-  junit           : '5.11.3',
-  junitPlatform   : '1.11.3',
+  junit           : '5.13.4',
+  junitPlatform   : '1.13.4',
   bouncycastle    : '1.81',
   serenity        : '4.2.34'
 ]
@@ -372,7 +372,7 @@ dependencies {
   testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: versions.testContainer_postgresql
   testImplementation group: 'org.testcontainers', name: 'testcontainers', version: versions.testContainer_postgresql
 
-  testImplementation(platform('org.junit:junit-bom:5.11.3'))
+  testImplementation(platform('org.junit:junit-bom:5.13.4'))
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
     exclude group: 'junit', module: 'junit'
     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
