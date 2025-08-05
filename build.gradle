@@ -394,7 +394,7 @@ dependencies {
   testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '5.16.1'
   testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
   testImplementation group: 'com.github.mifmif', name: 'generex', version: '1.0.2'
-  testImplementation 'com.github.hmcts:fortify-client:1.4.9:all'
+  testImplementation 'com.github.hmcts:fortify-client:1.4.10:all'
   testImplementation 'io.github.openfeign:feign-jackson:13.5'
   testImplementation group: 'org.codehaus.sonar-plugins', name: 'sonar-pitest-plugin', version: versions.sonarPitest
 
