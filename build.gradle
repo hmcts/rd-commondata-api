@@ -38,7 +38,7 @@ ext {
 def versions = [
   lombok          : '1.18.38',
   sonarPitest     : '0.5',
-  jjwt            : '0.12.7',
+  jjwt            : '0.13.0',
   junitPitest     : '1.2.1',
   flywaydb        : '11.11.2',
   reformLogging   : '6.1.4',
