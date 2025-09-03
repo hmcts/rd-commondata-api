@@ -340,7 +340,7 @@ dependencies {
   implementation group: 'org.flywaydb', name: 'flyway-core', version: versions.flywaydb
   implementation group: 'org.flywaydb', name: 'flyway-database-postgresql', version: versions.flywaydb
   implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.18.0'
-  implementation group: 'org.yaml', name: 'snakeyaml', version: '2.4'
+  implementation group: 'org.yaml', name: 'snakeyaml', version: '2.5'
 
   implementation group: 'jakarta.annotation', name: 'jakarta.annotation-api', version: '3.0.0'
 
