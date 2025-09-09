@@ -36,7 +36,7 @@ ext {
 }
 
 def versions = [
-  lombok          : '1.18.38',
+  lombok          : '1.18.40',
   sonarPitest     : '0.5',
   jjwt            : '0.13.0',
   junitPitest     : '1.2.1',
