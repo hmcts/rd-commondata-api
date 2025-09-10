@@ -8,6 +8,7 @@ plugins {
   id 'application'
   id 'uk.gov.hmcts.java' version '0.12.67'
   id 'pmd'
+  id 'checkstyle'
   id 'idea'
   id 'jacoco'
   id 'project-report'
@@ -214,6 +215,10 @@ pmd {
     'category/java/errorprone.xml',
     'category/java/bestpractices.xml'
   ]
+}
+
+checkstyle {
+  toolVersion = "11.0.1"
 }
 
 jacoco {
