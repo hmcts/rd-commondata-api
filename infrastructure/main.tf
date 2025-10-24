@@ -39,6 +39,7 @@ module "db-common-data-v16" {
   common_tags          = var.common_tags
   component            = var.component-v16
   env                  = var.env
+  enable_db_reporting_privileges = true
   pgsql_databases = [
     {
       name = "dbcommondata"
@@ -48,9 +49,6 @@ module "db-common-data-v16" {
   ]
   # Setup Access Reader db user
   force_user_permissions_trigger = "3"
-
-  # Reporting
-  enable_db_reporting_privileges = true
   force_db_report_privileges_trigger = "1"
 
   # Sets correct DB owner after migration to fix permissions
