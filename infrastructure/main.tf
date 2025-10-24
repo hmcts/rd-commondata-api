@@ -42,6 +42,8 @@ module "db-common-data-v16" {
   pgsql_databases = [
     {
       name = "dbcommondata"
+      report_privilege_schema : "public"
+      report_privilege_tables : ["list_of_values", "flag_details", "dataload_exception_records", "dataload_schedular_audit", "dataload_exception_records"]
     }
   ]
   # Setup Access Reader db user
@@ -69,13 +71,6 @@ module "db-common-data-v16" {
   # Reporting
   enable_db_reporting_privileges = true
   force_db_report_privileges_trigger = "1"
-  pgsql_databases = [
-    {
-      name = var.database_name
-      report_privilege_schema : "public"
-      report_privilege_tables : ["list_of_values", "flag_details", "dataload_exception_records", "dataload_schedular_audit", "dataload_exception_records"]
-    }
-  ]
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
