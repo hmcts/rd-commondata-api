@@ -39,13 +39,17 @@ module "db-common-data-v16" {
   common_tags          = var.common_tags
   component            = var.component-v16
   env                  = var.env
+  enable_db_report_privileges = true
   pgsql_databases = [
     {
       name = "dbcommondata"
+      report_privilege_schema : "public"
+      report_privilege_tables : ["list_of_values", "flag_details", "dataload_exception_records", "dataload_schedular_audit", "dataload_exception_records"]
     }
   ]
   # Setup Access Reader db user
   force_user_permissions_trigger = "3"
+  force_db_report_privileges_trigger = "1"
 
   # Sets correct DB owner after migration to fix permissions
   enable_schema_ownership        = var.enable_schema_ownership
@@ -65,7 +69,6 @@ module "db-common-data-v16" {
   action_group_name           = join("-", [var.action_group_name, local.db_name, var.env])
   email_address_key           = var.email_address_key
   email_address_key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
-
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
