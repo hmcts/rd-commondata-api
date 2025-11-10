@@ -20,7 +20,7 @@ plugins {
   id "info.solidsoft.pitest" version '1.15.0'
   id 'au.com.dius.pact' version '4.6.17'
   id 'org.owasp.dependencycheck' version '12.1.6'
-  id 'net.serenity-bdd.serenity-gradle-plugin' version '4.2.34'
+  id 'net.serenity-bdd.serenity-gradle-plugin' version '4.3.2'
 }
 
 group = 'uk.gov.hmcts.reform'
@@ -206,7 +206,7 @@ pact {
 }
 
 pmd {
-  toolVersion = "7.17.0"
+  toolVersion = "7.18.0"
   ignoreFailures = true
   sourceSets = [sourceSets.main, sourceSets.test, sourceSets.functionalTest, sourceSets.integrationTest, sourceSets.smokeTest]
   reportsDir = file("$project.buildDir/reports/pmd")
@@ -332,14 +332,14 @@ dependencies {
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-resource-server'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-cache'
-  implementation group: 'com.fasterxml.jackson', name:'jackson-bom' , version:'2.20.0'
+  implementation group: 'com.fasterxml.jackson', name:'jackson-bom' , version:'2.20.1'
 
   implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: versions.log4j
   implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: versions.log4j
   implementation group: 'org.apache.logging.log4j', name: 'log4j', version: versions.log4j
   implementation group: 'ch.qos.logback', name: 'logback-core', version: versions.logback
   implementation group: 'ch.qos.logback', name: 'logback-classic', version: versions.logback
-  implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.7.5'
+  implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.7.6'
 
   implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.8'
   implementation group: 'org.flywaydb', name: 'flyway-core', version: versions.flywaydb
@@ -356,14 +356,14 @@ dependencies {
   implementation group: 'jakarta.inject', name: 'jakarta.inject-api', version: '2.0.1'
   implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: '6.1.9'
   implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.4'
-  implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.2.2'
+  implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.2.3'
   implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version:  versions.jjwt
   implementation 'commons-io:commons-io:2.20.0'
-  implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: '2.20.0', ext: 'pom'
+  implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: '2.20.1', ext: 'pom'
   implementation group: 'io.github.openfeign.form', name: 'feign-form', version: versions.feign
   implementation group: 'io.github.openfeign.form', name: 'feign-form-spring', version: versions.feign
 
-  implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.8.13'
+  implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.8.14'
 
   implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap'
   implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign'
