@@ -53,7 +53,7 @@ def versions = [
   testContainer_postgresql: '1.21.3',
   junit           : '6.0.0',
   junitPlatform   : '6.0.0',
-  bouncycastle    : '1.82',
+  bouncycastle    : '1.83',
   serenity        : '4.3.4'
 ]
 
