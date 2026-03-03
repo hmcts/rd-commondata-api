@@ -14,11 +14,11 @@ plugins {
   id 'project-report'
   id "org.flywaydb.flyway" version '11.19.0'
   id 'io.spring.dependency-management' version '1.1.7'
-  id 'org.springframework.boot' version '3.4.5'
+  id 'org.springframework.boot' version '3.4.10'
   id 'com.github.ben-manes.versions' version '0.53.0'
   id 'org.sonarqube' version '7.0.0.6105'
   id "info.solidsoft.pitest" version '1.15.0'
-  id 'au.com.dius.pact' version '4.6.18'
+  id 'au.com.dius.pact' version '4.6.19'
   id 'org.owasp.dependencycheck' version '12.1.6'
   id 'net.serenity-bdd.serenity-gradle-plugin' version '4.3.2'
 }
@@ -43,8 +43,9 @@ def versions = [
   junitPitest     : '1.2.1',
   flywaydb        : '11.19.0',
   reformLogging   : '6.1.4',
-  pact_version    : '4.6.18',
+  pact_version    : '4.6.19',
   log4j           : '2.25.3',
+  logback         : '1.5.25',
   launchDarklySdk : "5.10.9",
   reformS2sClient : '5.3.3',
   restAssured     : '5.3.1',
@@ -395,7 +396,7 @@ dependencies {
   }
   testImplementation group: 'net.bytebuddy', name: 'byte-buddy', version: versions.bytebuddy
   testImplementation group: 'net.bytebuddy', name: 'byte-buddy-agent', version: versions.bytebuddy
-  testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.27.6'
+  testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.27.7'
   testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '5.21.0'
   testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
   testImplementation group: 'com.github.mifmif', name: 'generex', version: '1.0.2'
