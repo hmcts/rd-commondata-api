@@ -50,7 +50,7 @@ def versions = [
   reformS2sClient : '5.3.3',
   restAssured     : '5.3.1',
   feign           : '3.8.0',
-  bytebuddy       : '1.18.2',
+  bytebuddy       : '1.18.7',
   testContainer_postgresql: '1.21.4',
   junit           : '6.0.0',
   junitPlatform   : '6.0.0',
