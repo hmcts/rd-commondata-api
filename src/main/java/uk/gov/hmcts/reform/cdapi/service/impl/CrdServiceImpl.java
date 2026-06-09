@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.springframework.data.jpa.domain.Specification.unrestricted;
-import static org.springframework.data.jpa.domain.Specification.where;
 import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.categoryKey;
 import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.key;
 import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.parentCategory;
