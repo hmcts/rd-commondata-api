@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.springframework.data.jpa.domain.Specification.where;
 import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.categoryKey;
 import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.key;
 import static uk.gov.hmcts.reform.cdapi.domain.QuerySpecification.parentCategory;
@@ -84,7 +83,7 @@ public class CrdServiceImpl implements CrdService {
     }
 
     public Specification<ListOfValueDto> prepareBaseQuerySpecification(CategoryRequest request) {
-        return where(categoryKey(request.getCategoryId()))
+        return categoryKey(request.getCategoryId())
             .and(serviceId(request.getServiceId()))
             .and(parentCategory(request.getParentCategory()))
             .and(parentKey(request.getParentKey()))
@@ -92,7 +91,7 @@ public class CrdServiceImpl implements CrdService {
     }
 
     public Specification<ListOfValueDto> prepareCategoryExistsQuerySpecification(CategoryRequest request) {
-        return where(categoryKey(request.getCategoryId()));
+        return categoryKey(request.getCategoryId());
     }
 
     private List<Category> mapToParentCategory(List<Category> channelList) {
