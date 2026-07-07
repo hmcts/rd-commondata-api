@@ -19,7 +19,7 @@ plugins {
   id 'org.sonarqube' version '7.2.3.7755'
   id "info.solidsoft.pitest" version '1.15.0'
   id 'au.com.dius.pact' version '4.6.19'
-  id 'org.owasp.dependencycheck' version '12.2.0'
+  id 'org.owasp.dependencycheck' version '12.2.2'
   id 'net.serenity-bdd.serenity-gradle-plugin' version '4.3.2'
 }
 
@@ -39,6 +39,7 @@ ext {
 def versions = [
   lombok          : '1.18.44',
   sonarPitest     : '0.5',
+  jackson         : '2.22.0',
   jjwt            : '0.13.0',
   junitPitest     : '1.2.1',
   flywaydb        : '11.20.3',
@@ -313,7 +314,6 @@ repositories {
 }
 
 dependencies {
-
   configurations.all {
     exclude group: 'org.apache.logging.log4j', module: 'log4j-to-slf4j'
   }
@@ -333,7 +333,6 @@ dependencies {
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-resource-server'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-cache'
-  implementation group: 'com.fasterxml.jackson', name:'jackson-bom' , version:'2.21.2'
 
   implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: versions.log4j
   implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: versions.log4j
@@ -361,7 +360,11 @@ dependencies {
   implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version:  versions.jjwt
   implementation group: 'commons-io', name: 'commons-io', version: '2.22.0'
   implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.6.0'
-  implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: '2.21.2', ext: 'pom'
+  implementation (group: 'com.fasterxml.jackson', name: 'jackson-bom', ext: 'pom') {
+    version {
+      strictly versions.jackson
+    }
+  }
   implementation group: 'io.github.openfeign.form', name: 'feign-form', version: versions.feign
   implementation group: 'io.github.openfeign.form', name: 'feign-form-spring', version: versions.feign
 
@@ -498,7 +501,7 @@ dependencyManagement {
     mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
   }
   dependencies {
-    dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.55') {
+    dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.56') {
       entry 'tomcat-embed-core'
       entry 'tomcat-embed-el'
       entry 'tomcat-embed-websocket'
@@ -517,6 +520,20 @@ dependencyManagement {
       entry 'spring-tx'
       entry 'spring-web'
       entry 'spring-webmvc'
+    }
+    dependencySet(group: 'com.fasterxml.jackson.core', version: versions.jackson) {
+      entry 'jackson-core'
+      entry 'jackson-databind'
+    }
+    dependencySet(group: 'com.fasterxml.jackson.datatype', version: versions.jackson) {
+      entry 'jackson-datatype-jsr310'
+      entry 'jackson-datatype-jdk8'
+    }
+    dependencySet(group: 'com.fasterxml.jackson.dataformat', version: versions.jackson) {
+      entry 'jackson-dataformat-yaml'
+    }
+    dependencySet(group: 'com.fasterxml.jackson.module', version: versions.jackson) {
+      entry 'jackson-module-parameter-names'
     }
   }
 }
