@@ -48,7 +48,7 @@ def versions = [
   log4j           : '2.26.0',
   logback         : '1.5.37',
   launchDarklySdk : "5.10.9",
-  reformS2sClient : '5.3.3',
+  reformS2sClient : '5.3.4',
   restAssured     : '5.3.1',
   feign           : '3.8.0',
   bytebuddy       : '1.18.8',
