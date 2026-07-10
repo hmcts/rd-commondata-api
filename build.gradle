@@ -46,7 +46,7 @@ def versions = [
   reformLogging   : '8.0.0',
   pact_version    : '4.6.19',
   log4j           : '2.26.1',
-  logback         : '1.5.37',
+  logback         : '1.5.38',
   launchDarklySdk : "5.10.9",
   reformS2sClient : '5.3.4',
   restAssured     : '5.3.1',
