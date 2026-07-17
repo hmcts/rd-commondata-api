@@ -20,7 +20,7 @@ plugins {
   id "info.solidsoft.pitest" version '1.15.0'
   id 'au.com.dius.pact' version '4.7.3'
   id 'org.owasp.dependencycheck' version '12.2.2'
-  id 'net.serenity-bdd.serenity-gradle-plugin' version '4.3.2'
+  id 'net.serenity-bdd.serenity-gradle-plugin' version '5.3.9'
 }
 
 group = 'uk.gov.hmcts.reform'
