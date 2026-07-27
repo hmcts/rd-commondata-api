@@ -56,7 +56,7 @@ def versions = [
   junit           : '6.1.2',
   junitPlatform   : '6.1.2',
   bouncycastle    : '1.85',
-  serenity        : '4.3.4'
+  serenity        : '5.3.11'
 ]
 
 sourceSets {
