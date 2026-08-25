@@ -11,7 +11,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import uk.gov.hmcts.reform.authorisation.ServiceAuthorisationApi;
 import uk.gov.hmcts.reform.idam.client.IdamApi;
 
-
 @EnableJpaAuditing
 @EnableJpaRepositories
 @SpringBootApplication(scanBasePackages = {"uk.gov.hmcts.reform.cdapi", "uk.gov.hmcts.reform.idam"})
