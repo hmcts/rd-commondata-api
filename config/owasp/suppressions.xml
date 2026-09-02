@@ -76,7 +76,7 @@
         <cve>CVE-2026-59280</cve>
   </suppress>
    <suppress>
-        <notes>https://tools.hmcts.net/jira/browse/DTSAM-1386 spring security</notes>
+        <notes>https://tools.hmcts.net/jira/browse/DTSRD-6684 spring security</notes>
         <cve>CVE-2026-59270</cve>
     </suppress>
 </suppressions>
