@@ -33,7 +33,14 @@ public class FeatureToggleServiceImpl implements FeatureToggleService {
     @PostConstruct
     public void mapServiceToFlag() {
         launchDarklyMap = new HashMap<>();
-
+        launchDarklyMap.put(
+            "CaseFlagApiController.retrieveCaseFlagsByServiceId",
+            "rd_commondata_api"
+        );
+        launchDarklyMap.put(
+            "CrdApiController.retrieveListOfValuesByCategoryId",
+            "rd_lov_api"
+        );
     }
 
     @Override
