@@ -23,11 +23,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -53,6 +54,7 @@ class CaseFlagServiceImplTest {
         ReflectionTestUtils.setField(caseFlagService, "flaglistLov",
                                      Arrays.asList("PF0015", "RA0042")
         );
+        ReflectionTestUtils.setField(caseFlagService, "otherFlagCodeSuppressions", "");
     }
 
     @ParameterizedTest
@@ -192,11 +194,11 @@ class CaseFlagServiceImplTest {
             .filter(flagDetail -> "REASONABLE ADJUSTMENT".equals(flagDetail.getName()))
             .findFirst()
             .orElseThrow();
-        var childOfReasonableAdjustment = reasonableAdjustment.getChildFlags().stream()
+        final var childOfReasonableAdjustment = reasonableAdjustment.getChildFlags().stream()
             .filter(flagDetail -> "FLAG001".equals(flagDetail.getFlagCode()))
             .findFirst()
             .orElseThrow();
-        var otherFlag = reasonableAdjustment.getChildFlags().stream()
+        final var otherFlag = reasonableAdjustment.getChildFlags().stream()
             .filter(flagDetail -> "OT0001".equals(flagDetail.getFlagCode()))
             .findFirst()
             .orElseThrow();
@@ -209,6 +211,47 @@ class CaseFlagServiceImplTest {
         assertIterableEquals(List.of("CATEGORY", "RA_PARENT"), childOfReasonableAdjustment.getCodePath());
         assertIterableEquals(childOfReasonableAdjustment.getPath(), otherFlag.getPath());
         assertIterableEquals(childOfReasonableAdjustment.getCodePath(), otherFlag.getCodePath());
+    }
+
+    @Test
+    void testGetCaseFlag_WithNoSuppressions_KeepsExistingOtherFlags() {
+        when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
+
+        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "", "N", "N");
+
+        assertEquals(2, countFlagsByCode(caseFlag, "OT0001"));
+    }
+
+    @Test
+    void testGetCaseFlag_WithOneSuppression_SuppressesOneOtherFlag() {
+        ReflectionTestUtils.setField(caseFlagService, "otherFlagCodeSuppressions", "FLAG001");
+        when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
+
+        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "", "N", "N");
+
+        var topLevelParty = getFlagDetailByName(caseFlag, "PARTY");
+        var reasonableAdjustment = getChildFlagByName(topLevelParty, "REASONABLE ADJUSTMENT");
+
+        assertEquals(1, countFlagsByCode(caseFlag, "OT0001"));
+        assertTrue(containsFlagCode(topLevelParty.getChildFlags(), "OT0001"));
+        assertFalse(containsFlagCode(reasonableAdjustment.getChildFlags(), "OT0001"));
+    }
+
+    @Test
+    void testGetCaseFlag_WithManySuppressions_SuppressesManyOtherFlags() {
+        ReflectionTestUtils.setField(caseFlagService, "otherFlagCodeSuppressions", "FLAG001, FLAG002");
+        when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoListWithMultipleSuppressibleBranches());
+
+        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "", "N", "N");
+
+        var topLevelParty = getFlagDetailByName(caseFlag, "PARTY");
+        var reasonableAdjustment = getChildFlagByName(topLevelParty, "REASONABLE ADJUSTMENT");
+        final var supportNeeds = getChildFlagByName(topLevelParty, "SUPPORT NEEDS");
+
+        assertEquals(1, countFlagsByCode(caseFlag, "OT0001"));
+        assertTrue(containsFlagCode(topLevelParty.getChildFlags(), "OT0001"));
+        assertFalse(containsFlagCode(reasonableAdjustment.getChildFlags(), "OT0001"));
+        assertFalse(containsFlagCode(supportNeeds.getChildFlags(), "OT0001"));
     }
 
     @Test
@@ -369,6 +412,80 @@ class CaseFlagServiceImplTest {
         return caseFlagDtoList;
     }
 
+    List<CaseFlagDto> getCaseFlagDtoListWithMultipleSuppressibleBranches() {
+        var caseFlagDto1 = new CaseFlagDto();
+        caseFlagDto1.setFlagCode("CATEGORY");
+        caseFlagDto1.setCategoryId(0);
+        caseFlagDto1.setCategoryPath("");
+        caseFlagDto1.setCodePath("");
+        caseFlagDto1.setId(1);
+        caseFlagDto1.setHearingRelevant(true);
+        caseFlagDto1.setRequestReason(false);
+        caseFlagDto1.setValueEn("PARTY");
+        caseFlagDto1.setValueCy("");
+        caseFlagDto1.setIsParent(true);
+        caseFlagDto1.setExternallyAvailable(true);
+        caseFlagDto1.setDefaultStatus("Requested");
+
+        var caseFlagDto2 = new CaseFlagDto();
+        caseFlagDto2.setFlagCode("RA_PARENT");
+        caseFlagDto2.setCategoryId(1);
+        caseFlagDto2.setCategoryPath("PARTY");
+        caseFlagDto2.setCodePath("CATEGORY");
+        caseFlagDto2.setId(2);
+        caseFlagDto2.setHearingRelevant(true);
+        caseFlagDto2.setRequestReason(false);
+        caseFlagDto2.setValueEn("REASONABLE ADJUSTMENT");
+        caseFlagDto2.setValueCy("");
+        caseFlagDto2.setIsParent(true);
+        caseFlagDto2.setExternallyAvailable(true);
+        caseFlagDto2.setDefaultStatus("Active");
+
+        var caseFlagDto3 = new CaseFlagDto();
+        caseFlagDto3.setFlagCode("FLAG001");
+        caseFlagDto3.setCategoryId(2);
+        caseFlagDto3.setCategoryPath("PARTY/REASONABLE ADJUSTMENT");
+        caseFlagDto3.setCodePath("CATEGORY/RA_PARENT");
+        caseFlagDto3.setId(3);
+        caseFlagDto3.setHearingRelevant(true);
+        caseFlagDto3.setRequestReason(false);
+        caseFlagDto3.setValueEn("CHILD OF REASONABLE ADJUSTMENT");
+        caseFlagDto3.setValueCy("");
+        caseFlagDto3.setIsParent(false);
+        caseFlagDto3.setExternallyAvailable(true);
+        caseFlagDto3.setDefaultStatus("Requested");
+
+        var caseFlagDto4 = new CaseFlagDto();
+        caseFlagDto4.setFlagCode("RB_PARENT");
+        caseFlagDto4.setCategoryId(1);
+        caseFlagDto4.setCategoryPath("PARTY");
+        caseFlagDto4.setCodePath("CATEGORY");
+        caseFlagDto4.setId(4);
+        caseFlagDto4.setHearingRelevant(true);
+        caseFlagDto4.setRequestReason(false);
+        caseFlagDto4.setValueEn("SUPPORT NEEDS");
+        caseFlagDto4.setValueCy("");
+        caseFlagDto4.setIsParent(true);
+        caseFlagDto4.setExternallyAvailable(true);
+        caseFlagDto4.setDefaultStatus("Active");
+
+        var caseFlagDto5 = new CaseFlagDto();
+        caseFlagDto5.setFlagCode("FLAG002");
+        caseFlagDto5.setCategoryId(4);
+        caseFlagDto5.setCategoryPath("PARTY/SUPPORT NEEDS");
+        caseFlagDto5.setCodePath("CATEGORY/RB_PARENT");
+        caseFlagDto5.setId(5);
+        caseFlagDto5.setHearingRelevant(true);
+        caseFlagDto5.setRequestReason(false);
+        caseFlagDto5.setValueEn("CHILD OF SUPPORT NEEDS");
+        caseFlagDto5.setValueCy("");
+        caseFlagDto5.setIsParent(false);
+        caseFlagDto5.setExternallyAvailable(true);
+        caseFlagDto5.setDefaultStatus("Requested");
+
+        return new ArrayList<>(List.of(caseFlagDto1, caseFlagDto2, caseFlagDto3, caseFlagDto4, caseFlagDto5));
+    }
+
     private List<ListOfValue> getListOfValuesForLanguageInterPreter(boolean isWelshRequired) {
         var list = new ListOfValue();
         list.setId("1");
@@ -417,5 +534,40 @@ class CaseFlagServiceImplTest {
         }
         assertEquals(2, caseFlag.getFlags()
             .get(0).getFlagDetails().get(0).getChildFlags().size());
+    }
+
+    private long countFlagsByCode(CaseFlag caseFlag, String flagCode) {
+        return caseFlag.getFlags().stream()
+            .flatMap(flag -> flag.getFlagDetails().stream())
+            .mapToLong(flagDetail -> countFlagsByCode(flagDetail, flagCode))
+            .sum();
+    }
+
+    private long countFlagsByCode(FlagDetail flagDetail, String flagCode) {
+        long currentCount = flagCode.equals(flagDetail.getFlagCode()) ? 1 : 0;
+        if (flagDetail.getChildFlags() == null) {
+            return currentCount;
+        }
+        return currentCount + flagDetail.getChildFlags().stream()
+            .mapToLong(childFlag -> countFlagsByCode(childFlag, flagCode))
+            .sum();
+    }
+
+    private FlagDetail getFlagDetailByName(CaseFlag caseFlag, String name) {
+        return caseFlag.getFlags().get(0).getFlagDetails().stream()
+            .filter(flagDetail -> name.equals(flagDetail.getName()))
+            .findFirst()
+            .orElseThrow();
+    }
+
+    private FlagDetail getChildFlagByName(FlagDetail parentFlag, String name) {
+        return parentFlag.getChildFlags().stream()
+            .filter(flagDetail -> name.equals(flagDetail.getName()))
+            .findFirst()
+            .orElseThrow();
+    }
+
+    private boolean containsFlagCode(List<FlagDetail> flagDetails, String flagCode) {
+        return flagDetails.stream().anyMatch(flagDetail -> flagCode.equals(flagDetail.getFlagCode()));
     }
 }
