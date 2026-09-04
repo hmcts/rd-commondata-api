@@ -21,6 +21,8 @@ import uk.gov.hmcts.reform.cdapi.service.CaseFlagService;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static uk.gov.hmcts.reform.cdapi.controllers.constant.Constant.CATEGORY_KEY_LANGUAGE_INTERPRETER;
 import static uk.gov.hmcts.reform.cdapi.controllers.constant.Constant.CATEGORY_KEY_SIGN_LANGUAGE;
@@ -39,6 +41,9 @@ public class CaseFlagServiceImpl implements CaseFlagService {
 
     @Value("${flaglist}")
     List<String> flaglistLov;
+
+    @Value("${other-flag-code-suppressions:}")
+    String otherFlagCodeSuppressions;
 
     public static final String IGNORE_JSON = "IGNORE_JSON";
 
@@ -96,7 +101,8 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                     .flagComment(caseFlagDto.getRequestReason())
                     .parent(caseFlagDto.getIsParent())
                     .hearingRelevant(caseFlagDto.getHearingRelevant())
-                    .path(Arrays.stream(caseFlagDto.getCategoryPath().split("/")).toList())
+                    .path(splitPath(caseFlagDto.getCategoryPath()))
+                    .codePath(splitPath(caseFlagDto.getCodePath()))
                     .childFlags(new ArrayList<>())
                     .id(caseFlagDto.getId())
                     .cateGoryId(caseFlagDto.getCategoryId());
@@ -141,7 +147,8 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                     .flagComment(caseFlagDto.getRequestReason())
                     .parent(caseFlagDto.getIsParent())
                     .hearingRelevant(caseFlagDto.getHearingRelevant())
-                    .path(Arrays.stream(caseFlagDto.getCategoryPath().split("/")).toList())
+                    .path(splitPath(caseFlagDto.getCategoryPath()))
+                    .codePath(splitPath(caseFlagDto.getCodePath()))
                     .cateGoryId(caseFlagDto.getCategoryId())
                     .id(caseFlagDto.getId());
                 this.setCaseFlagByWelshRequired(isWelshRequired, childFlag, caseFlagDto);
@@ -186,6 +193,10 @@ public class CaseFlagServiceImpl implements CaseFlagService {
 
     private String setNullValue(String value) {
         return ObjectUtils.isEmpty(value) ? null : value;
+    }
+
+    private List<String> splitPath(String path) {
+        return path == null ? null : Arrays.stream(path.split("/")).toList();
     }
 
     private void ignoreNameCy(FlagDetail.FlagDetailBuilder flagDetail) {
@@ -258,14 +269,20 @@ public class CaseFlagServiceImpl implements CaseFlagService {
             return;
         }
         var isWelshRequired = this.getFlagYorN(welshRequired);
+        var suppressedFlagCodes = getOtherFlagSuppressions();
         for (FlagDetail flagDetail : flagDetails) {
             if (Boolean.TRUE.equals(flagDetail.getParent())
-                && (ObjectUtils.isNotEmpty(flagDetail.getChildFlags()) && !(flagDetail.getChildFlags().isEmpty()))) {
+                && (ObjectUtils.isNotEmpty(flagDetail.getChildFlags()) && !(flagDetail.getChildFlags().isEmpty()))
+                && !shouldSuppressOtherFlag(flagDetail.getChildFlags(), suppressedFlagCodes)) {
                 flagDetail.getChildFlags().add(otherFlagBuilder(
                     flagDetail
                         .getChildFlags()
                         .stream()
                         .findFirst().orElseThrow().getPath(),
+                    flagDetail
+                        .getChildFlags()
+                        .stream()
+                        .findFirst().orElseThrow().getCodePath(),
                     isWelshRequired
                 ));
             }
@@ -273,7 +290,26 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         }
     }
 
-    private FlagDetail otherFlagBuilder(List<String> path, boolean isWelshRequired) {
+    private Set<String> getOtherFlagSuppressions() {
+        if (StringUtils.isBlank(otherFlagCodeSuppressions)) {
+            return Set.of();
+        }
+        return Arrays.stream(otherFlagCodeSuppressions.split(","))
+            .map(String::trim)
+            .filter(StringUtils::isNotBlank)
+            .map(String::toUpperCase)
+            .collect(Collectors.toSet());
+    }
+
+    private boolean shouldSuppressOtherFlag(List<FlagDetail> childFlags, Set<String> suppressedFlagCodes) {
+        return childFlags.stream()
+            .map(FlagDetail::getFlagCode)
+            .filter(StringUtils::isNotBlank)
+            .map(String::toUpperCase)
+            .anyMatch(suppressedFlagCodes::contains);
+    }
+
+    private FlagDetail otherFlagBuilder(List<String> path, List<String> codePath, boolean isWelshRequired) {
         String nameCy = "Arall";
         if (!isWelshRequired) {
             nameCy = IGNORE_JSON;
@@ -289,6 +325,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
             .externallyAvailable(true)
             .childFlags(new ArrayList<>())
             .path(path)
+            .codePath(codePath)
             .flagComment(true).build();
     }
 

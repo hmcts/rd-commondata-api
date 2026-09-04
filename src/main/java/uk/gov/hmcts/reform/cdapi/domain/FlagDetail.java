@@ -37,6 +37,8 @@ public class FlagDetail {
     private Boolean parent;
     @JsonProperty("Path")
     private List<String> path;
+    @JsonProperty("CodePath")
+    private List<String> codePath;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @Builder.Default
     private List<FlagDetail> childFlags = new ArrayList<>();
