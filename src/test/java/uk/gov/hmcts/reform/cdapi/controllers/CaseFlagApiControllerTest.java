@@ -31,7 +31,6 @@ import static org.apache.commons.lang3.RandomUtils.nextBoolean;
 import static org.apache.commons.lang3.RandomUtils.nextInt;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -266,7 +265,8 @@ class CaseFlagApiControllerTest {
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].listOfValues", hasSize(1)))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].listOfValues[0].key", is(parentListOfValue.getKey())))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].listOfValues[0].value", is(parentListOfValue.getValue())))
-            .andExpect(jsonPath("$.flags[0].FlagDetails[0].Path", is(nullValue())))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].Path", is(parentFlagDetail.getPath())))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].CodePath", is(parentFlagDetail.getCodePath())))
 
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags", hasSize(1)))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].name", is(childFlagDetail.getName())))
@@ -294,7 +294,8 @@ class CaseFlagApiControllerTest {
                 is(childListOfValue.getValue())
             ))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].isParent", is(childFlagDetail.getParent())))
-            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].Path", is(nullValue())));
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].Path", is(childFlagDetail.getPath())))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].CodePath", is(childFlagDetail.getCodePath())));
     }
 
     private static Stream<Arguments> invalidScenarios() {
@@ -331,6 +332,8 @@ class CaseFlagApiControllerTest {
                 .flagComment(nextBoolean())
                 .hearingRelevant(nextBoolean())
                 .parent(nextBoolean())
+                .path(List.of(randomAlphabetic(5), randomAlphabetic(5)))
+                .codePath(List.of(randomAlphabetic(5), randomAlphabetic(5)))
                 .listOfValues(List.of(listOfValue))
                 .listOfValuesLength(nextInt());
 

@@ -25,6 +25,8 @@ class CaseFlagTest {
         assertEquals(1, caseFlag.getFlags().get(0).getFlagDetails().get(0).getCateGoryId());
         assertEquals(true, caseFlag.getFlags().get(0).getFlagDetails().get(0).getFlagComment());
         assertEquals(Arrays.asList("party", "ra"), caseFlag.getFlags().get(0).getFlagDetails().get(0).getPath());
+        assertEquals(Arrays.asList("CATEGORY", "RA_PARENT"),
+                     caseFlag.getFlags().get(0).getFlagDetails().get(0).getCodePath());
         assertNotNull(caseFlag.getFlags().get(0).getFlagDetails().get(0).getListOfValues());
         assertEquals(0, caseFlag.getFlags().get(0).getFlagDetails().get(0).getListOfValuesLength());
         assertEquals(true, caseFlag.getFlags().get(0).getFlagDetails().get(0).getParent());
@@ -40,6 +42,7 @@ class CaseFlagTest {
             .cateGoryId(1)
             .flagComment(true)
             .path(Arrays.asList("party", "ra"))
+            .codePath(Arrays.asList("CATEGORY", "RA_PARENT"))
             .hearingRelevant(false)
             .listOfValues(new ArrayList<>())
             .listOfValuesLength(0)
@@ -53,6 +56,7 @@ class CaseFlagTest {
             .cateGoryId(2)
             .flagComment(true)
             .path(Arrays.asList("case", "complexcase"))
+            .codePath(Arrays.asList("CASE", "COMPLEX_CASE"))
             .hearingRelevant(false)
             .listOfValues(new ArrayList<>())
             .listOfValuesLength(0)

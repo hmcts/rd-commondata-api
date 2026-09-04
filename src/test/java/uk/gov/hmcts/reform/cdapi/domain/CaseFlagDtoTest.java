@@ -13,6 +13,7 @@ class CaseFlagDtoTest {
         caseFlagDto.setNativeFlagCode("RA0001");
         caseFlagDto.setCategoryId(1);
         caseFlagDto.setCategoryPath("PARTY");
+        caseFlagDto.setCodePath("CATEGORY");
         caseFlagDto.setId(2);
         caseFlagDto.setHearingRelevant(true);
         caseFlagDto.setRequestReason(false);
@@ -23,6 +24,7 @@ class CaseFlagDtoTest {
         assertEquals("RA0001", caseFlagDto.getNativeFlagCode());
         assertEquals(1, caseFlagDto.getCategoryId());
         assertEquals("PARTY", caseFlagDto.getCategoryPath());
+        assertEquals("CATEGORY", caseFlagDto.getCodePath());
         assertEquals(2, caseFlagDto.getId());
         assertEquals(true, caseFlagDto.getHearingRelevant());
         assertEquals(false, caseFlagDto.getRequestReason());

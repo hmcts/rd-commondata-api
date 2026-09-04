@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -178,6 +179,39 @@ class CaseFlagServiceImplTest {
     }
 
     @Test
+    void testGetCaseFlag_PopulatesCodePathIncludingOtherFlag() {
+        when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
+
+        var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "", "N", "N");
+
+        var topLevelParty = caseFlag.getFlags().get(0).getFlagDetails().stream()
+            .filter(flagDetail -> "PARTY".equals(flagDetail.getName()))
+            .findFirst()
+            .orElseThrow();
+        var reasonableAdjustment = topLevelParty.getChildFlags().stream()
+            .filter(flagDetail -> "REASONABLE ADJUSTMENT".equals(flagDetail.getName()))
+            .findFirst()
+            .orElseThrow();
+        var childOfReasonableAdjustment = reasonableAdjustment.getChildFlags().stream()
+            .filter(flagDetail -> "FLAG001".equals(flagDetail.getFlagCode()))
+            .findFirst()
+            .orElseThrow();
+        var otherFlag = reasonableAdjustment.getChildFlags().stream()
+            .filter(flagDetail -> "OT0001".equals(flagDetail.getFlagCode()))
+            .findFirst()
+            .orElseThrow();
+
+        assertIterableEquals(List.of(""), topLevelParty.getPath());
+        assertIterableEquals(List.of(""), topLevelParty.getCodePath());
+        assertIterableEquals(List.of("PARTY"), reasonableAdjustment.getPath());
+        assertIterableEquals(List.of("CATEGORY"), reasonableAdjustment.getCodePath());
+        assertIterableEquals(List.of("PARTY", "REASONABLE ADJUSTMENT"), childOfReasonableAdjustment.getPath());
+        assertIterableEquals(List.of("CATEGORY", "RA_PARENT"), childOfReasonableAdjustment.getCodePath());
+        assertIterableEquals(childOfReasonableAdjustment.getPath(), otherFlag.getPath());
+        assertIterableEquals(childOfReasonableAdjustment.getCodePath(), otherFlag.getCodePath());
+    }
+
+    @Test
     @DisplayName("Add child level flag adds nothing on special conditions")
     void testAddChildLevelFlagContinuesWithoutAddingAnything() {
         CaseFlagDto flagDto = new CaseFlagDto();
@@ -231,12 +265,15 @@ class CaseFlagServiceImplTest {
         caseFlagDto1.setValueCy("");
         caseFlagDto1.setIsParent(true);
         caseFlagDto1.setFlagCode("CATEGORY");
+        caseFlagDto1.setCodePath("");
         caseFlagDto1.setExternallyAvailable(true);
         caseFlagDto1.setDefaultStatus("Requested");
 
         var caseFlagDto2 = new CaseFlagDto();
+        caseFlagDto2.setFlagCode("RA_PARENT");
         caseFlagDto2.setCategoryId(1);
         caseFlagDto2.setCategoryPath("PARTY");
+        caseFlagDto2.setCodePath("CATEGORY");
         caseFlagDto2.setId(2);
         caseFlagDto2.setHearingRelevant(true);
         caseFlagDto2.setRequestReason(false);
@@ -250,6 +287,7 @@ class CaseFlagServiceImplTest {
         caseFlagDto3.setFlagCode("FLAG001");
         caseFlagDto3.setCategoryId(2);
         caseFlagDto3.setCategoryPath("PARTY/REASONABLE ADJUSTMENT");
+        caseFlagDto3.setCodePath("CATEGORY/RA_PARENT");
         caseFlagDto3.setId(3);
         caseFlagDto3.setHearingRelevant(true);
         caseFlagDto3.setRequestReason(false);
@@ -263,6 +301,7 @@ class CaseFlagServiceImplTest {
         caseFlagDto4.setFlagCode("CATEGORY");
         caseFlagDto4.setCategoryId(0);
         caseFlagDto4.setCategoryPath("");
+        caseFlagDto4.setCodePath("");
         caseFlagDto4.setId(4);
         caseFlagDto4.setHearingRelevant(true);
         caseFlagDto4.setRequestReason(false);
@@ -276,6 +315,7 @@ class CaseFlagServiceImplTest {
         caseFlagDto5.setFlagCode("CATEGORY");
         caseFlagDto5.setCategoryId(4);
         caseFlagDto5.setCategoryPath("CASE");
+        caseFlagDto5.setCodePath("CATEGORY");
         caseFlagDto5.setId(5);
         caseFlagDto5.setHearingRelevant(true);
         caseFlagDto5.setRequestReason(false);
@@ -306,11 +346,13 @@ class CaseFlagServiceImplTest {
         caseFlagDto1.setValueEn("PARTY");
         caseFlagDto1.setValueCy("PARTY");
         caseFlagDto1.setIsParent(true);
+        caseFlagDto1.setCodePath("");
 
         var caseFlagDto2 = new CaseFlagDto();
         caseFlagDto2.setFlagCode("PF0015");
         caseFlagDto2.setCategoryId(1);
         caseFlagDto2.setCategoryPath("PARTY");
+        caseFlagDto2.setCodePath("CATEGORY");
         caseFlagDto2.setId(3);
         caseFlagDto2.setHearingRelevant(true);
         caseFlagDto2.setRequestReason(false);
