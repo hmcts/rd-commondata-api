@@ -84,4 +84,30 @@
         <cve>CVE-2026-59270</cve>
         <cve>CVE-2026-59276</cve>
     </suppress>
+   <!-- Spring Data JPA -->
+    <suppress>
+        <notes><![CDATA[
+            Temporary suppression until patched Spring Data JPA version is adopted.
+        ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.data/spring-data-jpa@3\.5\.13$</packageUrl>
+        <cve>CVE-2026-47834</cve>
+    </suppress>
+
+    <!-- Spring Security 6.5.11 -->
+    <suppress>
+        <notes><![CDATA[
+            Temporary suppression for Spring Security 6.5.11.
+        ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/.*@6\.5\.11$</packageUrl>
+        <cve>CVE-2026-47841</cve>
+    </suppress>
+
+    <suppress>
+        <notes><![CDATA[
+            Temporary suppression for Spring Security 6.5.11.
+        ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/.*@6\.5\.11$</packageUrl>
+        <cve>CVE-2026-47842</cve>
+    </suppress>
+
 </suppressions>
