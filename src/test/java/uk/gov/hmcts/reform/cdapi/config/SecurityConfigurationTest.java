@@ -15,8 +15,8 @@ import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
+import uk.gov.hmcts.reform.cdapi.config.security.IdamSecurityProperties;
 import uk.gov.hmcts.reform.cdapi.oidc.JwtGrantedAuthoritiesConverter;
-import uk.gov.hmcts.reform.userprofileapi.config.security.IdamSecurityProperties;
 
 import java.util.List;
 

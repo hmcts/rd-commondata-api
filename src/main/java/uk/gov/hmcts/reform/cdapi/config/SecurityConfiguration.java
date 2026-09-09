@@ -26,8 +26,8 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
+import uk.gov.hmcts.reform.cdapi.config.security.IdamSecurityProperties;
 import uk.gov.hmcts.reform.cdapi.oidc.JwtGrantedAuthoritiesConverter;
-import uk.gov.hmcts.reform.userprofileapi.config.security.IdamSecurityProperties;
 
 import java.util.List;
 import java.util.Objects;

@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.userprofileapi.config.security;
+package uk.gov.hmcts.reform.cdapi.config.security;
 
 import lombok.Getter;
 import lombok.Setter;
