@@ -37,7 +37,7 @@ public class FlagDetail {
     private Boolean parent;
     @JsonProperty("Path")
     private List<String> path;
-    @JsonProperty("CodePath")
+    @JsonProperty("serviceCodePath")
     private List<String> codePath;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @Builder.Default

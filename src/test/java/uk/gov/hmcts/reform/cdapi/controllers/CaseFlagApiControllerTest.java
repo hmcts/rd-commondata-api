@@ -266,7 +266,7 @@ class CaseFlagApiControllerTest {
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].listOfValues[0].key", is(parentListOfValue.getKey())))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].listOfValues[0].value", is(parentListOfValue.getValue())))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].Path", is(parentFlagDetail.getPath())))
-            .andExpect(jsonPath("$.flags[0].FlagDetails[0].CodePath", is(parentFlagDetail.getCodePath())))
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].serviceCodePath", is(parentFlagDetail.getCodePath())))
 
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags", hasSize(1)))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].name", is(childFlagDetail.getName())))
@@ -295,7 +295,7 @@ class CaseFlagApiControllerTest {
             ))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].isParent", is(childFlagDetail.getParent())))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].Path", is(childFlagDetail.getPath())))
-            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].CodePath", is(childFlagDetail.getCodePath())));
+            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].serviceCodePath", is(childFlagDetail.getCodePath())));
     }
 
     private static Stream<Arguments> invalidScenarios() {
