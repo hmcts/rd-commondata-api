@@ -1,6 +1,7 @@
 server:
   port: 4550
 flaglist: PF0015,RA0042
+other-flag-code-suppressions: ${OTHER_FLAG_CODE_SUPPRESSIONS:}
 management:
   endpoints:
     jmx:
