@@ -308,7 +308,7 @@ class CaseFlagServiceImplTest {
         caseFlagDto1.setValueCy("");
         caseFlagDto1.setIsParent(true);
         caseFlagDto1.setFlagCode("CATEGORY");
-        caseFlagDto1.setCodePath("");
+        caseFlagDto1.setServiceCodePath("");
         caseFlagDto1.setExternallyAvailable(true);
         caseFlagDto1.setDefaultStatus("Requested");
 
@@ -316,7 +316,7 @@ class CaseFlagServiceImplTest {
         caseFlagDto2.setFlagCode("RA_PARENT");
         caseFlagDto2.setCategoryId(1);
         caseFlagDto2.setCategoryPath("PARTY");
-        caseFlagDto2.setCodePath("CATEGORY");
+        caseFlagDto2.setServiceCodePath("CATEGORY");
         caseFlagDto2.setId(2);
         caseFlagDto2.setHearingRelevant(true);
         caseFlagDto2.setRequestReason(false);
@@ -330,7 +330,7 @@ class CaseFlagServiceImplTest {
         caseFlagDto3.setFlagCode("FLAG001");
         caseFlagDto3.setCategoryId(2);
         caseFlagDto3.setCategoryPath("PARTY/REASONABLE ADJUSTMENT");
-        caseFlagDto3.setCodePath("CATEGORY/RA_PARENT");
+        caseFlagDto3.setServiceCodePath("CATEGORY/RA_PARENT");
         caseFlagDto3.setId(3);
         caseFlagDto3.setHearingRelevant(true);
         caseFlagDto3.setRequestReason(false);
@@ -344,7 +344,7 @@ class CaseFlagServiceImplTest {
         caseFlagDto4.setFlagCode("CATEGORY");
         caseFlagDto4.setCategoryId(0);
         caseFlagDto4.setCategoryPath("");
-        caseFlagDto4.setCodePath("");
+        caseFlagDto4.setServiceCodePath("");
         caseFlagDto4.setId(4);
         caseFlagDto4.setHearingRelevant(true);
         caseFlagDto4.setRequestReason(false);
@@ -358,7 +358,7 @@ class CaseFlagServiceImplTest {
         caseFlagDto5.setFlagCode("CATEGORY");
         caseFlagDto5.setCategoryId(4);
         caseFlagDto5.setCategoryPath("CASE");
-        caseFlagDto5.setCodePath("CATEGORY");
+        caseFlagDto5.setServiceCodePath("CATEGORY");
         caseFlagDto5.setId(5);
         caseFlagDto5.setHearingRelevant(true);
         caseFlagDto5.setRequestReason(false);
@@ -389,13 +389,13 @@ class CaseFlagServiceImplTest {
         caseFlagDto1.setValueEn("PARTY");
         caseFlagDto1.setValueCy("PARTY");
         caseFlagDto1.setIsParent(true);
-        caseFlagDto1.setCodePath("");
+        caseFlagDto1.setServiceCodePath("");
 
         var caseFlagDto2 = new CaseFlagDto();
         caseFlagDto2.setFlagCode("PF0015");
         caseFlagDto2.setCategoryId(1);
         caseFlagDto2.setCategoryPath("PARTY");
-        caseFlagDto2.setCodePath("CATEGORY");
+        caseFlagDto2.setServiceCodePath("CATEGORY");
         caseFlagDto2.setId(3);
         caseFlagDto2.setHearingRelevant(true);
         caseFlagDto2.setRequestReason(false);
@@ -417,7 +417,7 @@ class CaseFlagServiceImplTest {
         caseFlagDto1.setFlagCode("CATEGORY");
         caseFlagDto1.setCategoryId(0);
         caseFlagDto1.setCategoryPath("");
-        caseFlagDto1.setCodePath("");
+        caseFlagDto1.setServiceCodePath("");
         caseFlagDto1.setId(1);
         caseFlagDto1.setHearingRelevant(true);
         caseFlagDto1.setRequestReason(false);
@@ -431,7 +431,7 @@ class CaseFlagServiceImplTest {
         caseFlagDto2.setFlagCode("RA_PARENT");
         caseFlagDto2.setCategoryId(1);
         caseFlagDto2.setCategoryPath("PARTY");
-        caseFlagDto2.setCodePath("CATEGORY");
+        caseFlagDto2.setServiceCodePath("CATEGORY");
         caseFlagDto2.setId(2);
         caseFlagDto2.setHearingRelevant(true);
         caseFlagDto2.setRequestReason(false);
@@ -445,7 +445,7 @@ class CaseFlagServiceImplTest {
         caseFlagDto3.setFlagCode("FLAG001");
         caseFlagDto3.setCategoryId(2);
         caseFlagDto3.setCategoryPath("PARTY/REASONABLE ADJUSTMENT");
-        caseFlagDto3.setCodePath("CATEGORY/RA_PARENT");
+        caseFlagDto3.setServiceCodePath("CATEGORY/RA_PARENT");
         caseFlagDto3.setId(3);
         caseFlagDto3.setHearingRelevant(true);
         caseFlagDto3.setRequestReason(false);
@@ -459,7 +459,7 @@ class CaseFlagServiceImplTest {
         caseFlagDto4.setFlagCode("RB_PARENT");
         caseFlagDto4.setCategoryId(1);
         caseFlagDto4.setCategoryPath("PARTY");
-        caseFlagDto4.setCodePath("CATEGORY");
+        caseFlagDto4.setServiceCodePath("CATEGORY");
         caseFlagDto4.setId(4);
         caseFlagDto4.setHearingRelevant(true);
         caseFlagDto4.setRequestReason(false);
@@ -473,7 +473,7 @@ class CaseFlagServiceImplTest {
         caseFlagDto5.setFlagCode("FLAG002");
         caseFlagDto5.setCategoryId(4);
         caseFlagDto5.setCategoryPath("PARTY/SUPPORT NEEDS");
-        caseFlagDto5.setCodePath("CATEGORY/RB_PARENT");
+        caseFlagDto5.setServiceCodePath("CATEGORY/RB_PARENT");
         caseFlagDto5.setId(5);
         caseFlagDto5.setHearingRelevant(true);
         caseFlagDto5.setRequestReason(false);

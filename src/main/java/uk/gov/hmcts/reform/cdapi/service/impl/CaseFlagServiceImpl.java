@@ -102,7 +102,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                     .parent(caseFlagDto.getIsParent())
                     .hearingRelevant(caseFlagDto.getHearingRelevant())
                     .path(splitPath(caseFlagDto.getCategoryPath()))
-                    .codePath(splitPath(caseFlagDto.getCodePath()))
+                    .codePath(splitPath(caseFlagDto.getServiceCodePath()))
                     .childFlags(new ArrayList<>())
                     .id(caseFlagDto.getId())
                     .cateGoryId(caseFlagDto.getCategoryId());
@@ -148,7 +148,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                     .parent(caseFlagDto.getIsParent())
                     .hearingRelevant(caseFlagDto.getHearingRelevant())
                     .path(splitPath(caseFlagDto.getCategoryPath()))
-                    .codePath(splitPath(caseFlagDto.getCodePath()))
+                    .codePath(splitPath(caseFlagDto.getServiceCodePath()))
                     .cateGoryId(caseFlagDto.getCategoryId())
                     .id(caseFlagDto.getId());
                 this.setCaseFlagByWelshRequired(isWelshRequired, childFlag, caseFlagDto);
