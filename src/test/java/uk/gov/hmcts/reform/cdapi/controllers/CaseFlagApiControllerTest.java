@@ -295,7 +295,10 @@ class CaseFlagApiControllerTest {
             ))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].isParent", is(childFlagDetail.getParent())))
             .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].Path", is(childFlagDetail.getPath())))
-            .andExpect(jsonPath("$.flags[0].FlagDetails[0].childFlags[0].serviceCodePath", is(childFlagDetail.getCodePath())));
+            .andExpect(jsonPath(
+                "$.flags[0].FlagDetails[0].childFlags[0].serviceCodePath",
+                is(childFlagDetail.getCodePath())
+            ));
     }
 
     private static Stream<Arguments> invalidScenarios() {
