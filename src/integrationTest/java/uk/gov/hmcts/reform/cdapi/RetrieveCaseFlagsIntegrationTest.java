@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
@@ -31,6 +33,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @WithTags({@WithTag("testType:Integration")})
 class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegrationTest {
     private static final String path = "/caseflags/service-id={service-id}";
+
+    @Autowired
+    private Environment environment;
 
     @ParameterizedTest
     @ValueSource(strings = {"AAA1", "XXXX"})
@@ -215,6 +220,26 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
         }
     }
 
+    @Test
+    void shouldNotConfigureOtherFlagSuppressionsByDefault() {
+        assertThat(environment.getProperty("other-flag-code-suppressions")).isBlank();
+    }
+
+    @Test
+    void shouldReturnOtherFlagsWhenNoOtherFlagSuppressionsConfigured() throws JsonProcessingException {
+        final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
+            "AAA1?available-external-flag=N",
+            CaseFlag.class,
+            path
+        );
+
+        assertEquals(4, countFlagsByCode(response, "OT0001"));
+        assertTrue(containsImmediateFlagCode(getFlagByName(response, "Case").getChildFlags(), "OT0001"));
+        assertTrue(containsImmediateFlagCode(getFlagByName(response, "Party").getChildFlags(), "OT0001"));
+        assertTrue(containsImmediateFlagCode(getFlagByName(response, "Reasonable adjustment")
+                                                 .getChildFlags(), "OT0001"));
+    }
+
 
     private static void assertResponseContent(CaseFlag response) {
         assertEquals(2, response.getFlags().get(0).getFlagDetails().size());
@@ -286,5 +311,48 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
             }
             verifyResponse(flagDetail.getChildFlags());
         }
+    }
+
+    private static long countFlagsByCode(CaseFlag caseFlag, String flagCode) {
+        return caseFlag.getFlags().stream()
+            .flatMap(flag -> flag.getFlagDetails().stream())
+            .mapToLong(flagDetail -> countFlagsByCode(flagDetail, flagCode))
+            .sum();
+    }
+
+    private static long countFlagsByCode(FlagDetail flagDetail, String flagCode) {
+        long currentCount = flagCode.equals(flagDetail.getFlagCode()) ? 1 : 0;
+        if (flagDetail.getChildFlags() == null) {
+            return currentCount;
+        }
+        return currentCount + flagDetail.getChildFlags().stream()
+            .mapToLong(childFlag -> countFlagsByCode(childFlag, flagCode))
+            .sum();
+    }
+
+    private static FlagDetail getFlagByName(CaseFlag response, String name) {
+        return response.getFlags().get(0).getFlagDetails().stream()
+            .map(flagDetail -> getFlagByName(flagDetail, name))
+            .filter(FlagDetail.class::isInstance)
+            .findFirst()
+            .orElseThrow();
+    }
+
+    private static FlagDetail getFlagByName(FlagDetail flagDetail, String name) {
+        if (name.equals(flagDetail.getName())) {
+            return flagDetail;
+        }
+        if (flagDetail.getChildFlags() == null) {
+            return null;
+        }
+        return flagDetail.getChildFlags().stream()
+            .map(childFlag -> getFlagByName(childFlag, name))
+            .filter(FlagDetail.class::isInstance)
+            .findFirst()
+            .orElse(null);
+    }
+
+    private static boolean containsImmediateFlagCode(List<FlagDetail> flagDetails, String flagCode) {
+        return flagDetails.stream().anyMatch(flagDetail -> flagCode.equals(flagDetail.getFlagCode()));
     }
 }
