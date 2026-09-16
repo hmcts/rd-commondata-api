@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @WithTags({@WithTag("testType:Integration")})
-@TestPropertySource(properties = "other-flag-code-suppressions=RA0004, RA0042")
+@TestPropertySource(properties = "other-flag-code-suppressions=RA0004")
 class RetrieveCaseFlagsWithOtherFlagSuppressionsIntegrationTest extends CdAuthorizationEnabledIntegrationTest {
 
     private static final String PATH = "/caseflags/service-id={service-id}";
@@ -31,24 +31,24 @@ class RetrieveCaseFlagsWithOtherFlagSuppressionsIntegrationTest extends CdAuthor
 
     @Test
     void shouldConfigureOtherFlagSuppressionsProperty() {
-        assertEquals("RA0004, RA0042", ReflectionTestUtils.getField(caseFlagService, "otherFlagCodeSuppressions"));
+        assertEquals("RA0004", ReflectionTestUtils.getField(caseFlagService, "otherFlagCodeSuppressions"));
     }
 
     @Test
-    void shouldSuppressOtherFlagsWhenSuppressionCodesAreConfigured() throws JsonProcessingException {
+    void shouldSuppressOtherFlagWhenSuppressionCodeIsConfigured() throws JsonProcessingException {
         final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
             "AAA1?available-external-flag=N",
             CaseFlag.class,
             PATH
         );
 
-        assertEquals(2, countFlagsByCode(response, "OT0001"));
+        assertEquals(3, countFlagsByCode(response, "OT0001"));
         assertTrue(containsImmediateFlagCode(getFlagByName(response, "Case").getChildFlags(), "OT0001"));
         assertTrue(containsImmediateFlagCode(getFlagByName(response, "Party").getChildFlags(), "OT0001"));
         assertFalse(containsImmediateFlagCode(getFlagByName(response, "Reasonable adjustment")
                                                   .getChildFlags(), "OT0001"));
-        assertFalse(containsImmediateFlagCode(getFlagByName(response, "I need help communicating and understanding")
-                                                  .getChildFlags(), "OT0001"));
+        assertTrue(containsImmediateFlagCode(getFlagByName(response, "I need help communicating and understanding")
+                                                 .getChildFlags(), "OT0001"));
     }
 
     private static long countFlagsByCode(CaseFlag caseFlag, String flagCode) {
