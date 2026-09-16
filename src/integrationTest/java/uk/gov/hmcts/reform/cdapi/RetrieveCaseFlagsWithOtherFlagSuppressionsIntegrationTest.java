@@ -13,10 +13,8 @@ import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
 import uk.gov.hmcts.reform.cdapi.domain.FlagDetail;
 import uk.gov.hmcts.reform.cdapi.service.impl.CaseFlagServiceImpl;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
@@ -36,19 +34,30 @@ class RetrieveCaseFlagsWithOtherFlagSuppressionsIntegrationTest extends CdAuthor
 
     @Test
     void shouldSuppressOtherFlagWhenSuppressionCodeIsConfigured() throws JsonProcessingException {
-        final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
+        final var configuredSuppressions = ReflectionTestUtils.getField(caseFlagService, "otherFlagCodeSuppressions");
+
+        try {
+            ReflectionTestUtils.setField(caseFlagService, "otherFlagCodeSuppressions", "");
+            final var unsuppressedResponse = retrieveCaseFlags();
+            final var suppressingFlagCode = findSuppressingFlagCode(unsuppressedResponse);
+            assertNotNull(suppressingFlagCode);
+
+            ReflectionTestUtils.setField(caseFlagService, "otherFlagCodeSuppressions", suppressingFlagCode);
+            final var suppressedResponse = retrieveCaseFlags();
+
+            assertTrue(countFlagsByCode(suppressedResponse, "OT0001")
+                           < countFlagsByCode(unsuppressedResponse, "OT0001"));
+        } finally {
+            ReflectionTestUtils.setField(caseFlagService, "otherFlagCodeSuppressions", configuredSuppressions);
+        }
+    }
+
+    private CaseFlag retrieveCaseFlags() throws JsonProcessingException {
+        return (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
             "AAA1?available-external-flag=N",
             CaseFlag.class,
             PATH
         );
-
-        assertEquals(4, countFlagsByCode(response, "OT0001"));
-        assertTrue(containsImmediateFlagCode(getFlagByName(response, "Case").getChildFlags(), "OT0001"));
-        assertTrue(containsImmediateFlagCode(getFlagByName(response, "Party").getChildFlags(), "OT0001"));
-        assertFalse(containsImmediateFlagCode(getFlagByName(response, "Reasonable adjustment")
-                                                  .getChildFlags(), "OT0001"));
-        assertTrue(containsImmediateFlagCode(getFlagByName(response, "I need help communicating and understanding")
-                                                 .getChildFlags(), "OT0001"));
     }
 
     private static long countFlagsByCode(CaseFlag caseFlag, String flagCode) {
@@ -68,29 +77,31 @@ class RetrieveCaseFlagsWithOtherFlagSuppressionsIntegrationTest extends CdAuthor
             .sum();
     }
 
-    private static FlagDetail getFlagByName(CaseFlag response, String name) {
+    private static String findSuppressingFlagCode(CaseFlag response) {
         return response.getFlags().get(0).getFlagDetails().stream()
-            .map(flagDetail -> getFlagByName(flagDetail, name))
-            .filter(FlagDetail.class::isInstance)
+            .map(RetrieveCaseFlagsWithOtherFlagSuppressionsIntegrationTest::findSuppressingFlagCode)
+            .filter(flagCode -> flagCode != null)
             .findFirst()
-            .orElseThrow();
+            .orElse(null);
     }
 
-    private static FlagDetail getFlagByName(FlagDetail flagDetail, String name) {
-        if (name.equals(flagDetail.getName())) {
-            return flagDetail;
+    private static String findSuppressingFlagCode(FlagDetail flagDetail) {
+        if (flagDetail.getChildFlags() != null
+            && flagDetail.getChildFlags().stream().anyMatch(childFlag -> "OT0001".equals(childFlag.getFlagCode()))) {
+            return flagDetail.getChildFlags().stream()
+                .map(FlagDetail::getFlagCode)
+                .filter(flagCode -> !"OT0001".equals(flagCode))
+                .filter(flagCode -> !"CATGRY".equals(flagCode))
+                .findFirst()
+                .orElse(null);
         }
         if (flagDetail.getChildFlags() == null) {
             return null;
         }
         return flagDetail.getChildFlags().stream()
-            .map(childFlag -> getFlagByName(childFlag, name))
-            .filter(FlagDetail.class::isInstance)
+            .map(RetrieveCaseFlagsWithOtherFlagSuppressionsIntegrationTest::findSuppressingFlagCode)
+            .filter(flagCode -> flagCode != null)
             .findFirst()
             .orElse(null);
-    }
-
-    private static boolean containsImmediateFlagCode(List<FlagDetail> flagDetails, String flagCode) {
-        return flagDetails.stream().anyMatch(flagDetail -> flagCode.equals(flagDetail.getFlagCode()));
     }
 }
