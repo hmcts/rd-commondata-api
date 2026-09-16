@@ -6,11 +6,12 @@ import net.serenitybdd.annotations.WithTags;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
 import uk.gov.hmcts.reform.cdapi.domain.FlagDetail;
+import uk.gov.hmcts.reform.cdapi.service.impl.CaseFlagServiceImpl;
 
 import java.util.List;
 
@@ -20,17 +21,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @WithTags({@WithTag("testType:Integration")})
-@TestPropertySource(properties = "other-flag-code-suppressions=PF0015, RA0004")
+@TestPropertySource(properties = "other-flag-code-suppressions=RA0004, RA0042")
 class RetrieveCaseFlagsWithOtherFlagSuppressionsIntegrationTest extends CdAuthorizationEnabledIntegrationTest {
 
     private static final String PATH = "/caseflags/service-id={service-id}";
 
     @Autowired
-    private Environment environment;
+    private CaseFlagServiceImpl caseFlagService;
 
     @Test
     void shouldConfigureOtherFlagSuppressionsProperty() {
-        assertEquals("PF0015, RA0004", environment.getProperty("other-flag-code-suppressions"));
+        assertEquals("RA0004, RA0042", ReflectionTestUtils.getField(caseFlagService, "otherFlagCodeSuppressions"));
     }
 
     @Test
@@ -41,10 +42,12 @@ class RetrieveCaseFlagsWithOtherFlagSuppressionsIntegrationTest extends CdAuthor
             PATH
         );
 
-        assertEquals(3, countFlagsByCode(response, "OT0001"));
+        assertEquals(2, countFlagsByCode(response, "OT0001"));
         assertTrue(containsImmediateFlagCode(getFlagByName(response, "Case").getChildFlags(), "OT0001"));
-        assertFalse(containsImmediateFlagCode(getFlagByName(response, "Party").getChildFlags(), "OT0001"));
+        assertTrue(containsImmediateFlagCode(getFlagByName(response, "Party").getChildFlags(), "OT0001"));
         assertFalse(containsImmediateFlagCode(getFlagByName(response, "Reasonable adjustment")
+                                                  .getChildFlags(), "OT0001"));
+        assertFalse(containsImmediateFlagCode(getFlagByName(response, "I need help communicating and understanding")
                                                   .getChildFlags(), "OT0001"));
     }
 

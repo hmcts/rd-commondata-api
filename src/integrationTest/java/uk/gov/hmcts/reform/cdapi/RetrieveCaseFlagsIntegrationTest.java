@@ -10,13 +10,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
 import uk.gov.hmcts.reform.cdapi.domain.FlagDetail;
 import uk.gov.hmcts.reform.cdapi.domain.FlagType;
 import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
+import uk.gov.hmcts.reform.cdapi.service.impl.CaseFlagServiceImpl;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +36,7 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
     private static final String path = "/caseflags/service-id={service-id}";
 
     @Autowired
-    private Environment environment;
+    private CaseFlagServiceImpl caseFlagService;
 
     @ParameterizedTest
     @ValueSource(strings = {"AAA1", "XXXX"})
@@ -222,7 +223,7 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
 
     @Test
     void shouldNotConfigureOtherFlagSuppressionsByDefault() {
-        assertThat(environment.getProperty("other-flag-code-suppressions")).isBlank();
+        assertThat(ReflectionTestUtils.getField(caseFlagService, "otherFlagCodeSuppressions")).isEqualTo("");
     }
 
     @Test
@@ -237,6 +238,8 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
         assertTrue(containsImmediateFlagCode(getFlagByName(response, "Case").getChildFlags(), "OT0001"));
         assertTrue(containsImmediateFlagCode(getFlagByName(response, "Party").getChildFlags(), "OT0001"));
         assertTrue(containsImmediateFlagCode(getFlagByName(response, "Reasonable adjustment")
+                                                 .getChildFlags(), "OT0001"));
+        assertTrue(containsImmediateFlagCode(getFlagByName(response, "I need help communicating and understanding")
                                                  .getChildFlags(), "OT0001"));
     }
 

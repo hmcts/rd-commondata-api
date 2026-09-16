@@ -383,10 +383,12 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
             PATH_CASE_FLAGS
         );
 
-        assertEquals(3, countFlagsByCode(response, "OT0001"));
+        assertEquals(4, countFlagsByCode(response, "OT0001"));
         assertTrue(containsImmediateFlagCode(getFlagByName(response, "Case").getChildFlags(), "OT0001"));
         assertTrue(containsImmediateFlagCode(getFlagByName(response, "Party").getChildFlags(), "OT0001"));
         assertTrue(containsImmediateFlagCode(getFlagByName(response, "Reasonable adjustment")
+                                                 .getChildFlags(), "OT0001"));
+        assertTrue(containsImmediateFlagCode(getFlagByName(response, "I need help communicating and understanding")
                                                  .getChildFlags(), "OT0001"));
     }
 
