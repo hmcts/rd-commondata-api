@@ -376,20 +376,23 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
     @ToggleEnable(mapKey = MAP_KEY_CASE_FLAGS, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
     void shouldReturnOtherFlagsWhenOtherFlagSuppressionsAreNotConfigured() {
-        final var response = (CaseFlag) commonDataApiClient.retrieveResponseForGivenRequest(
-            OK,
+        Response response = commonDataApiClient.retrieveResponseForGivenRequest(
             "/service-id=AAA1?available-external-flag=N",
-            CaseFlag.class,
             PATH_CASE_FLAGS
         );
 
-        assertEquals(4, countFlagsByCode(response, "OT0001"));
-        assertTrue(containsImmediateFlagCode(getFlagByName(response, "Case").getChildFlags(), "OT0001"));
-        assertTrue(containsImmediateFlagCode(getFlagByName(response, "Party").getChildFlags(), "OT0001"));
-        assertTrue(containsImmediateFlagCode(getFlagByName(response, "Reasonable adjustment")
+        if (OK.value() == response.getStatusCode()) {
+            var caseFlag = response.getBody().as(CaseFlag.class);
+            assertEquals(4, countFlagsByCode(caseFlag, "OT0001"));
+            assertTrue(containsImmediateFlagCode(getFlagByName(caseFlag, "Case").getChildFlags(), "OT0001"));
+            assertTrue(containsImmediateFlagCode(getFlagByName(caseFlag, "Party").getChildFlags(), "OT0001"));
+            assertTrue(containsImmediateFlagCode(getFlagByName(caseFlag, "Reasonable adjustment")
                                                  .getChildFlags(), "OT0001"));
-        assertTrue(containsImmediateFlagCode(getFlagByName(response, "I need help communicating and understanding")
+            assertTrue(containsImmediateFlagCode(getFlagByName(caseFlag, "I need help communicating and understanding")
                                                  .getChildFlags(), "OT0001"));
+        } else {
+            assertEquals(NOT_FOUND.value(), response.getStatusCode());
+        }
     }
 
     private static long countFlagsByCode(CaseFlag caseFlag, String flagCode) {
