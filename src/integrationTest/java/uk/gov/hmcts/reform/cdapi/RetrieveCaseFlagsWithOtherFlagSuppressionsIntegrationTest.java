@@ -42,7 +42,7 @@ class RetrieveCaseFlagsWithOtherFlagSuppressionsIntegrationTest extends CdAuthor
             PATH
         );
 
-        assertEquals(3, countFlagsByCode(response, "OT0001"));
+        assertEquals(4, countFlagsByCode(response, "OT0001"));
         assertTrue(containsImmediateFlagCode(getFlagByName(response, "Case").getChildFlags(), "OT0001"));
         assertTrue(containsImmediateFlagCode(getFlagByName(response, "Party").getChildFlags(), "OT0001"));
         assertFalse(containsImmediateFlagCode(getFlagByName(response, "Reasonable adjustment")
