@@ -86,15 +86,15 @@ public class JwtIssuerValidationEnabledIntegrationTest extends BaseSecurityInteg
                         ? expiredJwt(jwtIssuer)
                         : unexpiredJwt(jwtIssuer);
 
-//        jwtRequestSpecification
-//                .when()
-//                .request()
-//                .with()
-//                .body(OBJECT_MAPPER.writeValueAsString(new BookingRequestWrapper(BOOKING_REQUEST)))
-//                .and()
-//                .post(CREATE_BOOKING_URL)
-//                .then()
-//                .assertThat()
-//                .statusCode(expectedStatusCode);
+        //        jwtRequestSpecification
+        //                .when()
+        //                .request()
+        //                .with()
+        //                .body(OBJECT_MAPPER.writeValueAsString(new BookingRequestWrapper(BOOKING_REQUEST)))
+        //                .and()
+        //                .post(CREATE_BOOKING_URL)
+        //                .then()
+        //                .assertThat()
+        //                .statusCode(expectedStatusCode);
     }
 }
