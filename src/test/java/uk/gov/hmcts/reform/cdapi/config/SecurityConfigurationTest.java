@@ -28,7 +28,6 @@ import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class SecurityConfigurationTest {
@@ -40,9 +39,6 @@ class SecurityConfigurationTest {
     private JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter;
 
     @Mock
-    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-
-    @Mock
     private SecurityEndpointFilter securityEndpointFilter;
 
     @Mock
@@ -51,12 +47,15 @@ class SecurityConfigurationTest {
     @Mock
     private IdamSecurityProperties securityProperties;
 
+    @Mock
+    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+
     private SecurityConfiguration config;
 
     @BeforeEach
     void setUp() {
         config = new SecurityConfiguration(jwtGrantedAuthoritiesConverter, authFilter,
-                restAuthenticationEntryPoint, securityEndpointFilter);
+                                           restAuthenticationEntryPoint, securityEndpointFilter);
         ReflectionTestUtils.setField(config, "issuerUri", VALID_ISSUER);
     }
 
@@ -96,7 +95,6 @@ class SecurityConfigurationTest {
     @Test
     void decoderCreated() {
         System.setProperty("idam.security.issuerValidation", Boolean.TRUE.toString());
-        when(securityProperties.getAllowedIssuers()).thenReturn(List.of(VALID_ISSUER));
         NimbusJwtDecoder mockDecoder = mock(NimbusJwtDecoder.class);
 
         try (MockedStatic<JwtDecoders> mocked = mockStatic(JwtDecoders.class)) {
@@ -137,16 +135,16 @@ class SecurityConfigurationTest {
     @Test
     void webSecurityCustomized() {
         List<String> anonymousPaths = List.of(
-                "/swagger-ui.html",
-                "/swagger-ui/**",
-                "/swagger-resources/**",
-                "/v3/**",
-                "/health",
-                "/health/liveness",
-                "/health/readiness",
-                "/status/health",
-                "/loggers/**",
-                "/");
+            "/swagger-ui.html",
+            "/swagger-ui/**",
+            "/swagger-resources/**",
+            "/v3/**",
+            "/health",
+            "/health/liveness",
+            "/health/readiness",
+            "/status/health",
+            "/loggers/**",
+            "/");
 
         config.setAnonymousPaths(anonymousPaths);
         WebSecurityCustomizer customizer = config.webSecurityCustomizer();
