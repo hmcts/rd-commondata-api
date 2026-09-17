@@ -20,6 +20,7 @@ class FlagDetailTest {
             .cateGoryId(1)
             .flagComment(true)
             .path(Arrays.asList("party", "ra"))
+            .codePath(Arrays.asList("CATEGORY", "RA_PARENT"))
             .hearingRelevant(false)
             .listOfValues(new ArrayList<>())
             .listOfValuesLength(0)
@@ -34,6 +35,7 @@ class FlagDetailTest {
         assertEquals(1, flagDetail1.getCateGoryId());
         assertEquals(true, flagDetail1.getFlagComment());
         assertEquals(Arrays.asList("party", "ra"), flagDetail1.getPath());
+        assertEquals(Arrays.asList("CATEGORY", "RA_PARENT"), flagDetail1.getCodePath());
         assertNotNull(flagDetail1.getListOfValues());
         assertNotNull(flagDetail1.getChildFlags());
         assertEquals(0, flagDetail1.getListOfValuesLength());
