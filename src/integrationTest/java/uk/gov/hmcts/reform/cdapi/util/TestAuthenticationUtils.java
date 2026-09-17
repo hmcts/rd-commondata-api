@@ -7,9 +7,6 @@ import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.impl.TextCodec;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
@@ -21,6 +18,7 @@ import java.util.Date;
 
 import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.ACCESS_TOKEN;
 import static uk.gov.hmcts.reform.cdapi.config.FeatureConditionEvaluation.SERVICE_AUTHORIZATION;
+import static uk.gov.hmcts.reform.cdapi.util.CommonDataApiClient.generateDummyS2SToken;
 
 @UtilityClass
 @SuppressWarnings({"HideUtilityClassConstructor"})
@@ -64,16 +62,6 @@ public class TestAuthenticationUtils {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         return headers;
-    }
-
-    public static String generateDummyS2SToken(String serviceName) {
-        return Jwts.builder()
-                .setSubject(serviceName)
-                .setIssuedAt(new Date())
-                .signWith(
-                        SignatureAlgorithm.HS256,
-                        TextCodec.BASE64.encode("AA"))
-                .compact();
     }
 
     private static String generateAuthToken() throws JOSEException {
