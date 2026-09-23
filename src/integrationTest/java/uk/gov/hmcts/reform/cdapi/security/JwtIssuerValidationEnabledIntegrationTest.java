@@ -16,7 +16,6 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static uk.gov.hmcts.reform.cdapi.security.BaseSecurityIntegrationTest.VALID_ISSUER_1;
 import static uk.gov.hmcts.reform.cdapi.security.BaseSecurityIntegrationTest.VALID_ISSUER_2;
-import static uk.gov.hmcts.reform.cdapi.util.WireMockStubs.OBJECT_MAPPER;
 
 @TestPropertySource(properties = {
     "idam.security.issuer-validation=true",
