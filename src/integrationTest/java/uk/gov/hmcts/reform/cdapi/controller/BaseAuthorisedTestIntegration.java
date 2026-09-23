@@ -9,6 +9,9 @@ import uk.gov.hmcts.reform.cdapi.CdAuthorizationEnabledIntegrationTest;
 public abstract class BaseAuthorisedTestIntegration extends CdAuthorizationEnabledIntegrationTest {
 
     protected static final String BASEURL = "http://localhost";
+    protected static final String CASEFLAGS_URL = "/caseflags";
+    protected static final String SERVICE_ID_PARAM = "service-id";
+    protected static final String SERVICE_ID_PARAM_VALUE = "123456789";
 
     @LocalServerPort
     private int serverPort;

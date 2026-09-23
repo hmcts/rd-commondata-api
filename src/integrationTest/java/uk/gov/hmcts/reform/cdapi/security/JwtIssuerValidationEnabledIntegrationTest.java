@@ -5,13 +5,18 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
+import uk.gov.hmcts.reform.cdapi.service.CaseFlagService;
 
 import java.util.stream.Stream;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static uk.gov.hmcts.reform.cdapi.security.BaseSecurityIntegrationTest.VALID_ISSUER_1;
 import static uk.gov.hmcts.reform.cdapi.security.BaseSecurityIntegrationTest.VALID_ISSUER_2;
+import static uk.gov.hmcts.reform.cdapi.util.WireMockStubs.OBJECT_MAPPER;
 
 @TestPropertySource(properties = {
     "idam.security.issuer-validation=true",
@@ -19,6 +24,9 @@ import static uk.gov.hmcts.reform.cdapi.security.BaseSecurityIntegrationTest.VAL
     "idam.security.allowed-issuers[1]=" + VALID_ISSUER_2
 })
 public class JwtIssuerValidationEnabledIntegrationTest extends BaseSecurityIntegrationTest {
+
+    @MockitoBean
+    private CaseFlagService caseFlagService;
 
     private static Stream<Arguments> issuerValidationEnabledScenarios() {
         return Stream.of(
@@ -80,21 +88,26 @@ public class JwtIssuerValidationEnabledIntegrationTest extends BaseSecurityInteg
                                                             String jwtIssuer,
                                                             boolean tokenExpired,
                                                             int expectedStatusCode) throws Exception {
-
+        mockRetrieveCaseFlagByServiceId();
         RequestSpecification jwtRequestSpecification =
                 tokenExpired
                         ? expiredJwt(jwtIssuer)
                         : unexpiredJwt(jwtIssuer);
 
-        //        jwtRequestSpecification
-        //                .when()
-        //                .request()
-        //                .with()
-        //                .body(OBJECT_MAPPER.writeValueAsString(new BookingRequestWrapper(BOOKING_REQUEST)))
-        //                .and()
-        //                .post(CREATE_BOOKING_URL)
-        //                .then()
-        //                .assertThat()
-        //                .statusCode(expectedStatusCode);
+        jwtRequestSpecification
+                .when()
+                .request()
+                .with()
+                .pathParam(SERVICE_ID_PARAM, SERVICE_ID_PARAM_VALUE)
+                .and()
+                .post(CASEFLAGS_URL)
+                .then()
+                .assertThat()
+                .statusCode(expectedStatusCode);
+    }
+
+    private void mockRetrieveCaseFlagByServiceId() {
+        when(caseFlagService.retrieveCaseFlagByServiceId(SERVICE_ID_PARAM_VALUE, null,null, null)).thenReturn(
+            CaseFlag.builder().build());
     }
 }
