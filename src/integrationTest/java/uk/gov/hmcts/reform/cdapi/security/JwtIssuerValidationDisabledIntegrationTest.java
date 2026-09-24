@@ -6,13 +6,11 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
 import uk.gov.hmcts.reform.cdapi.service.CaseFlagService;
 
 import java.util.stream.Stream;
 
-import static org.mockito.Mockito.when;
-import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static uk.gov.hmcts.reform.cdapi.security.BaseSecurityIntegrationTest.VALID_ISSUER_1;
 import static uk.gov.hmcts.reform.cdapi.security.BaseSecurityIntegrationTest.VALID_ISSUER_2;
@@ -31,49 +29,49 @@ public class JwtIssuerValidationDisabledIntegrationTest extends BaseSecurityInte
         return Stream.of(
                 Arguments.of(
                         "Scenario 1 - JWT Issuer validation is disabled "
-                                + "And Valid primary issuer is accepted - 201",
+                                + "And Valid primary issuer is accepted - 200",
                         VALID_ISSUER_1,
                         false,
-                        CREATED.value()),
+                        OK.value()),
 
                 Arguments.of(
                         "Scenario 2 - JWT Issuer validation is disabled "
-                                + "And Valid secondary issuer is accepted - 201",
+                                + "And Valid secondary issuer is accepted - 200",
                         VALID_ISSUER_2,
                         false,
-                        CREATED.value()),
+                        OK.value()),
 
                 Arguments.of(
-                        "Scenario 3 - JWT Issuer validation is disabled And Rogue issuer is accepted - 201",
+                        "Scenario 3 - JWT Issuer validation is disabled And Rogue issuer is accepted - 200",
                         ROGUE_ISSUER,
                         false,
-                        CREATED.value()),
+                        OK.value()),
 
                 Arguments.of(
-                        "Scenario 4 - JWT Issuer validation is disabled And Missing issuer is accepted - 201",
+                        "Scenario 4 - JWT Issuer validation is disabled And Missing issuer is accepted - 200",
                         null,
                         false,
-                        CREATED.value()),
+                        OK.value()),
 
                 Arguments.of(
-                        "Scenario 5 - JWT Issuer validation is disabled And Empty issuer is accepted - 201",
+                        "Scenario 5 - JWT Issuer validation is disabled And Empty issuer is accepted - 200",
                         "",
                         false,
-                        CREATED.value()),
+                        OK.value()),
 
                 Arguments.of(
                         "Scenario 6 - JWT Issuer validation is disabled "
-                                + "And Issuer with trailing slash is accepted - 201",
+                                + "And Issuer with trailing slash is accepted - 200",
                         VALID_ISSUER_1 + "/",
                         false,
-                        CREATED.value()),
+                        OK.value()),
 
                 Arguments.of(
                         "Scenario 7 - JWT Issuer validation is disabled "
-                                + "And Issuer with different case is accepted - 201",
+                                + "And Issuer with different case is accepted - 200",
                         VALID_ISSUER_1.toUpperCase(),
                         false,
-                        CREATED.value()),
+                        OK.value()),
 
                 Arguments.of(
                         "Scenario 8 - JWT Issuer validation is disabled And Expired token is rejected - 401",
@@ -89,7 +87,6 @@ public class JwtIssuerValidationDisabledIntegrationTest extends BaseSecurityInte
                                                              String jwtIssuer,
                                                              boolean tokenExpired,
                                                              int expectedStatusCode) throws Exception {
-        mockRetrieveCaseFlagByServiceId();
         RequestSpecification jwtRequestSpecification =
                 tokenExpired
                         ? expiredJwt(jwtIssuer)
@@ -99,17 +96,11 @@ public class JwtIssuerValidationDisabledIntegrationTest extends BaseSecurityInte
                 .when()
                 .request()
                 .with()
-                .pathParam(SERVICE_ID_PARAM, SERVICE_ID_PARAM_VALUE)
                 .and()
-                .post(CASEFLAGS_URL)
-                .then()
+                .get(QUERY_PARAM)
+                .then().log().all()
                 .assertThat()
                 .statusCode(expectedStatusCode);
-    }
-
-    private void mockRetrieveCaseFlagByServiceId() {
-        when(caseFlagService.retrieveCaseFlagByServiceId(SERVICE_ID_PARAM_VALUE, null,null, null)).thenReturn(
-            CaseFlag.builder().build());
     }
 
 }
