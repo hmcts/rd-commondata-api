@@ -8,7 +8,6 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.experimental.UtilityClass;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
@@ -18,7 +17,7 @@ import java.util.Date;
 
 import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.ACCESS_TOKEN;
 import static uk.gov.hmcts.reform.cdapi.config.FeatureConditionEvaluation.SERVICE_AUTHORIZATION;
-import static uk.gov.hmcts.reform.cdapi.util.CommonDataApiClient.generateDummyS2SToken;
+import static uk.gov.hmcts.reform.cdapi.util.JwtTokenUtil.generateS2SToken;
 
 @UtilityClass
 @SuppressWarnings({"HideUtilityClassConstructor"})
@@ -26,7 +25,6 @@ public class TestAuthenticationUtils {
 
     public static final String S2S_XUI = "xui_webapp";
     public static final String TOKEN_NAME = "tokenName";
-    public static final long AUTH_TOKEN_TTL = 14400000L;
     private static final RSAKey TEST_RSA_JWK;
     private static final String CRD_CLAIM = "CRD_Claim";
 
@@ -38,46 +36,17 @@ public class TestAuthenticationUtils {
         }
     }
 
-    @NotNull
-    public static HttpHeaders getHttpHeaders(String serviceName) throws JOSEException {
-        HttpHeaders headers = new HttpHeaders();
-        var userAuthToken = generateAuthToken();
-        headers.setBearerAuth(userAuthToken);
-        headers.add(SERVICE_AUTHORIZATION, "Bearer " + generateDummyS2SToken(serviceName));
-        headers.add("X-Correlation-Id", "38a90097-434e-47ee-8ea1-9ea2a267f51d");
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        return headers;
-    }
-
     public static HttpHeaders getJwtHeaders(String issuer, boolean isExpired) throws Exception {
 
         HttpHeaders headers = new HttpHeaders();
 
         headers.setBearerAuth(generateAuthToken(issuer, isExpired));
 
-        headers.add(SERVICE_AUTHORIZATION, "Bearer " + generateDummyS2SToken(S2S_XUI));
-
-        headers.add("X-Correlation-Id", "38a90097-434e-47ee-8ea1-9ea2a267f51d");
+        headers.add(SERVICE_AUTHORIZATION, "Bearer " + generateS2SToken(S2S_XUI));
 
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         return headers;
-    }
-
-    private static String generateAuthToken() throws JOSEException {
-        JWTClaimsSet.Builder builder =
-                getJwtClaimsBuilder(new Date(), new Date(System.currentTimeMillis() + AUTH_TOKEN_TTL));
-
-        JWSHeader jwsHeader =
-                new JWSHeader.Builder(JWSAlgorithm.RS256)
-                        .keyID(TEST_RSA_JWK.getKeyID())
-                        .build();
-
-        SignedJWT signedJwt = new SignedJWT(jwsHeader, builder.build());
-
-        signedJwt.sign(new RSASSASigner(TEST_RSA_JWK));
-
-        return signedJwt.serialize();
     }
 
     public static String generateAuthToken(String issuer, boolean isExpired) throws Exception {
