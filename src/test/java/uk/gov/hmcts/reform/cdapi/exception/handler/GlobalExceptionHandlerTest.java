@@ -100,11 +100,8 @@ class GlobalExceptionHandlerTest {
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(errorResponse.getTimeStamp()).isNotBlank();
-
-        assertThat(LocalDateTime.parse(
-                errorResponse.getTimeStamp(),
-                TIMESTAMP_FORMATTER
-        )).isNotNull();
+        assertThat(LocalDateTime.parse(errorResponse.getTimeStamp(), TIMESTAMP_FORMATTER))
+                .isNotNull();
     }
 
     @Test

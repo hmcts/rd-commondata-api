@@ -20,7 +20,6 @@ public class IdamResponseTransformer extends ResponseTransformer {
             Response response,
             FileSource files,
             Parameters parameters) {
-
         String token = extractBearerToken(request.getHeader("Authorization"));
 
         UserTokenInfo tokenInfo = getUserIdAndRoleFromToken(token);
@@ -57,7 +56,6 @@ public class IdamResponseTransformer extends ResponseTransformer {
                     parts[0], // role
                     parts[1]  // userId
             );
-
         } catch (ParseException e) {
             throw new InvalidTokenException(
                     "Unable to parse JWT token",
@@ -101,7 +99,6 @@ public class IdamResponseTransformer extends ResponseTransformer {
         if (token.isEmpty()) {
             throw new InvalidTokenException("Bearer token is missing");
         }
-
         return token;
     }
 }
