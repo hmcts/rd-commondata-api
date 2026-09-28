@@ -6,13 +6,11 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
 import uk.gov.hmcts.reform.cdapi.service.CaseFlagService;
 
 import java.util.stream.Stream;
 
-import static org.mockito.Mockito.when;
-import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static uk.gov.hmcts.reform.cdapi.security.BaseSecurityIntegrationTest.VALID_ISSUER_1;
 import static uk.gov.hmcts.reform.cdapi.security.BaseSecurityIntegrationTest.VALID_ISSUER_2;
@@ -33,13 +31,13 @@ public class JwtIssuerValidationEnabledIntegrationTest extends BaseSecurityInteg
                         "Scenario 1 - JWT Issuer validation is enabled And Valid primary issuer is accepted - 201",
                         VALID_ISSUER_1,
                         false,
-                        CREATED.value()),
+                        OK.value()),
 
                 Arguments.of(
                         "Scenario 2 - JWT Issuer validation is enabled And Valid secondary issuer is accepted - 201",
                         VALID_ISSUER_2,
                         false,
-                        CREATED.value()),
+                        OK.value()),
 
                 Arguments.of(
                         "Scenario 3 - JWT Issuer validation is enabled And Rogue issuer is rejected - 401",
@@ -87,7 +85,6 @@ public class JwtIssuerValidationEnabledIntegrationTest extends BaseSecurityInteg
                                                             String jwtIssuer,
                                                             boolean tokenExpired,
                                                             int expectedStatusCode) throws Exception {
-        mockRetrieveCaseFlagByServiceId();
         RequestSpecification jwtRequestSpecification =
                 tokenExpired
                         ? expiredJwt(jwtIssuer)
@@ -97,16 +94,11 @@ public class JwtIssuerValidationEnabledIntegrationTest extends BaseSecurityInteg
                 .when()
                 .request()
                 .with()
-                .pathParam(SERVICE_ID_PARAM, SERVICE_ID_PARAM_VALUE)
                 .and()
-                .post(CASEFLAGS_URL)
-                .then()
+                .get(QUERY_PARAM)
+                .then().log().all()
                 .assertThat()
                 .statusCode(expectedStatusCode);
     }
 
-    private void mockRetrieveCaseFlagByServiceId() {
-        when(caseFlagService.retrieveCaseFlagByServiceId(SERVICE_ID_PARAM_VALUE, null,null, null)).thenReturn(
-            CaseFlag.builder().build());
-    }
 }
