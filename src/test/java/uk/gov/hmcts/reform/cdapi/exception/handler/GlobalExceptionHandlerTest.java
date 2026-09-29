@@ -103,7 +103,7 @@ class GlobalExceptionHandlerTest {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSS");
         LocalDateTime timeStamp = LocalDateTime.parse(response.getTimeStamp(), formatter);
-        assertThat(timeStamp).isCloseToUtcNow(within(5, ChronoUnit.SECONDS));
+        assertThat(timeStamp).isCloseTo(LocalDateTime.now(), within(5, ChronoUnit.SECONDS));
     }
 
     @Test
