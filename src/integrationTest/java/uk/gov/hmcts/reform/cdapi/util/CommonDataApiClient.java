@@ -3,9 +3,6 @@ package uk.gov.hmcts.reform.cdapi.util;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.impl.TextCodec;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,13 +17,13 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static uk.gov.hmcts.reform.cdapi.util.JwtTokenUtil.generateToken;
+import static uk.gov.hmcts.reform.cdapi.util.JwtTokenUtil.generateAuthToken;
+import static uk.gov.hmcts.reform.cdapi.util.JwtTokenUtil.generateS2SToken;
 
 @Slf4j
 @PropertySource(value = "/integrationTest/resources/application-test.yml")
@@ -119,8 +116,9 @@ public class CommonDataApiClient {
         ResponseEntity<Object> responseEntity;
         try {
             HttpEntity<?> request = new HttpEntity<>(getMultipleAuthHeaders());
+            String url = "http://localhost:" + commonDataApiPort + uriPath;
             responseEntity = restTemplate.exchange(
-                "http://localhost:" + commonDataApiPort + uriPath,
+                    url,
                 HttpMethod.GET,
                 request,
                 clasz,
@@ -139,7 +137,7 @@ public class CommonDataApiClient {
         headers.setAccept(Collections.singletonList(MediaType.ALL));
         if (StringUtils.isBlank(JWT_TOKEN)) {
 
-            JWT_TOKEN = generateDummyS2SToken(serviceName);
+            JWT_TOKEN = generateS2SToken(serviceName);
         }
         headers.add("ServiceAuthorization", JWT_TOKEN);
         String bearerToken = "Bearer ".concat(getBearerToken(UUID.randomUUID().toString()));
@@ -148,17 +146,10 @@ public class CommonDataApiClient {
         return headers;
     }
 
-    private final String getBearerToken(String userId) {
+    private String getBearerToken(String userId) {
 
-        return generateToken(issuer, expiration, userId);
+        return generateAuthToken(issuer, false, userId, null);
 
-    }
-
-    public static String generateDummyS2SToken(String serviceName) {
-        return Jwts.builder().setSubject(serviceName).setIssuedAt(new Date()).signWith(
-            SignatureAlgorithm.HS256,
-            TextCodec.BASE64.encode("00112233445566778899aabbccddeeff")
-        ).compact();
     }
 
 }
