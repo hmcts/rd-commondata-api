@@ -10,17 +10,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.cdapi.controllers.response.Categories;
 import uk.gov.hmcts.reform.cdapi.domain.CaseFlag;
+import uk.gov.hmcts.reform.cdapi.domain.FlagDetail;
 import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
 import uk.gov.hmcts.reform.cdapi.util.ErrorInvalidRequestResponse;
 import uk.gov.hmcts.reform.cdapi.util.FeatureToggleConditionExtension;
 import uk.gov.hmcts.reform.cdapi.util.ToggleEnable;
 import uk.gov.hmcts.reform.lib.util.serenity5.SerenityTest;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -366,6 +370,72 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
             );
         assertEquals(response.getErrorCode(), 400);
         assertEquals(response.getErrorDescription(), "Allowed values are Y or N");
+    }
+
+    @Test
+    @ToggleEnable(mapKey = MAP_KEY_CASE_FLAGS, withFeature = true)
+    @ExtendWith(FeatureToggleConditionExtension.class)
+    void shouldReturnOtherFlagsWhenOtherFlagSuppressionsAreNotConfigured() {
+        Response response = commonDataApiClient.retrieveResponseForGivenRequest(
+            "/service-id=AAA1?available-external-flag=N",
+            PATH_CASE_FLAGS
+        );
+
+        if (OK.value() == response.getStatusCode()) {
+            var caseFlag = response.getBody().as(CaseFlag.class);
+            assertEquals(4, countFlagsByCode(caseFlag, "OT0001"));
+            assertTrue(containsImmediateFlagCode(getFlagByName(caseFlag, "Case").getChildFlags(), "OT0001"));
+            assertTrue(containsImmediateFlagCode(getFlagByName(caseFlag, "Party").getChildFlags(), "OT0001"));
+            assertTrue(containsImmediateFlagCode(getFlagByName(caseFlag, "Reasonable adjustment")
+                                                 .getChildFlags(), "OT0001"));
+            assertTrue(containsImmediateFlagCode(getFlagByName(caseFlag, "I need help communicating and understanding")
+                                                 .getChildFlags(), "OT0001"));
+        } else {
+            assertEquals(NOT_FOUND.value(), response.getStatusCode());
+        }
+    }
+
+    private static long countFlagsByCode(CaseFlag caseFlag, String flagCode) {
+        return caseFlag.getFlags().stream()
+            .flatMap(flag -> flag.getFlagDetails().stream())
+            .mapToLong(flagDetail -> countFlagsByCode(flagDetail, flagCode))
+            .sum();
+    }
+
+    private static long countFlagsByCode(FlagDetail flagDetail, String flagCode) {
+        long currentCount = flagCode.equals(flagDetail.getFlagCode()) ? 1 : 0;
+        if (flagDetail.getChildFlags() == null) {
+            return currentCount;
+        }
+        return currentCount + flagDetail.getChildFlags().stream()
+            .mapToLong(childFlag -> countFlagsByCode(childFlag, flagCode))
+            .sum();
+    }
+
+    private static FlagDetail getFlagByName(CaseFlag response, String name) {
+        return response.getFlags().get(0).getFlagDetails().stream()
+            .map(flagDetail -> getFlagByName(flagDetail, name))
+            .filter(FlagDetail.class::isInstance)
+            .findFirst()
+            .orElseThrow();
+    }
+
+    private static FlagDetail getFlagByName(FlagDetail flagDetail, String name) {
+        if (name.equals(flagDetail.getName())) {
+            return flagDetail;
+        }
+        if (flagDetail.getChildFlags() == null) {
+            return null;
+        }
+        return flagDetail.getChildFlags().stream()
+            .map(childFlag -> getFlagByName(childFlag, name))
+            .filter(FlagDetail.class::isInstance)
+            .findFirst()
+            .orElse(null);
+    }
+
+    private static boolean containsImmediateFlagCode(List<FlagDetail> flagDetails, String flagCode) {
+        return flagDetails.stream().anyMatch(flagDetail -> flagCode.equals(flagDetail.getFlagCode()));
     }
 
 }
