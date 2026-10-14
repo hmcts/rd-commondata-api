@@ -104,8 +104,7 @@ class GlobalExceptionHandlerTest {
         assertThat(LocalDateTime.parse(
                 errorResponse.getTimeStamp(),
                 TIMESTAMP_FORMATTER
-        )).isNotNull();
-      
+        )).isNotNull(); 
     }
 
     @Test
