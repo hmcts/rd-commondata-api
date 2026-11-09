@@ -58,7 +58,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
             removeFlags(flagDetails);
         }
         addOtherFlag(flagDetails, welshRequired);
-        log.info("Added other flag");
+        log.debug("Added other flag");
         var flag = new Flag();
         flag.setFlagDetails(filterFlagType(flagDetails, flagType));
         if (flag.getFlagDetails().isEmpty()) {
@@ -120,7 +120,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                 flagDetails.add(flagDetailObj);
             }
         }
-        log.info("Added top level flag : " + flagDetails.size());
+        log.debug("Added top level flag : " + flagDetails.size());
         return flagDetails;
     }
 
@@ -159,7 +159,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                 addChildFlag(flagDetails, childFlagObj, isWelshRequired);
             }
         }
-        log.info("Added all child flag");
+        log.debug("Added all child flag");
     }
 
     private void setCaseFlagByWelshRequired(boolean isWelshRequired, FlagDetail.FlagDetailBuilder childFlag,
@@ -233,7 +233,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         }
         childFlag.setListOfValuesLength(listOfValuesSize);
         childFlag.setListOfValues(listOfValues);
-        log.info("Added Lov: " + listOfValuesSize);
+        log.debug("Added Lov: " + listOfValuesSize);
     }
 
     /**
@@ -330,7 +330,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     }
 
     private List<FlagDetail> filterFlagType(List<FlagDetail> flagDetail, String flagType) {
-        log.info("FlagType: " + flagType);
+        log.debug("FlagType: " + flagType);
         flagDetail = (StringUtils.isEmpty(flagType))
             ? flagDetail
             : flagDetail

@@ -38,7 +38,6 @@ public class IdamOpenIdClient extends IdamOpenId {
             log.info("delete sidam user with email");
             RestAssured
                 .given()
-                .relaxedHTTPSValidation()
                 .baseUri(testConfig.getIdamApiUrl())
                 .header(CONTENT_TYPE, APPLICATION_FORM_URLENCODED_VALUE)
                 .delete("/testing-support/accounts/" + email);
