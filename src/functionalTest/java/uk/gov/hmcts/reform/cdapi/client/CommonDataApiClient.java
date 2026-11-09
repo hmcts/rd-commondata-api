@@ -66,6 +66,12 @@ public class CommonDataApiClient {
         }
     }
 
+    public Response retrieveResponseForGivenRequest(String param, String path) {
+        return getMultipleAuthHeaders()
+            .get(BASE_URL_CASE_FLAGS + path + param)
+            .andReturn();
+    }
+
     public Object retrieveCaseFlagsByServiceId(HttpStatus expectedStatus, String param) {
         log.info(" In retrieveCaseFlagsByServiceId");
         Response response = getMultipleAuthHeaders()
