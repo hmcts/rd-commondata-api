@@ -254,13 +254,14 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
         assertIterableEquals(List.of(""), caseFlag.getCodePath());
         assertIterableEquals(List.of(""), partyFlag.getCodePath());
 
-        assertIterableEquals(List.of("CF0001", "CF0002"),
+        assertIterableEquals(List.of("CF0001"),
                              getFlagByName(response, "Complex Case").getCodePath());
-        assertIterableEquals(List.of("PF0001", "PF0015"),
+        assertIterableEquals(List.of("PF0001"),
                              getFlagByName(response, "Language Interpreter").getCodePath());
-        assertIterableEquals(List.of("PF0001", "RA0001", "RA0004"),
-                             getFlagByName(response, "I need adjustments to get to, into and around our buildings")
-                                 .getCodePath());
+        assertIterableEquals(List.of("PF0001", "RA0001"),
+                             getFlagByName(response, "I need help communicating and understanding").getCodePath());
+        assertIterableEquals(List.of("PF0001", "RA0001", "RA0008"),
+                             getFlagByName(response, "Sign Language Interpreter").getCodePath());
 
         assertChildFlagsHavePopulatedCodePath(caseFlag.getChildFlags());
         assertChildFlagsHavePopulatedCodePath(partyFlag.getChildFlags());
