@@ -24,7 +24,7 @@ public class CaseFlagDto {
     @Column(name = "categorypath")
     String categoryPath;
     @Column(name = "codepath")
-    String serviceCodePath;
+    String categoryCodePath;
     @Column(name = "hearing_relevant")
     Boolean hearingRelevant;
     @Column(name = "request_reason")
