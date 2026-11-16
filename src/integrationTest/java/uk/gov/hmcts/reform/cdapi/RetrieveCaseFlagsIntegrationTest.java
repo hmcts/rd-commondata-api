@@ -21,6 +21,8 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -237,6 +239,45 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
                                                  .getChildFlags(), "OT0001"));
     }
 
+
+    @Test
+    void shouldPopulateCategoryCodePathForChildFlags() throws JsonProcessingException {
+        final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
+            "AAA1?available-external-flag=N",
+            CaseFlag.class,
+            path
+        );
+
+        final var caseFlag = getFlagByName(response, "Case");
+        final var partyFlag = getFlagByName(response, "Party");
+
+        assertIterableEquals(List.of(""), caseFlag.getCodePath());
+        assertIterableEquals(List.of(""), partyFlag.getCodePath());
+
+        assertIterableEquals(List.of("CF0001", "CF0002"),
+                             getFlagByName(response, "Complex Case").getCodePath());
+        assertIterableEquals(List.of("PF0001", "PF0015"),
+                             getFlagByName(response, "Language Interpreter").getCodePath());
+        assertIterableEquals(List.of("PF0001", "RA0001", "RA0004"),
+                             getFlagByName(response, "I need adjustments to get to, into and around our buildings")
+                                 .getCodePath());
+
+        assertChildFlagsHavePopulatedCodePath(caseFlag.getChildFlags());
+        assertChildFlagsHavePopulatedCodePath(partyFlag.getChildFlags());
+    }
+
+    private static void assertChildFlagsHavePopulatedCodePath(List<FlagDetail> flagDetails) {
+        if (flagDetails == null) {
+            return;
+        }
+        for (FlagDetail flagDetail : flagDetails) {
+            assertNotNull(flagDetail.getCodePath(), "categoryCodePath is missing for " + flagDetail.getName());
+            assertFalse(flagDetail.getCodePath().isEmpty(), "categoryCodePath is empty for " + flagDetail.getName());
+            assertTrue(flagDetail.getCodePath().stream().noneMatch(String::isEmpty),
+                       "categoryCodePath contains blank values for " + flagDetail.getName());
+            assertChildFlagsHavePopulatedCodePath(flagDetail.getChildFlags());
+        }
+    }
 
     private static void assertResponseContent(CaseFlag response) {
         assertEquals(2, response.getFlags().get(0).getFlagDetails().size());
