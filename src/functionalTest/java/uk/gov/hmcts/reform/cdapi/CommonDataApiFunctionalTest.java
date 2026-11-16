@@ -382,18 +382,14 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
             PATH_CASE_FLAGS
         );
 
-        if (OK.value() == response.getStatusCode()) {
-            var caseFlag = response.getBody().as(CaseFlag.class);
-            assertEquals(4, countFlagsByCode(caseFlag, "OT0001"));
-            assertTrue(containsImmediateFlagCode(getFlagByName(caseFlag, "Case").getChildFlags(), "OT0001"));
-            assertTrue(containsImmediateFlagCode(getFlagByName(caseFlag, "Party").getChildFlags(), "OT0001"));
-            assertTrue(containsImmediateFlagCode(getFlagByName(caseFlag, "Reasonable adjustment")
-                                                 .getChildFlags(), "OT0001"));
-            assertTrue(containsImmediateFlagCode(getFlagByName(caseFlag, "I need help communicating and understanding")
-                                                 .getChildFlags(), "OT0001"));
-        } else {
-            assertEquals(NOT_FOUND.value(), response.getStatusCode());
-        }
+        var caseFlag = response.getBody().as(CaseFlag.class);
+        assertEquals(4, countFlagsByCode(caseFlag, "OT0001"));
+        assertTrue(containsImmediateFlagCode(getFlagByName(caseFlag, "Case").getChildFlags(), "OT0001"));
+        assertTrue(containsImmediateFlagCode(getFlagByName(caseFlag, "Party").getChildFlags(), "OT0001"));
+        assertTrue(containsImmediateFlagCode(getFlagByName(caseFlag, "Reasonable adjustment")
+                                             .getChildFlags(), "OT0001"));
+        assertTrue(containsImmediateFlagCode(getFlagByName(caseFlag, "I need help communicating and understanding")
+                                             .getChildFlags(), "OT0001"));
     }
 
     @Test
@@ -405,21 +401,17 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
             PATH_CASE_FLAGS
         );
 
-        if (OK.value() == response.getStatusCode()) {
-            var caseFlag = response.getBody().as(CaseFlag.class);
+        var caseFlag = response.getBody().as(CaseFlag.class);
 
-            assertIterableEquals(List.of(""), getFlagByName(caseFlag, "Case").getCodePath());
-            assertIterableEquals(List.of(""), getFlagByName(caseFlag, "Party").getCodePath());
-            assertIterableEquals(List.of("PF0001"),
-                                 getFlagByName(caseFlag, "Reasonable adjustment").getCodePath());
-            assertIterableEquals(List.of("PF0001", "RA0001"),
-                                 getFlagByName(caseFlag, "I need help communicating and understanding").getCodePath());
+        assertIterableEquals(List.of(""), getFlagByName(caseFlag, "Case").getCodePath());
+        assertIterableEquals(List.of(""), getFlagByName(caseFlag, "Party").getCodePath());
+        assertIterableEquals(List.of("PF0001"),
+                             getFlagByName(caseFlag, "Reasonable adjustment").getCodePath());
+        assertIterableEquals(List.of("PF0001", "RA0001"),
+                             getFlagByName(caseFlag, "I need help communicating and understanding").getCodePath());
 
-            assertChildFlagsHavePopulatedCodePath(getFlagByName(caseFlag, "Case").getChildFlags());
-            assertChildFlagsHavePopulatedCodePath(getFlagByName(caseFlag, "Party").getChildFlags());
-        } else {
-            assertEquals(NOT_FOUND.value(), response.getStatusCode());
-        }
+        assertChildFlagsHavePopulatedCodePath(getFlagByName(caseFlag, "Case").getChildFlags());
+        assertChildFlagsHavePopulatedCodePath(getFlagByName(caseFlag, "Party").getChildFlags());
     }
 
     private static void assertChildFlagsHavePopulatedCodePath(List<FlagDetail> flagDetails) {
