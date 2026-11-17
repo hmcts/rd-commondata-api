@@ -241,7 +241,7 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
 
 
     @Test
-    void shouldPopulateCategoryCodePathForChildFlags() throws JsonProcessingException {
+    void shouldPopulateCodePathForChildFlags() throws JsonProcessingException {
         final var response = (CaseFlag) commonDataApiClient.retrieveCaseFlagsByServiceId(
             "AAA1?available-external-flag=N",
             CaseFlag.class,
@@ -272,10 +272,10 @@ class RetrieveCaseFlagsIntegrationTest extends CdAuthorizationEnabledIntegration
             return;
         }
         for (FlagDetail flagDetail : flagDetails) {
-            assertNotNull(flagDetail.getCodePath(), "categoryCodePath is missing for " + flagDetail.getName());
-            assertFalse(flagDetail.getCodePath().isEmpty(), "categoryCodePath is empty for " + flagDetail.getName());
+            assertNotNull(flagDetail.getCodePath(), "codePath is missing for " + flagDetail.getName());
+            assertFalse(flagDetail.getCodePath().isEmpty(), "codePath is empty for " + flagDetail.getName());
             assertTrue(flagDetail.getCodePath().stream().noneMatch(String::isEmpty),
-                       "categoryCodePath contains blank values for " + flagDetail.getName());
+                       "codePath contains blank values for " + flagDetail.getName());
             assertChildFlagsHavePopulatedCodePath(flagDetail.getChildFlags());
         }
     }

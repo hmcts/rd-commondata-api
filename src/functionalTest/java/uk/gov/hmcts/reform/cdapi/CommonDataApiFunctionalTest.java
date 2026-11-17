@@ -399,7 +399,7 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
     @Test
     @ToggleEnable(mapKey = MAP_KEY_CASE_FLAGS, withFeature = true)
     @ExtendWith(FeatureToggleConditionExtension.class)
-    void shouldPopulateCategoryCodePathForCaseFlags() {
+    void shouldPopulateCodePathForCaseFlags() {
         Response response = commonDataApiClient.retrieveResponseForGivenRequest(
             "/service-id=AAA1?available-external-flag=N",
             PATH_CASE_FLAGS
@@ -427,10 +427,10 @@ class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
             return;
         }
         for (FlagDetail flagDetail : flagDetails) {
-            assertNotNull(flagDetail.getCodePath(), "categoryCodePath is missing for " + flagDetail.getName());
-            assertFalse(flagDetail.getCodePath().isEmpty(), "categoryCodePath is empty for " + flagDetail.getName());
+            assertNotNull(flagDetail.getCodePath(), "codePath is missing for " + flagDetail.getName());
+            assertFalse(flagDetail.getCodePath().isEmpty(), "codePath is empty for " + flagDetail.getName());
             assertTrue(flagDetail.getCodePath().stream().noneMatch(String::isEmpty),
-                       "categoryCodePath contains blank values for " + flagDetail.getName());
+                       "codePath contains blank values for " + flagDetail.getName());
             assertChildFlagsHavePopulatedCodePath(flagDetail.getChildFlags());
         }
     }
