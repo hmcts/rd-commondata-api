@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.cdapi;
 import io.restassured.response.Response;
 import net.serenitybdd.annotations.WithTag;
 import net.serenitybdd.annotations.WithTags;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +16,6 @@ import uk.gov.hmcts.reform.cdapi.exception.ErrorResponse;
 import uk.gov.hmcts.reform.cdapi.util.ErrorInvalidRequestResponse;
 import uk.gov.hmcts.reform.cdapi.util.FeatureToggleConditionExtension;
 import uk.gov.hmcts.reform.cdapi.util.ToggleEnable;
-import uk.gov.hmcts.reform.lib.util.serenity5.SerenityTest;
 
 import java.util.List;
 
@@ -29,10 +29,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
-@SerenityTest
 @SpringBootTest
 @WithTags({@WithTag("testType:Functional")})
 @ActiveProfiles("functional")
+@ExtendWith(SerenityJUnit5Extension.class)
 class CommonDataApiFunctionalTest extends AuthorizationFunctionalTest {
 
     private static final String MAP_KEY_CASE_FLAGS = "CaseFlagApiController.retrieveCaseFlagsByServiceId";
