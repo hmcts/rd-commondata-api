@@ -11,6 +11,7 @@ java:
     COMMONDATA_DB: classpath:db/migration,classpath:db/postgres,classpath:db/migrationAks
     LAUNCH_DARKLY_ENV: "preview"
     ENVIRONMENT_NAME: "preview"
+    OTHER_FLAG_CODE_SUPPRESSIONS: RA0028,RA0029,RA0030,RA0031,RA0032,RA0033,RA0034,RA0035,RA0036,RA0037,RA0038,RA0039,RA0040,RA0041,RA0042,RA0043,RA0044,RA0045,RA0046
     JWT_ISSUER_VALIDATION_ENABLED: true
     IDAM_SECURITY_ALLOWED_ISSUERS_0: https://idam-web-public.aat.platform.hmcts.net/o
     IDAM_SECURITY_ALLOWED_ISSUERS_1: https://hmcts-access.aat.platform.hmcts.net/o
