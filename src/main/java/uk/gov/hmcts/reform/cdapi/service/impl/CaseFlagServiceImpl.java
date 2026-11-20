@@ -21,6 +21,8 @@ import uk.gov.hmcts.reform.cdapi.service.CaseFlagService;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static uk.gov.hmcts.reform.cdapi.controllers.constant.Constant.CATEGORY_KEY_LANGUAGE_INTERPRETER;
 import static uk.gov.hmcts.reform.cdapi.controllers.constant.Constant.CATEGORY_KEY_SIGN_LANGUAGE;
@@ -40,6 +42,9 @@ public class CaseFlagServiceImpl implements CaseFlagService {
     @Value("${flaglist}")
     List<String> flaglistLov;
 
+    @Value("${other-flag-code-suppressions:}")
+    String otherFlagCodeSuppressions;
+
     public static final String IGNORE_JSON = "IGNORE_JSON";
 
     @Override
@@ -48,11 +53,12 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         var caseFlagDtoList = caseFlagRepository.findAll(serviceId.trim().toUpperCase());
         var isAvailableExternalFlag = this.getFlagYorN(availableExternalFlag);
         var flagDetails = addTopLevelFlag(caseFlagDtoList, welshRequired);
+        var suppressedFlagCodes = getOtherFlagSuppressions();
         addChildLevelFlag(caseFlagDtoList, flagDetails, welshRequired, isAvailableExternalFlag);
         if (isAvailableExternalFlag) {
             removeFlags(flagDetails);
         }
-        addOtherFlag(flagDetails, welshRequired);
+        addOtherFlag(flagDetails, welshRequired, suppressedFlagCodes);
         log.debug("Added other flag");
         var flag = new Flag();
         flag.setFlagDetails(filterFlagType(flagDetails, flagType));
@@ -96,7 +102,8 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                     .flagComment(caseFlagDto.getRequestReason())
                     .parent(caseFlagDto.getIsParent())
                     .hearingRelevant(caseFlagDto.getHearingRelevant())
-                    .path(Arrays.stream(caseFlagDto.getCategoryPath().split("/")).toList())
+                    .path(splitPath(caseFlagDto.getCategoryPath()))
+                    .codePath(splitPath(caseFlagDto.getCategoryCodePath()))
                     .childFlags(new ArrayList<>())
                     .id(caseFlagDto.getId())
                     .cateGoryId(caseFlagDto.getCategoryId());
@@ -141,7 +148,8 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                     .flagComment(caseFlagDto.getRequestReason())
                     .parent(caseFlagDto.getIsParent())
                     .hearingRelevant(caseFlagDto.getHearingRelevant())
-                    .path(Arrays.stream(caseFlagDto.getCategoryPath().split("/")).toList())
+                    .path(splitPath(caseFlagDto.getCategoryPath()))
+                    .codePath(splitPath(caseFlagDto.getCategoryCodePath()))
                     .cateGoryId(caseFlagDto.getCategoryId())
                     .id(caseFlagDto.getId());
                 this.setCaseFlagByWelshRequired(isWelshRequired, childFlag, caseFlagDto);
@@ -186,6 +194,10 @@ public class CaseFlagServiceImpl implements CaseFlagService {
 
     private String setNullValue(String value) {
         return ObjectUtils.isEmpty(value) ? null : value;
+    }
+
+    private List<String> splitPath(String path) {
+        return path == null ? null : Arrays.stream(path.split("/")).toList();
     }
 
     private void ignoreNameCy(FlagDetail.FlagDetailBuilder flagDetail) {
@@ -253,27 +265,48 @@ public class CaseFlagServiceImpl implements CaseFlagService {
      * @param flagDetails   list of all flags
      * @param welshRequired it is flag decide to display the name_cy values
      */
-    private void addOtherFlag(List<FlagDetail> flagDetails, String welshRequired) {
+    private void addOtherFlag(List<FlagDetail> flagDetails, String welshRequired, Set<String> suppressedFlagCodes) {
         if (null == flagDetails) {
             return;
         }
         var isWelshRequired = this.getFlagYorN(welshRequired);
         for (FlagDetail flagDetail : flagDetails) {
             if (Boolean.TRUE.equals(flagDetail.getParent())
-                && (ObjectUtils.isNotEmpty(flagDetail.getChildFlags()) && !(flagDetail.getChildFlags().isEmpty()))) {
+                && (ObjectUtils.isNotEmpty(flagDetail.getChildFlags()) && !(flagDetail.getChildFlags().isEmpty()))
+                && !shouldSuppressOtherFlag(flagDetail, suppressedFlagCodes)) {
                 flagDetail.getChildFlags().add(otherFlagBuilder(
                     flagDetail
                         .getChildFlags()
                         .stream()
                         .findFirst().orElseThrow().getPath(),
+                    flagDetail
+                        .getChildFlags()
+                        .stream()
+                        .findFirst().orElseThrow().getCodePath(),
                     isWelshRequired
                 ));
             }
-            addOtherFlag(flagDetail.getChildFlags(), welshRequired);
+            addOtherFlag(flagDetail.getChildFlags(), welshRequired, suppressedFlagCodes);
         }
     }
 
-    private FlagDetail otherFlagBuilder(List<String> path, boolean isWelshRequired) {
+    private Set<String> getOtherFlagSuppressions() {
+        if (StringUtils.isBlank(otherFlagCodeSuppressions)) {
+            return Set.of();
+        }
+        return Arrays.stream(otherFlagCodeSuppressions.split(","))
+            .map(String::trim)
+            .filter(StringUtils::isNotBlank)
+            .map(String::toUpperCase)
+            .collect(Collectors.toSet());
+    }
+
+    private boolean shouldSuppressOtherFlag(FlagDetail flagDetail, Set<String> suppressedFlagCodes) {
+        return StringUtils.isNotBlank(flagDetail.getNativeFlagCode())
+            && suppressedFlagCodes.contains(flagDetail.getNativeFlagCode().toUpperCase());
+    }
+
+    private FlagDetail otherFlagBuilder(List<String> path, List<String> codePath, boolean isWelshRequired) {
         String nameCy = "Arall";
         if (!isWelshRequired) {
             nameCy = IGNORE_JSON;
@@ -289,6 +322,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
             .externallyAvailable(true)
             .childFlags(new ArrayList<>())
             .path(path)
+            .codePath(codePath)
             .flagComment(true).build();
     }
 
