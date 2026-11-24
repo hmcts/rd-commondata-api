@@ -27,12 +27,9 @@ class SmokeTest {
     @Test
     void test_should_prove_app_is_running_and_healthy() {
 
-        SerenityRest.useRelaxedHTTPSValidation();
-
         Response response = SerenityRest
             .given().log().all()
             .baseUri(targetInstance)
-            .relaxedHTTPSValidation()
             .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
             .get("/")
             .andReturn();

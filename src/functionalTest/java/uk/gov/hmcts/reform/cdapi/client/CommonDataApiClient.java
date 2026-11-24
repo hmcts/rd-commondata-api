@@ -151,7 +151,6 @@ public class CommonDataApiClient {
 
     public RequestSpecification withUnauthenticatedRequest() {
         return SerenityRest.given()
-            .relaxedHTTPSValidation()
             .baseUri(commonDataApiUrl)
             .header("Content-Type", APPLICATION_JSON_VALUE)
             .header("Accepts", APPLICATION_JSON_VALUE);
@@ -159,7 +158,6 @@ public class CommonDataApiClient {
 
     public RequestSpecification withUnauthenticatedRequest_NoBearerToken() {
         return SerenityRest.given()
-            .relaxedHTTPSValidation()
             .baseUri(commonDataApiUrl)
             .header("Content-Type", APPLICATION_JSON_VALUE)
             .header("Accepts", APPLICATION_JSON_VALUE)
@@ -168,7 +166,6 @@ public class CommonDataApiClient {
 
     private RequestSpecification withUnauthenticatedRequest_NoS2SToken() {
         return SerenityRest.with()
-            .relaxedHTTPSValidation()
             .baseUri(commonDataApiUrl)
             .header("Content-Type", APPLICATION_JSON_VALUE)
             .header("Accepts", APPLICATION_JSON_VALUE)
@@ -177,7 +174,6 @@ public class CommonDataApiClient {
 
     public RequestSpecification getMultipleAuthHeaders() {
         return SerenityRest.with()
-            .relaxedHTTPSValidation()
             .baseUri(commonDataApiUrl)
             .header("Content-Type", APPLICATION_JSON_VALUE)
             .header("Accepts", APPLICATION_JSON_VALUE)
