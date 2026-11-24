@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-
+@SuppressWarnings("checkstyle:all")
 @ExtendWith(SerenityJUnit5Extension.class)
 @SpringBootTest
 @WithTags({@WithTag("testType:Functional")})

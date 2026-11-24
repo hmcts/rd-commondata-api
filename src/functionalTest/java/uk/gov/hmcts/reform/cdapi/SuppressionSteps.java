@@ -20,6 +20,7 @@ import java.util.TreeSet;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("checkstyle:all")
 public class SuppressionSteps extends AuthorizationFunctionalTest {
 
     private static final String OTHER_FLAG_CODE_SUPPRESSIONS = "OTHER_FLAG_CODE_SUPPRESSIONS";
