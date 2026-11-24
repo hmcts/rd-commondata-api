@@ -6,6 +6,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.core.Serenity;
+import uk.gov.hmcts.reform.cdapi.client.CommonDataApiClient;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ import java.util.TreeSet;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("checkstyle:all")
-public class SuppressionSteps extends AuthorizationFunctionalTest {
+public class SuppressionSteps {
 
     private static final String OTHER_FLAG_CODE_SUPPRESSIONS = "OTHER_FLAG_CODE_SUPPRESSIONS";
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -71,7 +72,7 @@ public class SuppressionSteps extends AuthorizationFunctionalTest {
 //    }
 
     @Step("Call flags API on BASELINE instance for serviceId ''{0}''")
-    public Response callBaselineFlagsApi(String serviceId) {
+    public Response callBaselineFlagsApi(String serviceId, CommonDataApiClient commonDataApiClient) {
         Response response =
                 commonDataApiClient.getBaseLineMultipleAuthHeaders(baselineApiUrl)
                         .get(String.format(flagsEndPoint, serviceId))
@@ -86,7 +87,7 @@ public class SuppressionSteps extends AuthorizationFunctionalTest {
     }
 
     @Step("Call flags API for service ''{1}'' ({0})")
-    public Response callFlagsApi(String phase, String serviceId) {
+    public Response callFlagsApi(String phase, String serviceId, CommonDataApiClient commonDataApiClient) {
         Response response =
                 commonDataApiClient.getMultipleAuthHeaders()
                         .log().all()

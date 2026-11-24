@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 @SpringBootTest
 @WithTags({@WithTag("testType:Functional")})
 @ActiveProfiles("functional")
-class OtherFlagsSuppressionTest {
+class OtherFlagsSuppressionTest extends AuthorizationFunctionalTest {
 
     private static final List<String> SERVICE_IDS = List.of("AAA3", "AAA6", "AAA7", "ABA1", "ABA2", "ABA3", "ABA4",
             "ABA5", "BBA2", "BCA1", "BCA2", "BCA3", "BCA4", "BFA1", "BHA1", "XXXX");
@@ -51,8 +51,9 @@ class OtherFlagsSuppressionTest {
     void otherSuppressedOnlyForGivenFlag(String serviceId, String flagCodes) throws IOException {
         Set<String> suppressionFlagCodes = SuppressionSteps.parse(flagCodes);
 
-        String baseline = steps.callBaselineFlagsApi(serviceId).asString();
-        Response after = steps.callFlagsApi("suppressed (OTHER_FLAG_CODE_SUPPRESSIONS=" + flagCodes + ")", serviceId);
+        String baseline = steps.callBaselineFlagsApi(serviceId, commonDataApiClient).asString();
+        Response after = steps.callFlagsApi("suppressed (OTHER_FLAG_CODE_SUPPRESSIONS=" + flagCodes + ")", serviceId,
+                commonDataApiClient);
 
         if (baseline != null) {
             steps.recordFlagTree("Flags BASELINE (serviceId " + serviceId + ")", baseline);
