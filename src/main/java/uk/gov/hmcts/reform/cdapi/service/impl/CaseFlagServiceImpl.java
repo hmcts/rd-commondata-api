@@ -54,6 +54,9 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         var isAvailableExternalFlag = this.getFlagYorN(availableExternalFlag);
         var flagDetails = addTopLevelFlag(caseFlagDtoList, welshRequired);
         var suppressedFlagCodes = getOtherFlagSuppressions();
+        log.info("************OTHER_FLAG_CODE_SUPPRESSIONS*****************************");
+        log.info("suppressedFlagCodes===="+suppressedFlagCodes);
+        log.info("*************OTHER_FLAG_CODE_SUPPRESSIONS****************************");
         addChildLevelFlag(caseFlagDtoList, flagDetails, welshRequired, isAvailableExternalFlag);
         if (isAvailableExternalFlag) {
             removeFlags(flagDetails);
