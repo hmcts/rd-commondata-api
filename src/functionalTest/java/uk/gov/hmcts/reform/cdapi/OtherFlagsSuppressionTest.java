@@ -47,8 +47,8 @@ class OtherFlagsSuppressionTest extends AuthorizationFunctionalTest {
         Set<String> suppressedFlagCodes = SuppressionSteps.parse(flagCodes);
 
         String baseline = steps.callBaselineCaseFlagsApi(serviceId, commonDataApiClient).asString();
-        Response after = steps.callCaseFlagsApi("suppressed (OTHER_FLAG_CODE_SUPPRESSIONS=" + flagCodes + ")", serviceId,
-                commonDataApiClient);
+        Response after = steps.callCaseFlagsApi("suppressed (OTHER_FLAG_CODE_SUPPRESSIONS=" + flagCodes + ")",
+                serviceId, commonDataApiClient);
 
         if (baseline != null) {
             steps.recordCaseFlagStructure("Case Flags BASELINE (serviceId " + serviceId + ")", baseline);
