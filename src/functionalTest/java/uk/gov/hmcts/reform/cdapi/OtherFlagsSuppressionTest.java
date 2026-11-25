@@ -41,7 +41,8 @@ class OtherFlagsSuppressionTest extends AuthorizationFunctionalTest {
             return SERVICE_IDS.stream().map(serviceId -> Arguments.of(serviceId, flagCodes));
         }
 
-        List<String> localCodes = List.of("3", "1", "2");
+        List<String> localCodes = List.of("CF0001", "PF0001", "SM0001", "RA0001", "RA0002", "RA0003", "RA0004", "RA0005", "RA0006", "RA0007");
+//        CF0001, PF0001, SM0001, RA0001, RA0002, RA0003, RA0004, RA0005, RA0006, RA0007
         return SERVICE_IDS.stream()
                 .flatMap(serviceId -> localCodes.stream().map(code -> Arguments.of(serviceId, code)));
     }
