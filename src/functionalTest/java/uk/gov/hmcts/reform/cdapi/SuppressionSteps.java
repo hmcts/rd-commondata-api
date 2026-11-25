@@ -36,8 +36,8 @@ public class SuppressionSteps {
         return set;
     }
 
-    @Step("Call flags API on BASELINE instance for serviceId ''{0}''")
-    public Response callBaselineFlagsApi(String serviceId, CommonDataApiClient commonDataApiClient) {
+    @Step("Call Case flags API on BASELINE instance for serviceId ''{0}''")
+    public Response callBaselineCaseFlagsApi(String serviceId, CommonDataApiClient commonDataApiClient) {
         Response response =
                 commonDataApiClient.getBaseLineMultipleAuthHeaders(BASELINE_API_URL)
                         .get(String.format(FLAGS_END_POINT, serviceId))
@@ -51,8 +51,8 @@ public class SuppressionSteps {
         return response;
     }
 
-    @Step("Call flags API for service ''{1}'' ({0})")
-    public Response callFlagsApi(String phase, String serviceId, CommonDataApiClient commonDataApiClient) {
+    @Step("Call Case flags API for service ''{1}'' ({0})")
+    public Response callCaseFlagsApi(String phase, String serviceId, CommonDataApiClient commonDataApiClient) {
         Response response =
                 commonDataApiClient.getMultipleAuthHeaders()
                         .log().all()
@@ -70,7 +70,7 @@ public class SuppressionSteps {
         return response;
     }
 
-    @Step("Record flag structure: {0}")
+    @Step("Record Case flag structure: {0}")
     public void recordCaseFlagStructure(String title, String json) throws IOException {
         Map<String, List<String>> tree = childNamesByCode(MAPPER.readTree(json));
 
