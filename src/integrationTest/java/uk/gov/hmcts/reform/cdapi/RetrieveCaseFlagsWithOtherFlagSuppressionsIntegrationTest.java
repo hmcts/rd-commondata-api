@@ -39,10 +39,10 @@ class RetrieveCaseFlagsWithOtherFlagSuppressionsIntegrationTest extends CdAuthor
         try {
             ReflectionTestUtils.setField(caseFlagService, "otherFlagCodeSuppressions", "");
             final var unsuppressedResponse = retrieveCaseFlags();
-            final var suppressingFlagCode = findSuppressingFlagCode(unsuppressedResponse);
-            assertNotNull(suppressingFlagCode);
+            final var suppressingNativeFlagCode = findSuppressingNativeFlagCode(unsuppressedResponse);
+            assertNotNull(suppressingNativeFlagCode);
 
-            ReflectionTestUtils.setField(caseFlagService, "otherFlagCodeSuppressions", suppressingFlagCode);
+            ReflectionTestUtils.setField(caseFlagService, "otherFlagCodeSuppressions", suppressingNativeFlagCode);
             final var suppressedResponse = retrieveCaseFlags();
 
             assertTrue(countFlagsByCode(suppressedResponse, "OT0001")
@@ -77,29 +77,25 @@ class RetrieveCaseFlagsWithOtherFlagSuppressionsIntegrationTest extends CdAuthor
             .sum();
     }
 
-    private static String findSuppressingFlagCode(CaseFlag response) {
+    private static String findSuppressingNativeFlagCode(CaseFlag response) {
         return response.getFlags().get(0).getFlagDetails().stream()
-            .map(RetrieveCaseFlagsWithOtherFlagSuppressionsIntegrationTest::findSuppressingFlagCode)
+            .map(RetrieveCaseFlagsWithOtherFlagSuppressionsIntegrationTest::findSuppressingNativeFlagCode)
             .filter(flagCode -> flagCode != null)
             .findFirst()
             .orElse(null);
     }
 
-    private static String findSuppressingFlagCode(FlagDetail flagDetail) {
+    private static String findSuppressingNativeFlagCode(FlagDetail flagDetail) {
         if (flagDetail.getChildFlags() != null
-            && flagDetail.getChildFlags().stream().anyMatch(childFlag -> "OT0001".equals(childFlag.getFlagCode()))) {
-            return flagDetail.getChildFlags().stream()
-                .map(FlagDetail::getFlagCode)
-                .filter(flagCode -> !"OT0001".equals(flagCode))
-                .filter(flagCode -> !"CATGRY".equals(flagCode))
-                .findFirst()
-                .orElse(null);
+            && flagDetail.getChildFlags().stream().anyMatch(childFlag -> "OT0001".equals(childFlag.getFlagCode()))
+            && flagDetail.getNativeFlagCode() != null) {
+            return flagDetail.getNativeFlagCode();
         }
         if (flagDetail.getChildFlags() == null) {
             return null;
         }
         return flagDetail.getChildFlags().stream()
-            .map(RetrieveCaseFlagsWithOtherFlagSuppressionsIntegrationTest::findSuppressingFlagCode)
+            .map(RetrieveCaseFlagsWithOtherFlagSuppressionsIntegrationTest::findSuppressingNativeFlagCode)
             .filter(flagCode -> flagCode != null)
             .findFirst()
             .orElse(null);
