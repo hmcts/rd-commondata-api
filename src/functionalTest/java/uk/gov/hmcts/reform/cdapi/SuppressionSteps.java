@@ -70,8 +70,8 @@ public class SuppressionSteps {
         return response;
     }
 
-    @Step("Record flag tree: {0}")
-    public void recordFlagTree(String title, String json) throws IOException {
+    @Step("Record flag structure: {0}")
+    public void recordCaseFlagStructure(String title, String json) throws IOException {
         Map<String, List<String>> tree = childNamesByCode(MAPPER.readTree(json));
 
         StringBuilder sb = new StringBuilder();
@@ -233,8 +233,8 @@ public class SuppressionSteps {
         for (JsonNode child : flag.path("childFlags")) {
             if (OTHER.equals(child.path("name").asText())) {
                 codes.add(flag.path("nativeFlagCode").asText());
-                collectParentsOfOther(codes, child);
-            }
+            } collectParentsOfOther(codes, child);
+
         }
     }
 }

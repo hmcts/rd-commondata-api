@@ -52,9 +52,10 @@ class OtherFlagsSuppressionTest extends AuthorizationFunctionalTest {
                 commonDataApiClient);
 
         if (baseline != null) {
-            steps.recordFlagTree("Flags BASELINE (serviceId " + serviceId + ")", baseline);
+            steps.recordCaseFlagStructure("Case Flags BASELINE (serviceId " + serviceId + ")", baseline);
         }
-        steps.recordFlagTree("Flags AFTER suppression of " + flagCodes + " (serviceId " + serviceId + ")", after.asString());
+        steps.recordCaseFlagStructure("Case Flags AFTER suppression of " + flagCodes + " (serviceId " + serviceId + ")",
+                after.asString());
 
         Set<String> applicable = steps.applicableFlagCodes(suppressedFlagCodes, baseline);
 
