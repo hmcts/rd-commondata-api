@@ -24,8 +24,9 @@ import java.util.stream.Stream;
 @ActiveProfiles("functional")
 class OtherFlagsSuppressionTest extends AuthorizationFunctionalTest {
 
-    private static final List<String> SERVICE_IDS = List.of("AAA3", "AAA6", "AAA7", "ABA1", "ABA2", "ABA3", "ABA4",
-            "ABA5", "BBA2", "BCA1", "BCA2", "BCA3", "BCA4", "BFA1", "BHA1", "XXXX");
+    private static final List<String> SERVICE_IDS =
+            List.of("AAA3", "AAA6", "AAA7", "ABA1", "ABA2", "ABA3", "ABA4", "ABA5", "BBA2", "BCA1", "BCA2",
+                    "BCA3", "BCA4", "BFA1", "BHA1", "XXXX");
 
     private static List<String> SUPPRESSED_FLAG_CODES =
             List.of("CF0001, PF0001, SM0001, RA0001, RA0002, RA0003, RA0004, RA0005, RA0006, RA0007");
