@@ -12,6 +12,7 @@ java:
     LAUNCH_DARKLY_ENV: "preview"
     ENVIRONMENT_NAME: "preview"
     JWT_ISSUER_VALIDATION_ENABLED: true
+    OTHER_FLAG_CODE_SUPPRESSIONS: RA0018,RA0019,RA0020,RA0021,RA0022,RA0023,RA0024,RA0025,RA0026,RA0027
     IDAM_SECURITY_ALLOWED_ISSUERS_0: https://idam-web-public.aat.platform.hmcts.net/o
     IDAM_SECURITY_ALLOWED_ISSUERS_1: https://hmcts-access.aat.platform.hmcts.net/o
     IDAM_SECURITY_ALLOWED_ISSUERS_2: https://forgerock-am.service.core-compute-idam-aat2.internal:8443/openam/oauth2/realms/root/realms/hmcts
