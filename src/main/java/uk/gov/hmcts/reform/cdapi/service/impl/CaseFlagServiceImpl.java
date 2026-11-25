@@ -53,11 +53,12 @@ public class CaseFlagServiceImpl implements CaseFlagService {
         var caseFlagDtoList = caseFlagRepository.findAll(serviceId.trim().toUpperCase());
         var isAvailableExternalFlag = this.getFlagYorN(availableExternalFlag);
         var flagDetails = addTopLevelFlag(caseFlagDtoList, welshRequired);
+        var suppressedFlagCodes = getOtherFlagSuppressions();
         addChildLevelFlag(caseFlagDtoList, flagDetails, welshRequired, isAvailableExternalFlag);
         if (isAvailableExternalFlag) {
             removeFlags(flagDetails);
         }
-        addOtherFlag(flagDetails, welshRequired);
+        addOtherFlag(flagDetails, welshRequired, suppressedFlagCodes);
         log.debug("Added other flag");
         var flag = new Flag();
         flag.setFlagDetails(filterFlagType(flagDetails, flagType));
@@ -264,16 +265,15 @@ public class CaseFlagServiceImpl implements CaseFlagService {
      * @param flagDetails   list of all flags
      * @param welshRequired it is flag decide to display the name_cy values
      */
-    private void addOtherFlag(List<FlagDetail> flagDetails, String welshRequired) {
+    private void addOtherFlag(List<FlagDetail> flagDetails, String welshRequired, Set<String> suppressedFlagCodes) {
         if (null == flagDetails) {
             return;
         }
         var isWelshRequired = this.getFlagYorN(welshRequired);
-        var suppressedFlagCodes = getOtherFlagSuppressions();
         for (FlagDetail flagDetail : flagDetails) {
             if (Boolean.TRUE.equals(flagDetail.getParent())
                 && (ObjectUtils.isNotEmpty(flagDetail.getChildFlags()) && !(flagDetail.getChildFlags().isEmpty()))
-                && !shouldSuppressOtherFlag(flagDetail.getChildFlags(), suppressedFlagCodes)) {
+                && !shouldSuppressOtherFlag(flagDetail, suppressedFlagCodes)) {
                 flagDetail.getChildFlags().add(otherFlagBuilder(
                     flagDetail
                         .getChildFlags()
@@ -286,7 +286,7 @@ public class CaseFlagServiceImpl implements CaseFlagService {
                     isWelshRequired
                 ));
             }
-            addOtherFlag(flagDetail.getChildFlags(), welshRequired);
+            addOtherFlag(flagDetail.getChildFlags(), welshRequired, suppressedFlagCodes);
         }
     }
 
@@ -301,12 +301,9 @@ public class CaseFlagServiceImpl implements CaseFlagService {
             .collect(Collectors.toSet());
     }
 
-    private boolean shouldSuppressOtherFlag(List<FlagDetail> childFlags, Set<String> suppressedFlagCodes) {
-        return childFlags.stream()
-            .map(FlagDetail::getFlagCode)
-            .filter(StringUtils::isNotBlank)
-            .map(String::toUpperCase)
-            .anyMatch(suppressedFlagCodes::contains);
+    private boolean shouldSuppressOtherFlag(FlagDetail flagDetail, Set<String> suppressedFlagCodes) {
+        return StringUtils.isNotBlank(flagDetail.getNativeFlagCode())
+            && suppressedFlagCodes.contains(flagDetail.getNativeFlagCode().toUpperCase());
     }
 
     private FlagDetail otherFlagBuilder(List<String> path, List<String> codePath, boolean isWelshRequired) {

@@ -224,7 +224,7 @@ class CaseFlagServiceImplTest {
 
     @Test
     void testGetCaseFlag_WithOneSuppression_SuppressesOneOtherFlag() {
-        ReflectionTestUtils.setField(caseFlagService, "otherFlagCodeSuppressions", "FLAG001");
+        ReflectionTestUtils.setField(caseFlagService, "otherFlagCodeSuppressions", "RA_NATIVE");
         when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoList());
 
         var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "", "N", "N");
@@ -239,7 +239,7 @@ class CaseFlagServiceImplTest {
 
     @Test
     void testGetCaseFlag_WithManySuppressions_SuppressesManyOtherFlags() {
-        ReflectionTestUtils.setField(caseFlagService, "otherFlagCodeSuppressions", "FLAG001, FLAG002");
+        ReflectionTestUtils.setField(caseFlagService, "otherFlagCodeSuppressions", "RA_NATIVE, SN_NATIVE");
         when(caseFlagRepository.findAll(anyString())).thenReturn(getCaseFlagDtoListWithMultipleSuppressibleBranches());
 
         var caseFlag = caseFlagService.retrieveCaseFlagByServiceId("XXXX", "", "N", "N");
@@ -314,6 +314,7 @@ class CaseFlagServiceImplTest {
 
         var caseFlagDto2 = new CaseFlagDto();
         caseFlagDto2.setFlagCode("RA_PARENT");
+        caseFlagDto2.setNativeFlagCode("RA_NATIVE");
         caseFlagDto2.setCategoryId(1);
         caseFlagDto2.setCategoryPath("PARTY");
         caseFlagDto2.setCategoryCodePath("CATEGORY");
@@ -429,6 +430,7 @@ class CaseFlagServiceImplTest {
 
         var caseFlagDto2 = new CaseFlagDto();
         caseFlagDto2.setFlagCode("RA_PARENT");
+        caseFlagDto2.setNativeFlagCode("RA_NATIVE");
         caseFlagDto2.setCategoryId(1);
         caseFlagDto2.setCategoryPath("PARTY");
         caseFlagDto2.setCategoryCodePath("CATEGORY");
@@ -457,6 +459,7 @@ class CaseFlagServiceImplTest {
 
         var caseFlagDto4 = new CaseFlagDto();
         caseFlagDto4.setFlagCode("RB_PARENT");
+        caseFlagDto4.setNativeFlagCode("SN_NATIVE");
         caseFlagDto4.setCategoryId(1);
         caseFlagDto4.setCategoryPath("PARTY");
         caseFlagDto4.setCategoryCodePath("CATEGORY");
