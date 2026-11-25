@@ -233,7 +233,8 @@ public class SuppressionSteps {
         for (JsonNode child : flag.path("childFlags")) {
             if (OTHER.equals(child.path("name").asText())) {
                 codes.add(flag.path("nativeFlagCode").asText());
-            } collectParentsOfOther(codes, child);
+            }
+            collectParentsOfOther(codes, child);
 
         }
     }
