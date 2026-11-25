@@ -29,7 +29,8 @@ class OtherFlagsSuppressionTest extends AuthorizationFunctionalTest {
                     "BCA3", "BCA4", "BFA1", "BHA1", "XXXX");
 
     private static List<String> SUPPRESSED_FLAG_CODES =
-            List.of("RA0028,RA0029,RA0030,RA0031,RA0032,RA0033,RA0034,RA0035,RA0036,RA0037,RA0038,RA0039,RA0040,RA0041,RA0042,RA0043,RA0044,RA0045,RA0046");
+            List.of("RA0028,RA0029,RA0030,RA0031,RA0032,RA0033,RA0034,RA0035,RA0036,RA0037,RA0038,RA0039,RA0040,"
+                    + "RA0041,RA0042,RA0043,RA0044,RA0045,RA0046");
 
     @Steps
     SuppressionSteps steps;
