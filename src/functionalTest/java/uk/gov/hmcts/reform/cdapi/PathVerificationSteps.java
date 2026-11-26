@@ -72,9 +72,11 @@ public class PathVerificationSteps {
             sb.append(String.format("[%s] flag %s (%s)  depth=%d  parent=%s%n",
                     problems.isEmpty() ? "OK" : "FAIL", n.code, n.name, n.depth, n.parentCode));
             sb.append("    codePath  actual   : ").append(n.actualCodePath).append('\n');
-            sb.append("    codePath  expected : ").append(n.isRoot() ? "[] or [\"\"]" : n.expectedCodePath.toString()).append('\n');
+            sb.append("    codePath  expected : ").append(n.isRoot() ? "[] or [\"\"]"
+                    : n.expectedCodePath.toString()).append('\n');
             sb.append("    Path  actual   : ").append(n.actualNamePath).append('\n');
-            sb.append("    Path  expected : ").append(n.isRoot() ? "[] or [\"\"]" : n.expectedNamePath.toString()).append('\n');
+            sb.append("    Path  expected : ").append(n.isRoot() ? "[] or [\"\"]"
+                    : n.expectedNamePath.toString()).append('\n');
             problems.forEach(p -> sb.append("    -> ").append(p).append('\n'));
             sb.append('\n');
         }
@@ -113,12 +115,16 @@ public class PathVerificationSteps {
     }
 
     static final class Node {
-        final String code, name;
+        final String code;
+        final String name;
         final int depth;
         final String parentCode;
-        final List<String> expectedCodePath, expectedNamePath;
-        final List<String> actualCodePath, actualNamePath;
-        final boolean hasCodePath, hasNamePath;
+        final List<String> expectedCodePath;
+        final List<String> expectedNamePath;
+        final List<String> actualCodePath;
+        final List<String> actualNamePath;
+        final boolean hasCodePath;
+        final boolean hasNamePath;
 
         Node(JsonNode jsonNode, int depth, String parentCode, List<String> ancCodes, List<String> ancNames) {
             this.depth = depth;
@@ -133,7 +139,8 @@ public class PathVerificationSteps {
             List<String> ec = new ArrayList<>(ancCodes);
             List<String> en = new ArrayList<>(ancNames);
             if (!ROOT_FIRST) {
-                Collections.reverse(ec); Collections.reverse(en);
+                Collections.reverse(ec);
+                Collections.reverse(en);
             }
             this.expectedCodePath = ec;
             this.expectedNamePath = en;
@@ -149,21 +156,30 @@ public class PathVerificationSteps {
 
         List<String> problems() {
             List<String> p = new ArrayList<>();
-            if (!hasCodePath) p.add("codePath is missing");
-            if (!hasNamePath) p.add("Path is missing");
+            if (!hasCodePath) {
+                p.add("codePath is missing");
+            }
+            if (!hasNamePath) {
+                p.add("Path is missing");
+            }
 
             if (isRoot()) {
-                if (hasCodePath && !isEmptyPlaceholder(actualCodePath))
+                if (hasCodePath && !isEmptyPlaceholder(actualCodePath)) {
                     p.add("root codePath should be [] or [\"\"] but was " + actualCodePath);
-                if (hasNamePath && !isEmptyPlaceholder(actualNamePath))
+                }
+                if (hasNamePath && !isEmptyPlaceholder(actualNamePath)) {
                     p.add("root Path should be [] or [\"\"] but was " + actualNamePath);
+                }
             } else {
-                if (hasCodePath && !actualCodePath.equals(expectedCodePath))
+                if (hasCodePath && !actualCodePath.equals(expectedCodePath)) {
                     p.add("codePath expected " + expectedCodePath + " but was " + actualCodePath);
-                if (hasNamePath && !actualNamePath.equals(expectedNamePath))
+                }
+                if (hasNamePath && !actualNamePath.equals(expectedNamePath)) {
                     p.add("Path expected " + expectedNamePath + " but was " + actualNamePath);
-                if (hasCodePath && hasNamePath && actualCodePath.size() != actualNamePath.size())
+                }
+                if (hasCodePath && hasNamePath && actualCodePath.size() != actualNamePath.size()) {
                     p.add("codePath size " + actualCodePath.size() + " != Path size " + actualNamePath.size());
+                }
             }
             return p;
         }
