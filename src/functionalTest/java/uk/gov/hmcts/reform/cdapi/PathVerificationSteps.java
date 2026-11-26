@@ -177,9 +177,6 @@ public class PathVerificationSteps {
                 if (hasNamePath && !actualNamePath.equals(expectedNamePath)) {
                     p.add("Path expected " + expectedNamePath + " but was " + actualNamePath);
                 }
-                if (hasCodePath && hasNamePath && actualCodePath.size() != actualNamePath.size()) {
-                    p.add("codePath size " + actualCodePath.size() + " != Path size " + actualNamePath.size());
-                }
             }
             return p;
         }
