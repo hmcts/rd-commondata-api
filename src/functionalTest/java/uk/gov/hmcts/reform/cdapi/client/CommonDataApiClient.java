@@ -187,6 +187,15 @@ public class CommonDataApiClient {
             .header(AUTHORIZATION_HEADER, "Bearer " + idamOpenIdClient.getcwdAdminOpenIdToken("crd-admin"));
     }
 
+    public RequestSpecification getBaseLineMultipleAuthHeaders(String baselineApiUrl) {
+        return SerenityRest.with()
+                .baseUri(baselineApiUrl)
+                .header("Content-Type", APPLICATION_JSON_VALUE)
+                .header("Accepts", APPLICATION_JSON_VALUE)
+                .header(SERVICE_HEADER, "Bearer " + s2sToken)
+                .header(AUTHORIZATION_HEADER, "Bearer " + idamOpenIdClient.getcwdAdminOpenIdToken("crd-admin"));
+    }
+
     @SuppressWarnings("unused")
     private JsonNode parseJson(String jsonString) throws IOException {
         return mapper.readTree(jsonString);
